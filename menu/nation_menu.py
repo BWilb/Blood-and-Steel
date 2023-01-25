@@ -1,6 +1,4 @@
 import arcade
-import time
-from nation_state import britain
 
 nations = ["Germany", "France", "Great Britain",
            "United States", "Japan", "Russia", "Italy"]
