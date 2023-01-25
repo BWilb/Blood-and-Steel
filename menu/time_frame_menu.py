@@ -3,8 +3,11 @@ import arcade
 time_frame = ["1910", "1914", "1918", "1932", "1936",
               "1940"]
 # time frame array will be expanded as project continues on
+time_chosen = ""
+nation_chosen = ""
 
-class Menu(arcade.Window):
+
+class TimeFrameMenu(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         self.width = width
@@ -28,7 +31,7 @@ class Menu(arcade.Window):
             # loop that goes through elements of time frame variable
             arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 175, self.menu_size, arcade.color.BLUE, font_size=20)
             self.menu_size -= 50
-            print(f"{i + 1} {time_frame[i]}")
+            print(f"{i + 1}. {time_frame[i]}")
 
 
     def on_draw(self):
@@ -36,7 +39,7 @@ class Menu(arcade.Window):
         self.draw_background()
 
 def main():
-    menu = Menu(1800, 1200)
+    menu = TimeFrameMenu(1800, 1200)
     arcade.start_render()
 
     menu.on_draw()

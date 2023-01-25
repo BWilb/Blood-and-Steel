@@ -6,7 +6,7 @@ nations = ["Germany", "France", "Great Britain",
            "United States", "Japan", "Russia", "Italy"]
 # nation_state array variable will be expanded upon as project continues
 
-class Menu(arcade.Window):
+class NationalMenu(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
         self.width = width
@@ -35,7 +35,7 @@ class Menu(arcade.Window):
         self.draw_background()
 
 def main():
-    menu = Menu(1800, 1200)
+    menu = NationalMenu(1800, 1200)
 
     arcade.start_render()
 
