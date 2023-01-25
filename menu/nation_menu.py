@@ -21,7 +21,7 @@ class Menu(arcade.Window):
         self.menu_size = self.height / 1.25
 
         arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.BLUE)
-        arcade.draw_text("Welcome to War", (self.width / 2) - 250, self.height - 100, color=arcade.color.BONE, font_size=25)
+        arcade.draw_text("Welcome to War", (self.width / 2) - 250, self.height - 100, color=arcade.color.CYAN, font_size=25)
 
         arcade.draw_text("Choose your nation!", (self.width / 2) - 250, self.height - 150, color=arcade.color.BLUE, font_size=20)
 
