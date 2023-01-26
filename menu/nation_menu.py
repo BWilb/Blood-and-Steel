@@ -5,6 +5,7 @@ nations = ["Germany", "France", "Great Britain",
 # nation_state array variable will be expanded upon as project continues
 
 class NationalMenu(arcade.Window):
+    """Class will eventually be migrated to time_frame file"""
     def __init__(self, width, height):
         super().__init__(width, height)
         self.width = width
