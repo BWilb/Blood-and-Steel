@@ -1,12 +1,13 @@
 import arcade
 
-nations = ["Germany", "France", "Great Britain",
-           "United States", "Japan", "Russia", "Italy"]
+time_frame = ["1910", "1914", "1918", "1932", "1936",
+              "1939"]
+# time frame array will be expanded as project continues on
+
+nations = ["Japan", "United States", "Russia", "Germany",
+                    "Britain", "France"]
 # nation_state array variable will be expanded upon as project continues
 
-time_frame = ["1910", "1914", "1918", "1932", "1936",
-              "1940"]
-# time frame array will be expanded as project continues on
 time_chosen = ""
 nation_chosen = ""
 
@@ -39,6 +40,9 @@ class NationalMenu(arcade.Window):
 
         self.draw_background()
 
+    def nation_main(self):
+        nationmenu = NationalMenu(1800, 1200)
+
 class TimeFrameMenu(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
@@ -65,19 +69,22 @@ class TimeFrameMenu(arcade.Window):
             self.menu_size -= 50
             print(f"{i + 1}. {time_frame[i]}")
 
-
     def on_draw(self):
 
         self.draw_background()
 
-def main():
+    def on_key_press(self, key: int, modifiers: int):
+        if key == arcade.key.SPACE:
+            arcade.close_window()
+
+def time_main():
     menu = TimeFrameMenu(1800, 1200)
     arcade.start_render()
 
     menu.on_draw()
     menu.draw_content()
     arcade.finish_render()
-
     arcade.run()
+
 if __name__ == '__main__':
-    main()
+    time_main()
