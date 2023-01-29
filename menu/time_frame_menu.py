@@ -37,15 +37,45 @@ class NationalMenu(arcade.Window):
             # loop that goes through elements of time frame variable
             arcade.draw_text(f"{i + 1}. {nations[i]}", self.width / 2 - 215, self.menu_size, arcade.color.BLUE, font_size=20)
             self.menu_size -= 50
-            print(f"{i + 1}. {nations[i]}")
+            
+
+        arcade.draw_text("type number of choice to exit menu",
+                         self.width / 2 - 375, 500, arcade.color.BLUE, font_size=25)
     def on_draw(self):
 
         self.draw_background()
 
     def on_key_press(self, key: int, modifiers: int):
-        if key == arcade.key.SPACE:
-            # when user hits space bar, window closes
+        """
+        Key choices will act as user prompts.
+        whichever nation chosen will become value
+        for nation variable. The other choice will be calling
+        the main function for whichever nation file chosen.
+        """
+        if key == arcade.key.KEY_1:
             arcade.close_window()
+            print("you chose japan!!")
+        elif key == arcade.key.KEY_2:
+            arcade.close_window()
+            print("you chose United States")
+        elif key == arcade.key.KEY_3:
+            arcade.close_window()
+            print("you chose Russia")
+        elif key == arcade.key.KEY_4:
+            arcade.close_window()
+            print("you chose Germany")
+        elif key == arcade.key.KEY_5:
+            arcade.close_window()
+            print("you chose Britain")
+        elif key == arcade.key.KEY_6:
+            arcade.close_window()
+            print("You chose France")
+        elif key == arcade.key.KEY_7:
+            arcade.close_window()
+            print("You chose Serbia")
+        elif key == arcade.key.KEY_8:
+            arcade.close_window()
+            print("you chose Italy")
 # break
 
 class TimeFrameMenu(arcade.Window):
@@ -71,17 +101,38 @@ class TimeFrameMenu(arcade.Window):
             # loop that goes through elements of time frame variable
             arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 175, self.menu_size, arcade.color.BLUE, font_size=20)
             self.menu_size -= 50
-            print(f"{i + 1}. {time_frame[i]}")
-        arcade.draw_text("Hit space bar to close window",
-                         self.width / 2 - 325, 500, arcade.color.BLUE, font_size=25)
+        arcade.draw_text("type number of choice to exit menu",
+                         self.width / 2 - 375, 500, arcade.color.BLUE, font_size=25)
 
     def on_draw(self):
         self.draw_background()
 
     def on_key_press(self, key: int, modifiers: int):
-        if key == arcade.key.SPACE:
-            # when user hits space bar, window closes
+        """
+        Key choices will act as user prompts.
+        whichever time frame chosen will become value
+        for time frame variable
+        """
+
+        if key == arcade.key.KEY_1:
             arcade.close_window()
+            print("you chose 1910")
+        elif key == arcade.key.KEY_2:
+            arcade.close_window()
+            print("you chose 1914")
+        elif key == arcade.key.KEY_3:
+            arcade.close_window()
+            print("you chose 1918")
+        elif key == arcade.key.KEY_4:
+            arcade.close_window()
+            print("you chose 1932")
+        elif key == arcade.key.KEY_5:
+            arcade.close_window()
+            print("you chose 1936")
+        elif key == arcade.key.KEY_6:
+            arcade.close_window()
+            print("you chose 1939")
+
 
 def time_main():
     """Beginning of time frame menu"""
@@ -93,9 +144,6 @@ def time_main():
     arcade.run()
     """ending of time frame menu"""
 
-    time_chosen = input("Which time period do you choose?: ")
-    # user is prompted to choose time period
-
     """Beginning of nation menu"""
     nationmenu = NationalMenu(1800, 1200)
     arcade.start_render()
@@ -104,9 +152,6 @@ def time_main():
     arcade.finish_render()
     arcade.run()
     """Ending of nation menu"""
-
-    nation_chosen = input("Which nation do you choose?: ")
-    # user is prompted to choose nation
 
 if __name__ == '__main__':
     time_main()
