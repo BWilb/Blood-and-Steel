@@ -1,11 +1,11 @@
 import arcade
-from nation_state.asia import japan
-from nation_state.north_america import united_states
-from nation_state.europe import germany
-from nation_state.europe import russia
-from nation_state.europe import italy
-from nation_state.europe import france
-from nation_state.europe import britain
+from nation_state.asia.japan import japan
+from nation_state.north_america.united_states import united_states
+from nation_state.europe.germany import germany
+from nation_state.europe.russia import russia
+from nation_state.europe.italy import italy
+from nation_state.europe.france import france
+from nation_state.europe.britain import britain
 
 time_frame = ["1910", "1914", "1918", "1932", "1936",
               "1939"]
