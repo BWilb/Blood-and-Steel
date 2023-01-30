@@ -23,3 +23,7 @@ class Japan:
 
     def printmetrics(self):
         print(self.population)
+
+def main(time):
+    japan = Japan(time)
+    print(japan.population)

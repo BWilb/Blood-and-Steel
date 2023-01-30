@@ -21,5 +21,6 @@ class France:
         self.population = population[year]
         # leader isn't initialized until time_frame is established.
 
-    def printmetrics(self):
-        print(self.population)
+def main(time):
+    france = France(time)
+    print(france.population)

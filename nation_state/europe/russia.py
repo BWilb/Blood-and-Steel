@@ -15,11 +15,13 @@ population = {
     "1936": 104900000,
     "1939": 109397463
 }
-class UnitedStates:
+class Russia:
     def __init__(self, year):
         self.leader = leaders[year]
         self.population = population[year]
         # leader isn't initialized until time_frame is established.
 
-    def printmetrics(self):
-        print(self.population)
+
+def main(time):
+    russia = Russia(time)
+    print(russia.population)

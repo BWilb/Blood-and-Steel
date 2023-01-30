@@ -16,13 +16,11 @@ population = {
     "1939": 70500000
 }
 class Germany:
-    def __init__(self):
-        self.leader = ""
-        self.population = 0
+    def __init__(self, time):
+        self.leader = leaders[time]
+        self.population = population[time]
         # leader isn't initialized until time_frame is established.
 
-def main():
-    print("hi")
-
-if __name__ == '__main__':
-    main()
+def main(time):
+    germany = Germany(time)
+    print(germany.population)
