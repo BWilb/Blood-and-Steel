@@ -1,3 +1,23 @@
+from datetime import timedelta, datetime
+from nation_state.europe.germany.germany import *
+from nation_state.europe.italy.italy import *
+from nation_state.europe.france.france import *
+from nation_state.europe.britain.britain import *
+from nation_state.europe.russia.russia import *
+from nation_state.asia.japan.japan import *
+
+on_going_conflicts = []
+"""variable established for any conflicts occurring"""
+
+leader_options = ["Justify War Goal",
+                  "Impose Sanctions",
+                  "Declare War",
+                  "Disband Congress",
+                  "Dissolve Congress",
+                  "Switch Parties",
+                  "Veto Bill",
+                  "Make Executive Order"]
+
 leaders = {
     "1910" : "William Howard Taft",
     "1914" : "Woodrow Wilson",
@@ -17,7 +37,7 @@ population = {
     "1939": 130880000
 }
 
-alternative_parties = ["Libertarian Party", "Communist Party USA", "transhumanist party",
+alternative_parties = ["Libertarian Party", "Communist Party USA", "Trans-humanist party",
                        "Green Party", "Constitution Party", "Reform Party", "American Nazi Party"
                        "Socialist Party USA", "American Freedom Party"]
 
@@ -42,10 +62,12 @@ vice_presidents = {
 }
 
 def show_statistics(nation, time):
+    # shows statistics of the current state of the nation
     if nation.at_war:
         print(f"The current year is {time}.\n"
               f"Your current country is {nation.nation_name}.\n"
               f"Your current leader is {nation.leader}\n"
+              f"Your current political party is {nation.political_party}"
               f"Your current population is {nation.population}\n"
               f"Your nation is currently at war!")
     else:
@@ -55,16 +77,45 @@ def show_statistics(nation, time):
               f"Your current population is {nation.population}\n"
               f"Your nation is currently not at war!")
 
+def manual_game(us, year):
+    date = datetime(int(year), 1, 1)
+    # establishment of date variable
+
+    germany = Germany(year)
+    italy = Italy(year)
+    britain = Britain(year)
+    russia = Russia(year)
+    france = France(year)
+    # establishment of European(partial) AIs
+    japan = Japan(year)
+    # establishment of Japanese (partial AI)
+    """establishment of nations not chosen (based upon preset AI)"""
+
+    i = 1
+    while us.population > 1000:
+        print(date)
+        """while loop constraint based 
+        upon assumption that US has large enough population"""
+        #print(date + timedelta(days=i))
+
+        i += 1
 class UnitedStates:
     def __init__(self, year):
         self.leader = leaders[year]
         self.population = population[year]
-        # leader isn't initialized until time_frame is established.
+        self.political_party = political_parties[year]
         self.nation_name = "United States"
+        """first 4 variables description of nation, not established until
+        time frame chosen in opening menu file
+        """
+        self.stability = 100
+        # stability of nation
         self.at_war = False
-
+        # foreign relations
 
 def main(time):
     united_states = UnitedStates(time)
     print(united_states.population)
-    show_statistics(united_states, time)
+    # show_statistics(united_states, time)
+    manual_game(united_states, time)
+main("1939")
