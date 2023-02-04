@@ -21,7 +21,7 @@ population = {
     "1918": 39582000,
     "1932": 46335000,
     "1936": 47081300,
-    "1940": 46029200
+    "1939": 46029200
 }
 
 
@@ -32,6 +32,6 @@ class Britain:
         # leader isn't initialized until time_frame is established.
 
 
-def main(time):
+"""def main(time):
     britain = Britain(time)
-    print(britain.population)
+    print(britain.population)"""

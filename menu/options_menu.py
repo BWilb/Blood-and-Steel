@@ -20,14 +20,14 @@ class OptionsMenu(arcade.Window):
         self.menu_size = self.height / 1.25
 
         arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.BLUE)
-        arcade.draw_text("War", (self.width / 2) - 175, self.height - 100, color=arcade.color.CYAN, font_size=25)
-        arcade.draw_text("What would you like to do", (self.width / 2) - 250, self.height - 150, color=arcade.color.BLUE, font_size=20)
+        arcade.draw_text("War", (self.width / 2) - 150, self.height - 100, color=arcade.color.CYAN, font_size=25)
+        arcade.draw_text("What would you like to do", (self.width / 2) - 300, self.height - 150, color=arcade.color.BLUE, font_size=25)
 
         for i in range(0, len(options)):
             # loop that goes through elements of time frame variable
             arcade.draw_text(f"{i + 1}. {options[i]}", self.width / 2 - 250, self.menu_size, arcade.color.BLUE, font_size=20)
             self.menu_size -= 50
-        arcade.draw_text("hit spacebar to exit menu",
+        arcade.draw_text("hit x in right hand corner to exit menu",
                          self.width / 2 - 300, 500, arcade.color.BLUE, font_size=25)
 
     def on_draw(self):
@@ -39,8 +39,8 @@ class OptionsMenu(arcade.Window):
         whichever time frame chosen will become value
         for time frame variable
         """
-        if key == arcade.key.SPACE:
-            arcade.close_window()
+        """if key == arcade.key.SPACE:
+            arcade.close_window()"""
 
 def main():
     menu = OptionsMenu(1800, 1200)
@@ -49,4 +49,3 @@ def main():
     menu.draw_content()
     arcade.finish_render()
     arcade.run()
-main()
