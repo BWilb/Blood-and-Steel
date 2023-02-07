@@ -134,7 +134,7 @@ def random_events(us, time):
         people_killed = random.randrange(1000, 10000000)
         us.population -= people_killed
         print(f"{people_killed} people died in a nuclear raid")
-        
+
 def show_statistics(nation, time):
     # shows statistics of the current state of the nation
     if nation.at_war:
@@ -145,12 +145,12 @@ def show_statistics(nation, time):
               f"Your current population is {nation.population}\n"
               f"Your nation's current stability is {nation.stability}%.\n"
               f"Your nation is currently at war!\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of civilians are nationalists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of civilians are communists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of civilians are independent\n")
+              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
+              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
+              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
+              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
+              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
+              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
     else:
         print(f"The current year is {time}.\n"
               f"Your current country is {nation.nation_name}.\n"
@@ -159,40 +159,61 @@ def show_statistics(nation, time):
               f"Your current population is {nation.population}\n"
               f"Your nation is currently not at war!\n"
               f"Your nation's current stability is {nation.stability}%.\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of civilians are nationalists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of civilians are communists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of civilians are independent\n")
+              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
+              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
+              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
+              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
+              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
+              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
 
 def us_collapse(us):
     print(f"Unfortunately your nation has collapsed due to low population.\n"
           f"{us.population} people remain.")
     us.stability = (us.stability - us.stability)
     # stability of United States collapses due to lack of population
-def us_election(us, year):
-    if int(year) % 4 == 0:
-        print("Its election time!!!")
+def us_election(us):
+    print("Its election time\n")
+    if (us.democratic_supporters // us.population) * 100 >= 50:
+        print("democrats won the elections\n")
+        if (us.nation_name.lower() == "democracy" or us.nation_name.lower() == "republic"):
+            us.nation_name = "United States"
+            print("the US government is now a republic\n")
 
-        if (us.stability <= 75 and us.political_party.lower() == "republican"):
-            us.democratic_supporters = us.population * 0.75
-            us.socialist_supporters = (us.population - us.democratic_supporters) * 0.2
-            us.republican_supporters = (us.population - us.democratic_supporters - us.socialist_supporters) * 0.45
-            us.nationalist_supporters = (us.population - us.democratic_supporters - us.socialist_supporters -
-                                         us.republican_supporters) * 0.45
-            us.communist_supporters = (us.population - us.democratic_supporters - us.socialist_supporters -
-                                         us.republican_supporters - us.nationalist_supporters) * 0.55
-            us.non_alligned = (us.population - us.democratic_supporters - us.socialist_supporters -
-                                         us.republican_supporters - us.nationalist_supporters - us.communist_supporters)
-            print("The democratic party came out on top")
-            time.sleep(3)
+    elif (us.republican_supporters // us.population) * 100 >= 50:
+        print("republicans won the elections\n")
 
-        """elif (us.stability <= 75 and us.political_party.lower() == "democratic"):
-            us.population = """
+    elif (us.socialist_supporters // us.population) * 100 >= 50:
+        print("socialists won the elections")
+        us.nation_name = "Socialist States of America"
+        print("the United States is now a social democracy\n")
+        us.goverment_type = "social democracy"
+
+def politics_change(us):
+    """
+    function manipulates membership of political parties
+    based on stability of nation
+    """
+    print(us.democratic_supporters)
+    print(us.republican_supporters)
+    print(us.nationalist_supporters)
+    print(us.communist_supporters)
+    print(us.socialist_supporters)
+    print(f"{us.non_alligned}\n")
+    time.sleep(3)
+    loss_gain = random.randrange(0, (round(us.population * 0.05, 0)))
+    loss_gain = round(loss_gain, 0)
+    if (us.stability < 75):
+        us.democratic_supporters -= loss_gain
+        us.republican_supporters += round(loss_gain * 0.50, 0)
+        us.communist_supporters += loss_gain * 0.10
+        us.socialist_supporters += loss_gain * 0.15
+        us.nationalist_supporters += loss_gain * 0.25
+        us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
+                                                            us.communist_supporters + us.socialist_supporters +
+                                                            us.nationalist_supporters))
+    time.sleep(5)
 
 def manual_game(us, year):
-    print("Hi")
     date = datetime(int(year), 1, 1)
     # establishment of date variable
     germany = Germany(year)
@@ -205,10 +226,19 @@ def manual_game(us, year):
     # establishment of Japanese (partial AI)
     """establishment of nations not chosen (based upon preset AI)"""
     globe_var = globe.Globe()
-    us_election(us, year)
-    #while us.population >= 10000:
+    i = 1
+    while us.population >= 10000:
+        if int(year) % 4 == 0:
+            us_election(us)
+        politics_change(us)
+        date = date + timedelta(days=i)
+        i += 1
+        show_statistics(us, year)
+        us.population += random.randrange(0, 10000)
 
-    show_statistics(us, year)
+        time.sleep(3)
+
+        show_statistics(us, year)
 
 class UnitedStates:
     def __init__(self, year):
@@ -236,7 +266,7 @@ class UnitedStates:
             self.defcon = 5
 
         if (int(year) >= 1930 and int(year) <= 1939):
-            self.stability = 75
+            self.stability = 72
         else:
             self.stability = 92
         self.leader_popularity = 95
@@ -244,7 +274,7 @@ class UnitedStates:
         # stability, type, and popularity of nation and parties
 
         if self.political_party.lower() == "democratic":
-            self.democratic_supporters = self.population * 0.85
+            self.democratic_supporters = self.population * 0.65
             self.republican_supporters = (self.population - self.democratic_supporters) * 0.75
             self.communist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters)) * 0.3
             self.socialist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
@@ -255,7 +285,7 @@ class UnitedStates:
                                                             self.communist_supporters + self.socialist_supporters +
                                                     self.nationalist_supporters))
         elif self.political_party.lower() == "republican":
-            self.republican_supporters = (self.population) * 0.85
+            self.republican_supporters = (self.population) * 0.65
             self.democratic_supporters = (self.population - self.republican_supporters) * 0.75
             self.communist_supporters = (self.population - (
                         self.democratic_supporters + self.republican_supporters)) * 0.3
