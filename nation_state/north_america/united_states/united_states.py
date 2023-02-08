@@ -138,7 +138,7 @@ def random_events(us, time):
 def show_statistics(nation, time):
     # shows statistics of the current state of the nation
     if nation.at_war:
-        print(f"The current year is {time}.\n"
+        print(f"The current date is {time}.\n"
               f"Your current country is {nation.nation_name}.\n"
               f"Your current leader is {nation.leader}\n"
               f"Your current political party is {nation.political_party}"
@@ -152,7 +152,7 @@ def show_statistics(nation, time):
               f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
               f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
     else:
-        print(f"The current year is {time}.\n"
+        print(f"The current date is {time}.\n"
               f"Your current country is {nation.nation_name}.\n"
               f"Your current leader is {nation.leader}\n"
               f"Your current political party is {nation.political_party}\n"
@@ -175,42 +175,116 @@ def us_election(us):
     print("Its election time\n")
     if (us.democratic_supporters // us.population) * 100 >= 50:
         print("democrats won the elections\n")
-        if (us.nation_name.lower() == "democracy" or us.nation_name.lower() == "republic"):
-            us.nation_name = "United States"
-            print("the US government is now a republic\n")
+        if (not us.goverment_type.lower() == "democracy"):
+            us.nation_name = "United States of America"
+            print("the US government is now a democracy\n")
 
     elif (us.republican_supporters // us.population) * 100 >= 50:
         print("republicans won the elections\n")
+        if not us.goverment_type.lower() == "republic":
+            us.nation_name = "Republic of the United States"
+            print("The US is now a Republic")
 
     elif (us.socialist_supporters // us.population) * 100 >= 50:
         print("socialists won the elections")
-        us.nation_name = "Socialist States of America"
-        print("the United States is now a social democracy\n")
-        us.goverment_type = "social democracy"
+        if not us.goverment_type.lower() == "social democracy":
+            us.nation_name = "Socialist States of America"
+            print("the United States is now a social democracy\n")
+            us.goverment_type = "social democracy"
+
+    elif (us.nationalist_supporters // us.population) * 100 >= 50:
+        print("The nationalists won the election")
+        if not us.goverment_type.lower() == "fascist state":
+            print("The United States is now a fascist state")
+            us.goverment_type = "fascist state"
+            us.nation_name = "Confederated States of America"
+
+    elif (us.communist_supporters // us.population) * 100 >= 50:
+        print("The communists won the election")
+        if not us.goverment_type.lower() == "communist state":
+            print("The united states is now a communist state")
+            us.goverment_type = "communist state"
+            us.nation_name = "Confederated States of America"
+
+    elif (us.non_alligned // us.population) * 100 >= 50:
+        print("The royalists won the election")
+        if not us.goverment_type.lower() == "monarchy":
+            print("The united states is now a monarchy")
+            us.goverment_type = "monarchy"
+            us.nation_name = "The Kingdom of America"
+
+def us_stability(us):
+    chance = random.randrange(1, 3)
+    if chance == 1:
+        us.stability -= (random.randrange(1, 10) * 0.72)
+    elif chance == 2:
+        us.stability += (random.randrange(1, 10) * 0.72)
+
+    if us.stability >= 100:
+        us.stability = 100
 
 def politics_change(us):
     """
     function manipulates membership of political parties
     based on stability of nation
     """
-    print(us.democratic_supporters)
-    print(us.republican_supporters)
-    print(us.nationalist_supporters)
-    print(us.communist_supporters)
-    print(us.socialist_supporters)
-    print(f"{us.non_alligned}\n")
-    time.sleep(3)
+
     loss_gain = random.randrange(0, (round(us.population * 0.05, 0)))
     loss_gain = round(loss_gain, 0)
+
+    percent = random.randrange(1, 3)
+
     if (us.stability < 75):
-        us.democratic_supporters -= loss_gain
-        us.republican_supporters += round(loss_gain * 0.50, 0)
-        us.communist_supporters += loss_gain * 0.10
-        us.socialist_supporters += loss_gain * 0.15
-        us.nationalist_supporters += loss_gain * 0.25
-        us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
-                                                            us.communist_supporters + us.socialist_supporters +
-                                                            us.nationalist_supporters))
+        if percent == 1:
+            us.democratic_supporters -= loss_gain
+            us.republican_supporters -= round(loss_gain * 0.50, 0)
+            us.communist_supporters += loss_gain * 0.10
+            us.socialist_supporters += loss_gain * 0.15
+            us.nationalist_supporters += loss_gain * 0.25
+            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
+                                                                us.communist_supporters + us.socialist_supporters +
+                                                                us.nationalist_supporters))
+        elif percent == 2:
+            us.democratic_supporters += loss_gain
+            us.republican_supporters += round(loss_gain * 0.50, 0)
+            us.communist_supporters -= loss_gain * 0.10
+            us.socialist_supporters -= loss_gain * 0.15
+            us.nationalist_supporters -= loss_gain * 0.25
+            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
+                                                us.communist_supporters + us.socialist_supporters +
+                                                us.nationalist_supporters))
+    elif us.stability > 75:
+        if percent == 1:
+            us.democratic_supporters -= loss_gain
+            us.republican_supporters -= round(loss_gain * 0.50, 0)
+            us.communist_supporters += round(loss_gain * 0.12, 0)
+            us.socialist_supporters += round(loss_gain * 0.13, 0)
+            us.nationalist_supporters += round(loss_gain * 0.25, 0)
+            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
+                                                                us.communist_supporters + us.socialist_supporters +
+                                                                us.nationalist_supporters))
+        elif percent == 2:
+            us.democratic_supporters += loss_gain
+            us.republican_supporters += round(loss_gain * 0.50, 0)
+            us.communist_supporters -= loss_gain * 0.13
+            us.socialist_supporters -= loss_gain * 0.12
+            us.nationalist_supporters -= loss_gain * 0.25
+            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
+                                                us.communist_supporters + us.socialist_supporters +
+                                                us.nationalist_supporters))
+    if us.democratic_supporters <= 0:
+        us.democratic_supporters = 0
+    if us.republican_supporters <= 0:
+        us.republican_supporters = 0
+    if us.communist_supporters <= 0:
+        us.communist_supporters = 0
+    if us.nationalist_supporters <= 0:
+        us.nationalist_supporters = 0
+    if us.socialist_supporters <= 0:
+        us.socialist_supporters = 0
+    if us.non_alligned <= 0:
+        us.non_alligned = 0
+
     time.sleep(5)
 
 def manual_game(us, year):
@@ -233,9 +307,10 @@ def manual_game(us, year):
         politics_change(us)
         date = date + timedelta(days=i)
         i += 1
-        show_statistics(us, year)
+        show_statistics(us, date)
         us.population += random.randrange(0, 10000)
 
+        us_stability(us)
         time.sleep(3)
 
         show_statistics(us, year)
