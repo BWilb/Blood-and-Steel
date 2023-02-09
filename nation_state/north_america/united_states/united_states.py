@@ -107,7 +107,17 @@ vice_presidents = {
     # will be coded in later"""
 
 def random_events(us, time):
-    parties = ["Democratic", "Republic"]
+    """
+    Random events will be able to influence...
+    population, political parties, stability, whether your nation is at war,
+    potential political deaths (whether natural or assassination).
+    Random Events could lead to potential civil war
+    """
+
+    parties = ["Democratic", "Republican"]
+
+    fringes = ["Communist", "Nationalist", "Socialist"]
+
     random_number = random.randrange(0, 1000)
     if random_number % 2 == 0:
         # random event of civilians winning lottery
@@ -125,6 +135,24 @@ def random_events(us, time):
             print(f"A {parties[choice]} senator has replaced the old.")
         elif choice == 1:
             print(f"A {parties[choice]} has replaced the old.")
+
+    elif (random_number % 25 == 0):
+        choice = random.randrange(0, len(fringes))
+        party = fringes[choice]
+        attendees = random.randrange(10, 5000)
+        if party.lower() == "communist":
+            us.republican_supporters -= round(attendees * 0.5, 0)
+            us.democratic_supporters -= round(attendees * 0.5, 0)
+            us.communist_supporters += attendees
+        elif party.lower() == "nationalist":
+            us.republican_supporters -= round(attendees * 0.3, 0)
+            us.democratic_supporters -= round(attendees * 0.7, 0)
+            us.nationalist_supporters += attendees
+        elif party.lower() == "socialist":
+            us.republican_supporters -= round(attendees * 0.7, 0)
+            us.democratic_supporters -= round(attendees * 0.3, 0)
+            us.socialist_supporters += attendees
+        print(f"The {party} party held a rally with {attendees} attendees\n")
 
     elif (random_number % 50 and int(time) >= 1945) or us.at_war:
         """Random event of nuclear attack.
@@ -158,7 +186,7 @@ def show_statistics(nation, time):
               f"Your current political party is {nation.political_party}\n"
               f"Your current population is {nation.population}\n"
               f"Your nation is currently not at war!\n"
-              f"Your nation's current stability is {nation.stability}%.\n"
+              f"Your nation's current stability is {round(nation.stability, 2)}%.\n"
               f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
               f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
               f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
@@ -172,48 +200,55 @@ def us_collapse(us):
     us.stability = (us.stability - us.stability)
     # stability of United States collapses due to lack of population
 def us_election(us):
-    print("Its election time\n")
-    if (us.democratic_supporters // us.population) * 100 >= 50:
-        print("democrats won the elections\n")
-        if (not us.goverment_type.lower() == "democracy"):
+    print("\nIts election time")
+    if (us.democratic_supporters / us.population) * 100 >= 50:
+        print(f"Democrats won the elections, with {us.democratic_supporters} votes")
+        if not us.goverment_type.lower() == "democracy":
             us.nation_name = "United States of America"
+            us.goverment_type = "democracy"
             print("the US government is now a democracy\n")
 
-    elif (us.republican_supporters // us.population) * 100 >= 50:
-        print("republicans won the elections\n")
+    elif (us.republican_supporters / us.population) * 100 >= 50:
+        print(f"republicans won the elections, with {us.republican_supporters} votes")
         if not us.goverment_type.lower() == "republic":
             us.nation_name = "Republic of the United States"
-            print("The US is now a Republic")
+            us.goverment_type = "republic"
+            print("The US is now a Republic\n")
 
-    elif (us.socialist_supporters // us.population) * 100 >= 50:
-        print("socialists won the elections")
+    elif (us.socialist_supporters / us.population) * 100 >= 50:
+        print(f"socialists won the elections, with {us.socialist_supporters} votes")
         if not us.goverment_type.lower() == "social democracy":
             us.nation_name = "Socialist States of America"
             print("the United States is now a social democracy\n")
             us.goverment_type = "social democracy"
 
-    elif (us.nationalist_supporters // us.population) * 100 >= 50:
-        print("The nationalists won the election")
+    elif (us.nationalist_supporters / us.population) * 100 >= 50:
+        print(f"The nationalists won the election, with {us.nationalist_supporters} votes")
         if not us.goverment_type.lower() == "fascist state":
-            print("The United States is now a fascist state")
+            print("The United States is now a fascist state\n")
             us.goverment_type = "fascist state"
             us.nation_name = "Confederated States of America"
 
-    elif (us.communist_supporters // us.population) * 100 >= 50:
-        print("The communists won the election")
+    elif (us.communist_supporters / us.population) * 100 >= 50:
+        print(f"The communists won the election, with {us.communist_supporters} votes")
         if not us.goverment_type.lower() == "communist state":
-            print("The united states is now a communist state")
+            print("The united states is now a communist state\n")
             us.goverment_type = "communist state"
             us.nation_name = "Confederated States of America"
 
-    elif (us.non_alligned // us.population) * 100 >= 50:
-        print("The royalists won the election")
+    elif (us.non_alligned / us.population) * 100 >= 50:
+        print(f"The royalists won the election, with {us.non_alligned} votes")
         if not us.goverment_type.lower() == "monarchy":
-            print("The united states is now a monarchy")
+            print("The united states is now a monarchy\n")
             us.goverment_type = "monarchy"
             us.nation_name = "The Kingdom of America"
+    time.sleep(5)
 
 def us_stability(us):
+    """
+    stability of government resets itself if exceeds 100% or drops below 0%
+    will be affected by random events as well
+    """
     chance = random.randrange(1, 3)
     if chance == 1:
         us.stability -= (random.randrange(1, 10) * 0.72)
@@ -222,17 +257,19 @@ def us_stability(us):
 
     if us.stability >= 100:
         us.stability = 100
+    elif us.stability <= 0:
+        us.stability = 0
 
 def politics_change(us):
     """
     function manipulates membership of political parties
     based on stability of nation
     """
-
-    loss_gain = random.randrange(0, (round(us.population * 0.05, 0)))
+    loss_gain = random.randrange(0, (round(us.population * 0.08, 0)))
     loss_gain = round(loss_gain, 0)
-
+    # loss_gain variable for amount of population that could change parties
     percent = random.randrange(1, 3)
+    # percent variable used for randomizing losses or gains per party
 
     if (us.stability < 75):
         if percent == 1:
@@ -284,8 +321,11 @@ def politics_change(us):
         us.socialist_supporters = 0
     if us.non_alligned <= 0:
         us.non_alligned = 0
-
-    time.sleep(5)
+    """
+    if political parties receive 0 or less supporters
+    get automatically set to 0
+    """
+    time.sleep(1)
 
 def manual_game(us, year):
     date = datetime(int(year), 1, 1)
@@ -300,21 +340,26 @@ def manual_game(us, year):
     # establishment of Japanese (partial AI)
     """establishment of nations not chosen (based upon preset AI)"""
     globe_var = globe.Globe()
-    i = 1
+    print(date)
     while us.population >= 10000:
-        if int(year) % 4 == 0:
+        """Control set up to 
+        make sure that US doesn't somehow 
+        survive with 0 people
+        """
+        if date.year % 4 == 0 and date.month == 11 and date.day == 7:
             us_election(us)
+        date = date + timedelta(days=1)
+        # date variable increments by one day
         politics_change(us)
-        date = date + timedelta(days=i)
-        i += 1
+        us_stability(us)
         show_statistics(us, date)
         us.population += random.randrange(0, 10000)
 
-        us_stability(us)
+        show_statistics(us, year)
         time.sleep(3)
 
-        show_statistics(us, year)
-
+    time.sleep(1)
+    us_collapse(us)
 class UnitedStates:
     def __init__(self, year):
         self.leader = historical_leaders[year]
@@ -324,7 +369,6 @@ class UnitedStates:
         """first 4 variables description of nation, not established until
         time frame chosen in opening menu file
         """
-
         if int(year) >= 1932:
             self.scotus_size = 9
         elif int(year) < 1932:
@@ -391,6 +435,4 @@ class UnitedStates:
 
 def main(time):
     united_states = UnitedStates(time)
-    #print(united_states.leader)
-    #show_statistics(united_states, time)
     manual_game(united_states, time)

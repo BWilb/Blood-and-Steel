@@ -2,15 +2,19 @@
 
 if keyboard.read_key("Space"):
     print("end")"""
+import time
 
 """File is meant for experimentation"""
-"""from datetime import timedelta, datetime
+from datetime import timedelta, datetime
 
-date = datetime(int("1939"), 1, 1)
+date = datetime(int("1936"), 1, 1)
 
-for i in range(0, 366):
-    date = date + timedelta(days=i)
-    print(date.year)"""
+for i in range(0, 10000):
+    date += timedelta(days=1)
+    if (date.year % 4 == 0 and date.month == 11 and date.day == 7):
+        print(date)
+
+
 
 
 """self.democratic_supporters = self.population * 0.85
@@ -25,6 +29,7 @@ for i in range(0, 366):
                                                     us.communist_supporters + us.socialist_supporters +
                                                     us.nationalist_supporters))
 """
+
 
 
 from nation_state.europe.germany.germany import *
