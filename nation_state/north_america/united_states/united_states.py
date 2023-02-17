@@ -395,7 +395,7 @@ def manual_game(us, year):
     """establishment of nations not chosen (based upon preset AI)"""
     globe_var = globe.Globe()
     print(date)
-    while us.population >= 10000:
+    while us.population >= 20000:
         """Control set up to 
         make sure that US doesn't somehow 
         survive with 0 people

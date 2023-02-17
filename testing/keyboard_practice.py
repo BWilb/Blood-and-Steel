@@ -6,6 +6,7 @@ import time
 
 """File is meant for experimentation"""
 from datetime import timedelta, datetime
+import math
 
 date = datetime(int("1936"), 1, 1)
 
@@ -15,7 +16,7 @@ for i in range(0, 10000):
         print(date)
 
 
-
+print(math.pow(2, 10000) )
 
 """self.democratic_supporters = self.population * 0.85
             self.republican_supporters = (self.population - self.democratic_supporters) * 0.75

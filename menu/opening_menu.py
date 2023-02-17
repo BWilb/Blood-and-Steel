@@ -1,3 +1,5 @@
+import time
+
 import arcade
 from nation_state.asia.japan import japan
 from nation_state.north_america.united_states import united_states
@@ -81,11 +83,13 @@ class NationalMenu(arcade.Window):
         arcade.draw_text("Choose your nation!", (self.width / 2) - 250, self.height - 150, color=arcade.color.BLUE,
                          font_size=20)
 
+
         for i in range(0, len(nations)):
             # loop that goes through elements of time frame variable
             arcade.draw_text(f"{i + 1}. {nations[i]}", self.width / 2 - 215, self.menu_size, arcade.color.BLUE,
                              font_size=20)
             self.menu_size -= 50
+
 
         arcade.draw_text("hit spacebar to exit menu",
                          self.width / 2 - 325, 500, arcade.color.BLUE, font_size=25)

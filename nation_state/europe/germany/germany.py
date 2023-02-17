@@ -1,3 +1,11 @@
+import random
+from nation_state.europe.italy.italy import *
+from nation_state.europe.britain.britain import *
+from nation_state.europe.france.france import *
+from nation_state.europe.russia.russia import *
+from nation_state.north_america.united_states.united_states import *
+from nation_state.asia.japan.japan import *
+
 leaders = {
     "1910" : "Wilhelm II",
     "1914" : "Wilhelm II",
@@ -25,6 +33,24 @@ political_parties = {
     "1939" : "National Socialist Workers Party",
 }
 
+def population_development(german):
+    choice = random.randrange(1, 3)
+    if choice == 1:
+        german.population += random.randrange(1000, 20000)
+    elif choice == 2:
+        german.population -= random.randrange(1000,  5000)
+
+def manual_game(germany, time):
+    italy = Italy(time)
+    britain = Britain(time)
+    russia = Russia(time)
+    france = France(time)
+    japan = Japan(time)
+    us = UnitedStates(time)
+    while germany.population >= 10000:
+        print("hi")
+
+    print("Your nation can no longer be sustained by your population")
 class Germany:
     def __init__(self, time):
         self.leader = leaders[time]
@@ -59,4 +85,6 @@ class Germany:
 
 def main(time):
     germany = Germany(time)
-    print(germany.population)
+    print(germany.population[time])
+
+    manual_game(germany, time)
