@@ -1,4 +1,6 @@
 import random
+from datetime import datetime
+
 from nation_state.europe.italy.italy import *
 from nation_state.europe.britain.britain import *
 from nation_state.europe.france.france import *
@@ -41,6 +43,7 @@ def population_development(german):
         german.population -= random.randrange(1000,  5000)
 
 def manual_game(germany, time):
+    date = datetime(int(time), 1, 1)
     italy = Italy(time)
     britain = Britain(time)
     russia = Russia(time)
@@ -50,29 +53,68 @@ def manual_game(germany, time):
     while germany.population >= 10000:
         print("hi")
 
+        date = date + timedelta(days=1)
+
     print("Your nation can no longer be sustained by your population")
 class Germany:
     def __init__(self, time):
         self.leader = leaders[time]
         self.population = population[time]
         self.political_party = political_parties[time]
-
-        if int(time) < 1918:
+        if (int(time) <= 1918):
             self.nation_name = "German Empire"
             self.government_type = "Constitutional Monarchy"
-            self.at_war = True
             self.stability = 95
+            self.sdp = self.population * 0.67
+            # consider changing social democratic party to monarchist party for GE
+            self.cp = (self.population - self.sdp) * 0.65
+            # center party
+            self.fcp = (self.population - (self.sdp + self.cp)) * 0.3
+            # free conservative party
+            self.nlp = (self.population - (self.sdp + self.cp + self.fcp)) * 0.45
+            # national liberal party
+            self.pp = (self.population - (self.sdp + self.cp + self.fcp + self.nlp)) * 0.65
+            # progressive party
+            self.centerp = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                              self.pp)) * 0.34
+            # center party
+            self.independent = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                              self.pp + self.centerp))
+            self.ns = 0
+            self.com = 0
+
+            """large chunk of code represents german political system
+            pretty stable before 1918
+            """
+
+            if int(time) >= 1914:
+                self.at_war = True
         elif int(time) > 1918 and int(time) <= 1933:
             self.nation_name = "Weimar Republic"
             self.government_type = "Federal Republic"
             self.at_war = False
             self.stability = 85
 
+            self.sdp = self.population * 0.45
+            self.cp = (self.population - self.sdp) * 0.65
+            self.fcp = (self.population - (self.sdp + self.cp)) * 0.45
+            self.nlp = (self.population - (self.sdp + self.cp + self.fcp)) * 0.50
+            self.pp = (self.population - (self.sdp + self.cp + self.fcp + self.nlp)) * 0.65
+            self.centerp = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                               self.pp)) * 0.34
+            self.com = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                               self.pp + self.centerp)) * 0.50
+            self.ns = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                               self.pp + self.centerp + self.com)) * 0.65
+            self.independent = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
+                                                   self.pp + self.centerp + self.com + self.ns))
+
         elif int(time) > 1933 and int(time) <= 1945:
             self.nation_name = "Third Reich"
-            self.at_war = False
             self.government_type = "Fascist Dictatorship"
             self.stability = 90
+            if int(time) >= 1939:
+                self.at_war = False
         """Internal characteristics of nation"""
 
         self.nations_at_war_with = []
@@ -85,6 +127,6 @@ class Germany:
 
 def main(time):
     germany = Germany(time)
-    print(germany.population[time])
+
 
     manual_game(germany, time)
