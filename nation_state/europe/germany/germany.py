@@ -31,9 +31,25 @@ political_parties = {
     "1914" : "Social Democratic Party of Germany",
     "1918" : "Social Democratic Party of Germany",
     "1932" : "National Socialist Workers Party",
-    "1936" : "National Socialist Workers Party",
-    "1939" : "National Socialist Workers Party",
+    "1936" : "National Socialist Party",
+    "1939" : "National Socialist Party",
 }
+
+def german_elections(germany):
+    if (germany.sdp / germany.population) * 100 >= 50:
+        print("The Social Democratic Party of Germany won the elections")
+    elif (germany.nlp / germany.population) * 100 >= 50:
+        print("The National Liberal Party of Germany won the elections")
+    elif (germany.fcp / germany.population) * 100 >= 50:
+        print("The Free Conservative Party of Germany won the elections")
+    elif (germany.ns / germany.population) * 100 >= 50:
+        print("The National Socialist Party of Germany won the elections")
+    elif (germany.centerp / germany.population) * 100 >= 50:
+        print("The Center Party of Germany won the elections")
+    elif (germany.pp / germany.population) * 100 >= 50:
+        print("The Progressive Party of Germany won the elections")
+    elif (germany.pp / germany.population) * 100 >= 50:
+        print("The Progressive Party of Germany won the elections")
 
 def population_development(german):
     choice = random.randrange(1, 3)
@@ -52,7 +68,8 @@ def manual_game(germany, time):
     us = UnitedStates(time)
     while germany.population >= 10000:
         print("hi")
-
+        if date.year % 6 == 0 and (germany.political_party.lower() == "social democratic party of germany"):
+            german_elections(germany)
         date = date + timedelta(days=1)
 
     print("Your nation can no longer be sustained by your population")
@@ -81,7 +98,9 @@ class Germany:
             self.independent = (self.population - (self.sdp + self.cp + self.fcp + self.nlp +
                                               self.pp + self.centerp))
             self.ns = 0
+            # national socialist party
             self.com = 0
+            # communist party
 
             """large chunk of code represents german political system
             pretty stable before 1918
@@ -113,6 +132,9 @@ class Germany:
             self.nation_name = "Third Reich"
             self.government_type = "Fascist Dictatorship"
             self.stability = 90
+            self.ns = self.population * 0.98
+            self.resistance = self.population - self.ns
+            # resistance groups including officers in wermacht
             if int(time) >= 1939:
                 self.at_war = False
         """Internal characteristics of nation"""
@@ -127,6 +149,5 @@ class Germany:
 
 def main(time):
     germany = Germany(time)
-
 
     manual_game(germany, time)

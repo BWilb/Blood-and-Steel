@@ -107,7 +107,6 @@ vice_presidents = {
 """def us_civil_war(us, time):
     # will be coded in later"""
 
-
 def random_events(us, time):
     """
     Random events will be able to influence...
@@ -165,7 +164,6 @@ def random_events(us, time):
         us.population -= people_killed
         print(f"{people_killed} people died in a nuclear raid")
 
-
 def show_statistics(nation, date):
     # shows statistics of the current state of the nation
     if nation.at_war:
@@ -199,13 +197,11 @@ def show_statistics(nation, date):
               f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
               f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
 
-
 def us_collapse(us):
     print(f"Unfortunately your nation has collapsed due to low population.\n"
           f"{us.population} people remain.")
     us.stability = (us.stability - us.stability)
     # stability of United States collapses due to lack of population
-
 
 def us_election(us):
     print("\nIts election time")
@@ -259,7 +255,6 @@ def us_election(us):
             us.nation_name = "The Kingdom of America"
     time.sleep(5)
 
-
 def us_stability(us):
     """
     stability of government resets itself if exceeds 100% or drops below 0%
@@ -285,7 +280,6 @@ def us_stability(us):
               f"{us.stability}")
     elif us.stability <= 0:
         us.stability = 0
-
 
 def politics_change(us):
     """
@@ -380,7 +374,6 @@ def politics_change(us):
     """
     time.sleep(1)
 
-
 def manual_game(us, year):
     date = datetime(int(year), 1, 1)
     # establishment of date variable
@@ -413,7 +406,6 @@ def manual_game(us, year):
 
     time.sleep(1)
     us_collapse(us)
-
 
 class UnitedStates:
     def __init__(self, year):
@@ -494,7 +486,6 @@ class UnitedStates:
         self.russian_relations = 100
         self.japanese_relations = 100
         # foreign relations
-
 
 def main(time):
     united_states = UnitedStates(time)
