@@ -113,89 +113,30 @@ def random_events(us, time):
     population, political parties, stability, whether your nation is at war,
     potential political deaths (whether natural or assassination).
     Random Events could lead to potential civil war
+
+    currently re-
     """
 
-    parties = ["Democratic", "Republican"]
-
-    fringes = ["Communist", "Nationalist", "Socialist"]
-
-    random_number = random.randrange(0, 1000)
-    if random_number % 2 == 0:
-        # random event of civilians winning lottery
-        print("One of your civilians won the lottery...Yay!!")
-    elif random_number % 20 == 0:
-        # random event of senator dying
-        choice = random.randrange(0, len(parties))
-        if choice == 0:
-            print(f"Oh no a {parties[choice]} senator has died.")
-        elif choice == 1:
-            print(f"Oh no a {parties[choice]} senator has died.")
-
-        choice = random.randrange(0, len(parties))
-        if choice == 0:
-            print(f"A {parties[choice]} senator has replaced the old.")
-        elif choice == 1:
-            print(f"A {parties[choice]} has replaced the old.")
-
-    elif (random_number % 25 == 0):
-        choice = random.randrange(0, len(fringes))
-        party = fringes[choice]
-        attendees = random.randrange(10, 5000)
-        if party.lower() == "communist":
-            us.republican_supporters -= round(attendees * 0.5, 0)
-            us.democratic_supporters -= round(attendees * 0.5, 0)
-            us.communist_supporters += attendees
-        elif party.lower() == "nationalist":
-            us.republican_supporters -= round(attendees * 0.3, 0)
-            us.democratic_supporters -= round(attendees * 0.7, 0)
-            us.nationalist_supporters += attendees
-        elif party.lower() == "socialist":
-            us.republican_supporters -= round(attendees * 0.7, 0)
-            us.democratic_supporters -= round(attendees * 0.3, 0)
-            us.socialist_supporters += attendees
-        print(f"The {party} party held a rally with {attendees} attendees\n")
-
-    elif (random_number % 50 and time.year >= 1945) or us.at_war:
-        """Random event of nuclear attack.
-        pre-emptive strike if not at war
-        """
-        print("You've been struck with a nuclear weapon...OH SHIT!!!")
-        people_killed = random.randrange(1000, 10000000)
-        us.population -= people_killed
-        print(f"{people_killed} people died in a nuclear raid")
 
 def show_statistics(nation, date):
     # shows statistics of the current state of the nation
+    print(f"The current date is {date}.\n"
+          f"Your current country is {nation.nation_name}.\n"
+          f"Your current leader is {nation.leader}\n"
+          f"Your current political party is {nation.political_party}"
+          f"Your current population is {nation.population}\n"
+          f"Your nation's current stability is {nation.stability}%.\n"
+          f"Your nation is currently at war!\n"
+          f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
+          f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
+          f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
+          f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
+          f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
+          f"{round((nation.fascist_supporters / nation.population) * 100, 2)}% of your civilians are fascists\n"
+          f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
     if nation.at_war:
-        print(f"The current date is {date}.\n"
-              f"Your current country is {nation.nation_name}.\n"
-              f"Your current leader is {nation.leader}\n"
-              f"Your current political party is {nation.political_party}"
-              f"Your current population is {nation.population}\n"
-              f"Your nation's current stability is {nation.stability}%.\n"
-              f"Your nation is currently at war!\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
-              f"{round((nation.fascist_supporters / nation.population) * 100, 2)}% of your civilians are fascists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
-    else:
-        print(f"The current date is {date}.\n"
-              f"Your current country is {nation.nation_name}.\n"
-              f"Your current leader is {nation.leader}\n"
-              f"Your current political party is {nation.political_party}\n"
-              f"Your current population is {nation.population}\n"
-              f"Your nation is currently not at war!\n"
-              f"Your nation's current stability is {round(nation.stability, 2)}%.\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
-              f"{round((nation.fascist_supporters / nation.population) * 100, 2)}% of your civilians are fascists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
+        for i in range(0, len(nation.nations_at_war_with) - 1):
+            print(nation.nations_at_war_with[i], "\n")
 
 def us_collapse(us):
     print(f"Unfortunately your nation has collapsed due to low population.\n"
