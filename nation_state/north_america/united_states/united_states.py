@@ -105,7 +105,8 @@ vice_presidents = {
 }
 
 """def us_civil_war(us, time):
-    # will be coded in later"""
+    will be coded in later
+"""
 
 def random_events(us, time):
     """
@@ -114,9 +115,50 @@ def random_events(us, time):
     potential political deaths (whether natural or assassination).
     Random Events could lead to potential civil war
 
-    currently re-
+    currently re-writing function
     """
+    randomNum = random.randrange(0, 1000)
 
+    if randomNum % 10 == 1:
+        # random event of where citizen wins lottery
+        print("one of your citizens won the lottery hurrah")
+        us.stability += 0.5
+        time.sleep(3)
+
+    elif randomNum % 25 == 3:
+        """
+        Terrorist attack of any kind. Whether Domestic(Catholics, Communists,
+        Nationalists, disgruntled civilians, etc) or Foreign(Spies, Saboteurs, Religious Extremists(the Pope)
+        """
+        amt = random.randrange(10, 2000)
+        us.population -= amt
+        us.stability -= 2
+        print(f"A terrorist attack occurred killing {amt} people")
+        time.sleep(3)
+
+    elif randomNum % 200 == 3:
+        """Assassination of President. Mass chaos will ensue. Later code will incorporate
+        more structured replacement if there is a slew of assassinations. Code will allow you to choose
+        next leader if nobody in chain of command is alive
+        """
+        us.leader = us.vp
+        us.vp = " "
+        us.stability -= random.randrange(10, 45)
+        print(f"{us.leader} was assassinated. Welp {us.vp} is the new leader")
+        time.sleep(3)
+
+    elif randomNum % 500 == 3 and us.year > 1950:
+        """
+        Later code will determine the nation that struck the US and which city was hit.
+        """
+        us.stability -= random.randrange(25, 50)
+        amt = random.randrange(20000, 3000000)
+        us.population -= amt
+        us.at_war = True
+        print(f"OH FUCK! Our enemies made a pre-emptive strike on the homeland.\n"
+              f"It is being reported that approximately {amt} have died from the attack.\n"
+              f"Unfortunately this means we must respond in kind.")
+        time.sleep(3)
 
 def show_statistics(nation, date):
     # shows statistics of the current state of the nation
@@ -351,6 +393,7 @@ def manual_game(us, year):
 class UnitedStates:
     def __init__(self, year):
         self.leader = historical_leaders[year]
+        self.vp = vice_presidents[year]
         self.population = population[year]
         self.political_party = political_parties[year]
         self.nation_name = "United States"

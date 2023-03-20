@@ -1,5 +1,7 @@
 import time
 
+"""Display of data within menus will be re-written later on"""
+
 import arcade
 from nation_state.asia.japan import japan
 from nation_state.north_america.united_states import united_states
@@ -10,12 +12,32 @@ from nation_state.europe.france import france
 from nation_state.europe.britain import britain
 
 time_frame = ["1910", "1914", "1918", "1932", "1936",
-              "1939"]
+              "1939", "1945(defunct)", "1950(defunct)",
+              "1962(defunct", "1960(defunct)", "1981(defunct)",
+              "2001(defunct)", "2020(defunct)", "2022(defunct)"]
 # time frame array will be expanded as project continues on
 
-nations = ["Japan", "United States", "Russia", "Germany",
-                    "Britain", "France", "Italy"]
-# nation_state array variable will be expanded upon as project continues
+asia = ["Japan", "China(Defunct)", "Turkey(Defunct)", "India(Defunct)", "Vietnam(Defunct)",
+        "North Korea(Defunct)", "South Korea(defunct)", "Pakistan(Defunct)", "Saudi Arabia(D)",
+        "Iran(Defunct)", "Afghanistan(Defunct)"]
+# array containing major nations in Asia
+
+north_america = ["United States", "Canada(Defunct)", "Mexico(Defunct)", "Cuba(Defunct"]
+# array containing major nations in North America
+
+europe = ["Britain", "Russia", "Germany", "France", "Italy", "Serbia(Defunct)",
+          "Netherlands(Defunct)", "Spain(Defunct)", "Belgium(Defunct)",
+          "Poland(Defunct)"]
+# array containing major nations in Europe
+
+africa = ["Egypt", "Algeria", "Morocco", "South Africa",
+          "Ethiopia", "Angola", "Congo", "Nigeria",
+          "Tunisia"]
+# array containing major players in Africa
+
+south_america = ["Brazil", "Chile", "Argentina",
+                 "Venezuala", "Columbia"]
+# array containing major players in South America
 
 """global variables created and initialized
     values will be stored to an external database, to remember users choices
@@ -34,19 +56,27 @@ class TimeFrameMenu(arcade.Window):
 
     def draw_content(self):
         """method creates title and primary choices for the specific time frame you want"""
-        self.menu_size = self.height / 1.25
+        self.menu_size = self.height / 1.15
 
-        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.BLUE)
-        arcade.draw_text("Welcome to War", (self.width / 2) - 250, self.height - 100, color=arcade.color.CYAN, font_size=25)
-        arcade.draw_text("Choose your time frame!", (self.width / 2) - 275, self.height - 150, color=arcade.color.BLUE, font_size=20)
+        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.DARK_GREEN)
+        arcade.draw_text("Welcome to War", (self.width / 2) - 300, self.height - 50, color=arcade.color.DARK_RED, font_size=35)
+        arcade.draw_text("Choose your time frame!", (self.width / 2) - 275, self.height - 100, color=arcade.color.DARK_RED, font_size=20)
         # header and welcoming of user
 
-        for i in range(0, len(time_frame)):
+        for i in range(0, int(len(time_frame)/2)):
             # loop that goes through elements of time frame variable
-            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 175, self.menu_size, arcade.color.BLUE, font_size=20)
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 350, self.menu_size, arcade.color.BLUE, font_size=20)
             self.menu_size -= 50
-        arcade.draw_text("hit spacebar to exit menu",
-                         self.width / 2 - 300, 500, arcade.color.BLUE, font_size=25)
+
+        self.menu_size = self.height / 1.15
+        # menu_size is reset for next set of text to be printed out
+        for i in range(int(len(time_frame)/2), len(time_frame)):
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 50, self.menu_size, arcade.color.BLUE,
+                             font_size=20)
+            self.menu_size -= 50
+
+        arcade.draw_text("hit spacebar to continue",
+                         self.width / 2 - 315, 500, arcade.color.BLUE, font_size=25)
 
     def on_draw(self):
         self.draw_background()
@@ -74,25 +104,59 @@ class NationalMenu(arcade.Window):
 
     def draw_content(self):
         """method creates title and primary choices for the specific time frame you want"""
-        self.menu_size = self.height / 1.25
+        self.menu_size = self.height - 200
 
-        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.BLUE)
-        arcade.draw_text("Welcome to War", (self.width / 2) - 250, self.height - 100, color=arcade.color.CYAN,
-                         font_size=25)
+        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height + 50, self.height / 1.1, color=arcade.color.DARK_GREEN)
+        #arcade.draw_text("Welcome to War", (self.width / 2) - 300, self.height - 50, color=arcade.color.DARK_RED,
+        #                 font_size=35)
+        arcade.draw_text("Choose your Nation!", (self.width / 2) - 325, self.height - 50,
+                         color=arcade.color.DARK_RED, font_size=30)
+        arcade.draw_text("press space bar to exit",(self.width / 2) - 275, self.height - 100, color=arcade.color.DARK_RED, font_size=20)
 
-        arcade.draw_text("Choose your nation!", (self.width / 2) - 250, self.height - 150, color=arcade.color.BLUE,
-                         font_size=20)
+        arcade.draw_text("Asia", 100, self.height - 150,
+                         color=arcade.color.DARK_RED, font_size=20)
+        for i in range(0, len(asia)):
+            arcade.draw_text(f"{i + 1}. {asia[i]}", 100, self.menu_size, color=arcade.color.BLUE, font_size=15)
+            self.menu_size -= 50
+            # end of asian loop
 
+        self.menu_size = self.height - 200
+        # beginning of European loop
+        arcade.draw_text("Europe", 400, self.height - 150,
+                     color=arcade.color.DARK_RED, font_size=20)
 
-        for i in range(0, len(nations)):
-            # loop that goes through elements of time frame variable
-            arcade.draw_text(f"{i + 1}. {nations[i]}", self.width / 2 - 215, self.menu_size, arcade.color.BLUE,
-                             font_size=20)
+        for i in range(0, len(europe)):
+            arcade.draw_text(f"{i + 1}. {europe[i]}", 400, self.menu_size, color=arcade.color.BLUE, font_size=15)
+            self.menu_size -= 50
+        # ending of european loop
+
+        # beginning of american loop
+        self.menu_size = self.height - 200
+        # beginning of European loop
+        arcade.draw_text("North America", 650, self.height - 150,
+                         color=arcade.color.DARK_RED, font_size=20)
+
+        for i in range(0, len(north_america)):
+            arcade.draw_text(f"{i + 1}. {north_america[i]}", 650, self.menu_size, color=arcade.color.BLUE,
+                             font_size=15)
             self.menu_size -= 50
 
+        self.menu_size = self.height - 200
+        arcade.draw_text("Africa(Defunct)", 925, self.height - 150,
+                         arcade.color.DARK_RED, font_size=20)
+        for i in range(0, len(africa)):
+            arcade.draw_text(f"{i + 1}. {africa[i]}", 925, self.menu_size, color=arcade.color.BLUE,
+                             font_size=15)
+            self.menu_size -= 50
 
-        arcade.draw_text("hit spacebar to exit menu",
-                         self.width / 2 - 325, 500, arcade.color.BLUE, font_size=25)
+        self.menu_size = self.height - 200
+        arcade.draw_text("South America(Defunct)", 1200, self.height - 150,
+                         arcade.color.DARK_RED, font_size=20)
+        for i in range(0, len(south_america)):
+            arcade.draw_text(f"{i + 1}. {south_america[i]}", 1200, self.menu_size, color=arcade.color.BLUE,
+                             font_size=15)
+            self.menu_size -= 50
+
 
     def on_draw(self):
 
