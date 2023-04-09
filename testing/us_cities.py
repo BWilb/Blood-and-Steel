@@ -12,7 +12,10 @@ class UsCities:
         self.west = west
         self.nw = north_west
 
-cities = ["Anchorage", "Honolulu", "Seattle", ""]
+cities = ["Anchorage", "Honolulu", "Olympia", "Salem", "Sacramento", "Boise",
+          "Carson City", "Salt Lake City", "Phoenix", "Santa Fe", "Denver", "Cheyenne",
+          "Helena", "Pierre", "Bismarck", "Lincoln", "Topeka", "Oklahoma City", "Austin",
+          "Baton Rouge", "Little Rock"]
 """ in order from west coast(Hawaii and Alaksa included) to East Coast
     will only incorporate capitals so far
 """

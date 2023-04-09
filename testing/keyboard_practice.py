@@ -16,7 +16,7 @@ for i in range(0, 10000):
         print(date)
 
 
-print(math.pow(2, 10000) )
+print(f"{math.pow(2, 10)} \t" + "b" )
 
 """self.democratic_supporters = self.population * 0.85
             self.republican_supporters = (self.population - self.democratic_supporters) * 0.75

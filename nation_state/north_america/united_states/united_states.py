@@ -1,4 +1,7 @@
-import random
+
+# File will be re-done
+
+'''import random
 import time
 from datetime import timedelta, datetime
 from nation_state.europe.germany.germany import *
@@ -35,12 +38,29 @@ judicial_options = ["Declare President Unconstitutional",
                     "Declare Congress Unconstitutional"]
 
 historical_leaders = {
-    "1910": "William Howard Taft",
+    1910: "William Howard Taft",
     "1914": "Woodrow Wilson",
     "1918": "Woodrow Wilson",
     "1932": "Herbert Hoover",
     "1936": "Franklin D. Roosevelt",
     "1939": "Franklin D. Roosevelt"
+}
+vice_presidents = {
+    # dictionary of vice presidents incase president gets assassinated
+    "1910": "James S. Sherman",
+    "1914": "Thomas R. Marshall",
+    "1918": "Thomas R. Marshall",
+    "1932": "Charles Curtis",
+    "1936": "John Garner",
+    "1939": "Henry Wallace"
+}
+speaker_of_house = {
+    "1910" : "Joseph Gurney Cannon",
+    "1914" : "Champ Clark",
+    "1918" : "Champ Clark",
+    "1932" : "John Nance Garner",
+    "1936" : "William B. Bankhead",
+    "1939" : "William B. Bankhead"
 }
 communist_party_leaders = {
     "1910": "C. E. Ruthenberg",
@@ -80,9 +100,9 @@ population = {
 }
 
 alternative_parties = ["Libertarian Party", "Communist Party USA", "Trans-humanist party",
-                       "Green Party", "Constitution Party", "Reform Party", "American Nazi Party"
-                                                                            "Socialist Party USA",
-                       "American Freedom Party", "Republican Party", "Democratic Party"]
+                       "Green Party", "Constitution Party", "Reform Party", "American Nazi Party",
+                       "Socialist Party USA", "American Freedom Party",
+                       "Republican Party", "Democratic Party"]
 
 political_parties = {
     # elections will be implemented later on
@@ -94,19 +114,12 @@ political_parties = {
     "1939": "Democratic"
 }
 
-vice_presidents = {
-    # dictionary of vice presidents incase president gets assassinated
-    "1910": "James S. Sherman",
-    "1914": "Thomas R. Marshall",
-    "1918": "Thomas R. Marshall",
-    "1932": "Charles Curtis",
-    "1936": "John Garner",
-    "1939": "Henry Wallace"
-}
-
 """def us_civil_war(us, time):
     will be coded in later
 """
+
+def presidentital_succession(us):
+    print("hi")
 
 def random_events(us, time):
     """
@@ -121,9 +134,13 @@ def random_events(us, time):
 
     if randomNum % 10 == 1:
         # random event of where citizen wins lottery
-        print("one of your citizens won the lottery hurrah")
+        print("one of your citizens won the lottery hurrah\n")
         us.stability += 0.5
         time.sleep(3)
+
+    elif randomNum % 15 == 2:
+        party = alternative_parties[random.randrange(len(alternative_parties) - 1)]
+        print(f"The {party} ")
 
     elif randomNum % 25 == 3:
         """
@@ -133,8 +150,12 @@ def random_events(us, time):
         amt = random.randrange(10, 2000)
         us.population -= amt
         us.stability -= 2
-        print(f"A terrorist attack occurred killing {amt} people")
+        print(f"A terrorist attack occurred killing {amt} people\n")
         time.sleep(3)
+
+    elif randomNum % 60 == 5:
+        # later code will bring logic to deciphering who is invading
+        print("Somebody is invading us. Time to arm ourselves")
 
     elif randomNum % 200 == 3:
         """Assassination of President. Mass chaos will ensue. Later code will incorporate
@@ -142,9 +163,10 @@ def random_events(us, time):
         next leader if nobody in chain of command is alive
         """
         us.leader = us.vp
-        us.vp = " "
+        us.vp = us.speaker
+        us.speaker = " "
         us.stability -= random.randrange(10, 45)
-        print(f"{us.leader} was assassinated. Welp {us.vp} is the new leader")
+        print(f"{us.leader} was assassinated. Welp {us.vp} is the new leader\n")
         time.sleep(3)
 
     elif randomNum % 500 == 3 and us.year > 1950:
@@ -164,8 +186,9 @@ def show_statistics(nation, date):
     # shows statistics of the current state of the nation
     print(f"The current date is {date}.\n"
           f"Your current country is {nation.nation_name}.\n"
-          f"Your current leader is {nation.leader}\n"
-          f"Your current political party is {nation.political_party}"
+          f"Your current President is {nation.leader}\n"
+          f"Your current VP is {nation.vp}\n"
+          f"Your current political party is {nation.political_party}\n"
           f"Your current population is {nation.population}\n"
           f"Your nation's current stability is {nation.stability}%.\n"
           f"Your nation is currently at war!\n"
@@ -372,8 +395,8 @@ def manual_game(us, year):
     globe_var = globe.Globe()
     print(date)
     while us.population >= 20000:
-        """Control set up to 
-        make sure that US doesn't somehow 
+        """Control set up to
+        make sure that US doesn't somehow
         survive with 0 people
         """
         if date.year % 4 == 0 and date.month == 11 and date.day == 7:
@@ -392,14 +415,18 @@ def manual_game(us, year):
 
 class UnitedStates:
     def __init__(self, year):
+        print(year, type(year))
         self.leader = historical_leaders[year]
         self.vp = vice_presidents[year]
+        self.speaker = speaker_of_house[year]
+
         self.population = population[year]
         self.political_party = political_parties[year]
         self.nation_name = "United States"
         """first 4 variables description of nation, not established until
         time frame chosen in opening menu file
         """
+        self.anti_establishment_popularity = False
         if int(year) >= 1932:
             self.scotus_size = 9
         elif int(year) < 1932:
@@ -473,4 +500,4 @@ class UnitedStates:
 
 def main(time):
     united_states = UnitedStates(time)
-    manual_game(united_states, time)
+    manual_game(united_states, time)'''

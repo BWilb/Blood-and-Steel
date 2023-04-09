@@ -1,4 +1,6 @@
-import time
+import datetime
+
+times = 0
 
 """Display of data within menus will be re-written later on"""
 
@@ -36,8 +38,10 @@ africa = ["Egypt", "Algeria", "Morocco", "South Africa",
 # array containing major players in Africa
 
 south_america = ["Brazil", "Chile", "Argentina",
-                 "Venezuala", "Columbia"]
+                 "Venezuela", "Columbia"]
 # array containing major players in South America
+
+australiasia = ["Australia", "New Zealand"]
 
 """global variables created and initialized
     values will be stored to an external database, to remember users choices
@@ -59,24 +63,23 @@ class TimeFrameMenu(arcade.Window):
         self.menu_size = self.height / 1.15
 
         arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.DARK_GREEN)
-        arcade.draw_text("Welcome to War", (self.width / 2) - 300, self.height - 50, color=arcade.color.DARK_RED, font_size=35)
-        arcade.draw_text("Choose your time frame!", (self.width / 2) - 275, self.height - 100, color=arcade.color.DARK_RED, font_size=20)
+        arcade.draw_text("Welcome to War", (self.width / 2) - 300, self.height - 45, color=arcade.color.DARK_RED, font_size=35)
+        arcade.draw_text("Choose your time frame!", (self.width / 2) - 275, self.height - 75, color=arcade.color.DARK_RED, font_size=20)
+        arcade.draw_text("hit spacebar to continue",
+                         self.width / 2 - 275, self.height - 105, arcade.color.DARK_RED, font_size=20)
         # header and welcoming of user
 
         for i in range(0, int(len(time_frame)/2)):
             # loop that goes through elements of time frame variable
-            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 350, self.menu_size, arcade.color.BLUE, font_size=20)
-            self.menu_size -= 50
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 350, self.menu_size, arcade.color.NEON_FUCHSIA, font_size=20)
+            self.menu_size -= 75
 
         self.menu_size = self.height / 1.15
         # menu_size is reset for next set of text to be printed out
         for i in range(int(len(time_frame)/2), len(time_frame)):
-            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 50, self.menu_size, arcade.color.BLUE,
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 50, self.menu_size, arcade.color.NEON_FUCHSIA,
                              font_size=20)
-            self.menu_size -= 50
-
-        arcade.draw_text("hit spacebar to continue",
-                         self.width / 2 - 315, 500, arcade.color.BLUE, font_size=25)
+            self.menu_size -= 75
 
     def on_draw(self):
         self.draw_background()
@@ -89,6 +92,7 @@ class TimeFrameMenu(arcade.Window):
         """
         if key == arcade.key.SPACE:
             arcade.close_window()
+
 # break between both files
 class NationalMenu(arcade.Window):
     """Class will eventually be migrated to time_frame file"""
@@ -114,19 +118,19 @@ class NationalMenu(arcade.Window):
         arcade.draw_text("press space bar to exit",(self.width / 2) - 275, self.height - 100, color=arcade.color.DARK_RED, font_size=20)
 
         arcade.draw_text("Asia", 100, self.height - 150,
-                         color=arcade.color.DARK_RED, font_size=20)
+                         color=arcade.color.CAMOUFLAGE_GREEN, font_size=20, bold=True)
         for i in range(0, len(asia)):
-            arcade.draw_text(f"{i + 1}. {asia[i]}", 100, self.menu_size, color=arcade.color.BLUE, font_size=15)
+            arcade.draw_text(f"{i + 1}. {asia[i]}", 100, self.menu_size, color=arcade.color.NEON_FUCHSIA, font_size=15)
             self.menu_size -= 50
             # end of asian loop
 
         self.menu_size = self.height - 200
         # beginning of European loop
         arcade.draw_text("Europe", 400, self.height - 150,
-                     color=arcade.color.DARK_RED, font_size=20)
+                     color=arcade.color.CAMOUFLAGE_GREEN, font_size=20, bold=True)
 
         for i in range(0, len(europe)):
-            arcade.draw_text(f"{i + 1}. {europe[i]}", 400, self.menu_size, color=arcade.color.BLUE, font_size=15)
+            arcade.draw_text(f"{i + 1}. {europe[i]}", 400, self.menu_size, color=arcade.color.NEON_FUCHSIA, font_size=15)
             self.menu_size -= 50
         # ending of european loop
 
@@ -134,29 +138,28 @@ class NationalMenu(arcade.Window):
         self.menu_size = self.height - 200
         # beginning of European loop
         arcade.draw_text("North America", 650, self.height - 150,
-                         color=arcade.color.DARK_RED, font_size=20)
+                         color=arcade.color.CAMOUFLAGE_GREEN, font_size=20, bold=True)
 
         for i in range(0, len(north_america)):
-            arcade.draw_text(f"{i + 1}. {north_america[i]}", 650, self.menu_size, color=arcade.color.BLUE,
+            arcade.draw_text(f"{i + 1}. {north_america[i]}", 650, self.menu_size, color=arcade.color.NEON_FUCHSIA,
                              font_size=15)
             self.menu_size -= 50
 
         self.menu_size = self.height - 200
         arcade.draw_text("Africa(Defunct)", 925, self.height - 150,
-                         arcade.color.DARK_RED, font_size=20)
+                         arcade.color.CAMOUFLAGE_GREEN, font_size=20, bold=True)
         for i in range(0, len(africa)):
-            arcade.draw_text(f"{i + 1}. {africa[i]}", 925, self.menu_size, color=arcade.color.BLUE,
+            arcade.draw_text(f"{i + 1}. {africa[i]}", 925, self.menu_size, color=arcade.color.NEON_FUCHSIA,
                              font_size=15)
             self.menu_size -= 50
 
         self.menu_size = self.height - 200
         arcade.draw_text("South America(Defunct)", 1200, self.height - 150,
-                         arcade.color.DARK_RED, font_size=20)
+                         arcade.color.CAMOUFLAGE_GREEN, font_size=20, bold=True, italic=True)
         for i in range(0, len(south_america)):
-            arcade.draw_text(f"{i + 1}. {south_america[i]}", 1200, self.menu_size, color=arcade.color.BLUE,
+            arcade.draw_text(f"{i + 1}. {south_america[i]}", 1200, self.menu_size, color=arcade.color.NEON_FUCHSIA,
                              font_size=15)
             self.menu_size -= 50
-
 
     def on_draw(self):
 
