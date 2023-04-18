@@ -1,4 +1,4 @@
-from tkinter import *
+"""from tkinter import *
 from tkinter.ttk import *
 
 from time import strftime
@@ -17,4 +17,7 @@ label = Label(root, font=("ds-digital", 80), background="black", foreground="cya
 label.pack(anchor="center")
 time()
 
-mainloop()
+mainloop()"""
+
+c = "\"C:\\My Documents\""
+print(c)
