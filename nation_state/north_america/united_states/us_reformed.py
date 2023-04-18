@@ -44,33 +44,42 @@ gdp = {
 
 """Subsidiary functions of game"""
 
-def population_change(us, pop):
+def population_change(us):
     """Function is exaggerated in numbers
     incorporates population growth
     """
-    if us.viagra_subsidize and us.population_change < 1.5:
-        """If US birth rate too low"""
-        us.population += random.randrange(25000, 50000)
-        # Incorporation of deaths
-        us.population -= random.randrange(4000, 15000)
-        # Incorporation of births
-    elif us.condom_subsidize and us.population_change >= 10:
-        """if US birth rate too high"""
-        us.population += random.randrange(3000, 6000)
-        # Incorporation of deaths
-        us.population -= random.randrange(4000, 15000)
-        # Incorporation of births
-    else:
-        """Normal birth rate"""
-        us.population += random.randrange(5000, 20000)
-        # Incorporation of deaths
-        us.population -= random.randrange(4000, 15000)
     if us.current_year < us.date.year:
-        us.population_change = (us.population - pop / ((us.population + pop)/2)) * 100
-        print(f"The US population changed by {us.population_change}%")
-        time.sleep(3)
-        pop = us.population
+        us.population_change = (us.population - us.current_pop / ((us.population + us.current_pop)/2)) * 100
+        """Calculation of population change over year"""
+        us.current_pop = us.population
+        # reset of current population
         us.current_year = us.date.year
+        # reset of current year
+
+        if us.viagra_subsidize:
+            us.population += random.randrange(25000, 50000)
+            # Incorporation of deaths
+            us.population -= random.randrange(4000, 15000)
+            # Incorporation of births
+            if us.population_change >= 10:
+                """choice if population growth is out of control"""
+                choice = input(f"your yearly population growth rate of {us.population_change}% is unsustainable"
+                               f"Do you want to increase subsidies for population control?: ")
+                if choice.lower() == "yes" or choice.lower() == "y":
+                    us.viagra_subsidize = False
+                    us.condom_subsidize = True
+
+        elif us.condom_subsidize:
+            """Choice if us population growth is too low"""
+            if us.population_change <= 1.5:
+                """Choice if population growth is too low"""
+                choice = input(f"your yearly population growth rate of {us.population_change}% is unsustainable"
+                               f"Do you want to increase subsidies for population growth?: ")
+                us.viagra_subsidize = True
+                us.condom_subsidize = False
+    else:
+        us.population += random.randrange(6700, 45000)
+        us.population -= random.randrange(4500, 27000)
 
 def economic_change(us):
     if us.economic_state == "expansion":
@@ -79,19 +88,19 @@ def economic_change(us):
         us.gdp -= random.randrange(23546, 73464)
 
 """Main function of US_Version of game"""
-def manual_game(us, time):
-    cur_pop = us.population
+def manual_game(us):
     # Establishment of date variable
     while us.population > 20000:
         us.date = us.date + timedelta(days=1)
         # function will incorporate daily changes in us population
-        population_change(us, cur_pop)
+        population_change(us)
 
 class UnitedStates:
     def __init__(self, year):
         # population variables
         self.population = population[year]
         self.population_change = 0
+        self.current_pop = self.population
         self.condom_subsidize = False
         """Population controller if birth rate gets out of control"""
         self.viagra_subsidize = False
@@ -114,4 +123,4 @@ class UnitedStates:
 
 def main(time):
     united_states = UnitedStates(time)
-    manual_game(united_states, time)
+    manual_game(united_states)
