@@ -71,6 +71,10 @@ def population_change(us):
 
         elif us.condom_subsidize:
             """Choice if us population growth is too low"""
+            us.population += random.randrange(5000, 20000)
+            # Incorporation of deaths
+            us.population -= random.randrange(8000, 25000)
+            # Incorporation of births
             if us.population_change <= 1.5:
                 """Choice if population growth is too low"""
                 choice = input(f"your yearly population growth rate of {us.population_change}% is unsustainable"
@@ -90,7 +94,7 @@ def economic_change(us):
 """Main function of US_Version of game"""
 def manual_game(us):
     # Establishment of date variable
-    while us.population > 20000:
+    while us.population > 2000000:
         us.date = us.date + timedelta(days=1)
         # function will incorporate daily changes in us population
         population_change(us)

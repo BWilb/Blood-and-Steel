@@ -34,60 +34,95 @@ gdp = {
 }
 
 """Subsidiary functions of game"""
-def population_change(germany, pop):
+
+"""Population functions"""
+def population_change(germany):
     """Numbers within function are exaggerated
     incorporates population growth
     """
-    print('hi')
+    if germany.current_year < germany.date.year:
+        germany.population_change = (germany.population - germany.current_pop
+                                     / ((germany.population + germany.current_pop) / 2)) * 100
+        """Calculation of german population growth"""
+        germany.current_year = germany.date.year
+        germany.current_population = germany.population
+        """resetting of yearly population and year"""
+        if germany.procurement_subsidize:
+            """Choice if population increase true"""
+            germany.population += random.randrange(4000, 16000)
+            germany.population -= random.randrange(1000, 5000)
 
-    if germany.procurement_subsidize:
-        """Choice if population increase true"""
-        germany.population += random.randrange(4000, 16000)
-        germany.population -= random.randrange(1000, 5000)
+            if germany.population_change >= 10:
+                """choice if population growth out of control"""
+                choice = input(f"your population growth rate of {germany.population_growth}%\n"
+                               f"is unsustainable! Do you want to increase subsidies for condoms?: ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    germany.condom_subsidize = True
+                    germany.procurement_subsidize = False
 
-        if germany.population_change >= 10:
-            """choice if population growth out of control"""
-            choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                           f"is unsustainable! Do you want to increase subsidies for condoms?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                germany.condom_subsidize = True
-                germany.procurement_subsidize = False
+        elif germany.condom_subsidize:
+            """choice if population control true"""
+            germany.population += random.randrange(4500, 6000)
+            germany.population -= random.randrange(2000, 8000)
 
-    elif germany.condom_subsidize:
-        """choice if population control true"""
-        germany.population += random.randrange(4500, 6000)
-        germany.population -= random.randrange(2000, 8000)
+            if germany.population_growth <= 1.5:
+                """choice if under population control gets out of hand"""
+                choice = input(f"your population growth rate of {germany.population_growth}%\n"
+                               f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    germany.procurement_subsidize = True
+                    germany.condom_subsidize = False
 
-        if germany.population_growth <= 1.5:
-            """choice if under population control gets out of hand"""
-            choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                           f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                germany.procurement_subsidize = True
-                germany.condom_subsidize = False
+        else:
+            germany.population += random.randrange(4000, 14500)
+            germany.population -= random.randrange(5000, 10000)
 
-    else:
-        germany.population += random.randrange(4000, 14500)
-        germany.population -= random.randrange(5000, 10000)
-
-        if germany.population_change >= 10:
-            choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                           f"is unsustainable! Do you want to increase subsidies for condoms?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                germany.condom_subsidize = True
-        elif germany.population_growth <= 1.5:
-            choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                           f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                germany.procurement_subsidize = True
+            if germany.population_change >= 10:
+                choice = input(f"your population growth rate of {germany.population_growth}%\n"
+                               f"is unsustainable! Do you want to increase subsidies for condoms?: ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    germany.condom_subsidize = True
+            elif germany.population_growth <= 1.5:
+                choice = input(f"your population growth rate of {germany.population_growth}%\n"
+                               f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    germany.procurement_subsidize = True
+"""Economic Functions"""
 
 def econommic_change(germany):
-    print("hi")
+
+    if germany.current_year < germany.date.year:
+        print("hi")
+        germany.economic_growth =(germany.gdp - germany.current_gdp / ((germany.gdp + germany.current_gdp) / 2)) * 100
+        """Calculation of economic growth over year"""
+        if germany.economic_stimulus:
+            germany.gdp += random.randrange(60000, 150000)
+
+            if germany.economic_growth >= 6 or germany.economic_state == "recession":
+                choice = input(f"Your GDP grew {germany.economic_growth} last year.\n"
+                               f"This is unsustainable. If your economy continues to grow like this "
+                               f"A recession might happen\nDo you want to take away economy stimulus?: ")
+
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    germany.economic_stimulus = False
+
+        if germany.economic_growth <= 0.5:
+            print("hi")
+
+"""Random Function"""
+
+"""Main Function"""
+def manual_game(germany):
+    while germany.population > 200000:
+        germany.date = germany.date + timedelta(days=1)
+        population_change(germany)
+        econommic_change(germany)
 
 class Germany:
     def __init__(self, year):
         # population variables
         self.population = population[year]
+        self.current_population = self.population
         self.population_change = 0
         self.procurement_subsidize = False
         self.condom_subsidize = False
@@ -96,6 +131,9 @@ class Germany:
         # economic variables
         self.economic_state = business_cycle[random.randrange(0, len(business_cycle) - 1)]
         self.gdp = gdp[year]
+        self.current_gdp = self.gdp
+        self.economic_growth = 0
+        self.economic_stimulus = False
         # military variables
         # international variables
         # time variables
