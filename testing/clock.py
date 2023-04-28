@@ -19,5 +19,6 @@ time()
 
 mainloop()"""
 
-c = "\"C:\\My Documents\""
-print(c)
+"""c = "\"C:\\My Documents\""
+print(c)"""
+

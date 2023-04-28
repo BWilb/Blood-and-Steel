@@ -44,6 +44,7 @@ gdp = {
 
 """Subsidiary functions of game"""
 
+"""population functions"""
 def population_change(us):
     """Function is exaggerated in numbers
     incorporates population growth
@@ -85,11 +86,45 @@ def population_change(us):
         us.population += random.randrange(6700, 45000)
         us.population -= random.randrange(4500, 27000)
 
+"""political functions"""
+
+"""Economic Functions"""
+def gdp_changes(us):
+    choice = random.randrange(1, 3)
+    if choice == 1:
+        us.consumer_spending += random.randrange(1200, 34500)
+        us.govnerment_spending += random.randrange(1400, 24500)
+        us.investment += random.randrange(1600, 36570)
+        us.exports += random.randrange(1155, 45000)
+        us.imports += random.randrange(2245, 34500)
+        us.gdp += (us.consumer_spending + us.government_spending + us.investment +
+                   (us.exports - us.imports))
+    elif choice == 2:
+        us.consumer_spending -= random.randrange(1200, 34500)
+        us.govnerment_spending -= random.randrange(1400, 24500)
+        us.investment -= random.randrange(1600, 36570)
+        us.exports -= random.randrange(1155, 45000)
+        us.imports -= random.randrange(2245, 34500)
+        us.gdp += (us.consumer_spending + us.government_spending + us.investment +
+                   (us.exports - us.imports))
+
 def economic_change(us):
-    if us.economic_state == "expansion":
-        us.gdp += random.randrange(25945, 62352)
-    elif us.economic_state == "recession":
-        us.gdp -= random.randrange(23546, 73464)
+    if us.current_year < us.date.year:
+        us.economic_growth = (us.gdp - us.current_gdp / ((us.gdp + us.current_gdp) / 2)) * 100
+
+        if us.economic_growth <= 1.5:
+            choice = input(f"Your GDP grew {us.economic_growth}% last year.\n"
+                           f"Do you want to stimulate your economy?: ")
+            if choice.lower() == "yes" or choice.lower() == 'y':
+                us.economic_stimulus = True
+
+            elif choice.lower() == "no" or choice.lower() == 'n':
+                if us.recess_years > 3 and us.economic_growth <= 0.5:
+                    print("Your economy has been declining for three years.\n"
+                          "An economic stimulus has been implemented!")
+                    us.economic_stimulus = True
+    else:
+        gdp_changes(us)
 
 """Main function of US_Version of game"""
 def manual_game(us):
@@ -98,6 +133,8 @@ def manual_game(us):
         us.date = us.date + timedelta(days=1)
         # function will incorporate daily changes in us population
         population_change(us)
+        if us.current_year%4 == 0:
+            us_elections(us)
 
 class UnitedStates:
     def __init__(self, year):
@@ -119,6 +156,13 @@ class UnitedStates:
         # economic variables
         self.economic_state = business_cycle[random.randrange(len(business_cycle) - 1)]
         self.gdp = gdp[year]
+        self.current_gdp = self.gdp
+        self.consumer_spending = 0
+        self.investment = 0
+        self.government_spending = 0
+        self.exports = 0
+        self.imports = 0
+        self.economic_stimulus = False
         # military variables
         # international variables
         # time variables

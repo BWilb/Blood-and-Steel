@@ -93,12 +93,14 @@ def econommic_change(germany):
 
     if germany.current_year < germany.date.year:
         print("hi")
-        germany.economic_growth =(germany.gdp - germany.current_gdp / ((germany.gdp + germany.current_gdp) / 2)) * 100
+        germany.economic_growth = (germany.gdp - germany.current_gdp / ((germany.gdp + germany.current_gdp) / 2)) * 100
         """Calculation of economic growth over year"""
         if germany.economic_stimulus:
+            """implemented if economic stimulus is applied"""
             germany.gdp += random.randrange(60000, 150000)
+            germany.gdp -= random.randrange(40000, 115000)
 
-            if germany.economic_growth >= 6 or germany.economic_state == "recession":
+            if germany.economic_growth >= 6:
                 choice = input(f"Your GDP grew {germany.economic_growth} last year.\n"
                                f"This is unsustainable. If your economy continues to grow like this "
                                f"A recession might happen\nDo you want to take away economy stimulus?: ")
@@ -106,8 +108,31 @@ def econommic_change(germany):
                 if choice.lower() == "y" or choice.lower() == "yes":
                     germany.economic_stimulus = False
 
+                else:
+                    if germany.growth_years >= 3 and germany.economic_growth >= 6:
+                        print("Your economy has been growing at an alarming rate!\n"
+                              "Slowdowns will be put into place")
+                        germany.economic_stimulus = False
+
         if germany.economic_growth <= 0.5:
-            print("hi")
+            """Implemented if past year had low growth, but not at critical point yet"""
+            choice = input(f"Your economy grew {germany.economic_growth}% last year.\n"
+                           f"Do you want to stimulate the economy?: ")
+            if choice.lower() == "y" or choice.lower() == "yes":
+                germany.economic_stimulus = True
+
+            else:
+                if germany.recess_years > 3 and germany.economic_growth <= 0.5:
+                    """implemented if German Economic has had 3 year recession and
+                    past year had low growth
+                    """
+                    print("your economy has been declining for three years.\n"
+                          "a stimulus has been automatically implemented!")
+                    time.sleep(3)
+                    germany.economic_stimulus = True
+        else:
+            germany.gdp += random.randrange(259900, 445000)
+            germany.gdp -= random.randrange(100000, 300000)
 
 """Random Function"""
 
@@ -134,6 +159,8 @@ class Germany:
         self.current_gdp = self.gdp
         self.economic_growth = 0
         self.economic_stimulus = False
+        self.growth_years = 0
+        self.recess_years = 0
         # military variables
         # international variables
         # time variables
