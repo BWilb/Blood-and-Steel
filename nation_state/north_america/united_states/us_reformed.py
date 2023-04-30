@@ -97,27 +97,101 @@ def population_change(us):
 
 """political functions"""
 
+"""Random functions"""
+
+def random_politics(us):
+    print("hi")
+
+def random_economics(us):
+    print('hi')
+
+def random_social(us):
+    print("hi")
+    chance = random.randrange(10, 20000)
+    if chance % 4 == 0:
+        print("Someone threw a surprise birthday for their child!")
+        time.sleep(3)
+        us.happiness += round((us.population * 0.0001), 0)
+
+    elif chance % 6 == 5:
+        print("")
+def random_weather(us):
+    """Function covers weather events"""
+    print("hi")
+
+def random_international():
+    """
+    Function deals with un-anticipated international events.
+    These events will include terrorism, pre-emptive strikes,
+    trade(possibly), international aid, and many more
+    """
+    print("hi")
+def randomized_functions(us):
+    print("hi")
+    random_politics(us)
+    random_economics(us)
+    random_social(us)
+
 """Economic Functions"""
 def low_growth(us):
     if us.economic_state == "expansion":
-        us.consumer_spending += round(random.uniform(30000, 75000), 2)
-        us.investment += round(random.uniform(20000, 54000), 2)
-        us.government_spending += round(random.uniform(300000, 500000), 2)
+        """Very slight growth within economy"""
+        us.consumer_spending = round(random.uniform(30000, 75000), 2)
+        us.investment = round(random.uniform(20000, 54000), 2)
+        us.government_spending = round(random.uniform(300000, 500000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
         us.exports = round(random.uniform(20000, 560000), 2)
         us.imports = round(random.uniform(32000, 560000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     else:
-        print("hi")
+        """Entry into a recession"""
+        us.consumer_spending = -(round(random.uniform(15000, 65500), 2))
+        us.investment = -(round(random.uniform(3000, 5000), 2))
+        us.government_spending = round(random.uniform(200000, 450000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
+        us.exports = round(random.uniform(6200, 120000), 2)
+        us.imports = round(random.uniform(140000, 1400000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
 def moderate_growth(us):
     if us.economic_state == "expansion":
-        print("hi")
+        """State of moderate wealth for nation"""
+        us.consumer_spending = round(random.uniform(60000, 105000), 2)
+        us.investment = round(random.uniform(60000, 100000), 2)
+        us.government_spending += round(random.uniform(100000, 350000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
+        us.exports = round(random.uniform(60000, 860000), 2)
+        us.imports = round(random.uniform(62000, 880000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     else:
-        print("hi")
+        """Economy turning towards depression"""
+        us.consumer_spending = -(round(random.uniform(35000, 102500), 2))
+        us.investment = -(round(random.uniform(30000, 40000), 2))
+        us.government_spending = round(random.uniform(500000, 1050000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
+        us.exports = round(random.uniform(140000, 1200000), 2)
+        us.imports = round(random.uniform(140000, 1400000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
 
 def high_growth(us):
     if us.economic_state == "expansion":
-        print("hi")
+        """State of glorious wealth for nation"""
+        us.consumer_spending = round(random.uniform(60000, 105000), 2)
+        us.investment = round(random.uniform(60000, 100000), 2)
+        us.government_spending = round(random.uniform(50000, 75000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
+        us.exports = round(random.uniform(120000, 1200000), 2)
+        us.imports = round(random.uniform(140000, 1400000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     else:
-        print("hi")
+        """Very severe economic depression"""
+        us.consumer_spending = -(round(random.uniform(6000, 10500), 2))
+        us.investment = -(round(random.uniform(6000, 10000), 2))
+        us.government_spending = round(random.uniform(500000, 1250000), 2)
+        us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
+        us.exports = round(random.uniform(1200, 120000), 2)
+        us.imports = round(random.uniform(140000, 1400000), 2)
+        us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
+
 def stimulus(us):
     """Fucntion deals with increased government spending"""
     """Function covering government spending and taxes
@@ -162,14 +236,15 @@ def gdp_change(us):
     over daily count
     """
     if us.tax_rate <= 3 and us.tax_rate >= 0.5:
-        print("Hi")
+        """Economic growth under low tax rate"""
         high_growth(us)
 
     elif us.tax_rate <= 7.5 and us.tax_rate >= 3.1:
-        print("hi")
+        """Economic growth under moderate tax rate"""
         moderate_growth(us)
 
     else:
+        """Economic growth under high tax rate"""
         low_growth(us)
 
 def economic_decisions(us):
@@ -177,11 +252,6 @@ def economic_decisions(us):
 
         us.economic_growth = (us.gdp - us.current_gdp / ((us.gdp + us.current_gdp) / 2)) * 100
         """Simplified calculation for economic growth"""
-        us.current_gdp = us.gdp
-        us.consumer_spending += 0
-        us.investment += 0
-        us.government_spending += 0
-        """Resetting of specific GDP variables"""
 
         if us.economic_growth <= 1.5:
             choice = input(f"Your GDP grew {us.economic_growth}% last year.\n"
@@ -210,6 +280,7 @@ def manual_game(us):
         # function will incorporate daily changes in us population
         population_change(us)
         economic_decisions(us)
+        randomized_functions(us)
         """if us.current_year%4 == 0:
             us_elections(us)"""
 
@@ -219,17 +290,20 @@ class UnitedStates:
         self.population = population[year]
         self.population_change = 0
         self.current_pop = self.population
-        self.condom_subsidize = False
+        self.happiness = 96.56
         """Population controller if birth rate gets out of control"""
-        self.viagra_subsidize = False
+        self.condom_subsidize = False
         """Population controller if birth rate flops"""
+        self.viagra_subsidize = False
         # political variables
+        """Leaders of US"""
         self.president = presidents[year]
         self.vice_president = vice_presidents[year]
-        """Leaders of US"""
+        """Political parties of US"""
         self.republicans = self.population * 0.5
         self.democrats = self.population - self.republicans
-        """Political parties of US"""
+        """Other political variables"""
+        self.stability = 95.00
         # economic variables
         self.economic_state = business_cycle[random.randrange(len(business_cycle) - 1)]
         self.gdp = gdp[year]
