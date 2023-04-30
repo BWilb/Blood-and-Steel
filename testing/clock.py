@@ -18,7 +18,10 @@ label.pack(anchor="center")
 time()
 
 mainloop()"""
+import random
 
 """c = "\"C:\\My Documents\""
 print(c)"""
 
+"""tax = round(random.uniform(0.5, 10.0), 2)
+print(f"{tax}%")"""
