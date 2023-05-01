@@ -98,25 +98,65 @@ def population_change(us):
 """political functions"""
 
 """Random functions"""
-
 def random_politics(us):
-    print("hi")
+    """Function based upon random political events"""
+    chance = random.randrange(10, 20000)
+    if chance % 12 == 5:
+        issues = ["Abortion", "Immigration", "Guns", "Women's Rights"]
+        print(f"A {issues[random.randrange(0, len(issues) - 1)]} protest occurred in DC.")
 
 def random_economics(us):
-    print('hi')
+    """Function based upon random economic events"""
+    chance = random.randrange(10, 20000)
+    if chance % 5 == 3:
+        money = round(random.uniform(145000, 1500000000), 2)
+        print("Congress decided to spend ")
+        us.gdp += money
+        us.government_debt += round((money * random.uniform(0.25, 75)), 2)
 
 def random_social(us):
+    """Random events based upon a social aspect"""
     print("hi")
     chance = random.randrange(10, 20000)
     if chance % 4 == 0:
         print("Someone threw a surprise birthday for their child!")
         time.sleep(3)
-        us.happiness += round((us.population * 0.0001), 0)
+        us.happiness += round(random.uniform(0.5, 2), 2)
 
-    elif chance % 6 == 5:
-        print("")
+    elif chance % 8 == 3:
+        print("A parade occurred")
+        time.sleep(3)
+        us.happiness += round(random.uniform(0.5, 2), 2)
+
+    elif chance % 10 == 4:
+        print("Someone just got married!!")
+        time.sleep(3)
+        us.happiness += round(random.uniform(0.5, 2), 2)
+
+    elif chance % 12 == 5:
+        money = random.randrange(1000, 10000000)
+        print(f"Someone just won ${money} at their local lottery")
+        time.sleep(3)
+
+    elif chance % 15 == 2:
+        people = random.randrange(3, 25)
+        print(f"Someone lost control of their car and ran into a group of people.\n"
+              f"{people} people died.")
+        time.sleep(3)
+        us.happiness -= round(random.uniform(0.5, 2), 2)
+
+    elif chance % 24 == 5:
+        locations = ["School", "Bank", "Store", "Parade"]
+        people = random.randrange(0, 50)
+        print(f"Someone decided to shoot up a {locations[random.randrange(0, len(locations) - 1)]}.\n"
+              f"{people} people died")
+        time.sleep(3)
+        us.population -= people
+        us.stability -= round(random.uniform(0.5, 5), 2)
+        us.happiness -= round(random.uniform(0.5, 14), 2)
+
 def random_weather(us):
-    """Function covers weather events"""
+    """Function covers random weather events"""
     print("hi")
 
 def random_international():
@@ -127,7 +167,7 @@ def random_international():
     """
     print("hi")
 def randomized_functions(us):
-    print("hi")
+    """Function that deviates to other subsidiary functions"""
     random_politics(us)
     random_economics(us)
     random_social(us)
