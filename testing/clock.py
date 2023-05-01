@@ -18,6 +18,7 @@ label.pack(anchor="center")
 time()
 
 mainloop()"""
+import datetime
 import random
 import time
 
@@ -28,7 +29,7 @@ print(c)"""
 print(f"{tax}%")"""
 import keyboard
 
-def printhi():
+"""def printhi():
     print("hhi")
 pressed = False
 while not pressed:
@@ -37,4 +38,5 @@ while not pressed:
         pressed = True
     else:
         print("hi")
-    time.sleep(1)
+    time.sleep(1)"""
+print(datetime.datetime(2001, 9, 9) < datetime.datetime(2002, 6, 6))

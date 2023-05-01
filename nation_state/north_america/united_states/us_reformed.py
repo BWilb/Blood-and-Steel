@@ -34,21 +34,21 @@ vice_presidents = {
 """Economic dictionaries & Variables"""
 business_cycle = ["expansion", "recession"]
 gdp = {
-    "1910" : 520000000000,
-    "1914" : 500000000000,
-    "1918" : 550000000000,
-    "1932" : 550000000000,
-    "1936" : 575000000000,
-    "1939" : 1100000000000
+    "1910": 520000000000,
+    "1914": 500000000000,
+    "1918": 550000000000,
+    "1932": 550000000000,
+    "1936": 575000000000,
+    "1939": 1100000000000
 }
 
 tax_rate = {
-    "1910" : 0,
-    "1914" : 1.00,
-    "1918" : 6.00,
-    "1932" : 4.00,
-    "1936" : 4.00,
-    "1939" : 4.00
+    "1910": 0,
+    "1914": 1.00,
+    "1918": 6.00,
+    "1932": 4.00,
+    "1936": 4.00,
+    "1939": 4.00
 }
 
 """Subsidiary functions of game"""
@@ -109,10 +109,55 @@ def random_economics(us):
     """Function based upon random economic events"""
     chance = random.randrange(10, 20000)
     if chance % 5 == 3:
-        money = round(random.uniform(145000, 1500000000), 2)
-        print("Congress decided to spend ")
+        """Chance that Congress spends a bit of money"""
+        money = round(random.uniform(145000, 150000000), 2)
+        print(f"Congress decided to spend ${money} today")
         us.gdp += money
-        us.government_debt += round((money * random.uniform(0.25, 75)), 2)
+        us.government_debt += round((money * random.uniform(0.25, 0.75)), 2)
+
+    elif chance % 8 == 3:
+        """Chance that congress raises tax rate"""
+        if us.tax_rate < 10.00:
+            increase = round(random.uniform(0.25, 2.25), 2)
+            print(f"Congress decided to raise taxes by {increase}%")
+            us.investment -= round(random.uniform(120000, 1020000), 2)
+            us.consumer_spending -= round(random.uniform(20000, 400000), 2)
+            us.happiness -= round(random.uniform(0.25, 1.25), 2)
+            time.sleep(3)
+            us.tax_rate += increase
+
+    elif chance % 10 == 6:
+        """chance that congress lowers tax rate"""
+        decrease = round(random.uniform(0.25, 2.25), 2)
+        print(f"Congress decided to lower taxes by {decrease}%")
+        us.investment += round(random.uniform(140000, 1200000), 2)
+        us.consumer_spending += round(random.uniform(20000, 600000), 2)
+        us.happiness += round(random.uniform(0.25, 1.25), 2)
+        time.sleep(3)
+        us.tax_rate -= decrease
+
+    elif chance % 35 == 3:
+        """Chance the economy goes for a run"""
+        growth = round(random.uniform(3.56, 8.56), 2)
+        print(f"The economy has whipped itself into a frenzy of extreme growth has taken place!!\n"
+              f"Numbers indicate that it is beginning to grow at {growth}%.")
+        time.sleep(3)
+        us.gdp *= growth
+        us.stability += round(random.uniform(0.95, 4.56), 2)
+        us.happiness += round(random.uniform(0.56, 20.45), 2)
+
+    elif chance % 45 == 4:
+        """Chance that the economy goes into a tailspin"""
+        retraction = round(random.uniform(5.56, 10.00), 2)
+        print("OH FUCK, the economy has fallen into a tailspin.\n"
+              f"It is being reported that it is beginning to shrink at {retraction}%")
+        time.sleep(3)
+        us.gdp /= retraction
+        us.happiness -= round(random.uniform(10.45, 34.56), 2)
+        us.stability -= round(random.uniform(12.56, 50.55), 2)
+        if us.economic_state != "recession":
+            us.economic_state = "depression"
+
 
 def random_social(us):
     """Random events based upon a social aspect"""
@@ -159,7 +204,7 @@ def random_weather(us):
     """Function covers random weather events"""
     print("hi")
 
-def random_international():
+def random_international(us):
     """
     Function deals with un-anticipated international events.
     These events will include terrorism, pre-emptive strikes,
@@ -169,8 +214,10 @@ def random_international():
 def randomized_functions(us):
     """Function that deviates to other subsidiary functions"""
     random_politics(us)
-    random_economics(us)
     random_social(us)
+    random_economics(us)
+    random_weather(us)
+    random_international(us)
 
 """Economic Functions"""
 def low_growth(us):
@@ -317,6 +364,7 @@ def manual_game(us):
     # Establishment of date variable
     while us.population > 2000000:
         us.date = us.date + timedelta(days=1)
+        print(f"Date: {us.date}")
         # function will incorporate daily changes in us population
         population_change(us)
         economic_decisions(us)
@@ -363,8 +411,9 @@ class UnitedStates:
         self.tax_rate = tax_rate[year]
         # military variables
         # international variables
+        self.alliance = ""
         # time variables
-        self.date = date = datetime(int(year), 1, 1)
+        self.date = datetime(int(year), 1, 1)
         self.current_year = self.date.year
 
 def main(time):
