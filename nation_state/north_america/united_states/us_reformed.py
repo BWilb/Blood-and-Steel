@@ -1,6 +1,54 @@
 import random
 import time
-from datetime import *
+from datetime import datetime, timedelta
+import arcade
+
+class StatisticsMenu(arcade.Window):
+
+    def __init__(self, width, height, nation):
+        super().__init__(width, height)
+        self.width = width
+        self.height = height
+        self.nation = nation
+        self.is_active = True
+
+    def draw_background(self):
+        # creation of background
+        arcade.draw_rectangle_filled(0, 0, self.width, self.height, color=arcade.color.BLACK)
+
+    def draw_content(self):
+        """method creates title and primary choices for the specific time frame you want"""
+        self.menu_size = self.height / 1.15
+
+        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.DARK_GREEN)
+        arcade.draw_text("Current Stats", (self.width / 2) - 300, self.height - 45, color=arcade.color.DARK_RED, font_size=35)
+        # header and welcoming of user
+
+        """for i in range(0, int(len(time_frame)/2)):
+            # loop that goes through elements of time frame variable
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 350, self.menu_size, arcade.color.NEON_FUCHSIA, font_size=20)
+            self.menu_size -= 75
+
+        self.menu_size = self.height / 1.15
+        # menu_size is reset for next set of text to be printed out
+        for i in range(int(len(time_frame)/2), len(time_frame)):
+            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 50, self.menu_size, arcade.color.NEON_FUCHSIA,
+                             font_size=20)
+            self.menu_size -= 75"""
+
+    def on_draw(self):
+        self.draw_background()
+        #self.is_active = True
+
+    def on_key_press(self, key: int, modifiers: int):
+        """
+        Key choices will act as user prompts.
+        whichever time frame chosen will become value
+        for time frame variable
+        """
+        if key == arcade.key.SPACE:
+            arcade.close_window()
+            self.is_active = False
 
 """Population Dictionaries"""
 population = {
@@ -161,7 +209,6 @@ def random_economics(us):
 
 def random_social(us):
     """Random events based upon a social aspect"""
-    print("hi")
     chance = random.randrange(10, 20000)
     if chance % 4 == 0:
         print("Someone threw a surprise birthday for their child!")
@@ -181,7 +228,7 @@ def random_social(us):
     elif chance % 12 == 5:
         money = random.randrange(1000, 10000000)
         print(f"Someone just won ${money} at their local lottery")
-        time.sleep(3)
+
 
     elif chance % 15 == 2:
         people = random.randrange(3, 25)
@@ -202,7 +249,7 @@ def random_social(us):
 
 def random_weather(us):
     """Function covers random weather events"""
-    print("hi")
+    print()
 
 def random_international(us):
     """
@@ -210,7 +257,7 @@ def random_international(us):
     These events will include terrorism, pre-emptive strikes,
     trade(possibly), international aid, and many more
     """
-    print("hi")
+    print()
 def randomized_functions(us):
     """Function that deviates to other subsidiary functions"""
     random_politics(us)
@@ -369,9 +416,18 @@ def manual_game(us):
         population_change(us)
         economic_decisions(us)
         randomized_functions(us)
+        if us.stability < 100:
+            choice = input("view your stats: ")
+            if choice.lower() == "y" or choice.lower() == "yes":
+                menu = StatisticsMenu(1800, 1200, us)
+                arcade.start_render()
+                menu.on_draw()
+                menu.draw_content()
+                arcade.run()
+                while not menu.is_active:
+                    print('hi')
         """if us.current_year%4 == 0:
             us_elections(us)"""
-
 class UnitedStates:
     def __init__(self, year):
         # population variables

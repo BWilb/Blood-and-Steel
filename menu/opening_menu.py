@@ -7,6 +7,7 @@ times = 0
 import arcade
 from nation_state.asia.japan import japan
 from nation_state.north_america.united_states import united_states
+from nation_state.north_america.united_states import us_reformed
 from nation_state.europe.germany import germany
 from nation_state.europe.russia import russia
 from nation_state.europe.italy import italy
@@ -199,7 +200,7 @@ def time_main():
     if nation_chosen.lower() == "japan":
         japan.main(time_chosen)
     elif nation_chosen.strip().lower() == "united states" or nation_chosen.strip().lower() == "us":
-        united_states.main(time_chosen)
+        us_reformed.main(time_chosen)
     elif nation_chosen.strip().lower() == "germany":
         germany.main(time_chosen)
     elif nation_chosen.strip().lower() == "russia":
