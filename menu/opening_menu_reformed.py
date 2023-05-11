@@ -1,8 +1,27 @@
 import pygame
+from pygame import mixer
 import button
+import time
 import pyautogui
 
+def play_music(screen, nation, run):
+    music = font.render(f"Congrats for choosing {nation}.", 1, text_col)
+    screen.blit(music, ((width / 2) - 600, 60))
+    space = font.render(f"Press space bar to continue.", 1, text_col)
+    screen.blit(space, ((width / 2) - 460, 160))
+    time.sleep(1)
+    user_enter = False
+    if nation.lower() == "united states":
+        pygame.mixer.music.play(-1)
+        if not pygame.mixer.music.play():
+            run = False
+            return run
+
 pygame.init()
+
+mixer.init()
+us_anthem = pygame.mixer.music.load("United States of America National Anthem - The Star-Spangled Banner (1Hour Instrumental) WAVING FLAG.mp3")
+german_anthem = ""
 
 width = pyautogui.size().width
 height = pyautogui.size().height
@@ -110,8 +129,8 @@ france_button = button.Button(width * 0.425, 600, france, 0.25)
 africa_button = button.Button(width * 0.65, 400, img_africa, 0.25)
 """asia"""
 asia_button = button.Button(width * 0.20, 400, img_asia, 0.25)
-japan = button.Button(width * 0.45, 200, img_japan, 0.25)
-china = button.Button(width * 0.45, 400, img_china, 0.25)
+japan = button.Button(width * 0.425, 200, img_japan, 0.25)
+china = button.Button(width * 0.425, 400, img_china, 0.25)
 """south america"""
 sa_button = button.Button(width * 0.425, 600, img_south_america, 0.25)
 
@@ -247,9 +266,11 @@ while run:
             nation = font.render("Choose your nation", 1, text_col)
             screen.blit(nation, ((width / 2) - 300, 60))
             if japan.draw(screen):
-                pass
+                nation_chosen = "Japan"
+                game_state = "unavailable"
             if china.draw(screen):
-                pass
+                nation_chosen = "China"
+                game_state = "unavailable"
             if back_button.draw(screen):
                 game_state = "main"
 
@@ -282,9 +303,13 @@ while run:
             screen.blit(question, ((width / 2) - 235, (height / 2) - 100))
 
             if yes_button.draw(screen):
-                pass
+                game_state = "yes"
             if no_button.draw(screen):
                 game_state = "start"
+
+        if game_state == "yes":
+
+            run = play_music(screen, nation_chosen, run)
 
     else:
         """pausing the game"""
@@ -295,7 +320,8 @@ while run:
         if event.type == pygame.KEYDOWN:
             """registering key event of pressing space bar"""
             if event.key == pygame.K_SPACE:
-                game_paused = True
+                pygame.mixer.music.stop()
+                run = False
         if event.type == pygame.QUIT:
             run = False
 
