@@ -4,7 +4,7 @@ pygame.mixer.init()
 def play_music(nation):
 
     pygame.mixer.music.load(
-        "music/europe/＂Preußens Gloria＂ march with prussian flag[⏎1892–1918] @NationalPrideFlags.mp3")
+        "german/Kaiser Wilhelm II.'s speech about WWI. - Address to the German people [TRANSLATED].mp3")
 
     pygame.mixer.music.play(-1)
 

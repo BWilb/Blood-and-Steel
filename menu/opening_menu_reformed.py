@@ -3,25 +3,9 @@ from pygame import mixer
 import button
 import time
 import pyautogui
-
-def play_music(screen, nation, run):
-    music = font.render(f"Congrats for choosing {nation}.", 1, text_col)
-    screen.blit(music, ((width / 2) - 600, 60))
-    space = font.render(f"Press space bar to continue.", 1, text_col)
-    screen.blit(space, ((width / 2) - 460, 160))
-    time.sleep(1)
-    user_enter = False
-    if nation.lower() == "united states":
-        pygame.mixer.music.play(-1)
-        if not pygame.mixer.music.play():
-            run = False
-            return run
+import pygame_testing
 
 pygame.init()
-
-mixer.init()
-us_anthem = pygame.mixer.music.load("United States of America National Anthem - The Star-Spangled Banner (1Hour Instrumental) WAVING FLAG.mp3")
-german_anthem = ""
 
 width = pyautogui.size().width
 height = pyautogui.size().height
@@ -309,7 +293,11 @@ while run:
 
         if game_state == "yes":
 
-            run = play_music(screen, nation_chosen, run)
+            """music = font.render(f"Congrats for choosing {nation_chosen}.", 1, text_col)
+            screen.blit(music, ((width / 2) - 600, 60))
+            space = font.render(f"Press space bar to continue.", 1, text_col)
+            screen.blit(space, ((width / 2) - 460, 160))"""
+            pygame_testing.play_music(nation_chosen)
 
     else:
         """pausing the game"""
@@ -320,7 +308,7 @@ while run:
         if event.type == pygame.KEYDOWN:
             """registering key event of pressing space bar"""
             if event.key == pygame.K_SPACE:
-                pygame.mixer.music.stop()
+
                 run = False
         if event.type == pygame.QUIT:
             run = False
