@@ -1,16 +1,33 @@
 import pygame
 from pygame import mixer
+import pygame
 import button
 import time
 import pyautogui
-import pygame_testing
+from nation_state.north_america.united_states import us_reformed
+import nation_state.europe.britain.britain
+import nation_state.europe.italy.italy
+import nation_state.europe.france.france
+import nation_state.europe.russia.russia
+import nation_state.europe.germany.germany
+import nation_state.asia.japan.japan
+
+def begin_game(nation, time):
+    if nation == "United States":
+        national = us_reformed.UnitedStates(time)
+        us_reformed.manual_game(national)
+        pygame.quit()
+
 
 pygame.init()
 
+# game is initialized
 width = pyautogui.size().width
 height = pyautogui.size().height
 
 screen = pygame.display.set_mode((width, height))
+
+
 pygame.display.set_caption("Welcome To War")
 #game variables
 game_paused = False
@@ -101,6 +118,7 @@ na_button = button.Button(width * 0.20, 200, img_north_america, 0.25)
 canada_button = button.Button(width * 0.43, 200, img_canada, 0.25)
 mexico_button = button.Button(width * 0.43, 400, img_mexico, 0.25)
 us_button = button.Button(width * 0.43, 600, img_us, 0.25)
+
 # nation buttons
 """europe"""
 europe_button = button.Button(width * 0.65, 200, img_europe, 0.25)
@@ -109,12 +127,15 @@ german_button = button.Button(width * 0.65, 200, germany, 0.25)
 russian_button = button.Button(width * 0.20, 400, russia, 0.25)
 italian_button = button.Button(width * 0.65, 400, italy, 0.25)
 france_button = button.Button(width * 0.425, 600, france, 0.25)
+
 """africa"""
 africa_button = button.Button(width * 0.65, 400, img_africa, 0.25)
+
 """asia"""
 asia_button = button.Button(width * 0.20, 400, img_asia, 0.25)
 japan = button.Button(width * 0.425, 200, img_japan, 0.25)
 china = button.Button(width * 0.425, 400, img_china, 0.25)
+
 """south america"""
 sa_button = button.Button(width * 0.425, 600, img_south_america, 0.25)
 
@@ -293,11 +314,10 @@ while run:
 
         if game_state == "yes":
 
-            """music = font.render(f"Congrats for choosing {nation_chosen}.", 1, text_col)
+            music = font.render(f"Congrats for choosing {nation_chosen}.", 1, text_col)
             screen.blit(music, ((width / 2) - 600, 60))
             space = font.render(f"Press space bar to continue.", 1, text_col)
-            screen.blit(space, ((width / 2) - 460, 160))"""
-            pygame_testing.play_music(nation_chosen)
+            screen.blit(space, ((width / 2) - 460, 160))
 
     else:
         """pausing the game"""
@@ -308,7 +328,6 @@ while run:
         if event.type == pygame.KEYDOWN:
             """registering key event of pressing space bar"""
             if event.key == pygame.K_SPACE:
-
                 run = False
         if event.type == pygame.QUIT:
             run = False
@@ -316,3 +335,7 @@ while run:
     pygame.display.update()
 
 pygame.quit()
+print(nation_chosen)
+if nation_chosen == "United States":
+    national = us_reformed.UnitedStates(time_chosen)
+    us_reformed.manual_game(national)

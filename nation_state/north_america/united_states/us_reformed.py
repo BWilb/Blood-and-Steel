@@ -2,54 +2,6 @@ import random
 import time
 from datetime import datetime, timedelta
 import arcade
-
-class StatisticsMenu(arcade.Window):
-
-    def __init__(self, width, height, nation):
-        super().__init__(width, height)
-        self.width = width
-        self.height = height
-        self.nation = nation
-        self.is_active = True
-
-    def draw_background(self):
-        # creation of background
-        arcade.draw_rectangle_filled(0, 0, self.width, self.height, color=arcade.color.BLACK)
-
-    def draw_content(self):
-        """method creates title and primary choices for the specific time frame you want"""
-        self.menu_size = self.height / 1.15
-
-        arcade.draw_lrtb_rectangle_filled(0, self.width, self.height, self.height / 1.1, color=arcade.color.DARK_GREEN)
-        arcade.draw_text("Current Stats", (self.width / 2) - 300, self.height - 45, color=arcade.color.DARK_RED, font_size=35)
-        # header and welcoming of user
-
-        """for i in range(0, int(len(time_frame)/2)):
-            # loop that goes through elements of time frame variable
-            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 350, self.menu_size, arcade.color.NEON_FUCHSIA, font_size=20)
-            self.menu_size -= 75
-
-        self.menu_size = self.height / 1.15
-        # menu_size is reset for next set of text to be printed out
-        for i in range(int(len(time_frame)/2), len(time_frame)):
-            arcade.draw_text(f"{i + 1}. {time_frame[i]}", self.width / 2 - 50, self.menu_size, arcade.color.NEON_FUCHSIA,
-                             font_size=20)
-            self.menu_size -= 75"""
-
-    def on_draw(self):
-        self.draw_background()
-        #self.is_active = True
-
-    def on_key_press(self, key: int, modifiers: int):
-        """
-        Key choices will act as user prompts.
-        whichever time frame chosen will become value
-        for time frame variable
-        """
-        if key == arcade.key.SPACE:
-            arcade.close_window()
-            self.is_active = False
-
 """Population Dictionaries"""
 population = {
     # population will be set up to increase or decrease randomly throughout every year
@@ -117,7 +69,9 @@ def population_change(us):
         if us.viagra_subsidize:
             us.population += random.randrange(25000, 50000)
             # Incorporation of deaths
-            us.population -= random.randrange(4000, 15000)
+            deaths = random.randrange(4000, 15000)
+            us.deaths += deaths
+            us.population -= deaths
             # Incorporation of births
             if us.population_change >= 10:
                 """choice if population growth is out of control"""
@@ -131,7 +85,9 @@ def population_change(us):
             """Choice if us population growth is too low"""
             us.population += random.randrange(5000, 20000)
             # Incorporation of deaths
-            us.population -= random.randrange(8000, 25000)
+            deaths = random.randrange(8000, 25000)
+            us.deaths += deaths
+            us.population -= deaths
             # Incorporation of births
             if us.population_change <= 1.5:
                 """Choice if population growth is too low"""
@@ -140,8 +96,14 @@ def population_change(us):
                 us.viagra_subsidize = True
                 us.condom_subsidize = False
     else:
-        us.population += random.randrange(6700, 45000)
-        us.population -= random.randrange(4500, 27000)
+        births = random.randrange(670, 4500)
+        us.births += births
+        us.population += births
+
+        deaths = random.randrange(450, 2700)
+        us.deaths += deaths
+        us.population -= deaths
+
 
 """political functions"""
 
@@ -234,6 +196,7 @@ def random_social(us):
         people = random.randrange(3, 25)
         print(f"Someone lost control of their car and ran into a group of people.\n"
               f"{people} people died.")
+        us.deaths += people
         time.sleep(3)
         us.happiness -= round(random.uniform(0.5, 2), 2)
 
@@ -242,6 +205,7 @@ def random_social(us):
         people = random.randrange(0, 50)
         print(f"Someone decided to shoot up a {locations[random.randrange(0, len(locations) - 1)]}.\n"
               f"{people} people died")
+        us.deaths += people
         time.sleep(3)
         us.population -= people
         us.stability -= round(random.uniform(0.5, 5), 2)
@@ -406,6 +370,23 @@ def economic_decisions(us):
     else:
         gdp_change(us)
 
+"""Function designed to check stats"""
+def check_stats(us):
+    """Stats organized by...
+    1. Politics
+    2. Economics
+    3. Social aspects
+    4. Others
+    """
+    print(f"Your current President is {us.president}\n"
+          f"Your current Vice President is {us.vice_president}\n"
+          f"Your current GDP is ${round(us.gdp, 2)}\n"
+          f"Your current yearly gdp growth is {round((us.gdp - us.current_gdp) / ((us.gdp + us.current_gdp) / 2) * 100, 3)}%\n"
+          f"Your current national debt is ${round(us.government_debt, 2)}\n"
+          f"Your current tax rate is {us.tax_rate}%\n"
+          f"There have been {us.deaths} deaths that have occurred in {us.current_year}\n"
+          f"There have been {us.births} births that have occurred in {us.current_year}")
+
 """Main function of US_Version of game"""
 def manual_game(us):
     # Establishment of date variable
@@ -418,14 +399,8 @@ def manual_game(us):
         randomized_functions(us)
         if us.stability < 100:
             choice = input("view your stats: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                menu = StatisticsMenu(1800, 1200, us)
-                arcade.start_render()
-                menu.on_draw()
-                menu.draw_content()
-                arcade.run()
-                while not menu.is_active:
-                    print('hi')
+            if choice == "y" or choice == "yes":
+                check_stats(us)
         """if us.current_year%4 == 0:
             us_elections(us)"""
 class UnitedStates:
@@ -434,6 +409,8 @@ class UnitedStates:
         self.population = population[year]
         self.population_change = 0
         self.current_pop = self.population
+        self.births = 0
+        self.deaths = 0
         self.happiness = 96.56
         """Population controller if birth rate gets out of control"""
         self.condom_subsidize = False
