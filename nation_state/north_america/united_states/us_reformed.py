@@ -55,55 +55,58 @@ tax_rate = {
 
 """population functions"""
 def population_change(us):
-    """Function is exaggerated in numbers
-    incorporates population growth
-    """
     if us.current_year < us.date.year:
-        us.population_change = (us.population - us.current_pop / ((us.population + us.current_pop)/2)) * 100
-        """Calculation of population change over year"""
+        us.population_change = (us.population - us.current_pop / ((us.population + us.current_pop) / 2)) * 100
+
         us.current_pop = us.population
-        # reset of current population
-        us.current_year = us.date.year
-        # reset of current year
 
-        if us.viagra_subsidize:
-            us.population += random.randrange(25000, 50000)
-            # Incorporation of deaths
-            deaths = random.randrange(4000, 15000)
-            us.deaths += deaths
-            us.population -= deaths
-            # Incorporation of births
-            if us.population_change >= 10:
-                """choice if population growth is out of control"""
-                choice = input(f"your yearly population growth rate of {us.population_change}% is unsustainable"
-                               f"Do you want to increase subsidies for population control?: ")
-                if choice.lower() == "yes" or choice.lower() == "y":
-                    us.viagra_subsidize = False
-                    us.condom_subsidize = True
+        if us.population_change <= 1.5:
+            """Incorporation of what happens when population growth becomes too small"""
+            print(f"Your population growth for {us.current_year} was {us.population_change}%")
+            choice = input("Would you like to subsidize viagra?: ")
 
-        elif us.condom_subsidize:
-            """Choice if us population growth is too low"""
-            us.population += random.randrange(5000, 20000)
-            # Incorporation of deaths
-            deaths = random.randrange(8000, 25000)
-            us.deaths += deaths
-            us.population -= deaths
-            # Incorporation of births
-            if us.population_change <= 1.5:
-                """Choice if population growth is too low"""
-                choice = input(f"your yearly population growth rate of {us.population_change}% is unsustainable"
-                               f"Do you want to increase subsidies for population growth?: ")
-                us.viagra_subsidize = True
-                us.condom_subsidize = False
+            if choice.lower() == "yes" or choice.lower() == "y":
+                us.viagra_subsidy = True
+                us.condom_subsidy = False
+
+        elif us.population_change >= 8:
+            """Incorporation of what happens when population growth becomes too large"""
+            print(f"Your population growth for {us.current_year} was {us.population_change}%")
+            choice = input("Would you like to subsidize condoms?: ")
+            if choice.lower() == "yes" or choice.lower():
+                us.condom_subsidy = True
+                us.viagra_subsidy = False
+
     else:
-        births = random.randrange(670, 4500)
-        us.births += births
-        us.population += births
+        if us.viagra_subsidy:
+            """incorporation of births and deaths under viagra subsidies"""
+            births = random.randrange(700, 2400)
+            us.births += births
+            us.population += births
 
-        deaths = random.randrange(450, 2700)
-        us.deaths += deaths
-        us.population -= deaths
+            deaths = random.randrange(300, 1200)
+            us.deaths += deaths
+            us.population -= deaths
 
+        elif us.condom_subsidy:
+            """incorporation of births and deaths under condom subsidies"""
+            births = random.randrange(500, 2000)
+            us.births += births
+            us.population += births
+
+            deaths = random.randrange(400, 1800)
+            us.deaths += deaths
+            us.population -= deaths
+
+        else:
+            """Incorporation of births and deaths under regular circumstances"""
+            births = random.randrange(600, 2200)
+            us.births += births
+            us.population += births
+
+            deaths = random.randrange(500, 1500)
+            us.deaths += deaths
+            us.population -= deaths
 
 """political functions"""
 
@@ -139,12 +142,17 @@ def random_economics(us):
     elif chance % 10 == 6:
         """chance that congress lowers tax rate"""
         decrease = round(random.uniform(0.25, 2.25), 2)
-        print(f"Congress decided to lower taxes by {decrease}%")
-        us.investment += round(random.uniform(140000, 1200000), 2)
-        us.consumer_spending += round(random.uniform(20000, 600000), 2)
-        us.happiness += round(random.uniform(0.25, 1.25), 2)
-        time.sleep(3)
-        us.tax_rate -= decrease
+        if us.tax_rate - decrease >= 0.25:
+            print(f"Congress decided to lower taxes by {decrease}%")
+            us.investment += round(random.uniform(140000, 1200000), 2)
+            us.consumer_spending += round(random.uniform(20000, 600000), 2)
+            us.happiness += round(random.uniform(0.25, 1.25), 2)
+            time.sleep(3)
+            us.tax_rate -= decrease
+        else:
+            print(f"Congress attempted to lower taxes by {decrease}%.\n"
+                  f"However this decrease wouldn't've been sustainable.")
+            time.sleep(3)
 
     elif chance % 35 == 3:
         """Chance the economy goes for a run"""
@@ -231,15 +239,15 @@ def randomized_functions(us):
     random_international(us)
 
 """Economic Functions"""
-def low_growth(us):
+def low_change(us):
     if us.economic_state == "expansion":
         """Very slight growth within economy"""
         us.consumer_spending = round(random.uniform(30000, 75000), 2)
         us.investment = round(random.uniform(20000, 54000), 2)
         us.government_spending = round(random.uniform(300000, 500000), 2)
         us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
-        us.exports = round(random.uniform(20000, 560000), 2)
-        us.imports = round(random.uniform(32000, 560000), 2)
+        us.exports = round(random.uniform(2000, 56000), 2)
+        us.imports = round(random.uniform(3200, 56000), 2)
         us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     else:
         """Entry into a recession"""
@@ -247,30 +255,31 @@ def low_growth(us):
         us.investment = -(round(random.uniform(3000, 5000), 2))
         us.government_spending = round(random.uniform(200000, 450000), 2)
         us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
-        us.exports = round(random.uniform(6200, 120000), 2)
-        us.imports = round(random.uniform(140000, 1400000), 2)
+        us.exports = round(random.uniform(6200, 12000), 2)
+        us.imports = round(random.uniform(14000, 140000), 2)
         us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
-def moderate_growth(us):
+
+def moderate_chnage(us):
     if us.economic_state == "expansion":
         """State of moderate wealth for nation"""
         us.consumer_spending = round(random.uniform(60000, 105000), 2)
         us.investment = round(random.uniform(60000, 100000), 2)
         us.government_spending += round(random.uniform(100000, 350000), 2)
         us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
-        us.exports = round(random.uniform(60000, 860000), 2)
-        us.imports = round(random.uniform(62000, 880000), 2)
+        us.exports = round(random.uniform(6000, 86000), 2)
+        us.imports = round(random.uniform(62000, 88000), 2)
         us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     else:
         """Economy turning towards depression"""
-        us.consumer_spending = -(round(random.uniform(35000, 102500), 2))
-        us.investment = -(round(random.uniform(30000, 40000), 2))
+        us.consumer_spending = -(round(random.uniform(3500, 102500), 2))
+        us.investment = -(round(random.uniform(3000, 40000), 2))
         us.government_spending = round(random.uniform(500000, 1050000), 2)
         us.government_debt += us.government_spending * round(random.uniform(0.25, 0.75), 2)
-        us.exports = round(random.uniform(140000, 1200000), 2)
+        us.exports = round(random.uniform(14000, 920000), 2)
         us.imports = round(random.uniform(140000, 1400000), 2)
         us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
 
-def high_growth(us):
+def extreme_change(us):
     if us.economic_state == "expansion":
         """State of glorious wealth for nation"""
         us.consumer_spending = round(random.uniform(60000, 105000), 2)
@@ -291,82 +300,67 @@ def high_growth(us):
         us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
 
 def stimulus(us):
-    """Fucntion deals with increased government spending"""
-    """Function covering government spending and taxes
+    """
+    Function covering government spending and taxes
     in times of economic crisis
     """
     us.economic_stimulus = True
-    """us.government_spending += random.randrange(24000, 100000)"""
-    if us.recess_years < 3 and us.economic_growth >= 0.5:
+    if us.recess_years <= 3 or us.economic_growth <= 1.5:
 
-        choice = input("Do you want to increase tax rate(Remember this applies to the entire population).\n"
-                       "Yes or No?: ")
+        choice = input("Do you want ot increase the tax rate(Remember this applies to the entire population)?: ")
         """Prompting user to choose if they want to increase taxes"""
 
-        if choice.lower() == 'yes' or choice.lower() == 'y':
-            """if statement covering if answer is yes"""
+        if choice.lower() == "yes" or choice.lower() == "y":
             valid_choice = False
+
             while valid_choice:
-                tax_hike = float(input("what will your new tax rate(between 0.5 & 10.0 be?: "))
+                tax_hike = float(input("By how much do you want to increase taxes(max cap is 10)?: "))
+
                 if tax_hike <= 10.00 and tax_hike >= 0.5:
-                    """if statement if tax rate meets criteria"""
-                    print(f"{tax_hike}% is new tax rate.")
+                    """if statement covering if tax hike meets criteria"""
+                    us.tax_rate += tax_hike
+                    print(f"{us.tax_rate}% is your new tax rate")
 
-                    valid_choice = True
-                elif tax_hike <= 0:
-                    """if statement if tax rate is below 0"""
-                    print("new tax rate will be impossible to carry out. choose another tax rate")
+                    valid_choice = False
 
-                elif tax_hike >= 10:
-                    """if statement if tax rate is too high"""
-                    print("New tax rate will piss a lot of people off. Choose another tax rate.")
+                elif tax_hike <= 0 or tax_hike > 10.00:
+                    print(f"New tax hike of {tax_hike} is improper./n"
+                          f"try again")
+
                 else:
-                    print("not a valid tax rate")
-
-    elif us.recess_years >= 3:
-        """if statement if economy has been growing slowly for past 3 years"""
-        us.tax_rate = round(random.uniform(us.tax_rate, 10.0), 2)
-        print("Congress has voted to raise the tax rate, without your involvement!")
-        print(f"New tax rate {us.tax_rate}%")
+                    print("Not a valid tax rate")
 
 def gdp_change(us):
-    """Function covers direction of gdp change
-    over daily count
-    """
-    if us.tax_rate <= 3 and us.tax_rate >= 0.5:
+    if us.tax_rate <= 3:
         """Economic growth under low tax rate"""
-        high_growth(us)
+        extreme_change(us)
 
     elif us.tax_rate <= 7.5 and us.tax_rate >= 3.1:
         """Economic growth under moderate tax rate"""
-        moderate_growth(us)
+        moderate_chnage(us)
 
     else:
         """Economic growth under high tax rate"""
-        low_growth(us)
+        low_change(us)
 
 def economic_decisions(us):
     if us.current_year < us.date.year:
 
         us.economic_growth = (us.gdp - us.current_gdp / ((us.gdp + us.current_gdp) / 2)) * 100
-        """Simplified calculation for economic growth"""
 
         if us.economic_growth <= 1.5:
-            choice = input(f"Your GDP grew {us.economic_growth}% last year.\n"
-                           f"Do you want to stimulate your economy?: ")
-            if choice.lower() == "yes" or choice.lower() == 'y':
+            choice = input(f"Your GDP grew {us.economic_growth}% last year.\n")
+
+            if choice.lower() == "yes" or choice.lower() == "y":
                 stimulus(us)
 
-            elif choice.lower() == "no" or choice.lower() == 'n':
-                """Incorporation of user choice no"""
-                if us.recess_years > 3 and us.economic_growth <= 0.5:
-                    """Implementation of Economic Stimulus if economy hasn't been growing 
-                    for past 3 years
-                    """
-                    print("Your economy has been declining for three years.\n"
-                          "An economic stimulus has been implemented!")
+            elif choice.lower() == "n" or choice.lower() == "no":
+                if us.recess_years > 3 and us.economic_grwoth <= 0.5:
+                    print("Your economy has been been declining for three years.\n"
+                          "An economic stimulus has been implemented by Congress.")
                     time.sleep(3)
                     stimulus(us)
+
     else:
         gdp_change(us)
 
@@ -413,9 +407,9 @@ class UnitedStates:
         self.deaths = 0
         self.happiness = 96.56
         """Population controller if birth rate gets out of control"""
-        self.condom_subsidize = False
+        self.condom_subsidy = False
         """Population controller if birth rate flops"""
-        self.viagra_subsidize = False
+        self.viagra_subsidy = False
         # political variables
         """Leaders of US"""
         self.president = presidents[year]
