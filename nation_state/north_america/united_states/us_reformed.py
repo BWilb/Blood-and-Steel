@@ -252,7 +252,7 @@ def random_economics(us):
         """Chance that Congress spends a bit of money"""
         money = round(random.uniform(14500, 150000), 2)
         print(f"Congress decided to spend ${money} today")
-        us.gdp += money
+        us.current_gdp += money
         us.national_debt += round((money * random.uniform(0.25, 0.75)), 2)
 
     elif chance % 8 == 3:
@@ -435,7 +435,7 @@ def slow_growth(us):
 
     us.exports = round(random.uniform(4500, 75000), 2)
     us.imports = round(random.uniform(3200, 56000), 2)
-    us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
+    us.current_gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     us.happiness += 0.15
 
 def fast_growth(us):
@@ -453,7 +453,7 @@ def fast_growth(us):
 
     us.exports = round(random.uniform(15000, 170000), 2)
     us.imports = round(random.uniform(14000, 100000), 2)
-    us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
+    us.current_gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     us.happiness += 0.25
 
 def slow_fall(us):
@@ -475,7 +475,7 @@ def slow_fall(us):
 
     us.exports = round(random.uniform(14000, 65000), 2)
     us.imports = round(random.uniform(14000, 140000), 2)
-    us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
+    us.current_gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     us.happiness -= 0.15
     us.stability -= round(random.uniform(0.15, 1.05), 2)
 
@@ -498,7 +498,7 @@ def fast_fall(us):
 
     us.exports = round(random.uniform(1200, 420000), 2)
     us.imports = round(random.uniform(140000, 1400000), 2)
-    us.gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
+    us.current_gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
     us.happiness -= 0.25
     us.stability -= round(random.uniform(0.25, 1.25), 2)
 
@@ -585,9 +585,9 @@ def check_stats(us):
           f"Democrats make up {round((us.democrats / us.population) * 100, 2)}% of the population\n"
           f"Republicans make up {round((us.republicans / us.population) * 100, 2)}% of the population\n"
           f"Your current political stability is {round(us.stability, 2)}%\n"
-          f"Your current GDP is ${round(us.gdp, 2)}\n"
+          f"Your current GDP is ${round(us.current_gdp, 2)}\n"
           f"Your economy is currently in a(n) {us.economic_state} period\n"
-          f"Your current yearly gdp growth is {round(((us.gdp - us.current_gdp) / ((us.gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
+          f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
           f"Your current national debt is ${round(us.national_debt, 2)}\n"
           f"Your current tax rate is {round(us.tax_rate, 2)}%\n"
           f"There have been {us.deaths} deaths that have occurred in {us.current_year}\n"
