@@ -238,141 +238,306 @@ def political_changes(us):
         us.republicans += change
 
 """Random functions"""
-def random_politics(us):
-    """Function based upon random political events"""
-    chance = random.randrange(10, 20000)
-    if chance % 12 == 5:
-        issues = ["Abortion", "Immigration", "Guns", "Women's Rights"]
-        print(f"A(n) {issues[random.randrange(0, len(issues) - 1)]} protest occurred in DC.")
+
 
 def random_economics(us):
-    """Function based upon random economic events"""
     chance = random.randrange(10, 20000)
-    if chance % 5 == 3:
-        """Chance that Congress spends a bit of money"""
-        money = round(random.uniform(14500, 150000), 2)
-        print(f"Congress decided to spend ${money} today")
+
+    if chance % 33 == 2:
+        """Chance that someone wins the lottery
+        - increase in happiness
+        - increase in consumer debt
+        """
+        lottery = round(random.uniform(125000, 956000), 2)
+        us.national_debt += round(lottery * 0.45, 2)
+        us.happiness -= round(random.uniform(0.25, 1.00))
+        print(f"Someone just won ${lottery} in their local lottery")
+        time.sleep(3)
+
+    elif chance % 8 == 5:
+        """chance that someone loses their savings @ a casino
+        - decrease in happiness
+        """
+        print(f"Someone just lost ${round(random.uniform(10000, 900000))} at their local Casino")
+        us.happiness -= round(random.uniform(0.55, 2.00))
+        time.sleep(3)
+
+    elif chance % 12 == 7:
+        """chance that somebody gets robbed
+        - potential for death
+        - decrease in happiness
+        """
+        death = random.randrange(0, 2)
+        if death == 0:
+            print("Someone just got mugged. They were left unharmed though!")
+            us.happiness -= round(random.uniform(0.55, 1.55))
+            time.sleep(3)
+
+        elif death == 1:
+            print("Someone just got mugged. The mugging resulted in the victims death")
+            us.population -= 1
+            us.happiness -= round(random.uniform(0.55, 1.25))
+            time.sleep(3)
+
+    elif chance % 15 == 6:
+        """chance that a bank gets robbed
+        - loss in GDP
+            -> investment
+        - potential death(s)
+        - decrease in happiness
+        - decrease in stability
+        - increase in government and consumer(bank owner) debt to cover bank losses
+        """
+        robbery = round(random.uniform(756000, 50000000), 2)
+        death_chance = random.randrange(0, 2)
+        deaths = random.randrange(10, 40)
+        if death_chance == 0:
+            print(f"A bank robbery just occurred. The bank lost ${robbery} in assets")
+        if death_chance == 0:
+            print(f"A bank robbery just occurred. The bank lost ${robbery} in assets.\n"
+                  f"The robber was also armed, killing {deaths} people.")
+            us.deaths += deaths
+        us.stability -= round(random.uniform(0.25, 1.24), 2)
+        us.happiness -= round(random.uniform(2.34, 5.56), 2)
+        us.current_gdp -= robbery
+        us.national_debt += round(robbery * 0.75)
+        time.sleep(3)
+
+    elif chance % 17 == 2:
+        """Chance that Congress decides to spend extra money
+        - increase in government debt
+        - increase in GDP
+        - increase in stability
+        """
+        money = round(random.uniform(345000, 1000000), 2)
+        print(f"Congress decided to spend an extra ${money} today.")
+        us.national_debt += money * 0.45
         us.current_gdp += money
-        us.national_debt += round((money * random.uniform(0.25, 0.75)), 2)
-
-    elif chance % 8 == 3:
-        """Chance that congress raises tax rate"""
-
-        if us.tax_rate < 10.00 and us.date >= us.tax_change_date:
-            """chance that congress raises taxes, has time constraint on it"""
-            increase = round(random.uniform(0.25, 2.25), 2)
-            print(f"Congress decided to raise taxes by {increase}%")
-            us.investment -= round(random.uniform(120000, 1020000), 2)
-            us.consumer_spending -= round(random.uniform(20000, 400000), 2)
-            us.happiness -= round(random.uniform(0.25, 1.25), 2)
-            time.sleep(3)
-            us.tax_rate += increase
-            us.tax_change_date = us.date
-
-    elif chance % 10 == 6 and us.date >= us.tax_change_date:
-        """chance that congress lowers tax rate, has time constraint"""
-        decrease = round(random.uniform(0.25, 2.25), 2)
-        if us.tax_rate - decrease >= 0.25:
-            print(f"Congress decided to lower taxes by {decrease}%")
-            us.happiness += round(random.uniform(0.25, 1.25), 2)
-            time.sleep(3)
-            us.tax_rate -= decrease
-            us.tax_change_date = us.date
-            
-        else:
-            print(f"Congress attempted to lower taxes by {decrease}%.\n"
-                  f"However this decrease wouldn't've been sustainable.")
-            time.sleep(3)
-
-    elif chance % 35 == 3:
-        """Chance the economy goes for a run"""
-        growth = round(random.uniform(3.56, 8.56), 2)
-        print(f"The economy has whipped itself into a frenzy of extreme growth has taken place!!\n"
-              f"Numbers indicate that it is beginning to grow at {growth}%.")
         time.sleep(3)
-        us.gdp *= growth
-        us.stability += round(random.uniform(0.95, 4.56), 2)
-        us.happiness += round(random.uniform(0.56, 20.45), 2)
 
-    elif chance % 45 == 4:
-        """Chance that the economy goes into a tailspin"""
-        retraction = round(random.uniform(5.56, 10.00), 2)
-        print("OH FUCK, the economy has fallen into a tailspin.\n"
-              f"It is being reported that it is beginning to shrink at {retraction}%")
+    elif chance % 20 == 3:
+        """Chance that a bank or multiple banks collapse
+        - decrease in GDP
+            -> loss in investment
+            -> increase in government spending
+                -> increase in national debt
+        - decrease in stability and happiness
+        """
+        amount = random.randrange(1, 30)
+        loss = round(random.uniform(645000, 3000000), 2)
+        us.current_gdp -= loss
+        us.happiness -= round(random.uniform(1.25, 12.56), 2)
+        us.stability -= round(random.uniform(3.25, 10.56), 2)
         time.sleep(3)
-        us.gdp = us.gdp / retraction
-        us.happiness -= round(random.uniform(10.45, 34.56), 2)
-        us.stability -= round(random.uniform(12.56, 50.55), 2)
-        if us.economic_state != "depression":
-            us.economic_state = "depression"
+
+    elif chance % 28 == 6 and us.date > us.tax_change_date:
+        """Chance that congress decides to raise taxes
+        - decrease in happiness
+        - decrease in stability
+        - increase of government spending and national debt(other functions)
+        - increase in democratic support
+        - decrease in republican support
+        """
+        tax_hike = round(random.uniform(1.25, 10.5))
+        if (us.tax_rate + tax_hike) >= 50:
+            print(f"Congress has decided to raise taxes by {tax_hike}%")
+            us.tax_rate += tax_hike
+            us.stability -= round(random.uniform(0.45, 1.56), 2)
+            us.happiness -= round(random.uniform(1.45, 5.56), 2)
+            change = random.randrange((us.republicans * 0.20), (us.republicans * 0.50))
+            if (us.republicans - change) < 0 or (us.democrats + change) > 100:
+                """Check to see if republican support will be negative
+                or democrat support will be above 100
+                """
+                us.republicans -= change
+                us.democrats += change
+            us.tax_change_date = us.date + timedelta(days=75)
+        time.sleep(3)
+
+    elif chance % 35 == 12 and us.date > us.tax_change_date:
+        """chance that congress decides to lower taxes
+        - increase in happiness
+        - increase in stability 
+        - increase of consumer spending
+        - decrease of government spending and increase of national debt(consumer spending)
+        - increase in republican support
+        - decrease of democratic support
+        """
+        tax_cut = round(random.uniform(1.25, 10.5))
+        if (us.tax_rate + tax_cut) >= 50:
+            print(f"Congress has decided to raise taxes by {tax_cut}%")
+            us.tax_rate += tax_cut
+            us.stability += round(random.uniform(0.45, 1.56), 2)
+            us.happiness += round(random.uniform(1.45, 5.56), 2)
+            change = random.randrange((us.democrats * 0.20), (us.democrats * 0.50))
+            if (us.democrats - change) < 0 or (us.republicans + change) > 100:
+                """Check to see if democrat support will be negative
+                or republican support will be above 100
+                """
+                us.republicans += change
+                us.democrats -= change
+
+            us.tax_change_date = us.date + timedelta(days=75)
+
+        time.sleep(3)
+
+    elif chance % 42 == 9 and us.economic_state != "depression":
+        """chance that economy collapses into depression
+        - stimulus function gets called
+        - gdp gets slashed by a factor of 5
+            -> time for potential cycle change is reset
+        - stability and happiness decrease
+        - government spending increases and national debt increases
+        - later on, potential for entire Union to break apart
+        """
+        us.economic_state = "depression"
+        print("Oh no, the US economy has fallen into a tailspin.\n"
+              "It has been slashed by a factor of 5")
+        us.current_gdp /= 5
+        # economic_stimulus(us)
+        if us.happiness < 30 or us.stability < 40:
+            us.happiness -= round(random.uniform(20.56, 45), 2)
+            us.stability -= round(random.uniform(10.56, 45), 2)
+        recovery_spending = round(random.uniform(1200000, 5000000), 2)
+        us.current_gdp += recovery_spending
+        us.national_debt += recovery_spending * 0.75
+        us.economic_change_date = us.date + timedelta(days=120)
+        time.sleep(3)
+
+    elif chance % 48 == 5 and us.economic_state != "expansion":
+        """chance that economy experiences boom
+        - tax rate decreases
+        - gdp gets multiplied by 5
+        - investment increases
+        - national debt increases
+            -> consumer spending increases
+        - stability and happiness increase
+        """
+
+        print("Very Interesting...the US economy has suddenly experienced a growth spurt.\n"
+              "This growth spurt has increased the US GDP by a factor of 5")
+        us.current_gdp *= 5
+        if us.happiness < 87 or us.stability < 85:
+            us.happiness -= round(random.uniform(5.56, 20), 2)
+            us.stability -= round(random.uniform(2.45, 15.56), 2)
+        increased_consumer = round(random.uniform(1200000, 5000000), 2)
+        us.current_gdp += increased_consumer * 1.5
+        # increase in consumer spending is multiplied by 1.5 in order to represent increase in investment
+        us.national_debt += increased_consumer * 0.75
+        us.economic_change_date = us.date + timedelta(days=120)
+        time.sleep(3)
 
 
 def random_social(us):
-    """Random events based upon a social aspect"""
     chance = random.randrange(10, 20000)
-    if chance % 4 == 0:
-        print("Someone threw a surprise birthday for their child!")
+    if chance % 5 == 0:
+        """Very likely chance that a college dorm party occurs
+        within this chance, there will be a probability of deaths from drunkenness
+        - increase in happiness 
+            -> decrease in happiness if death
+        """
+        print("A college dorm is throwing a wild party")
         time.sleep(3)
-        us.happiness += round(random.uniform(0.5, 2), 2)
+        chance = random.randrange(0, 2)
+        if chance == 1:
+            people = random.randrange(1, 30)
+            print(f"Well bad news...{people} people died from partying a little to hard.\n")
+            us.population -= people
+            us.deaths += people
+            time.sleep(3)
+            us.happiness -= random.randrange(1, 4)
+        else:
+            us.happiness += random.randrange(2, 7)
 
-    elif chance % 8 == 3:
-        print("A parade occurred")
+    elif chance % 8 == 0:
+        """Chance that a high school party occurs
+        within this chance, there will be a probability of deaths from drunkenness(possibly murder later on)
+        - increase in happiness 
+            -> decrease in happiness if death
+        """
+        print("A popular high school cheerleader is throwing a wild party")
         time.sleep(3)
-        us.happiness += round(random.uniform(0.5, 2), 2)
+        chance = random.randrange(0, 2)
+        if chance == 1:
+            people = random.randrange(1, 30)
+            print(f"Well bad news...{people} people died from partying a little to hard.\n")
+            us.population -= people
+            us.deaths += people
+            time.sleep(3)
+            us.happiness -= random.randrange(1, 4)
+        else:
+            us.happiness += random.randrange(2, 7)
 
-    elif chance % 10 == 4:
-        print("Someone just got married!!")
+    elif chance % 10 == 3:
+        """Chance that someone throws a surprise birthday party for their child
+        - increase in happiness
+        """
+        print("Someone just threw their child a surprise party\n")
+        us.happiness += round(random.uniform(0.25, 1.25), 2)
         time.sleep(3)
-        us.happiness += round(random.uniform(0.5, 2), 2)
 
     elif chance % 12 == 5:
-        money = random.randrange(1000, 1000000)
-        print(f"Someone just won ${money} at their local lottery")
-
-    elif chance % 15 == 2:
-        people = random.randrange(3, 25)
-        print(f"Someone lost control of their car and ran into a group of people.\n"
-              f"{people} people died.")
-        us.deaths += people
+        """Chance that someone gets married
+        - increase in happiness and stability
+        """
+        print("someone just got married")
         time.sleep(3)
-        us.happiness -= round(random.uniform(0.5, 2), 2)
-        
-    elif chance % 16 == 3:
-        partner = ["wife", "husband", "boyfriend" "girlfriend", "fiance"]
-        print(f"Someone just broke up with their {partner[random.randrange(0, len(partner) - 1)]}")
-        us.happiness -= round(random.uniform(0.5, 1.25), 2)
+        us.stability += round(random.uniform(0.25, 0.75), 2)
+        us.happiness += round(random.uniform(0.25, 1.75), 2)
+
+    elif chance % 15 == 4:
+        """Chance that somebody converts and begins to believe in God
+        -> Christian, Islamic, Jewish, or other
+        - increase in happiness and stability
+        """
+        religions = ["Jewish", "Christian", "Islamic"]
+        print(
+            f"An Atheist just converted to believing in the {religions[random.randrange(0, len(religions) - 1)]} God\n")
+        us.stability += round(random.uniform(0.25, 0.75), 2)
+        us.happiness += round(random.uniform(0.25, 1.75), 2)
         time.sleep(3)
 
-    elif chance % 24 == 5:
-        locations = ["School", "Bank", "Store", "Parade"]
-        people = random.randrange(0, 50)
-        print(f"Someone decided to shoot up a {locations[random.randrange(0, len(locations) - 1)]}.\n"
-              f"{people} people died")
-        us.deaths += people
+    elif chance % 18 == 4:
+        """Chance that a parade occurs
+        - increase in happiness
+        """
+        print("A parade occurred, Huzzah.\n")
+        us.happiness += round(random.uniform(0.25, 1.75), 2)
         time.sleep(3)
-        us.population -= people
-        us.stability -= round(random.uniform(0.5, 5), 2)
-        us.happiness -= round(random.uniform(0.5, 14), 2)
 
+    elif chance % 21 == 2:
+        """Chance that a random place gets shot up
+        - decrease in population, happiness, and stability
+        """
+        locations = ["School", "Library", "Restaurant", "Bakery", "Courthouse", "Bank"]
+        deaths = random.randrange(6, 100)
+        print(f"Oh no there was a shooting at a local {locations[random.randrange(0, len(locations) - 1)]}."
+              f"This shooting resulted in the deaths of {deaths} people")
+        us.stability += round(random.uniform(0.25, 1.75), 2)
+        us.happiness += round(random.uniform(0.25, 4.75), 2)
+        us.population -= deaths
+        time.sleep(3)
+
+    elif chance % 26 == 3:
+        """Chance that someone rolls their car into a group of people
+        decrease in population
+        """
+        deaths = random.randrange(3, 25)
+        print(f"Someone just rolled their car into a group of people. {deaths} people died.\n")
+        us.population -= deaths
+        time.sleep(3)
+def random_politics(us):
+    pass
 def random_weather(us):
-    """Function covers random weather events"""
-    print()
-
+    pass
 def random_international(us):
-    """
-    Function deals with un-anticipated international events.
-    These events will include terrorism, pre-emptive strikes,
-    trade(possibly), international aid, and many more
-    """
-    print()
+    pass
 def randomized_functions(us):
-    """Function that deviates to other subsidiary functions"""
+    random_economics(us)
     random_politics(us)
     random_social(us)
-    random_economics(us)
     random_weather(us)
     random_international(us)
-
 """Economic Functions"""
 def economic_state(us):
     if us.date >= us.economic_change_date:
@@ -423,7 +588,7 @@ def economic_state(us):
 def slow_growth(us):
     us.consumer_spending = round(random.uniform(3000, 7500), 2)
     us.investment = round(random.uniform(2000, 5400), 2)
-    print(us.consumer_spending, '\n', us.investment)
+
     us.government_spending = round(random.uniform(3000, 5000), 2)
 
     us.national_debt += (us.government_spending * round(random.uniform(0.05, 0.45), 2) +
@@ -441,7 +606,6 @@ def slow_growth(us):
 def fast_growth(us):
     us.consumer_spending = round(random.uniform(80000, 150000), 2)
     us.investment = round(random.uniform(60000, 150000), 2)
-    print(us.consumer_spending, '\n', us.investment)
     us.government_spending = round(random.uniform(50000, 175000), 2)
 
     us.national_debt += (us.government_spending * round(random.uniform(0.05, 0.45), 2) +
@@ -459,7 +623,6 @@ def fast_growth(us):
 def slow_fall(us):
     us.consumer_spending = -(round(random.uniform(3500, 10250), 2))
     us.investment = -(round(random.uniform(3000, 40000), 2))
-    print(us.consumer_spending, '\n', us.investment)
     if us.economic_stimulus:
         us.government_spending = round(random.uniform(75000, 3250000), 2)
 
@@ -482,7 +645,6 @@ def slow_fall(us):
 def fast_fall(us):
     us.consumer_spending = -(round(random.uniform(6000, 455000), 2))
     us.investment = -(round(random.uniform(6000, 560000), 2))
-    print(us.consumer_spending, '\n', us.investment)
     if us.economic_stimulus:
         us.government_spending = round(random.uniform(500000, 12500000), 2)
 
@@ -658,7 +820,7 @@ class UnitedStates:
         self.alliance = ""
         # time variables
         self.date = datetime(int(year), 1, 1)
-        self.tax_change_date = self.date + timedelta(days=30)
+        self.tax_change_date = self.date + timedelta(days=75)
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
 
