@@ -238,8 +238,6 @@ def political_changes(us):
         us.republicans += change
 
 """Random functions"""
-
-
 def random_economics(us):
     chance = random.randrange(10, 20000)
 
@@ -511,7 +509,7 @@ def random_social(us):
         """
         locations = ["School", "Library", "Restaurant", "Bakery", "Courthouse", "Bank"]
         deaths = random.randrange(6, 100)
-        print(f"Oh no there was a shooting at a local {locations[random.randrange(0, len(locations) - 1)]}."
+        print(f"Oh no there was a shooting at a local {locations[random.randrange(0, len(locations) - 1)]}.\n"
               f"This shooting resulted in the deaths of {deaths} people")
         us.stability += round(random.uniform(0.25, 1.75), 2)
         us.happiness += round(random.uniform(0.25, 4.75), 2)
@@ -526,10 +524,411 @@ def random_social(us):
         print(f"Someone just rolled their car into a group of people. {deaths} people died.\n")
         us.population -= deaths
         time.sleep(3)
+
+
 def random_politics(us):
-    pass
+    chance = random.randrange(10, 20000)
+    if chance % 5 == 0:
+        """Chance that a protest occurs
+        - stability decreases
+        """
+        protests = ["Abortion", "Gun", "Free Speech", "Women's Rights",
+                    "Men's Rights", "Immigration"]
+        print(f"A(n) {protests[random.randrange(0, len(protests) - 1)]} protest occurred")
+        us.stability -= round(random.uniform(0.25, 0.75), 2)
+        time.sleep(3)
+
+    elif chance % 8 == 3:
+        """Chance that political parties are reversed in amount of support
+        """
+        republicans = us.democrats
+        us.democrats = us.republicans
+        us.republicans = republicans
+        print("Both Republicans and Democrats swapped popularity")
+        time.sleep(3)
+
+    elif chance % 16 == 5:
+        """chance that a special interest group gets sued
+        - decrease in stability
+        - decrease in GDP
+            -> investment
+        """
+        spig = ["BLM", "NRA", "NAACP", "GOA", "FreedomWorks", "Common Cause", "RNC", "DNC"]
+        lawsuit = round(random.uniform(200000, 800000), 2)
+        print(f"{spig[random.randrange(0, len(spig) - 1)]} experienced a lawsuit of ${lawsuit}")
+        us.current_gdp -= lawsuit
+
+    elif chance % 21 == 8:
+        """Chance that congressman is assassinated 
+        - stability decreases
+        - chance that they're replaced with republican or democrat
+        """
+        kill = random.randrange(0, 2)
+        if kill == 0:
+            print("Oh no, a democratic congressman was just assassinated.")
+            replacement = random.randrange(0, 2)
+            if replacement == 0:
+                print("A republican congressman has replaced the dead congressman place")
+            elif replacement == 1:
+                print("A democratic congressman has replaced the dead congressman place")
+
+        elif kill == 1:
+            print("Oh no, a republican congressman was just assassinated.")
+            replacement = random.randrange(0, 2)
+            if replacement == 0:
+                print("A republican congressman has replaced the dead congressman place")
+            elif replacement == 1:
+                print("A democratic congressman has replaced the dead congressman place")
+
+    elif chance % 48 == 5:
+        """Chance that the speaker of the house gets assassinated(will be filled in later)
+        - decrease in stability and happiness
+        - Decrease in population
+        """
+    elif chance % 60 == 8:
+        """Chance that the Vice president gets assassinated(will be filled in later)
+        - decrease in stability and happiness
+        - decrease in consumer spending and GDP
+        - Decrease in population
+        """
+
+    elif chance % 78 == 4:
+        """Chance that the President gets assassinated(will be filled in later)
+        - Decrease in stability and happiness
+        - Potential for Economic Recession or Depression to occur
+        - Potential for the US to dissolve
+        - Decrease in population
+        """
+    elif chance % 90 == 7:
+        """Chance for a revolt/revolution against the government to occur(will be filled in later)
+        -> potential factions will include hyper-nationalists, communists, socialists, monarchists, foreign actors
+        - decrease in stability and happiness
+        - GDP gets slashed by factor of 12
+        - Any alliance the US is in, will have the US kicked out
+        - Decrease in population as civil war ensues
+        """
+
+
 def random_weather(us):
-    pass
+    chance = random.randrange(10, 20000)
+    if chance % 7 == 0:
+        """Chance for a thunderstorm
+        later on will increase the amount of food resources for specific time period
+        """
+        print("A thunderstorm has occurred")
+        us.happiness += round(random.uniform(0.10, 0.80), 2)
+        time.sleep(3)
+
+    elif chance % 12 == 5:
+        """chance for lightning to strike personal property
+        - very slight decrease in GDP
+        - decrease in happiness
+        """
+        property = ["Car", "Home", "Swimming Pool", "Barbecue", "Deck", "Garden",
+                    "Trailer", "Camper"]
+        print(f"Lightning just struck someone's {property[random.randrange(0, len(property) - 1)]}")
+
+        us.happiess -= round(random.uniform(0.10, 0.80), 2)
+        us.gdp -= round(random.uniform(1000, 10000), 2)
+
+    elif chance % 16 == 3 and (us.date.month <= 8 and us.date.month >= 4):
+        """Chance that tornado forms
+        internal chance whether tornado is EF0-EF5
+        - Decrease in GDP
+        - Decrease in Population if deaths occur
+            -> based upon another chance
+        - Decrease in happiness
+        **Decrements based upon severity of tornado
+        """
+        print("Tornado Season has begun!!!")
+        time.sleep(3)
+        scale = random.randrange(0, 6)
+        if scale == 0:
+            print("An EF0 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 16)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(1000, 20000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+            decrease_happiness = round(random.uniform(0.76, 1.45), 2)
+            decrease_stability = round(random.uniform(0.10, 0.75), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+        elif scale == 1:
+            print("An EF1 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 30)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(6000, 40000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+            decrease_happiness = round(random.uniform(0.76, 2.45), 2)
+            decrease_stability = round(random.uniform(0.10, 1.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+        elif scale == 2:
+            print("An EF2 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 50)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(7000, 500000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+            decrease_happiness = round(random.uniform(0.76, 3.45), 2)
+            decrease_stability = round(random.uniform(0.10, 2.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+        elif scale == 3:
+            print("An EF3 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 75)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(24000, 1200000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+            decrease_happiness = round(random.uniform(0.76, 4.45), 2)
+            decrease_stability = round(random.uniform(0.10, 3.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+        elif scale == 4:
+            print("An EF4 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 100)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(500000, 3400000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+            decrease_happiness = round(random.uniform(0.76, 6.45), 2)
+            decrease_stability = round(random.uniform(0.10, 4.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+        elif scale == 5:
+            print("An EF5 tornado just struck a local town.\n")
+            death_chance = random.randrange(0, 2)
+            if death_chance == 1:
+                deaths = random.randrange(1, 200)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"This has resulted in {deaths} death(s)")
+
+            property_damage = round(random.uniform(700000, 6000000), 2)
+            print(f"Overall there has been ${property_damage} in damage")
+            us.gdp -= property_damage
+
+            decrease_happiness = round(random.uniform(0.76, 8.45), 2)
+            decrease_stability = round(random.uniform(0.10, 6.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+
+    elif chance % 18 == 5 and (us.date.month <= 4 or us.date.month >= 1):
+        """Chance that a blizzard occurs
+        -> internal chance of death
+            - decrease in population
+        - decrease in stability 
+        - decrease in happiness
+        """
+        print("A blizzard just occurred\n")
+        chance = random.randrange(0, 2)
+        if chance == 1:
+            deaths = random.randrange(1, 100)
+            damages = round(random.uniform(10000, 1000000), 2)
+            print(f"{deaths} occurred and there was ${damages} in damage")
+            us.gdp -= damages
+            us.population -= deaths
+            us.deaths += deaths
+            decrease_happiness = round(random.uniform(0.76, 3.45), 2)
+            decrease_stability = round(random.uniform(0.10, 1.25), 2)
+            if (us.happiness - decrease_happiness) >= 3.5:
+                us.happiness -= decrease_happiness
+            if (us.happiness - decrease_stability) >= 5:
+                us.stability -= decrease_stability
+            time.sleep(3)
+        pass
+
+    elif chance % 20 == 6 and (us.date.month <= 11 or us.date.month >= 6):
+        """Chance that a hurricane occurs
+        - Decrease in stability
+        - Decrease in happiness
+        - Internal chance of death
+            -> decrease in population
+        - Decrease in GDP
+        """
+        category = random.randrange(1, 6)
+        if category == 1:
+            print(f"A Category {category} hurricane is occurring now\n")
+            death_chance = random.randrange(0, 2)
+            damages = round(random.uniform(10000, 300000), 2)
+            if death_chance == 1:
+                """If death is true"""
+                deaths = random.randrange(2, 90)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"{deaths} people died and there were ${damages} in damages\n")
+                time.sleep(3)
+
+            else:
+                print(f"nobody was harmed, however there were ${damages} in damages\n")
+                time.sleep(3)
+                us.gdp -= damages
+                decrease_happiness = round(random.uniform(0.76, 6.45), 2)
+                decrease_stability = round(random.uniform(0.10, 4.25), 2)
+                if (us.happiness - decrease_happiness) >= 3.5:
+                    us.happiness -= decrease_happiness
+                if (us.happiness - decrease_stability) >= 5:
+                    us.stability -= decrease_stability
+
+        if category == 2:
+            print(f"A Category {category} hurricane is occurring now\n")
+            death_chance = random.randrange(0, 2)
+            damages = round(random.uniform(50000, 600000), 2)
+            if death_chance == 1:
+                """If death is true"""
+                deaths = random.randrange(2, 200)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"{deaths} people died and there were ${damages} in damages\n")
+                time.sleep(3)
+
+            else:
+                print(f"nobody was harmed, however there were ${damages} in damages\n")
+                time.sleep(3)
+                us.gdp -= damages
+                decrease_happiness = round(random.uniform(0.76, 6.45), 2)
+                decrease_stability = round(random.uniform(0.10, 4.25), 2)
+                if (us.happiness - decrease_happiness) >= 3.5:
+                    us.happiness -= decrease_happiness
+                if (us.happiness - decrease_stability) >= 5:
+                    us.stability -= decrease_stability
+
+        if category == 3:
+            print(f"A Category {category} hurricane is occurring now\n")
+            death_chance = random.randrange(0, 2)
+            damages = round(random.uniform(100000, 1000000), 2)
+            if death_chance == 1:
+                """If death is true"""
+                deaths = random.randrange(2, 300)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"{deaths} people died and there were ${damages} in damages\n")
+                time.sleep(3)
+
+            else:
+                print(f"nobody was harmed, however there were ${damages} in damages\n")
+                time.sleep(3)
+                us.gdp -= damages
+                decrease_happiness = round(random.uniform(0.76, 7.45), 2)
+                decrease_stability = round(random.uniform(0.10, 5.25), 2)
+                if (us.happiness - decrease_happiness) >= 3.5:
+                    us.happiness -= decrease_happiness
+                if (us.happiness - decrease_stability) >= 5:
+                    us.stability -= decrease_stability
+
+        if category == 4:
+            print(f"A Category {category} hurricane is occurring now\n")
+            death_chance = random.randrange(0, 2)
+            damages = round(random.uniform(600000, 7000000), 2)
+            if death_chance == 1:
+                """If death is true"""
+                deaths = random.randrange(2, 500)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"{deaths} people died and there were ${damages} in damages\n")
+                time.sleep(3)
+
+            else:
+                print(f"nobody was harmed, however there were ${damages} in damages\n")
+                time.sleep(3)
+                us.gdp -= damages
+                decrease_happiness = round(random.uniform(0.76, 9.45), 2)
+                decrease_stability = round(random.uniform(0.10, 6.25), 2)
+                if (us.happiness - decrease_happiness) >= 3.5:
+                    us.happiness -= decrease_happiness
+                if (us.happiness - decrease_stability) >= 5:
+                    us.stability -= decrease_stability
+
+        if category == 5:
+            print(f"A Category {category} hurricane is occurring now\n")
+            death_chance = random.randrange(0, 2)
+            damages = round(random.uniform(1000000, 50000000), 2)
+            if death_chance == 1:
+                """If death is true"""
+                deaths = random.randrange(2, 1000)
+                us.population -= deaths
+                us.deaths += deaths
+                print(f"{deaths} people died and there were ${damages} in damages\n")
+                time.sleep(3)
+
+            else:
+                print(f"nobody was harmed, however there were ${damages} in damages\n")
+                time.sleep(3)
+                us.gdp -= damages
+                decrease_happiness = round(random.uniform(0.76, 12.45), 2)
+                decrease_stability = round(random.uniform(0.10, 8.25), 2)
+                if (us.happiness - decrease_happiness) >= 3.5:
+                    us.happiness -= decrease_happiness
+                if (us.happiness - decrease_stability) >= 5:
+                    us.stability -= decrease_stability
+        pass
+
+    elif chance % 50 == 3:
+        """Chance that someone gets struck by lightning
+        - decrease in happiness
+        - decrease in population
+        """
+        print("Someone just got struck by lightning and died\n")
+        time.sleep(3)
+        decrease_happiness = round(random.uniform(0.76, 1.25), 2)
+        decrease_stability = round(random.uniform(0.10, 0.75), 2)
+        if (us.happiness - decrease_happiness) >= 3.5:
+            us.happiness -= decrease_happiness
+        if (us.happiness - decrease_stability) >= 5:
+            us.stability -= decrease_stability
+        us.population -= 1
+        us.deaths += 1
 def random_international(us):
     pass
 def randomized_functions(us):
