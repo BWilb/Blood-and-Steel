@@ -53,6 +53,23 @@ tax_rate = {
 
 """Subsidiary functions of game"""
 
+"""Weather functions"""
+def blackout(us):
+    if us.date < us.blackout_date:
+        us.population -= random.randrange(1, 34)
+        loss = round(random.uniform(2000, 50000), 2)
+        """Representing loss in consumer spending"""
+        us.gdp -= loss
+        us.national_debt += loss * 0.75
+        spending = round(random.uniform(10000, 100000), 2)
+        us.gdp += round(random.uniform(10000, 100000), 2)
+        """representing government spending to support nation and/or communities"""
+        us.national_debt += spending * 0.75
+        us.happiness -= round(random.uniform(0.01, 0.25), 2)
+        us.stability -= round(random.uniform(0.01, 0.1), 2)
+    else:
+        us.blackout = False
+
 """Happiness and Stability functions"""
 
 def happiness_and_stability(us):
@@ -411,7 +428,6 @@ def random_economics(us):
             -> consumer spending increases
         - stability and happiness increase
         """
-
         print("Very Interesting...the US economy has suddenly experienced a growth spurt.\n"
               "This growth spurt has increased the US GDP by a factor of 5")
         us.current_gdp *= 5
@@ -424,7 +440,6 @@ def random_economics(us):
         us.national_debt += increased_consumer * 0.75
         us.economic_change_date = us.date + timedelta(days=120)
         time.sleep(3)
-
 
 def random_social(us):
     chance = random.randrange(10, 20000)
@@ -525,7 +540,6 @@ def random_social(us):
         us.population -= deaths
         time.sleep(3)
 
-
 def random_politics(us):
     chance = random.randrange(10, 20000)
     if chance % 5 == 0:
@@ -608,9 +622,22 @@ def random_politics(us):
         - Decrease in population as civil war ensues
         """
 
-
 def random_weather(us):
     chance = random.randrange(10, 20000)
+    if us.date == datetime(us.date.year, 4, 1):
+        print("Tornado Season has begun!!!")
+        time.sleep(3)
+
+    elif us.date == datetime(us.date.year, 8, 1):
+        print("Tornado Season has ended.")
+
+    elif us.date == datetime(us.date.year, 6, 1):
+        print("Hurricane Season has begun!!!")
+        time.sleep(3)
+    elif us.date == datetime(us.date.year, 11, 1):
+        print("Hurricane Season has ended.")
+        time.sleep(3)
+
     if chance % 7 == 0:
         """Chance for a thunderstorm
         later on will increase the amount of food resources for specific time period
@@ -628,8 +655,34 @@ def random_weather(us):
                     "Trailer", "Camper"]
         print(f"Lightning just struck someone's {property[random.randrange(0, len(property) - 1)]}")
 
-        us.happiess -= round(random.uniform(0.10, 0.80), 2)
-        us.gdp -= round(random.uniform(1000, 10000), 2)
+        us.happiness -= round(random.uniform(0.10, 0.80), 2)
+        us.current_gdp -= round(random.uniform(1000, 10000), 2)
+
+    elif chance % 14 == 3 and (us.date.month <= 4 or us.date.month >= 1):
+        """Chance for ice storm
+        - internal chance for blackouts
+            -> if black severe loss in...
+                - life
+                - GDP
+                - increase in government spending and national debt
+                - decrease in stability and happiness
+        - if no blackout
+        - potential for death
+        - decrease in happiness
+        """
+        chance = random.randrange(0, 20)
+        if chance % 19 == 0 and us.blackout != True:
+            print("A major ice storm just occurred across the nation, knocking out power and causing a blackout.\n"
+                  "It is being reported that the black out will be fixed within the next 15 - 60 days\n")
+            time.sleep(3)
+            us.blackout_date = us.date + timedelta(days=random.randrange(15, 60))
+            us.blackout = True
+        else:
+            print("A major ice storm just occurred within the nation.\n"
+                  "Fortunately nothing major occurred.\n")
+            us.happiness -= round(random.uniform(0.25, 2.25), 2)
+            us.stability -= round(random.uniform(0.25, 1.25), 2)
+        pass
 
     elif chance % 16 == 3 and (us.date.month <= 8 and us.date.month >= 4):
         """Chance that tornado forms
@@ -640,7 +693,6 @@ def random_weather(us):
         - Decrease in happiness
         **Decrements based upon severity of tornado
         """
-        print("Tornado Season has begun!!!")
         time.sleep(3)
         scale = random.randrange(0, 6)
         if scale == 0:
@@ -777,7 +829,7 @@ def random_weather(us):
             deaths = random.randrange(1, 100)
             damages = round(random.uniform(10000, 1000000), 2)
             print(f"{deaths} occurred and there was ${damages} in damage")
-            us.gdp -= damages
+            us.current_gdp -= damages
             us.population -= deaths
             us.deaths += deaths
             decrease_happiness = round(random.uniform(0.76, 3.45), 2)
@@ -789,7 +841,7 @@ def random_weather(us):
             time.sleep(3)
         pass
 
-    elif chance % 20 == 6 and (us.date.month <= 11 or us.date.month >= 6):
+    elif chance % 20 == 6 and (us.date.month <= 11 and us.date.month >= 6):
         """Chance that a hurricane occurs
         - Decrease in stability
         - Decrease in happiness
@@ -797,6 +849,7 @@ def random_weather(us):
             -> decrease in population
         - Decrease in GDP
         """
+
         category = random.randrange(1, 6)
         if category == 1:
             print(f"A Category {category} hurricane is occurring now\n")
@@ -913,6 +966,28 @@ def random_weather(us):
                 if (us.happiness - decrease_stability) >= 5:
                     us.stability -= decrease_stability
         pass
+
+    elif chance % 30 == 7 and (us.date.month <= 10 and us.date.month >= 4):
+        """Chance for a wildfire to occur
+        - internal chance for loss of life
+        - decrease in happiness and stability
+        - decrease in GDP via consumer spending
+            - increase via government spending (balances out)
+            - increase in debt
+        - soon to be decrease in natural and economic resources
+        """
+        regions = ["southwest", "northeast", "south", "midwest", "west", "east", "Alaska", "Hawaii"]
+        print(f"Oh no...there is a wildfire spreading within (the) {regions[random.randrange(0, len(regions) - 1)]}.\n")
+        chance = random.randrange(0, 2)
+        economic_loss = round(random.uniform(10000, 900000), 2)
+        if chance == 1:
+            deaths = random.randrange(2, 40)
+            print(f"{deaths} people have died and there has been ${economic_loss} in damage.\n")
+            us.population -= deaths
+            us.deaths += deaths
+        us.national_debt += economic_loss * 0.75
+        us.happiness -= round(random.uniform(0.01, 4.25), 2)
+        us.stability -= round(random.uniform(0.01, 2.25), 2)
 
     elif chance % 50 == 3:
         """Chance that someone gets struck by lightning
@@ -1167,13 +1242,13 @@ def manual_game(us):
         economic_decisions(us)
         economic_state(us)
         randomized_functions(us)
-        # chance variable for depicting US political stability
+        if us.blackout == True:
+            blackout(us)
 
         if us.stability >= 50:
             choice = input("Important!!! view your stats: ")
             if choice == "y" or choice == "yes":
                 check_stats(us)
-
 class UnitedStates:
     def __init__(self, year):
         # population variables
@@ -1214,6 +1289,9 @@ class UnitedStates:
         self.economic_stimulus = False
         """Taxes components"""
         self.tax_rate = tax_rate[year]
+        # weather variables
+        self.blackout = False
+        self.blackout_date = None
         # military variables
         # international variables
         self.alliance = ""
