@@ -17,17 +17,12 @@ def begin_game(nation, time):
         national = us_reformed.UnitedStates(time)
         us_reformed.manual_game(national)
         pygame.quit()
-
-
 pygame.init()
-
 # game is initialized
 width = pyautogui.size().width
 height = pyautogui.size().height
 
 screen = pygame.display.set_mode((width, height))
-
-
 pygame.display.set_caption("Welcome To War")
 #game variables
 game_paused = False
