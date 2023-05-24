@@ -17,6 +17,7 @@ def begin_game(nation, time):
         national = us_reformed.UnitedStates(time)
         us_reformed.manual_game(national)
         pygame.quit()
+
 pygame.init()
 # game is initialized
 width = pyautogui.size().width

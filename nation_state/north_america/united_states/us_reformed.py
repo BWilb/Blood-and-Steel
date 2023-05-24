@@ -256,7 +256,6 @@ def political_changes(us):
 
 """Random functions"""
 
-
 def random_economics(us):
     chance = random.randrange(10, 20000)
 

@@ -13,7 +13,7 @@ population = {
 }
 
 """Political Dictionaries"""
-kaisers = {
+chancellors = {
     "1910": "Theobald von Bethmann Hollweg",
     "1914": "Theobald von Bethmann Hollweg",
     "1918": "Friedrich Ebert",
@@ -22,7 +22,7 @@ kaisers = {
     "1939": "Adolf Hitler"
 }
 
-chancellors = {
+kaisers = {
     "1910": "Wilhelm II",
     "1914": "Wilhelm II",
     "1918": "None",
@@ -53,9 +53,216 @@ tax_rate = {
 
 """Subsidiary functions of game"""
 
+"""Statistics function"""
+def check_stats(german):
+    """Stats organized by...
+    1. Politics
+    2. Economics
+    3. Social aspects
+    4. Others
+    """
+    print(f"Your current Kaiser is {german.kaiser}\n"
+          f"Your current Chancellor is {german.chancellor}\n"
+          f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
+          f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
+          f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population\n"
+          f"Your current political stability is {round(german.stability, 2)}%\n"
+          f"Your current GDP is ${round(german.current_gdp, 2)}\n"
+          f"Your economy is currently in a(n) {german.economic_state} period\n"
+          f"Your current yearly gdp growth is {round(((german.current_gdp - german.past_gdp) / ((german.past_gdp + german.current_gdp) / 2)) * 100, 5 )}%\n"
+          f"Your current national debt is ${round(german.national_debt, 2)}\n"
+          f"Your current tax rate is {round(german.tax_rate, 2)}%\n"
+          f"There have been {german.deaths} deaths that have occurred in {german.current_year}\n"
+          f"There have been {german.births} births that have occurred in {german.current_year}\n"
+          f"The current happiness rating of Germany is {round(german.happiness, 2)}%\n")
+
+"""Political functions"""
+def political_change(germany):
+    if germany.date < datetime(1932, 1, 30):
+        """Shifting of political landscape in German Empire and Weimar Republic"""
+        chance = random.randrange(0, 3)
+        """chance based upon whether each of three main parties lose supporters"""
+        if chance == 0:
+            progressive_loss = germany.progressives * round(random.uniform(0.01, 0.1), 2)
+            if germany.progressives - progressive_loss > 0:
+                """Check to see if progressives go negative"""
+                germany.progressives -= progressive_loss
+                germany.center_party += progressive_loss * 0.5
+                germany.free_conservatives += progressive_loss * 0.5
+
+        elif chance == 1:
+            conservative_loss = germany.free_conservatives * round(random.uniform(0.01, 0.1), 2)
+            if germany.free_conservatives - conservative_loss > 0:
+                """Check to see if conservatives go negative"""
+                germany.free_conservatives -= conservative_loss
+                germany.center_party += conservative_loss * 0.5
+                germany.progressives += conservative_loss * 0.5
+
+        elif chance == 2:
+            center_loss = germany.center_party * round(random.uniform(0.01, 0.1), 2)
+            if germany.center_party - center_loss > 0:
+                """Check to see if non-aligned go negative"""
+                germany.center_party -= center_loss
+                germany.free_conservatives += center_loss * 0.5
+                germany.progressives += center_loss * 0.5
+
+    elif germany.date > datetime(1932, 1, 30) and germany.date < datetime(1945, 5, 2):
+        """Shifting of political landscape in Nazi Germany(Third Reich)"""
+        chance = random.randrange(0, 2)
+        """Chance whether Nazis gain more supporters or lose some"""
+        if chance == 0:
+            nazi_loss = germany.national_socialists * round(random.uniform(0.01, 0.1), 2)
+            germany.national_socialists -= nazi_loss
+            germany.rebels += nazi_loss
+        elif chance == 1:
+            rebel_loss = germany.rebels * round(random.uniform(0.01, 0.1), 2)
+            germany.rebels -= rebel_loss
+            germany.national_socialists += rebel_loss
+    else:
+        pass
+
 """Population functions"""
 def population_change(germany):
-    pass
+    if germany.current_year < germany.date.year:
+        germany.population_change = (germany.population - germany.current_pop / ((germany.population + germany.current_pop) / 2)) * 100
+
+        germany.current_pop = germany.population
+        """Resetting of current population(past)"""
+        if germany.population_change <= 1.5:
+            """Incorporation of what happens when population growth becomes too small"""
+            print(f"Your population growth for {germany.current_year} was {germany.population_change}%\n")
+
+            choice = input("Would you like to subsidize viagra for your population?: ")
+            if choice.lower() == "yes" or choice.lower() == 'y':
+                germany.viagra_subsidy = True
+
+                if germany.condom_subsidy == True:
+                    """Checking to see if condom subsidies exist"""
+                    germany.condom_subsidy = False
+
+        elif germany.population_change >= 8:
+            """Incorporation of what happens when population growth becomes too large"""
+            print(f"Your population growth for {germany.current_year} was {germany.population_change}%.\n")
+            choice = input("Would you like to subsidize condoms?: ")
+            if choice.lower() == "yes" or choice.lower() == "y":
+                germany.condom_subsidy = True
+
+                if germany.viagra_subsidy == True:
+                    """Checking to see if viagra subsidies exist"""
+                    germany.viagra_subsidy = False
+
+    else:
+        if germany.viagra_subsidy:
+            births = random.randrange(100, 300)
+            germany.births += births
+            germany.population += births
+
+            if germany.date < datetime(1932, 1, 30):
+                """Check to see if Hitler has taken power yet"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 3)
+                    if chance == 0:
+                        """Chance that the births go to progressive party"""
+                        germany.progressives += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to free conservative party"""
+                        germany.free_conservatives += 1
+
+                    elif chance == 2:
+                        """Chance that the births go to center party"""
+                        germany.center_party += 1
+
+            elif germany.date > datetime(1932, 1, 30) and germany.date < datetime(1945, 5, 2):
+                """Check to see if Hitler is still in power"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 2)
+                    if chance == 0:
+                        """Chance that the births go to the Nazi party"""
+                        germany.national_socialists += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to the rebels"""
+                        germany.rebels += 1
+
+            deaths = random.randrange(30, 60)
+            germany.deaths += deaths
+            germany.population -= deaths
+
+        elif germany.condom_subsidy:
+            births = random.randrange(48, 72)
+            germany.births += births
+            germany.population += births
+
+            if germany.date < datetime(1932, 1, 30):
+                """Check to see if Hitler has taken power yet"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 3)
+                    if chance == 0:
+                        """Chance that the births go to progressive party"""
+                        germany.progressives += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to free conservative party"""
+                        germany.free_conservatives += 1
+
+                    elif chance == 2:
+                        """Chance that the births go to center party"""
+                        germany.center_party += 1
+
+            elif germany.date > datetime(1932, 1, 30) and germany.date < datetime(1945, 5, 2):
+                """Check to see if Hitler is still in power"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 2)
+                    if chance == 0:
+                        """Chance that the births go to the Nazi party"""
+                        germany.national_socialists += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to the rebels"""
+                        germany.rebels += 1
+
+            deaths = random.randrange(50, 80)
+            germany.deaths += deaths
+            germany.population -= deaths
+
+        else:
+            births = random.randrange(50, 150)
+            germany.births += births
+            germany.population += births
+
+            if germany.date < datetime(1932, 1, 30):
+                """Check to see if Hitler has taken power yet"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 3)
+                    if chance == 0:
+                        """Chance that the births go to progressive party"""
+                        germany.progressives += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to free conservative party"""
+                        germany.free_conservatives += 1
+
+                    elif chance == 2:
+                        """Chance that the births go to center party"""
+                        germany.center_party += 1
+
+            elif germany.date > datetime(1932, 1, 30) and germany.date < datetime(1945, 5, 2):
+                """Check to see if Hitler is still in power"""
+                for i in range(0, births):
+                    chance = random.randrange(0, 2)
+                    if chance == 0:
+                        """Chance that the births go to the Nazi party"""
+                        germany.national_socialists += 1
+
+                    elif chance == 1:
+                        """Chance that the births go to the rebels"""
+                        germany.rebels += 1
+
+            deaths = random.randrange(50, 80)
+            germany.deaths += deaths
+            germany.population -= deaths
+
 """Main function of manual German version of game"""
 def manual_game(germany):
     # establishment of check upon game status
@@ -65,6 +272,11 @@ def manual_game(germany):
         print(germany.date)
         # primary functions
         population_change(germany)
+        political_change(germany)
+        if germany.stability >= 50:
+            choice = input("Important!!! view your stats: ")
+            if choice == "y" or choice == "yes":
+                check_stats(germany)
         print("hi")
         time.sleep(3)
 class Germany:
@@ -84,15 +296,17 @@ class Germany:
         """Leaders of Germany"""
         self.kaiser = kaisers[year]
         self.chancellor = chancellors[year]
-        """Political parties of US"""
+        """Political parties of Germany
+        based upon year
+        """
         if int(year) < 1932:
             self.center_party = self.population * round(random.uniform(0.10, 0.33), 2)
             self.progressives = ((self.population - self.center_party) *
-                                      self.population * round(random.uniform(0.10, 0.45), 2))
+                                      round(random.uniform(0.10, 0.45), 2))
             self.free_conservatives = (self.population - self.center_party - self.progressives)
         else:
             self.national_socialists = self.population * 0.99
-            self.anti_nationalists = self.population = self.national_socialists
+            self.rebels = self.population - self.national_socialists
             self.center_party = 0
             self.progressives = 0
             self.free_conservatives = 0
@@ -103,11 +317,17 @@ class Germany:
             for i in range(0, len(business_cycle) - 1):
                 if business_cycle[i] == "recession":
                     self.economic_state = business_cycle[i]
+
+        elif int(year) <= 1932 and int(year) > 1929:
+            for i in range(0, len(business_cycle) - 1):
+                if business_cycle[i] == "depression":
+                    self.economic_state = business_cycle[i]
+
         else:
-            if int(year) < 1918 and int(year) > 1914:
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "recovery":
-                        self.economic_state = business_cycle[i]
+            for i in range(0, len(business_cycle) - 1):
+                if business_cycle[i] == "recovery":
+                    self.economic_state = business_cycle[i]
+
         """State of the economy variables"""
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
