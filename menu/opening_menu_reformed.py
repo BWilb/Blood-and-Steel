@@ -9,7 +9,7 @@ import nation_state.europe.britain.britain
 import nation_state.europe.italy.italy
 import nation_state.europe.france.france
 import nation_state.europe.russia.russia
-import nation_state.europe.germany.germany
+from nation_state.europe.germany import germany_reformed
 import nation_state.asia.japan.japan
 
 def begin_game(nation, time):
@@ -85,7 +85,6 @@ img_china = pygame.image.load("region_buttons/asia/nation_buttons/china_button.p
 
 """south america"""
 img_south_america = pygame.image.load("region_buttons/south_america/south_america_button.png").convert_alpha()
-
 
 # menu buttons
 start_button = button.Button((width / 2) - 135, 225, start_img, 0.25)
@@ -249,7 +248,7 @@ while run:
 
             if german_button.draw(screen):
                 nation_chosen = "Germany"
-                game_state = "unavailable"
+                game_state = "chosen"
 
             if italian_button.draw(screen):
                 nation_chosen = "Italy"
@@ -334,3 +333,6 @@ print(nation_chosen)
 if nation_chosen == "United States":
     national = us_reformed.UnitedStates(time_chosen)
     us_reformed.manual_game(national)
+elif nation_chosen == "Germany":
+    national = germany_reformed.Germany(time_chosen)
+    germany_reformed.manual_game(national)

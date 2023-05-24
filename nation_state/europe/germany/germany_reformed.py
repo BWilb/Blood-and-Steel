@@ -1,6 +1,6 @@
 import random
 import time
-from datetime import *
+from datetime import datetime, timedelta
 
 """Population Dictionaries"""
 population = {
@@ -13,156 +13,126 @@ population = {
 }
 
 """Political Dictionaries"""
-leaders = {
-    "1910" : "Wilhelm II",
-    "1914" : "Wilhelm II",
-    "1918" : "Friedrich Ebert",
-    "1932" : "Paul Von Hindenburg",
-    "1936" : "Adolf Hitler",
-    "1939" : "Adolf Hitler"
+kaisers = {
+    "1910": "Theobald von Bethmann Hollweg",
+    "1914": "Theobald von Bethmann Hollweg",
+    "1918": "Friedrich Ebert",
+    "1932": "Kurt von Schleicher",
+    "1936": "Adolf Hitler",
+    "1939": "Adolf Hitler"
+}
+
+chancellors = {
+    "1910": "Wilhelm II",
+    "1914": "Wilhelm II",
+    "1918": "None",
+    "1932": "None",
+    "1936": "None",
+    "1939": "None"
 }
 
 """Economic dictionaries & Variables"""
-business_cycle = ["expansion", "recession"]
+business_cycle = ["recovery", "expansion", "recession", "depression"]
 gdp = {
-    "1910" : 237000000,
-    "1914" : 237395000,
-    "1918" : 235968000,
-    "1932" : 237947500,
-    "1936" : 240000000,
-    "1939" : 300456000
+    "1910": 237000000,
+    "1914": 237395000,
+    "1918": 235968000,
+    "1932": 237947500,
+    "1936": 240000000,
+    "1939": 300456000
+}
+
+tax_rate = {
+    "1910": 8.00,
+    "1914": 8.00,
+    "1918": 8.00,
+    "1932": 60.00,
+    "1936": 60.00,
+    "1939": 65.00
 }
 
 """Subsidiary functions of game"""
 
 """Population functions"""
 def population_change(germany):
-    """Numbers within function are exaggerated
-    incorporates population growth
-    """
-    if germany.current_year < germany.date.year:
-        germany.population_change = (germany.population - germany.current_pop
-                                     / ((germany.population + germany.current_pop) / 2)) * 100
-        """Calculation of german population growth"""
-        germany.current_year = germany.date.year
-        germany.current_population = germany.population
-        """resetting of yearly population and year"""
-        if germany.procurement_subsidize:
-            """Choice if population increase true"""
-            germany.population += random.randrange(4000, 16000)
-            germany.population -= random.randrange(1000, 5000)
-
-            if germany.population_change >= 10:
-                """choice if population growth out of control"""
-                choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                               f"is unsustainable! Do you want to increase subsidies for condoms?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    germany.condom_subsidize = True
-                    germany.procurement_subsidize = False
-
-        elif germany.condom_subsidize:
-            """choice if population control true"""
-            germany.population += random.randrange(4500, 6000)
-            germany.population -= random.randrange(2000, 8000)
-
-            if germany.population_growth <= 1.5:
-                """choice if under population control gets out of hand"""
-                choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                               f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    germany.procurement_subsidize = True
-                    germany.condom_subsidize = False
-
-        else:
-            germany.population += random.randrange(4000, 14500)
-            germany.population -= random.randrange(5000, 10000)
-
-            if germany.population_change >= 10:
-                choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                               f"is unsustainable! Do you want to increase subsidies for condoms?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    germany.condom_subsidize = True
-            elif germany.population_growth <= 1.5:
-                choice = input(f"your population growth rate of {germany.population_growth}%\n"
-                               f"is unsustainable! Do you want to increase subsidizes for procurment options?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    germany.procurement_subsidize = True
-"""Economic Functions"""
-
-def econommic_change(germany):
-
-    if germany.current_year < germany.date.year:
-        print("hi")
-        germany.economic_growth = (germany.gdp - germany.current_gdp / ((germany.gdp + germany.current_gdp) / 2)) * 100
-        """Calculation of economic growth over year"""
-        if germany.economic_stimulus:
-            """implemented if economic stimulus is applied"""
-            germany.gdp += random.randrange(60000, 150000)
-            germany.gdp -= random.randrange(40000, 115000)
-
-            if germany.economic_growth >= 6:
-                choice = input(f"Your GDP grew {germany.economic_growth} last year.\n"
-                               f"This is unsustainable. If your economy continues to grow like this "
-                               f"A recession might happen\nDo you want to take away economy stimulus?: ")
-
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    germany.economic_stimulus = False
-
-                else:
-                    if germany.growth_years >= 3 and germany.economic_growth >= 6:
-                        print("Your economy has been growing at an alarming rate!\n"
-                              "Slowdowns will be put into place")
-                        germany.economic_stimulus = False
-
-        if germany.economic_growth <= 0.5:
-            """Implemented if past year had low growth, but not at critical point yet"""
-            choice = input(f"Your economy grew {germany.economic_growth}% last year.\n"
-                           f"Do you want to stimulate the economy?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                germany.economic_stimulus = True
-
-            else:
-                if germany.recess_years > 3 and germany.economic_growth <= 0.5:
-                    """implemented if German Economic has had 3 year recession and
-                    past year had low growth
-                    """
-                    print("your economy has been declining for three years.\n"
-                          "a stimulus has been automatically implemented!")
-                    time.sleep(3)
-                    germany.economic_stimulus = True
-        else:
-            germany.gdp += random.randrange(259900, 445000)
-            germany.gdp -= random.randrange(100000, 300000)
-
-"""Random Function"""
-
-"""Main Function"""
+    pass
+"""Main function of manual German version of game"""
 def manual_game(germany):
+    # establishment of check upon game status
     while germany.population > 200000:
         germany.date = germany.date + timedelta(days=1)
+        # incrementing of time
+        print(germany.date)
+        # primary functions
         population_change(germany)
-        econommic_change(germany)
-
+        print("hi")
+        time.sleep(3)
 class Germany:
     def __init__(self, year):
         # population variables
         self.population = population[year]
-        self.current_population = self.population
         self.population_change = 0
-        self.procurement_subsidize = False
-        self.condom_subsidize = False
+        self.current_pop = self.population
+        self.births = 0
+        self.deaths = 0
+        self.happiness = 96.56
+        """Population controller if birth rate gets out of control"""
+        self.condom_subsidy = False
+        """Population controller if birth rate flops"""
+        self.viagra_subsidy = False
         # political variables
-        self.leader = leaders[year]
+        """Leaders of Germany"""
+        self.kaiser = kaisers[year]
+        self.chancellor = chancellors[year]
+        """Political parties of US"""
+        if int(year) < 1932:
+            self.center_party = self.population * round(random.uniform(0.10, 0.33), 2)
+            self.progressives = ((self.population - self.center_party) *
+                                      self.population * round(random.uniform(0.10, 0.45), 2))
+            self.free_conservatives = (self.population - self.center_party - self.progressives)
+        else:
+            self.national_socialists = self.population * 0.99
+            self.anti_nationalists = self.population = self.national_socialists
+            self.center_party = 0
+            self.progressives = 0
+            self.free_conservatives = 0
+        """Other political variables"""
+        self.stability = 95.00
         # economic variables
-        self.economic_state = business_cycle[random.randrange(0, len(business_cycle) - 1)]
-        self.gdp = gdp[year]
-        self.current_gdp = self.gdp
-        self.economic_growth = 0
+        if int(year) < 1918 and int(year) > 1914:
+            for i in range(0, len(business_cycle) - 1):
+                if business_cycle[i] == "recession":
+                    self.economic_state = business_cycle[i]
+        else:
+            if int(year) < 1918 and int(year) > 1914:
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recovery":
+                        self.economic_state = business_cycle[i]
+        """State of the economy variables"""
+        self.current_gdp = gdp[year]
+        self.past_gdp = self.current_gdp
+        """holds current year of gdp(used for comparing with future GDP
+        to determine GDP growth)
+        """
+        self.national_debt = 0
+        """Components of GDP"""
+        self.consumer_spending = 0
+        self.investment = 0
+        self.government_spending = 0
+        self.exports = 0
+        self.imports = 0
+        """Economic Stimulus components"""
         self.economic_stimulus = False
-        self.growth_years = 0
-        self.recess_years = 0
+        """Taxes components"""
+        self.tax_rate = tax_rate[year]
+        # weather variables
+        self.blackout = False
+        self.blackout_date = None
         # military variables
         # international variables
+        self.alliance = ""
         # time variables
-        self.date = date = datetime(int(year), 1, 1)
+        self.date = datetime(int(year), 1, 1)
+        self.tax_change_date = self.date + timedelta(days=75)
+        self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
