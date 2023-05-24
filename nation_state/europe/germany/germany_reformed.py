@@ -30,6 +30,9 @@ kaisers = {
     "1936": "None",
     "1939": "None"
 }
+kaiser_succession = ["Wilhelm III", "Louis Ferdinand", "George Fredrick"]
+nazi_succession = ["Hermann Goering", "Joseph Goebbels", "Martin Bormann", "Rudolf Hess", "Heinrich Himmler",
+                   "Reinhard Heydrich", "Albert Speer", "Wilhelm Keitel", "Otto Strasser"]
 
 """Economic dictionaries & Variables"""
 business_cycle = ["recovery", "expansion", "recession", "depression"]
@@ -62,11 +65,17 @@ def check_stats(german):
     4. Others
     """
     print(f"Your current Kaiser is {german.kaiser}\n"
-          f"Your current Chancellor is {german.chancellor}\n"
-          f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
-          f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
-          f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population\n"
-          f"Your current political stability is {round(german.stability, 2)}%\n"
+          f"Your current Chancellor is {german.chancellor}.\n")
+    if german.date < datetime(1933, 1, 30):
+        print(f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
+              f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
+              f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population\n")
+
+    elif german.date >= datetime(1933, 1, 30) and german.date <= datetime(1945, 5, 2):
+        print(f"National Socialists make up {round((german.national_socialists / german.population), 3) * 100}% of the population.\n"
+              f"German Rebels make up {round((german.rebels / german.population), 3) * 100}% of the population.\n")
+
+    print(f"Your current political stability is {round(german.stability, 2)}%\n"
           f"Your current GDP is ${round(german.current_gdp, 2)}\n"
           f"Your economy is currently in a(n) {german.economic_state} period\n"
           f"Your current yearly gdp growth is {round(((german.current_gdp - german.past_gdp) / ((german.past_gdp + german.current_gdp) / 2)) * 100, 5 )}%\n"
@@ -75,6 +84,182 @@ def check_stats(german):
           f"There have been {german.deaths} deaths that have occurred in {german.current_year}\n"
           f"There have been {german.births} births that have occurred in {german.current_year}\n"
           f"The current happiness rating of Germany is {round(german.happiness, 2)}%\n")
+
+"""Primary events function"""
+def social_events(germany):
+    """definitive national social events in germany"""
+
+    if germany.date == datetime(germany.date.year, 2, 16):
+        """Checking of date to see if the German version of Karneval has begun"""
+        print("Karneval hat begonnen!!")
+        time.sleep(3)
+
+    if germany.date >= datetime(germany.date.year, 2, 16) and germany.date <= datetime(germany.date.year, 2, 22):
+
+        increase = round(random.uniform(0.10, 0.75), 2)
+        if (germany.happiness + increase) < 99:
+            germany.happiness += increase
+
+        if (germany.stability + increase) < 99:
+            germany.stability += increase
+
+        births = random.randrange(2, 20)
+        """Very slight increase in births due to increased happiness"""
+
+        if germany.date > (1932, 1, 30):
+            """Checking to see if Weimar Republic or German Empire is around"""
+            for i in range(0, births):
+                chance = random.randrange(0, 3)
+                if chance == 0:
+                    germany.center_party += 1
+
+                elif chance == 1:
+                    germany.progressives += 1
+
+                elif chance == 2:
+                    germany.free_conservatives += 1
+
+        elif germany.date < datetime(1945, 5, 2) and germany.date >= datetime(1932, 1, 30):
+            for i in range(0, births):
+                chance = random.randrange(0, 2)
+                if chance == 0:
+                    germany.national_socialists += 1
+
+                elif chance == 1:
+                    germany.rebels += 1
+
+    if germany.date == datetime(germany.date.year, 4, 7):
+        """Checking to see if Easter weekend has begun"""
+        print("Das Osterwochenende hat begonnen")
+        time.sleep(3)
+
+    if germany.date <= datetime(germany.date.year, 4, 7) and germany.date >= datetime(germany.date.year, 4, 10):
+        increase = round(random.uniform(0.10, 0.75), 2)
+        if (germany.happiness + increase) < 99:
+            germany.happiness += increase
+
+        if (germany.stability + increase) < 99:
+            germany.stability += increase
+
+        births = random.randrange(2, 20)
+        """Very slight increase in births due to increased happiness and stability"""
+
+        if germany.date > (1932, 1, 30):
+            """Checking to see if Weimar Republic or German Empire is around"""
+            for i in range(0, births):
+                chance = random.randrange(0, 3)
+                if chance == 0:
+                    germany.center_party += 1
+
+                elif chance == 1:
+                    germany.progressives += 1
+
+                elif chance == 2:
+                    germany.free_conservatives += 1
+
+        elif germany.date < datetime(1945, 5, 2) and germany.date >= datetime(1932, 1, 30):
+            for i in range(0, births):
+                chance = random.randrange(0, 2)
+                if chance == 0:
+                    germany.national_socialists += 1
+
+                elif chance == 1:
+                    germany.rebels += 1
+
+    if germany.date == datetime(germany.date.year, 9, 16):
+        """Checking of date to see if Oktoberfest has begun"""
+        print("Oktoberfest hat begonnen!!")
+        time.sleep(3)
+
+    if germany.date >= datetime(germany.date.year, 9, 16) and germany.date <= datetime(germany.date.year, 10, 3):
+        """Checking to see if Oktoberfest is still occurring"""
+        increase = round(random.uniform(0.10, 0.75), 2)
+        if (germany.happiness + increase) < 99:
+            germany.happiness += increase
+
+        if (germany.stability + increase) < 99:
+            germany.stability += increase
+
+        births = random.randrange(2, 20)
+        """Very slight increase in births due to increased happiness"""
+
+        if germany.date > (1932, 1, 30):
+            """Checking to see if Weimar Republic or German Empire is around"""
+            for i in range(0, births):
+                chance = random.randrange(0, 3)
+                if chance == 0:
+                    germany.center_party += 1
+
+                elif chance == 1:
+                    germany.progressives += 1
+
+                elif chance == 2:
+                    germany.free_conservatives += 1
+
+        elif germany.date < datetime(1945, 5, 2) and germany.date >= datetime(1932, 1, 30):
+            for i in range(0, births):
+                chance = random.randrange(0, 2)
+                if chance == 0:
+                    germany.national_socialists += 1
+
+                elif chance == 1:
+                    germany.rebels += 1
+def economic_events(germany):
+    """definitive national economic events in germany"""
+    pass
+def political_events(germany):
+    """definitive national political events in germany"""
+
+    # events in January
+    if germany.date == datetime(1919, 1, 5):
+        print("\nGerman Workers Party has just been formed!!")
+        time.sleep(3)
+
+    elif germany.date == datetime(1933, 1, 30):
+        """
+        Adolf Hitler takes control of Germany
+        Major decrease in happiness and stability
+        Reshaping of political landscape
+        """
+        print("Adolf Hitler has taken full control of the government.\n"
+              "The Third Reich has begun.")
+        time.sleep(3)
+        germany.national_socialists = round(germany.population * 0.85, 0)
+        germany.rebels = germany.population - germany.national_socialists
+        happy_decrease = round(random.uniform(0.75, 6.56), 2)
+        stability_decrease = round(random.uniform(0.25, 4.25), 2)
+
+        if germany.happiness - happy_decrease > 10:
+            germany.happiness -= happy_decrease
+
+        if germany.stability - stability_decrease > 10:
+            germany.stability -= stability_decrease
+
+    # Events in February
+    elif germany.date == datetime(1920, 2, 24):
+        print("\n The German Workers Party has changed its name to National Socialist German Workers Party!!!")
+        time.sleep(3)
+
+    # Events in September
+    elif germany.date == datetime(1919, 9, 12):
+        print("\nAdolf Hitler has just joined the German Workers Party!!")
+        time.sleep(3)
+    # Events in November
+    elif germany.date == datetime(1923, 11, 8):
+        print("Adolf Hitler just attempted a coup in a Beer Hall putsch in Munich!!")
+        time.sleep(3)
+        decrease = round(random.uniform(0.25, 2.25), 2)
+        if (germany.stability - decrease) > 10:
+            germany.stabilty -= decrease
+def international_events(germany):
+    """definitive national foreign relation events with germany and her allies"""
+    pass
+def events(germany):
+    social_events(germany)
+    economic_events(germany)
+    political_events(germany)
+    international_events(germany)
+    pass
 
 """Political functions"""
 def political_change(germany):
@@ -299,7 +484,7 @@ class Germany:
         """Political parties of Germany
         based upon year
         """
-        if int(year) < 1932:
+        if int(year) < 1933:
             self.center_party = self.population * round(random.uniform(0.10, 0.33), 2)
             self.progressives = ((self.population - self.center_party) *
                                       round(random.uniform(0.10, 0.45), 2))
