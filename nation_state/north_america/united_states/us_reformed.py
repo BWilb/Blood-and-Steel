@@ -630,8 +630,13 @@ def random_social(us):
         religions = ["Jewish", "Christian", "Islamic"]
         print(
             f"An Atheist just converted to believing in the {religions[random.randrange(0, len(religions) - 1)]} God\n")
-        us.stability += round(random.uniform(0.25, 0.75), 2)
-        us.happiness += round(random.uniform(0.25, 1.75), 2)
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (us.happiness - decrease) > 5:
+            us.happiness -= decrease
+
+        if (us.stability - decrease_stability) > 10:
+            us.stability -= decrease_stability
         time.sleep(3)
 
     elif chance % 18 == 4:
@@ -1210,7 +1215,6 @@ def slow_growth(us):
     us.exports = round(random.uniform(4500, 75000), 2)
     us.imports = round(random.uniform(3200, 56000), 2)
     us.current_gdp += (us.consumer_spending + us.investment + us.government_spending + (us.exports - us.imports))
-    us.happiness += 0.15
 
 def fast_growth(us):
     us.consumer_spending = round(random.uniform(80000, 150000), 2)
@@ -1326,7 +1330,6 @@ def economic_stimulus(us):
 def economic_decisions(us):
     if us.current_year < us.date.year:
         us.economic_growth = (us.current_gdp - us.past_gdp / ((us.past_gdp + us.current_gdp) / 2)) * 100
-
         if us.economic_growth <= 1.5:
             choice = input(f"Your GDP grew {us.economic_growth}% last year.\n"
                            f"Would you like to apply a stimulus?: ")

@@ -69,11 +69,11 @@ def check_stats(german):
     if german.date < datetime(1933, 1, 30):
         print(f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
               f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
-              f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population\n")
+              f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population")
 
     elif german.date >= datetime(1933, 1, 30) and german.date <= datetime(1945, 5, 2):
         print(f"National Socialists make up {round((german.national_socialists / german.population), 3) * 100}% of the population.\n"
-              f"German Rebels make up {round((german.rebels / german.population), 3) * 100}% of the population.\n")
+              f"German Rebels make up {round((german.rebels / german.population), 3) * 100}% of the population.")
 
     print(f"Your current political stability is {round(german.stability, 2)}%\n"
           f"Your current GDP is ${round(german.current_gdp, 2)}\n"
@@ -260,6 +260,244 @@ def events(germany):
     political_events(germany)
     international_events(germany)
     pass
+
+"""Economic Functions"""
+def economic_stimulus(germany):
+    germany.economic_stimulus = True
+
+    if germany.economic_state.lower() == "recession":
+        choice = input("\nDo you want to increase the tax rate in order to support increased spending"
+                       "(Remember this applies to the entire population)?:")
+        """Prompting user to choose if they want to increase taxes"""
+
+        if choice.lower() == "yes" or choice.lower() == "y":
+            valid_choice = False
+
+            while valid_choice:
+                tax_hike = float(input("By how much do you want to increase taxes(max cap is 10)?: "))
+
+                if tax_hike <= 10 and tax_hike >= 0.5:
+                    """if statement covering if tax hike meets criteria"""
+
+                    germany.tax_rate += round(tax_hike, 2)
+                    print(f"{germany.tax_rate}% is your new tax rate")
+                    germany.happiness -= round(random.uniform(0.25, 3.45), 2)
+                    germany.stability -= round(random.uniform(0.25, 1.45), 2)
+                    valid_choice = True
+
+                elif tax_hike <= 0 or tax_hike > 25:
+                    print(f"New tax hike of {tax_hike} is improper./n"
+                          f"try again")
+                    time.sleep(3)
+
+                else:
+                    print("Not a valid tax rate")
+                    time.sleep(3)
+
+    elif germany.economic_state.lower() == "depression":
+
+        tax_hike = round(random.uniform(0.5, 10), 2)
+        if (germany.tax_rate + tax_hike) <= 86.00:
+            print(f"Congress has enacted a tax hike of {tax_hike} points")
+def economic_state(germany):
+    if germany.date >= germany.economic_change_date:
+        """comparing current date with possible shift in business cycle, based upon 3 month cycle"""
+        if germany.past_gdp > germany.current_gdp:
+            """comparing past gdp to current gdp"""
+            if germany.economic_state == "expansion" or germany.economic_state == "recovery":
+                """current state is expansion or recovery"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recession":
+                        print("Your economy has entered into a recession after 6 months of decayed growth.\n")
+                        time.sleep(3)
+                        germany.economic_state = business_cycle[i]
+                        germany.economic_change_date = germany.date + timedelta(days=240)
+                        economic_stimulus(germany)
+                        """increasing amount of time to check up on GDP
+                        Time is average amount(5 months cycle)
+                        """
+
+            elif germany.economic_state == "recession":
+                """current state is recession and cycle is switching to depression"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "depression":
+                        print("Your economy has entered into a depression "
+                              "after exceeding 6 months of decayed growth.\n")
+                        time.sleep(3)
+                        germany.economic_state = business_cycle[i]
+                        germany.economic_change_date = germany.date + timedelta(days=210)
+                        economic_stimulus(germany)
+                        """
+                        Since it takes awhile to escape a depression, amount of time on change date is increased
+                        """
+
+        elif germany.past_gdp < germany.current_gdp:
+            if germany.economic_state == "depression" or germany.economic_state == "recession":
+                """current state is expansion or recovery"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recovery":
+                        print("Your economy has finally entered its recovery period.\n")
+                        time.sleep(3)
+                        germany.economic_state = business_cycle[i]
+                        germany.economic_change_date = germany.date + timedelta(days=360)
+                        """increasing amount of time to check up on GDP
+                        Time is average amount(5 months cycle)
+                        """
+
+            elif germany.economic_state == "recovery":
+                """current state is recession and cycle is switching to depression"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "expansion":
+                        print("Your economy has finally entered its expansionary period. Woo!!!\n")
+                        time.sleep(3)
+                        germany.economic_state = business_cycle[i]
+                        germany.economic_change_date = germany.date + timedelta(days=120)
+                        """
+                        Since it takes awhile to escape a depression, amount of time on change date is increased
+                        """
+def recovery(germany):
+    """Path taken if economy is currently in recovery"""
+    if germany.economic_stimulus:
+        """Recovery simulation if an economic stimulus is in effect"""
+        germany.consumer_spending = round(random.uniform(3000, 7500), 2)
+        germany.investment = round(random.uniform(2000, 7400), 2)
+
+        germany.government_spending = round(random.uniform(1300, 5000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                             germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+    else:
+        """Recovery simulation if an economic stimulus isn't in effect"""
+        germany.consumer_spending = round(random.uniform(300, 1500), 2)
+        germany.investment = round(random.uniform(200, 2400), 2)
+
+        germany.government_spending = round(random.uniform(300, 2000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+
+    germany.exports = round(random.uniform(4500, 45000), 2)
+    germany.imports = round(random.uniform(3200, 32000), 2)
+    germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
+                            (germany.exports - germany.imports))
+def expansion(germany):
+    """Path taken if economy is currently in expansion"""
+    if germany.economic_stimulus:
+        """Recovery simulation if an economic stimulus is in effect"""
+        germany.consumer_spending = round(random.uniform(9000, 60000), 2)
+        germany.investment = round(random.uniform(20000, 74000), 2)
+
+        germany.government_spending = round(random.uniform(13000, 80000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+    else:
+        """Recovery simulation if an economic stimulus isn't in effect"""
+        germany.consumer_spending = round(random.uniform(300, 1500), 2)
+        germany.investment = round(random.uniform(200, 2400), 2)
+
+        germany.government_spending = round(random.uniform(300, 2000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+
+    germany.exports = round(random.uniform(9000, 70000), 2)
+    germany.imports = round(random.uniform(8000, 56000), 2)
+    germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
+                            (germany.exports - germany.imports))
+
+def recession(germany):
+    """Path taken if economy is currently in recession"""
+    if germany.economic_stimulus:
+        """Depression simulation if an economic stimulus is in effect"""
+        germany.consumer_spending = -round(random.uniform(3000, 9000), 2)
+        germany.investment = -round(random.uniform(4500, 10000), 2)
+
+        germany.government_spending = round(random.uniform(90000, 700000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+    else:
+        """Depression simulation if an economic stimulus isn't in effect"""
+        germany.consumer_spending = -round(random.uniform(10000, 30000), 2)
+        germany.investment = -round(random.uniform(10000, 48000), 2)
+
+        germany.government_spending = round(random.uniform(200000, 750000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+
+    germany.exports = round(random.uniform(9000, 65000), 2)
+    germany.imports = round(random.uniform(8000, 90000), 2)
+    germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
+                            (germany.exports - germany.imports))
+
+def depression(germany):
+    """Path taken if economy is currently in depression"""
+    if germany.economic_stimulus:
+        """Depression simulation if an economic stimulus is in effect"""
+        germany.consumer_spending = -round(random.uniform(6000, 20000), 2)
+        germany.investment = -round(random.uniform(7500, 24000), 2)
+
+        germany.government_spending = round(random.uniform(130000, 800000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+    else:
+        """Depression simulation if an economic stimulus isn't in effect"""
+        germany.consumer_spending = -round(random.uniform(30000, 50000), 2)
+        germany.investment = -round(random.uniform(20000, 67000), 2)
+
+        germany.government_spending = round(random.uniform(300000, 850000), 2)
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+                                  germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
+
+    germany.exports = round(random.uniform(9000, 54000), 2)
+    germany.imports = round(random.uniform(8000, 100000), 2)
+    germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
+                            (germany.exports - germany.imports))
+def gdp_changes(germany):
+    if germany.economic_state == "recovery":
+        recovery(germany)
+
+    elif germany.economic_state == "expansion":
+        expansion(germany)
+
+    elif germany.economic_state == "recession":
+        recession(germany)
+
+    elif germany.economic_state == "depression":
+        depression(germany)
+
+def economic_decisions(germany):
+    """Primary economic function"""
+    if germany.current_year < germany.date.year:
+
+        germany.economic_growth = (germany.current_gdp - germany.past_gdp / ((germany.past_gdp + germany.current_gdp) / 2)) * 100
+
+        if germany.economic_growth <= 2.0:
+            choice = input(f"Your GDP grew {germany.economic_growth}% last year.\n"
+                           f"Would you like to apply a stimulus?: ")
+
+            if choice.lower() == "yes" or choice.lower() == "y":
+                # economic_stimulus(germany)
+                pass
+
+    else:
+        gdp_changes(germany)
 
 """Political functions"""
 def political_change(germany):
@@ -448,6 +686,206 @@ def population_change(germany):
             germany.deaths += deaths
             germany.population -= deaths
 
+"""Random Functions"""
+def random_politics(germany):
+    chance = random.randrange(10, 20000)
+def random_economics(germany):
+    pass
+def random_social(germany):
+    chance = random.randrange(10, 20000)
+
+    if chance % 4 == 0:
+        """Chance that somebody gets mugged
+        - chance for death
+        - decrease in happiness
+        """
+        death_chance = random.randrange(0, 2)
+        print("A mugging has just occurred.\n")
+        if death_chance == 1:
+            print("The mugging has resulted in the victims death")
+            germany.deaths += 1
+            germany.population -= 1
+            decrease = round(random.uniform(0.1, 0.56), 2)
+            if (germany.happiness - decrease) > 5:
+                germany.happiness -= decrease
+        else:
+            decrease = round(random.uniform(0.1, 0.56), 2)
+            if (germany.happiness - decrease) > 5:
+                germany.happiness -= decrease
+
+    elif chance % 6 == 7:
+        """Chance that someone burglarizes a house
+        - internal chance for death
+        - decrease in happiness
+        """
+        death_chance = random.randrange(0, 2)
+        print("A burglary has just occurred.\n")
+        if death_chance == 1:
+            deaths = random.randrange(1, 7)
+            print(f"The burglary has resulted in the {deaths} death(s)")
+            germany.deaths += deaths
+            germany.population -= deaths
+            decrease = round(random.uniform(0.1, 0.56), 2)
+            if (germany.happiness - decrease) > 5:
+                germany.happiness -= decrease
+        else:
+            decrease = round(random.uniform(0.1, 0.56), 2)
+            if (germany.happiness - decrease) > 5:
+                germany.happiness -= decrease
+
+    elif chance % 8 == 3:
+        """Chance that somebod loses their savings @ a casino
+        - decrease in happiness
+        - slight decrease in GDP(Consumer spending)
+        """
+        loss = round(random.uniform(10000, 600000), 2)
+        print(f"Someone just lost ${loss} at their local casino")
+
+        decrease = round(random.uniform(0.25, 2.56), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        germany.current_gdp -= round(loss * round(random.uniform(0.25, 0.55), 2), 2)
+
+    elif chance % 12 == 9:
+        """Chance that a homicide occurs
+        - decrease in stability and happiness
+        - decrease in population
+        """
+        deaths = random.randrange(3, 56)
+        print(f"A homicide has just occurred.\n"
+              f"{deaths} deaths occurred during this homicide.\n")
+        time.sleep(3)
+        germany.population -= deaths
+        germany.deaths += deaths
+
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        if (germany.stability - decrease_stability) > 10:
+            germany.stability -= decrease_stability
+
+    elif chance % 14 == 10:
+        """Chance that a certain public space gets shot up
+        - Decrease in population
+        - Decrease in stability and happiness
+        """
+        locations = ["School", "Library", "Restaurant", "Bakery", "Courthouse", "Bank"]
+        deaths = random.randrange(6, 100)
+        print(f"Oh no there was a shooting at a local {locations[random.randrange(0, len(locations) - 1)]}.\n"
+              f"This shooting resulted in the deaths of {deaths} people.\n")
+        germany.stability += round(random.uniform(0.25, 1.75), 2)
+        germany.happiness += round(random.uniform(0.25, 4.75), 2)
+        germany.population -= deaths
+        germany.deaths += deaths
+
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        if (germany.stability - decrease_stability) > 10:
+            germany.stability -= decrease_stability
+
+        time.sleep(3)
+
+    elif chance % 16 == 5:
+        """Chance that someone gets married
+        - increase in happiness and stability
+        """
+        print("someone just got married\n")
+        time.sleep(3)
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        if (germany.stability - decrease_stability) > 10:
+            germany.stability -= decrease_stability
+
+    elif chance % 18 == 7:
+        """Chance that a college dorm throws a party
+        - increase in happiness
+        - internal chance of death
+            -> if death 
+                - decrease in happiness
+        """
+        print("A college dorm is throwing a wild party\n")
+        time.sleep(3)
+        chance = random.randrange(0, 2)
+        if chance == 1:
+            people = random.randrange(1, 30)
+            print(f"Well bad news...{people} people died from partying a little to hard.\n")
+            time.sleep(3)
+            germany.population -= people
+            germany.deaths += people
+            time.sleep(3)
+            germany.happiness -= random.randrange(1, 4)
+        else:
+            germany.happiness += random.randrange(2, 7)
+
+    elif chance % 21 == 10:
+        """Chance that a high schooler throws a party
+        - increase in happiness
+        - internal chance of death
+            -> if death 
+                - decrease in happiness
+        """
+        print("A popular high schooler is throwing a wild party\n")
+        time.sleep(3)
+        chance = random.randrange(0, 2)
+        if chance == 1:
+            people = random.randrange(1, 30)
+            print(f"Well bad news...{people} people died from partying a little to hard.\n")
+            germany.population -= people
+            germany.deaths += people
+            time.sleep(3)
+            germany.happiness -= random.randrange(1, 4)
+        else:
+            germany.happiness += random.randrange(2, 7)
+
+    elif chance % 26 == 8:
+        """Chance that car rolls into group of people
+        - decrease in population
+        - decrease in happiness and stability
+        """
+        deaths = random.randrange(3, 25)
+        print(f"Someone just rolled their car into a group of people. {deaths} people died.\n")
+        germany.population -= deaths
+        time.sleep(3)
+
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        if (germany.stability - decrease_stability) > 10:
+            germany.stability -= decrease_stability
+
+    elif chance % 36 == 7:
+        """Chance that somebody converts and begins to believe in God
+        -> Christian, Islamic, Jewish, or other
+        - increase in happiness and stability
+        """
+        religions = ["Jewish", "Christian", "Islamic"]
+        print(
+            f"An Atheist just converted to believing in the {religions[random.randrange(0, len(religions) - 1)]} God\n")
+        decrease = round(random.uniform(0.25, 0.75), 2)
+        decrease_stability = round(random.uniform(0.25, 1.75), 2)
+        if (germany.happiness - decrease) > 5:
+            germany.happiness -= decrease
+
+        if (germany.stability - decrease_stability) > 10:
+            germany.stability -= decrease_stability
+        time.sleep(3)
+"""Primary Random Function"""
+def random_functions(germany):
+    random_social(germany)
+    random_politics(germany)
+    random_economics(germany)
+
 """Main function of manual German version of game"""
 def manual_game(germany):
     # establishment of check upon game status
@@ -456,13 +894,14 @@ def manual_game(germany):
         # incrementing of time
         print(germany.date)
         # primary functions
+        economic_decisions(germany)
         population_change(germany)
         political_change(germany)
+        random_functions(germany)
         if germany.stability >= 50:
             choice = input("Important!!! view your stats: ")
             if choice == "y" or choice == "yes":
                 check_stats(germany)
-        print("hi")
         time.sleep(3)
 class Germany:
     def __init__(self, year):
