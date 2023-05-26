@@ -583,7 +583,6 @@ def random_social(us):
             us.happiness -= random.randrange(1, 4)
         else:
             increase = round(random.uniform(0.25, 7), 2)
-
             us.happiness += random.randrange(2, 7)
 
     elif chance % 8 == 0:
