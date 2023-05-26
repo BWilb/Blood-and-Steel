@@ -2,6 +2,9 @@ import random
 import time
 from datetime import datetime, timedelta
 
+alliance_names = ["European Commonwealth", "European Union", "Pan-Germanic Union", "Axis", "Central Powers",
+                  "Pan-Aryan Union", "Pan-Germanic Commonwealth"]
+
 """Population Dictionaries"""
 population = {
     "1910": 63200000,
@@ -288,8 +291,13 @@ def economic_stimulus(germany):
 
                     germany.tax_rate += round(tax_hike, 2)
                     print(f"{germany.tax_rate}% is your new tax rate")
-                    germany.happiness -= round(random.uniform(0.25, 3.45), 2)
-                    germany.stability -= round(random.uniform(0.25, 1.45), 2)
+                    decrease_happiness = round(random.uniform(0.25, 3.45), 2)
+                    decrease_stability = round(random.uniform(0.25, 1.45), 2)
+                    if (germany.happiness - decrease_happiness) < 5:
+                        germany.happiness -= decrease_happiness
+
+                    if (germany.stability - decrease_stability) < 5:
+                        germany.stability -= decrease_stability
                     valid_choice = True
 
                 elif tax_hike <= 0 or tax_hike > 25:
@@ -370,7 +378,7 @@ def recovery(germany):
         germany.investment = round(random.uniform(2000, 7400), 2)
 
         germany.government_spending = round(random.uniform(1300, 5000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                              germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -383,7 +391,7 @@ def recovery(germany):
         germany.investment = round(random.uniform(200, 2400), 2)
 
         germany.government_spending = round(random.uniform(300, 2000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
 
     germany.exports = round(random.uniform(4500, 45000), 2)
@@ -398,7 +406,7 @@ def expansion(germany):
         germany.investment = round(random.uniform(20000, 74000), 2)
 
         germany.government_spending = round(random.uniform(13000, 80000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -411,7 +419,7 @@ def expansion(germany):
         germany.investment = round(random.uniform(200, 2400), 2)
 
         germany.government_spending = round(random.uniform(300, 2000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
 
     germany.exports = round(random.uniform(9000, 70000), 2)
@@ -427,7 +435,7 @@ def recession(germany):
         germany.investment = -round(random.uniform(4500, 10000), 2)
 
         germany.government_spending = round(random.uniform(90000, 700000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -440,7 +448,7 @@ def recession(germany):
         germany.investment = -round(random.uniform(10000, 48000), 2)
 
         germany.government_spending = round(random.uniform(200000, 750000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
 
     germany.exports = round(random.uniform(9000, 65000), 2)
@@ -456,7 +464,7 @@ def depression(germany):
         germany.investment = -round(random.uniform(7500, 24000), 2)
 
         germany.government_spending = round(random.uniform(130000, 800000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -469,7 +477,7 @@ def depression(germany):
         germany.investment = -round(random.uniform(20000, 67000), 2)
 
         germany.government_spending = round(random.uniform(300000, 850000), 2)
-        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.45), 2) +
+        germany.national_debt += (germany.government_spending * round(random.uniform(0.05, 0.35), 2) +
                                   germany.consumer_spending * round(random.uniform(0.05, 0.30), 2))
 
     germany.exports = round(random.uniform(9000, 54000), 2)
@@ -696,7 +704,117 @@ def population_change(germany):
 """Random Functions"""
 def random_politics(germany):
     chance = random.randrange(10, 20000)
+    if chance % 5 == 10:
+        """Chance that politician of any political party makes a speech
+        - if politician is making speech from 1932 to 1945
+            * Potential for politicians death and portion of rebels death
+            * increase in stability and decrease in happiness
+        """
+        if germany.date < datetime(1932, 1, 30):
+            chance = random.randrange(0, 3)
 
+            if chance == 0:
+                """Chance that the free conservative party holds a speech"""
+                print("The free conservative party just held a speech in Berlin.\n")
+                time.sleep(3)
+                for i in range(0, random.randrange(100, 2000)):
+                    chance = random.randrange(0, 2)
+                    """Chance that influence either takes supporters away from progressive
+                    or center party
+                    """
+                    if chance == 0:
+                        germany.center_party -= 1
+                        germany.free_conservatives += 1
+                    elif chance == 1:
+                        germany.progressives -= 1
+                        germany.free_conservatives += 1
+
+            elif chance == 1:
+                """Chance that the progressive party holds a speech"""
+                print("The progressive party just held a speech in Berlin.\n")
+                time.sleep(3)
+
+                for i in range(0, random.randrange(100, 2000)):
+                    chance = random.randrange(0, 2)
+                    """Chance that influence either takes supporters away from progressive
+                    or center party
+                    """
+                    if chance == 0:
+                        germany.center_party -= 1
+                        germany.progressives += 1
+                    elif chance == 1:
+                        germany.free_conservatives -= 1
+                        germany.progressives += 1
+
+            elif chance == 2:
+                """Chance that the center party holds a speech"""
+                print("The center party just held a speech in Berlin.\n")
+                time.sleep(3)
+
+                for i in range(0, random.randrange(100, 2000)):
+                    chance = random.randrange(0, 2)
+                    """Chance that influence either takes supporters away from progressive
+                    or center party
+                    """
+                    if chance == 0:
+                        germany.progressives -= 1
+                        germany.center_party += 1
+                    elif chance == 1:
+                        germany.free_conservatives -= 1
+                        germany.center_party += 1
+
+    elif chance % 19 == 15:
+        """Chance that politician secretly influences GDP
+        - increase in GDP and national debt
+        """
+        increase = round(random.uniform(12000, 300000), 2)
+        germany.current_gdp += increase
+        germany.national_debt += round(round(random.uniform(0.09, 0.30), 2), 2)
+
+    elif chance % 25 == 21:
+        """Chance that politician secretly influences population
+        - increases in population
+        """
+        births = random.randrange(13, 2000)
+        germany.births += births
+        germany.population += births
+        for i in range(0, births):
+            chance = random.randrange(0, 3)
+            if chance == 0:
+                germany.free_conservatives += 1
+
+            elif chance == 1:
+                germany.progressives += 1
+
+            elif chance == 2:
+                germany.center_party += 1
+
+    elif chance % 48 == 38:
+        """Chance that an assassination attempt is made on the German Chancellor
+        - internal chance if successful or not
+            -> other people will die as well
+        - economy goes into recession
+            -> GDP slashed by 1.25
+        - decrease in stability
+        """
+
+    elif chance % 60 == 59:
+        """Chance that the Kaiser or Heir to the throne is assassinated
+        - internal chance if successful or not
+            -> other people will die as well
+        - if Kaiser is in power...GDP will be slashed by 1.5
+        - decrease in stability
+        """
+        chance = random.randrange(0, 9)
+        if germany.date < datetime(1918, 11, 11):
+            if chance % 8 == 0:
+                print(f"Kaiser {germany.kaiser} has been assassinated!!!\n")
+                germany.kaiser = kaisers[0]
+                kaisers.pop(0)
+                print(f"{germany.kaiser} has replace him")
+                germany.current_gdp /= 1.5
+                economic_stimulus(germany)
+                germany.stability -= round(random.uniform(1.25, 10.25), 2)
 def random_economics(germany):
     chance = random.randrange(10, 20000)
     if chance % 3 == 7:
@@ -712,7 +830,7 @@ def random_economics(germany):
 
         gdp_increase = round(random.uniform(1200, 3000), 2)
         germany.current_gdp += gdp_increase
-        germany.national_debt += round(gdp_increase * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(gdp_increase * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(0.1, 1.00), 2)
         happiness_increase = round(random.uniform(0.1, 1.00), 2)
@@ -785,7 +903,7 @@ def random_economics(germany):
         time.sleep(3)
 
         germany.current_gdp += winnings * 0.75
-        germany.national_debt += round(winnings * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(winnings * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(0.1, 0.5), 2)
         happiness_increase = round(random.uniform(1.25, 3.00), 2)
@@ -807,7 +925,7 @@ def random_economics(germany):
         time.sleep(3)
 
         germany.current_gdp += round(spending * round(random.uniform(0.25, 0.75), 2), 2)
-        germany.national_debt += round(spending * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(1.00, 1.5), 2)
         happiness_increase = round(random.uniform(0.25, 1.00), 2)
@@ -836,7 +954,7 @@ def random_economics(germany):
         print(f"{banks} bank(s) collapsed today resulting in a loss of ${loss}.\n")
         time.sleep(3)
         germany.current_gdp -= loss
-        germany.national_debt += round(loss * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(1.00, 5.5), 2)
         happiness_increase = round(random.uniform(2.25, 8.00), 2)
@@ -915,7 +1033,7 @@ def random_economics(germany):
         germany.current_gdp /= 1.5
         spending = round(random.uniform(120000, 1000000), 2)
         germany.current_gdp += spending
-        germany.national_debt += round(spending * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(2.20, 5.00), 2)
         happiness_increase = round(random.uniform(3.25, 8.00), 2)
@@ -943,7 +1061,7 @@ def random_economics(germany):
         germany.current_gdp *= 1.5
         consumer_spending = round(random.uniform(120000, 1000000), 2)
         germany.current_gdp += consumer_spending
-        germany.national_debt += round(consumer_spending * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(consumer_spending * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(2.20, 5.00), 2)
         happiness_increase = round(random.uniform(3.25, 8.00), 2)
@@ -972,7 +1090,7 @@ def random_economics(germany):
         germany.current_gdp /= 3
         spending = round(random.uniform(1000000, 9000000), 2)
         germany.current_gdp += spending
-        germany.national_debt += round(spending * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(10.20, 15.00), 2)
         happiness_increase = round(random.uniform(13.25, 20.00), 2)
@@ -997,7 +1115,7 @@ def random_economics(germany):
         germany.current_gdp *= 3
         consumer_spending = round(random.uniform(1000000, 9000000), 2)
         germany.current_gdp += consumer_spending
-        germany.national_debt += round(consumer_spending * round(random.uniform(0.25, 0.75), 2), 2)
+        germany.national_debt += round(consumer_spending * round(random.uniform(0.05, 0.25), 2), 2)
 
         stability_increase = round(random.uniform(10.20, 15.00), 2)
         happiness_increase = round(random.uniform(13.25, 20.00), 2)
@@ -1100,11 +1218,11 @@ def random_social(germany):
             f"An Atheist just converted to believing in the {religions[random.randrange(0, len(religions) - 1)]} God\n")
         decrease = round(random.uniform(0.25, 0.75), 2)
         decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
+        if (germany.happiness + decrease) < 98:
+            germany.happiness += decrease
 
-        if (germany.stability - decrease_stability) > 10:
-            germany.stability -= decrease_stability
+        if (germany.stability + decrease_stability) < 98:
+            germany.stability += decrease_stability
         time.sleep(3)
 
 def random_crime(germany):
@@ -1218,7 +1336,7 @@ def random_crime(germany):
                 time.sleep(3)
 
                 germany.current_gdp -= loss
-                germany.national_debt += round(loss * round(random.uniform(0.25, 0.75), 2), 2)
+                germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
 
                 stability_increase = round(random.uniform(0.5, 1.25), 2)
                 happiness_increase = round(random.uniform(1.00, 2.25), 2)
@@ -1238,7 +1356,7 @@ def random_crime(germany):
                 time.sleep(3)
 
                 germany.current_gdp -= loss
-                germany.national_debt += round(loss * round(random.uniform(0.25, 0.75), 2), 2)
+                germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
 
                 stability_increase = round(random.uniform(1.00, 2.00), 2)
                 happiness_increase = round(random.uniform(1.00, 3.25), 2)
@@ -1292,7 +1410,7 @@ def random_crime(germany):
                 germany.stability -= decrease
             increase = round(random.uniform(10000, 2000000), 2)
             germany.current_gdp += increase
-            germany.national_debt += round(increase * round(random.uniform(0.25, 0.75), 2), 2)
+            germany.national_debt += round(increase * round(random.uniform(0.05, 0.25), 2), 2)
 
     elif chance % 25 == 30:
         """Chance that a major political scandal is uncovered
@@ -1305,7 +1423,7 @@ def random_crime(germany):
         time.sleep(3)
         germany.current_gdp -= loss
 
-    elif chance % 60 == 50 and germany.rebllion != True:
+    elif chance % 60 == 50 and germany.rebellion != True:
         """Chance that a riot begins(could lead to rebellion)
         - major decrease in stability and happiness
         - can arise in any of the states of Germany
@@ -1336,6 +1454,37 @@ def random_crime(germany):
             germany.economic_change_date = germany.date + timedelta(days=days)
             # economic_stimulus(germany)
         germany.riot_over = germany.date + timedelta(days=days)
+
+def random_international(germany):
+    chance = random.randrange(10, 20000)
+    if chance % 6 == 9:
+        """Chance that Germany's relations with another nation improves
+        - later on...
+            * improved relations with other nation
+            * more potential for trade relations
+        """
+    elif chance % 10 == 11:
+        """Chance that Germany's relations with another nation deteriorate
+        - later on...
+            * worsened relations with specific nation
+            * less potential for trade
+        """
+
+    elif chance % 15 == 14:
+        """Chance that Germany randomly embargoes another nation
+        - nation will not be in alliance
+        """
+
+    elif chance % 34 == 19:
+        """Chance that a terrorist attack occurs on German soil
+        - nation that commences terrorism will not be in alliance
+        """
+
+    elif chance % 50 == 46:
+        """Random chance that Germany decides to go to war with another nation
+        - nation will not be in alliance
+        """
+    pass
 
 """Primary Random Function"""
 def random_functions(germany):
