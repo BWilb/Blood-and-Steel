@@ -666,7 +666,7 @@ def population_change(germany):
 
         germany.current_pop = germany.population
         """Resetting of current population(past)"""
-        if germany.population_change <= 1.5:
+        if germany.population_change <= 1.75:
             """Incorporation of what happens when population growth becomes too small"""
             print(f"Your population growth for {germany.current_year} was {germany.population_change}%\n")
 

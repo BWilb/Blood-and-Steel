@@ -6,7 +6,7 @@ import time
 import pyautogui
 from nation_state.north_america.united_states import us_reformed
 import nation_state.europe.britain.britain
-import nation_state.europe.italy.italy
+from nation_state.europe.italy import italy
 import nation_state.europe.france.france
 import nation_state.europe.russia.russia
 from nation_state.europe.germany import germany_reformed
@@ -72,7 +72,7 @@ img_mexico = pygame.image.load("region_buttons/north_america/nation_buttons/mexi
 img_europe = pygame.image.load("region_buttons/europe/europe_button.png").convert_alpha()
 uk = pygame.image.load("region_buttons/europe/nation_buttons/britain_button.png").convert_alpha()
 germany = pygame.image.load("region_buttons/europe/nation_buttons/germany_button.png").convert_alpha()
-italy = pygame.image.load("region_buttons/europe/nation_buttons/Italy_button.png").convert_alpha()
+italian = pygame.image.load("region_buttons/europe/nation_buttons/Italy_button.png").convert_alpha()
 france = pygame.image.load("region_buttons/europe/nation_buttons/france_button.png").convert_alpha()
 russia = pygame.image.load("region_buttons/europe/nation_buttons/russia_button.png").convert_alpha()
 
@@ -120,7 +120,7 @@ europe_button = button.Button(width * 0.65, 200, img_europe, 0.25)
 britain_button = button.Button(width * 0.20, 200, uk, 0.25)
 german_button = button.Button(width * 0.65, 200, germany, 0.25)
 russian_button = button.Button(width * 0.20, 400, russia, 0.25)
-italian_button = button.Button(width * 0.65, 400, italy, 0.25)
+italian_button = button.Button(width * 0.65, 400, italian, 0.25)
 france_button = button.Button(width * 0.425, 600, france, 0.25)
 
 """africa"""
@@ -253,7 +253,7 @@ while run:
 
             if italian_button.draw(screen):
                 nation_chosen = "Italy"
-                game_state = "unavailable"
+                game_state = "chosen"
 
             if france_button.draw(screen):
                 nation_chosen = "France"
@@ -334,6 +334,11 @@ print(nation_chosen)
 if nation_chosen == "United States":
     national = us_reformed.UnitedStates(time_chosen)
     us_reformed.manual_game(national)
+
 elif nation_chosen == "Germany":
     national = germany_reformed.Germany(time_chosen)
     germany_reformed.manual_game(national)
+
+elif nation_chosen == "Italy":
+    national = italy.Italy(time_chosen)
+    italy.main(national)
