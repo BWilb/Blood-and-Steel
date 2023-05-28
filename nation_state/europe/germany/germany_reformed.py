@@ -2,9 +2,6 @@ import random
 import time
 from datetime import datetime, timedelta
 
-alliance_names = ["European Commonwealth", "European Union", "Pan-Germanic Union", "Axis", "Central Powers",
-                  "Pan-Aryan Union", "Pan-Germanic Commonwealth"]
-
 """Population Dictionaries"""
 population = {
     "1910": 63200000,
@@ -37,6 +34,16 @@ kaiser_succession = ["Wilhelm III", "Louis Ferdinand", "George Fredrick"]
 nazi_succession = ["Hermann Goering", "Joseph Goebbels", "Martin Bormann", "Rudolf Hess", "Heinrich Himmler",
                    "Reinhard Heydrich", "Albert Speer", "Wilhelm Keitel", "Otto Strasser"]
 
+"""Military dictionaries"""
+army_size = {
+    "1910": 673000,
+    "1914": 862000,
+    "1918": 2000000,
+    "1932": 100000,
+    "1936": 601000,
+    "1939": 2970000
+}
+
 """Economic dictionaries & Variables"""
 business_cycle = ["recovery", "expansion", "recession", "depression"]
 gdp = {
@@ -59,6 +66,54 @@ tax_rate = {
 
 """Subsidiary functions of game"""
 
+"""Military functions"""
+
+def retire_soldiers(germany):
+    """Function for retiring old, wounded, or stupid soldiers"""
+    germany.army_size -= random.randrange(2, 100)
+def increase_army_size(germany):
+    if germany.date < datetime(1918, 11, 11) or germany.date.year > datetime(1933, 1, 30):
+        """Periods in time where Germany doesn't have army size restrictions"""
+        increase = round(germany.conscripts * round(random.uniform(0.0001, 0.0005), 5), 0)
+        germany.army_size += increase
+        germany.conscripts -= increase
+
+    elif germany.date > datetime(1918, 11, 12) and germany.date < datetime(1933, 1, 30):
+        increase = round(germany.conscripts * round(random.uniform(0.0001, 0.0005), 5), 0)
+        if (germany.army_size + increase) < 100000:
+            germany.army_size += increase
+            germany.conscripts -= increase
+def increase_conscripts(germany):
+    """Function for increasing eligible candidates in draft"""
+    if germany.conscription_status == "volunteer":
+        if germany.date == germany.conscript_census:
+            """Amount of population that is eligible under volunteering draft"""
+            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.0009), 5), 0)
+            germany.conscript_census = germany.date + timedelta(days=15)
+
+    elif germany.conscription_status == "limited":
+        if germany.date == germany.conscript_census:
+            """Amount of population that is eligible under limited draft"""
+            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.002), 5), 0)
+            germany.conscript_census = germany.date + timedelta(days=20)
+
+    elif germany.conscript_status == "extensive":
+        if germany.date == germany.conscript_census:
+            """Amount of population that is eligible under extensive draft"""
+            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.009), 5), 0)
+            germany.conscript_census = germany.date + timedelta(days=25)
+
+    elif germany.conscript_status == "required":
+        if germany.date == germany.conscript_census:
+            """Amount of population that is eligible under required drafting"""
+            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.02), 5), 0)
+            germany.conscript_census = germany.date + timedelta(days=30)
+
+def military_functions(germany):
+    increase_conscripts(germany)
+    increase_army_size(germany)
+    retire_soldiers(germany)
+
 """Statistics function"""
 def check_stats(german):
     """Stats organized by...
@@ -68,7 +123,10 @@ def check_stats(german):
     4. Others
     """
     print(f"Your current Kaiser is {german.kaiser}\n"
-          f"Your current Chancellor is {german.chancellor}.\n")
+          f"Your current Chancellor is {german.chancellor}.\n"
+          f"Your current population is {german.population}.\n"
+          f"You have {german.conscripts} conscripts.\n"
+          f"Your army has {german.army_size} soldiers")
     if german.date < datetime(1933, 1, 30):
         print(f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
               f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
@@ -211,9 +269,51 @@ def social_events(germany):
 
                 elif chance == 1:
                     germany.rebels += 1
+
+
 def economic_events(germany):
     """definitive national economic events in germany"""
-    pass
+    if germany.date == datetime(1915, 1, 1):
+        """Represents the blockade on Germany causing...
+        malnutrition and hunger
+        """
+        germany.happiness -= round(random.uniform(0.01, 0.09), 2)
+        germany.stability -= round(random.uniform(0.01, 0.09), 2)
+        # economic_stimulus(germany)
+        germany.current_gdp -= round(random.uniform(1000, 3000), 2)
+
+    if germany.date.year >= 1921 and germany.date.year <= 1923:
+        """Time of germany hyperinflation"""
+        chance = random.randrange(0, 10)
+        if chance % 9 == 4:
+            print("The German economy has fallen into a Recession, due to rapid hyperinflation")
+            if germany.economic_state != "recession":
+                germany.economic_state = "recession"
+                stimulus_chance = random.randrange(0, 16)
+                if stimulus_chance % 15 == 14:
+                    if germany.economic_stimulus == False:
+                        # economic_stimulus(germany)
+                        pass
+        germany.happiness -= round(random.uniform(0.01, 0.09), 2)
+        germany.stability -= round(random.uniform(0.01, 0.09), 2)
+
+    if germany.date == datetime(1929, 10, 24):
+        print("The German Economy has fallen into a depression")
+        print("It is being reported that nations across the globe are experiencing similar occurrences.\n")
+        time.sleep(3)
+        germany.current_gdp /= 10
+        if germany.economic_state != "depression":
+            germany.economic_state = "depression"
+            # economic_stimulus(germany)
+
+    if germany.date > datetime(1929, 10, 24) and germany.date < datetime(1933, 1, 30):
+        """Period in time where germany experiences Great Depression"""
+        decrease_happiness = round(random.uniform(0.01, 0.05), 2)
+        decrease_stability = round(random.uniform(0.01, 0.05), 2)
+        if (germany.happiness - decrease_happiness) > 5:
+            germany.happiness -= decrease_happiness
+        elif (germany.stability - decrease_stability) > 5:
+            germany.happiness -= decrease_stability
 def political_events(germany):
     """definitive national political events in germany"""
 
@@ -1531,6 +1631,7 @@ def manual_game(germany):
         population_change(germany)
         political_change(germany)
         random_functions(germany)
+        military_functions(germany)
         if germany.stability >= 50:
             choice = input("Important!!! view your stats: ")
             if choice == "y" or choice == "yes":
@@ -1540,6 +1641,7 @@ def manual_game(germany):
         time.sleep(3)
 class Germany:
     def __init__(self, year):
+        self.date = datetime(int(year), 1, 1)
         # population variables
         self.population = population[year]
         self.population_change = 0
@@ -1625,10 +1727,18 @@ class Germany:
                             "Bavaria", "Baden", "Wurttemberg", "Westphalia", "Hessen-Nassau", "Bohemia", "Moravia",
                             "Austria", "Sudetenland"]
         # military variables
+        self.conscription_status = "limited"
+        """Will also include extensive, required, and volunteer(Weimar Republic)"""
+        self.war_deaths = 0
+        self.conscripts = round(self.population * round(random.uniform(0.0001, 0.0009), 5), 2)
+
+        self.army_size = army_size[year]
         # international variables
         self.alliance = ""
+        self.global_market_share = 0
+        """Wont be utilized until other nations are developed"""
         # time variables
-        self.date = datetime(int(year), 1, 1)
+        self.conscript_census = self.date + timedelta(days=75)
         self.tax_change_date = self.date + timedelta(days=75)
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
