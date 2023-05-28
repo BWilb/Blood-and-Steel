@@ -41,8 +41,6 @@ population = {
 }
 
 """population functions"""
-
-
 def population_change(italy):
     if italy.past_year < italy.date.year:
         italy.population_change = (italy.population - italy.past_pop / (
@@ -79,6 +77,31 @@ def population_change(italy):
             italy.deaths += deaths
             italy.current_pop -= deaths
 
+"""Economic Functions"""
+def recession(italy):
+    pass
+def depression(italy):
+    pass
+def recovery(italy):
+    pass
+def expansion(italy):
+    pass
+def gdp_changes(italy):
+    if italy.economic_state == "recovery":
+        recovery(italy)
+    elif italy.economic_state == "expansion":
+        expansion(italy)
+    elif italy.economic_state == "recession":
+        recession(italy)
+    elif italy.economic_state == "depression":
+        depression(italy)
+def economic_decisions(italy):
+    if italy.current_year < italy.past_year:
+        pass
+
+    else:
+        gdp_changes(italy)
+
 def manual_game(italy):
     while italy.population > 150000:
         italy.date = italy.date + timedelta(days=1)
@@ -88,7 +111,7 @@ def manual_game(italy):
 class Italy:
     def __init__(self, year):
         """Political variables"""
-        self.leader = prime_ministers[year]
+        self.pm = prime_ministers[year]
         self.monarch = monarchs[year]
         self.stability = 90.00
         self.anti_establishment = 0
@@ -104,11 +127,9 @@ class Italy:
         # population controller if birth rate flops
         self.viagra_subsidy = False
         """Economic_variables"""
+        self.current_gdp = gdp[year]
+        self.past_gdp = self.current_gdp
+        self.economic_state = "recovery"
         """Time variables"""
         self.date = datetime(year, 1, 1)
         self.past_year = self.date.year
-
-
-def main(time):
-    italy = Italy(time)
-    print(italy.population)
