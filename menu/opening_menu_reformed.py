@@ -341,4 +341,4 @@ elif nation_chosen == "Germany":
 
 elif nation_chosen == "Italy":
     national = italy.Italy(time_chosen)
-    italy.main(national)
+    italy.manual_game(national)
