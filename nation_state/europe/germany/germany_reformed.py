@@ -100,7 +100,7 @@ def increase_conscripts(germany):
     elif germany.conscript_status == "extensive":
         if germany.date == germany.conscript_census:
             """Amount of population that is eligible under extensive draft"""
-            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.009), 5), 0)
+            germany.conscripts = round(germany.population * round(random.uniform(0.0001, 0.005), 5), 0)
             germany.conscript_census = germany.date + timedelta(days=25)
 
     elif germany.conscript_status == "required":

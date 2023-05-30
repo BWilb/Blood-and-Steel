@@ -47,7 +47,17 @@ population = {
     "1936": 42400000,
     "1939": 43500000
 }
+"""Military variables and dictionaries"""
 
+army_size = {
+    "1910": 252169,
+    "1914": 497219,
+    "1918": 2700000,
+    "1932": 354169,
+    "1936": 381336,
+    "1939": 645000
+}
+"""Stability and happiness functions"""
 def stability_happiness(italy):
     chance = random.randrange(0, 2)
 
@@ -68,6 +78,42 @@ def stability_happiness(italy):
             italy.happiness -= decrease_happiness
         if (italy.stability - decrease_stability) > 5:
             italy.stability -= decrease_stability
+
+def retire_soldiers(italy):
+    """function for retiring old, wounded, or stupid soldiers"""
+    italy.army -= random.randrange(2, 100)
+def increase_army(italy):
+    increase = round(italy.conscripts * round(random.uniform(0.0001, 0.0005), 6), 0)
+    italy.army += increase
+    italy.conscripts -= increase
+def increase_conscripts(italy):
+    if italy.conscription_status == "volunteer":
+        if italy.date == italy.conscript_census:
+            """Amount of population that is eligible under volunteering draft"""
+            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.0009), 5), 0)
+            italy.conscript_census = italy.date + timedelta(days=15)
+
+    elif italy.conscription_status == "limited":
+        if italy.date == italy.conscript_census:
+            """Amount of population that is eligible under limited draft"""
+            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.002), 5), 0)
+            italy.conscript_census = italy.date + timedelta(days=20)
+
+    elif italy.conscript_status == "extensive":
+        if italy.date == italy.conscript_census:
+            """Amount of population that is eligible under extensive draft"""
+            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.005), 5), 0)
+            italy.conscript_census = italy.date + timedelta(days=25)
+
+    elif italy.conscript_status == "required":
+        if italy.date == italy.conscript_census:
+            """Amount of population that is eligible under required drafting"""
+            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.02), 5), 0)
+            italy.conscript_census = italy.date + timedelta(days=30)
+def military_functions(italy):
+    increase_conscripts(italy)
+    increase_army(italy)
+    retire_soldiers(italy)
 
 """population functions"""
 def population_change(italy):
@@ -102,27 +148,122 @@ def population_change(italy):
             italy.births += births
             italy.current_pop += births
 
+            for i in range(0, births):
+                """Looping through births to assign to political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party += 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party += 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party += 1
+
+                elif chance == 3:
+                    italy.italian_republican_party += 1
+
             deaths = random.randrange(25, 150)
             italy.deaths += deaths
             italy.current_pop -= deaths
+
+            for i in range(0, births):
+                """Looping through deaths to un-assign political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party -= 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party -= 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party -= 1
+
+                elif chance == 3:
+                    italy.italian_republican_party -= 1
 
         elif italy.condom_subsidy:
             births = random.randrange(50, 200)
             italy.births += births
             italy.current_pop += births
 
+            for i in range(0, births):
+                """Looping through births to assign to political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party += 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party += 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party += 1
+
+                elif chance == 3:
+                    italy.italian_republican_party += 1
+
             deaths = random.randrange(25, 150)
             italy.deaths += deaths
             italy.current_pop -= deaths
+
+            for i in range(0, births):
+                """Looping through deaths to un-assign political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party -= 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party -= 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party -= 1
+
+                elif chance == 3:
+                    italy.italian_republican_party -= 1
 
         else:
             births = random.randrange(50, 300)
             italy.births += births
             italy.current_pop += births
+            for i in range(0, births):
+                """Looping through births to assign to political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party += 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party += 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party += 1
+
+                elif chance == 3:
+                    italy.italian_republican_party += 1
 
             deaths = random.randrange(25, 150)
             italy.deaths += deaths
             italy.current_pop -= deaths
+
+            for i in range(0, births):
+                """Looping through deaths to un-assign political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party -= 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party -= 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party -= 1
+
+                elif chance == 3:
+                    italy.italian_republican_party -= 1
 
 """Economic Functions"""
 def economic_stimulus(italy):
@@ -152,7 +293,6 @@ def economic_stimulus(italy):
                 elif tax_hike <= 0 or tax_hike > 10:
                     print(f"New tax hike of {tax_hike}% is improper.\n"
                           f"Try again.")
-
                     time.sleep(3)
 
                 else:
@@ -451,14 +591,21 @@ def stats(italy):
           f"Your current prime minister is {italy.pm}\n"
           f"Your current stability is {round(italy.stability, 3)}\n"
           f"Your current population is {italy.current_pop}\n"
+          f"Socialists make up {round((italy.italian_socialist_party / italy.current_pop) * 100, 4)}% of population.\n"
+          f"Republicans make up {round((italy.italian_republican_party / italy.current_pop) * 100, 4)}% of the population.\n"
+          f"The peoples party make up {round((italy.italian_peoples_party / italy.current_pop) * 100, 4)}% of the population.\n"
+          f"Liberals make up {round((italy.italian_liberal_party / italy.current_pop) * 100, 4)}% of the population.\n"
           f"Your current happiness level is {round(italy.happiness, 3)}\n"
           f"There have been {italy.births} births in {italy.past_year}\n"
           f"There have been {italy.deaths} deaths in {italy.past_year}\n"
           f"Your current GDP is ${round(italy.current_gdp, 2)}\n"
           f"Your current GDP growth rate is {round((italy.current_gdp - italy.past_gdp) / ((italy.current_gdp + italy.past_gdp)/2) * 100, 5)}%\n"
+          f"Your current debt to GDP ratio is {round((italy.national_debt / italy.current_gdp), 2)}%\n"
+          f"Your current tax rate is {italy.tax_rate}\n"
           f"Your economy is currently in a(n) {italy.economic_state}\n"
           f"Your current national debt it ${round(italy.national_debt, 2)}.\n"
-          f"Your current tax rate is {italy.tax_rate}%\n")
+          f"Your current tax rate is {italy.tax_rate}%\n"
+          f"Your current army size is {italy.army}\n")
 def social_events(italy):
     if italy.date.year > 1945 and italy.date == datetime(italy.year, 4, 25):
         print("Today is the day that we wrestled our futures from Mussolini's tyranny.\n")
@@ -501,19 +648,19 @@ def manual_game(italy):
         events(italy)
         population_change(italy)
         economic_decisions(italy)
+        military_functions(italy)
         if italy.stability > 50:
             choice = input("view stats: ")
             if choice.lower() == "yes" or choice.lower() == "y":
                 stats(italy)
         time.sleep(3)
-
 class Italy:
     def __init__(self, year):
-        """Political variables"""
-        self.pm = prime_ministers[year]
-        self.monarch = monarchs[year]
-        self.stability = 90.00
-        self.anti_establishment = 0
+        """Time variables"""
+        self.date = datetime(int(year), 1, 1)
+
+        self.past_year = self.date.year
+
         """Population variables"""
         self.current_pop = population[year]
         self.population_change = 0
@@ -524,7 +671,28 @@ class Italy:
         # population controller if birth rate gets out of hand
         self.condom_subsidy = False
         # population controller if birth rate flops
+
         self.viagra_subsidy = False
+        """Political variables"""
+        self.pm = prime_ministers[year]
+        self.monarch = monarchs[year]
+        self.stability = 90.00
+        self.anti_establishment = 0
+        # political parties based upon time frame
+        if self.date < datetime(1922, 10, 27):
+            self.italian_socialist_party = round(self.current_pop * round(random.uniform(0.1, 0.25), 2), 0)
+
+            self.italian_republican_party = round((self.current_pop - self.italian_socialist_party) *
+                                                  round(random.uniform(0.1, 0.25), 2), 0)
+
+
+            self.italian_peoples_party = round((self.current_pop - self.italian_socialist_party -
+                                                self.italian_republican_party) *
+                                                round(random.uniform(0.1, 0.25), 2), 0)
+
+            self.italian_liberal_party = round((self.current_pop - self.italian_socialist_party -
+                                                self.italian_republican_party - self.italian_peoples_party))
+
         """Economic_variables"""
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -539,10 +707,12 @@ class Italy:
         self.imports = 0
         # political economic variables
         self.government_spending = 0
-        self.national_debt = 0
-        # international variables
+        self.national_debt = 10000000
+        """international variables"""
         self.alliance = None
-        """Time variables"""
-        self.date = datetime(int(year), 1, 1)
-
-        self.past_year = self.date.year
+        """military variables"""
+        self.army = army_size[year]
+        self.conscripts = round(self.current_pop * round(random.uniform(0.001, 0.009), 5), 0)
+        self.conscription_status = "limited"
+        self.conscript_census = self.date + timedelta(days=15)
+        self.war_deaths = 0
