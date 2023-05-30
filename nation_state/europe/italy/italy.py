@@ -48,6 +48,27 @@ population = {
     "1939": 43500000
 }
 
+def stability_happiness(italy):
+    chance = random.randrange(0, 2)
+
+    if chance == 0:
+        increase_happiness = round(random.uniform(0.001, 0.09), 3)
+        increase_stability = round(random.uniform(0.001, 0.009), 3)
+
+        if (italy.happiness + increase_happiness) < 98:
+            italy.happiness += increase_happiness
+        if (italy.stability + increase_stability) < 98:
+            italy.stability += increase_stability
+
+    elif chance == 1:
+        decrease_happiness = round(random.uniform(0.001, 0.09), 3)
+        decrease_stability = round(random.uniform(0.001, 0.009), 3)
+
+        if (italy.happiness - decrease_happiness) > 5:
+            italy.happiness -= decrease_happiness
+        if (italy.stability - decrease_stability) > 5:
+            italy.stability -= decrease_stability
+
 """population functions"""
 def population_change(italy):
     if italy.past_year > italy.date.year:
@@ -77,7 +98,7 @@ def population_change(italy):
                     italy.viagra_subsidy = False
     else:
         if italy.viagra_subsidy:
-            births = random.randrange(200, 600)
+            births = random.randrange(50, 600)
             italy.births += births
             italy.current_pop += births
 
@@ -95,7 +116,7 @@ def population_change(italy):
             italy.current_pop -= deaths
 
         else:
-            births = random.randrange(100, 300)
+            births = random.randrange(50, 300)
             italy.births += births
             italy.current_pop += births
 
@@ -104,6 +125,49 @@ def population_change(italy):
             italy.current_pop -= deaths
 
 """Economic Functions"""
+def economic_stimulus(italy):
+    italy.economic_stimulus = True
+
+    if italy.economic_state == "recession":
+        choice = input("Do you want to increase the tax rate in order to support increased spending?\n"
+                       "(Remember this will apply to the entire population): ")
+
+        if choice.lower() == "yes" or choice.lower() == "y":
+            valid_choice = False
+
+            while valid_choice:
+
+                tax_hike = float(input("By how much do you to increase taxes(max cap is 10)?: "))
+                if tax_hike <= 10 and tax_hike >= 1.0:
+                    italy.tax_rate += tax_hike
+                    print(f"{italy.tax_rate}% is your new tax rate.\n")
+                    time.sleep(3)
+                    decrease = round(random.uniform(0.25, 1.45), 2)
+
+                    if (italy.happiness - decrease) < 5:
+                        italy.happiness -= decrease
+
+                    valid_choice = True
+
+                elif tax_hike <= 0 or tax_hike > 10:
+                    print(f"New tax hike of {tax_hike}% is improper.\n"
+                          f"Try again.")
+
+                    time.sleep(3)
+
+                else:
+                    print("Not a valid tax rate")
+                    time.sleep(3)
+
+    elif italy.economic_state == "depression":
+        tax_hike = round(random.uniform(0.5, 10), 2)
+        if (italy.tax_rate + tax_hike) <= 68.00:
+            if italy.date.year <= 1922 or italy.date.year >= 1946:
+                print(f"Parliament has enacted a tax hike of {tax_hike}%\n")
+
+            if italy.date.year > 1922 and italy.date.year < 1946:
+                print(f"Il Duce has enacted a tax hike of {tax_hike}%\n")
+            time.sleep(3)
 def recession(italy):
     """Recession simulation based upon stimulus and tax rate"""
     if italy.economic_stimulus:
@@ -360,13 +424,17 @@ def economic_decisions(italy):
     if italy.past_year < italy.date.year:
 
         italy.economic_growth = (italy.current_gdp - italy.past_gdp / ((italy.past_gdp + italy.current_gdp) / 2)) * 100
-
+        """Calculation of yearly economic growth"""
         if italy.economic_growth <= 1.5:
-            choice = input(f"Your GDP grew {italy.economic_growth} last year.\n"
-                           f"Would you like to apply a stimulus?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                # economic_stimulus(italy)
-                pass
+            if not italy.economic_stimulus:
+                choice = input(f"Your GDP grew {italy.economic_growth} last year.\n"
+                               f"Would you like to apply a stimulus?: ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    economic_stimulus(italy)
+
+        elif italy.economic_growth >= 10.5:
+            if italy.economic_stimulus:
+                italy.economic_stimulus = False
     else:
         gdp_changes(italy)
 
@@ -381,9 +449,9 @@ def stats(italy):
     """
     print(f"Your current monarch is {italy.monarch}\n"
           f"Your current prime minister is {italy.pm}\n"
-          f"Your current stability is {italy.stability}\n"
+          f"Your current stability is {round(italy.stability, 3)}\n"
           f"Your current population is {italy.current_pop}\n"
-          f"Your current happiness level is {italy.happiness}\n"
+          f"Your current happiness level is {round(italy.happiness, 3)}\n"
           f"There have been {italy.births} births in {italy.past_year}\n"
           f"There have been {italy.deaths} deaths in {italy.past_year}\n"
           f"Your current GDP is ${round(italy.current_gdp, 2)}\n"
@@ -391,12 +459,46 @@ def stats(italy):
           f"Your economy is currently in a(n) {italy.economic_state}\n"
           f"Your current national debt it ${round(italy.national_debt, 2)}.\n"
           f"Your current tax rate is {italy.tax_rate}%\n")
+def social_events(italy):
+    if italy.date.year > 1945 and italy.date == datetime(italy.year, 4, 25):
+        print("Today is the day that we wrestled our futures from Mussolini's tyranny.\n")
+        italy.happiness += round(random.uniform(0.25, 1.25), 2)
+        time.sleep(3)
+def economic_events(italy):
+    if italy.date > datetime(1922, 10, 24) and italy.date < datetime(1929, 10, 24):
+        increment = round(random.uniform(1000, 10000), 2)
+        italy.curent_gdp += increment
+        italy.national_debt += round(increment * round(random.uniform(0.001, 0.009), 2), 2)
+
+    if italy.date == datetime(1929, 10, 24):
+        print("The Italian economy has fallen into a Depression.\n"
+              "It is being reported that our economy has been slashed by a factor of 5\n"
+              "Other nations across the globe are experiencing similar issues.\n")
+        time.sleep(3)
+        italy.current_gdp /= 5
+        italy.government_spending = round(random.uniform(100000, 5000000), 2)
+        italy.national_debt = round(italy.government_spending * round(random.uniform(0.001, 0.05), 2), 2)
+def political_events(italy):
+    if italy.date == datetime(1922, 10, 27):
+        print(f"Benito Mussolini has stormed Rome, forcing {italy.monarch} to elect as PM.\n")
+        time.sleep(3)
+        italy.pm = "Benito Mussolini"
+
+    elif italy.date == datetime(1940, 10, 28):
+        print("Italy has entered world war 2 alongside Hitler, bonding them together.\n")
+        italy.alliance = "Axis"
+        time.sleep(3)
+def events(italy):
+    political_events(italy)
+    economic_events(italy)
+    social_events(italy)
 def manual_game(italy):
     while italy.current_pop > 150000:
         print(f"Date: {italy.date}")
         italy.date += timedelta(days=1)
-        print(italy.stability)
         # incrementing of time
+        stability_happiness(italy)
+        events(italy)
         population_change(italy)
         economic_decisions(italy)
         if italy.stability > 50:
@@ -404,6 +506,7 @@ def manual_game(italy):
             if choice.lower() == "yes" or choice.lower() == "y":
                 stats(italy)
         time.sleep(3)
+
 class Italy:
     def __init__(self, year):
         """Political variables"""
@@ -437,6 +540,8 @@ class Italy:
         # political economic variables
         self.government_spending = 0
         self.national_debt = 0
+        # international variables
+        self.alliance = None
         """Time variables"""
         self.date = datetime(int(year), 1, 1)
 

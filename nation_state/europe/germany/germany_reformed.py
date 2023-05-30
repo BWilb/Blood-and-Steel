@@ -270,7 +270,6 @@ def social_events(germany):
                 elif chance == 1:
                     germany.rebels += 1
 
-
 def economic_events(germany):
     """definitive national economic events in germany"""
     if germany.date == datetime(1915, 1, 1):
@@ -400,7 +399,7 @@ def economic_stimulus(germany):
                         germany.stability -= decrease_stability
                     valid_choice = True
 
-                elif tax_hike <= 0 or tax_hike > 25:
+                elif tax_hike <= 0 or tax_hike > 10:
                     print(f"New tax hike of {tax_hike} is improper./n"
                           f"try again")
                     time.sleep(3)
@@ -413,7 +412,10 @@ def economic_stimulus(germany):
 
         tax_hike = round(random.uniform(0.5, 10), 2)
         if (germany.tax_rate + tax_hike) <= 86.00:
-            print(f"Congress has enacted a tax hike of {tax_hike} points")
+            if germany.date.year <= 1945:
+                print(f"The Reichstag has enacted a tax hike of {tax_hike} points")
+            else:
+                print(f"The Bundestag has enacted a tax hike of {tax_hike} points")
 def economic_state(germany):
     if germany.date >= germany.economic_change_date:
         """comparing current date with possible shift in business cycle, based upon 3 month cycle"""
