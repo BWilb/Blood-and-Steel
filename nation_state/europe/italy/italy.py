@@ -81,8 +81,8 @@ def stability_happiness(italy):
         if (italy.stability - decrease_stability) > 5:
             italy.stability -= decrease_stability
 def random_economic(italy):
-    chance = random.randrange(10, 20000)
-    if chance % 5 == 15:
+    chance = random.randrange(10, 5000)
+    if chance % 5 == 7:
         """Chance that somebody loses at their casino
         - decrease in gdp and happiness
         - increase in national debt
@@ -95,7 +95,7 @@ def random_economic(italy):
         if (italy.happiness - decrease) > 5:
             italy.happiness -= decrease
 
-    elif chance % 10 == 10:
+    elif chance % 10 == 6:
         """chance that somebody wins at their casino
         - increase in GDP and national debt(consumer debt)
         - increase in happiness
@@ -136,6 +136,8 @@ def random_economic(italy):
         if amount < 5:
             """Less severe outlook/probability"""
             loss = round(random.uniform(10000, 400000), 2)
+            print(f"The collapse resulted in a loss of ${loss}\n")
+            time.sleep(3)
             italy.current_gdp -= loss
             italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
             increase = round(random.uniform(0.25, 1.56), 2)
@@ -145,6 +147,8 @@ def random_economic(italy):
         elif amount > 5 and amount < 20:
             """more moderately severe outlook/probability"""
             loss = round(random.uniform(90000, 900000), 2)
+            print(f"The collapse resulted in a loss of ${loss}\n")
+            time.sleep(3)
             italy.current_gdp /= 2
             italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
             print("The Italian economy faced a severe backlash from the bank failures.\n"
@@ -158,6 +162,8 @@ def random_economic(italy):
         elif amount > 20:
             """most severe outlook/probability"""
             loss = round(random.uniform(300000, 900000), 2)
+            print(f"The collapse resulted in a loss of ${loss}\n")
+            time.sleep(3)
             italy.current_gdp /= 5
             italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
             chance = random.randrange(0, 2)
@@ -220,7 +226,7 @@ def random_economic(italy):
         italy.economic_change_date = italy.date + timedelta(days=60)
 
 def random_social(italy):
-    chance = random.randrange(10, 20000)
+    chance = random.randrange(10, 5000)
     print(chance)
     if chance % 5 == 0:
         """Chance that someone throws a surprise birthday for their kid
@@ -235,7 +241,7 @@ def random_social(italy):
         if(italy.stability + increase) < 98:
             italy.stability += increase
 
-    elif chance % 7 == 10:
+    elif chance % 7 == 8:
         """Chance that someone gets married
         - increase in happiness and stability
         """
@@ -248,7 +254,7 @@ def random_social(italy):
         if (italy.stability + increase) < 98:
             italy.stability += increase
 
-    elif chance % 15 == 20:
+    elif chance % 15 == 6:
         """Chance that the mafia recruits a random amount of people
         - decrease in stability
         - increase in gdp(due to spending of mafia)
@@ -273,15 +279,15 @@ def random_social(italy):
         if (italy.happiness + increase) < 98:
             italy.happiness += increase
 def random_crime(italy):
-    chance = random.randrange(10, 20000)
-    if chance % 6 == 10:
+    chance = random.randrange(10, 5000)
+    if chance % 6 == 6:
         """Chance that the mafia attacks someone/group of people
         - internal chance that attack kills the person/people
         * decrease in stability and happiness
         * decrease in population
         """
         chance = random.randrange(1, 5)
-        if chance % 4 == 0:
+        if chance % 2 == 0:
             kills = random.randrange(10, 50)
             print(f"The Mafia just killed {kills} people.\n")
             time.sleep(3)
@@ -314,7 +320,7 @@ def random_crime(italy):
             italy.current_gdp -= stolen
             italy.national_debt += round(stolen * round(random.uniform(0.001, 0.09), 5), 2)
 
-        elif chance % 10 == 12:
+        elif chance % 10 == 9:
             """Chance that a rape occurs
             - internal chance of rapist or victim being killed
             - decrease in happiness
@@ -418,7 +424,7 @@ def random_crime(italy):
                         elif chance == 3:
                             italy.italian_republican_party -= 1
 
-        elif chance % 12 == 18:
+        elif chance % 12 == 8:
             """Chance that street performers rob tourists
             - internal chance of success and death(of either street performer or tourist)
             """
@@ -488,7 +494,7 @@ def random_crime(italy):
                     print("Due to the tourist fighting back, the street performer decide to kill the tourist\n")
                     time.sleep(3)
 
-        elif chance % 20 == 30:
+        elif chance % 20 == 17:
             """Chance that a homicide occurs
             - decrease in population
             - decrease in happiness and stability
@@ -539,25 +545,25 @@ def increase_conscripts(italy):
     if italy.conscription_status == "volunteer":
         if italy.date == italy.conscript_census:
             """Amount of population that is eligible under volunteering draft"""
-            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.0009), 5), 0)
+            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.0009), 5), 0)
             italy.conscript_census = italy.date + timedelta(days=15)
 
     elif italy.conscription_status == "limited":
         if italy.date == italy.conscript_census:
             """Amount of population that is eligible under limited draft"""
-            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.002), 5), 0)
+            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.002), 5), 0)
             italy.conscript_census = italy.date + timedelta(days=20)
 
     elif italy.conscript_status == "extensive":
         if italy.date == italy.conscript_census:
             """Amount of population that is eligible under extensive draft"""
-            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.005), 5), 0)
+            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.005), 5), 0)
             italy.conscript_census = italy.date + timedelta(days=25)
 
     elif italy.conscript_status == "required":
         if italy.date == italy.conscript_census:
             """Amount of population that is eligible under required drafting"""
-            italy.conscripts = round(italy.population * round(random.uniform(0.0001, 0.02), 5), 0)
+            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.02), 5), 0)
             italy.conscript_census = italy.date + timedelta(days=30)
 def military_functions(italy):
     increase_conscripts(italy)
