@@ -78,6 +78,90 @@ def stability_happiness(italy):
             italy.happiness -= decrease_happiness
         if (italy.stability - decrease_stability) > 5:
             italy.stability -= decrease_stability
+def random_economic(italy):
+    chance = random.randrange(20, 20000)
+    if chance % 5 == 15:
+        """Chance that somebody loses at their casino
+        - decrease in gdp and happiness
+        - increase in national debt
+        """
+        loss = round(random.uniform(55000, 350000), 2)
+        print(f"Someone just lost ${loss} at their local casino\n")
+        italy.current_gdp -= loss
+        italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
+        decrease = round(random.uniform(0.25, 1.25), 2)
+        if (italy.happiness - decrease) > 5:
+            italy.happiness -= decrease
+
+    elif chance % 10 == 10:
+        """chance that somebody wins """
+def random_social(italy):
+    chance = random.randrange(20, 20000)
+    pass
+def random_crime(italy):
+    chance = random.randrange(20, 20000)
+    if chance % 6 == 10:
+        """Chance that the mafia attacks someone/group of people
+        - internal chance that attack kills the person/people
+        * decrease in stability and happiness
+        * decrease in population
+        """
+        chance = random.randrange(1, 5)
+        if chance % 4 == 0:
+            kills = random.randrange(10, 50)
+            print(f"The Mafia has killed {kills} people.\n")
+            time.sleep(3)
+            italy.current_pop -= kills
+            italy.deaths += kills
+
+            for i in range(0, kills):
+                """Looping through deaths to un-assign political parties"""
+                chance = random.randrange(0, 4)
+                # chance of chance variable being 0 - 3
+                if chance == 0:
+                    italy.italian_socialist_party -= 1
+
+                elif chance == 1:
+                    italy.italian_liberal_party -= 1
+
+                elif chance == 2:
+                    italy.italian_peoples_party -= 1
+
+                elif chance == 3:
+                    italy.italian_republican_party -= 1
+
+        elif chance % 7 == 5:
+            """Chance that the Mafia robs a bank(s)
+            - no alert given(Mafia pays government to cover up)
+            - decrease in GDP
+            - Increase in national debt
+            """
+            stolen = round(random.uniform(100000, 1000000), 2)
+            italy.current_gdp -= stolen
+            italy.national_debt += round(stolen * round(random.uniform(0.001, 0.09), 5), 2)
+
+        elif chance % 20 == 30:
+            """Chance that a homicide occurs
+            - decrease in population
+            - decrease in happiness and stability
+            """
+            homicides = random.randrange(1, 12)
+            print(f"{homicides} homicides just occurred.\n")
+            time.sleep(3)
+            italy.current_pop -= homicides
+            decrease = round(random.uniform(0.25, 1.25), 2)
+            if (italy.happiness - decrease) > 5:
+                italy.happiness -= decrease
+def random_politics(italy):
+    pass
+def random_international(italy):
+    pass
+def randomized_functions(italy):
+    random_social(italy)
+    random_economic(italy)
+    random_crime(italy)
+    random_politics(italy)
+    random_international(italy)
 
 def retire_soldiers(italy):
     """function for retiring old, wounded, or stupid soldiers"""
@@ -209,7 +293,7 @@ def population_change(italy):
             italy.deaths += deaths
             italy.current_pop -= deaths
 
-            for i in range(0, births):
+            for i in range(0, deaths):
                 """Looping through deaths to un-assign political parties"""
                 chance = random.randrange(0, 4)
                 # chance of chance variable being 0 - 3
@@ -249,7 +333,7 @@ def population_change(italy):
             italy.deaths += deaths
             italy.current_pop -= deaths
 
-            for i in range(0, births):
+            for i in range(0, deaths):
                 """Looping through deaths to un-assign political parties"""
                 chance = random.randrange(0, 4)
                 # chance of chance variable being 0 - 3
@@ -649,6 +733,7 @@ def manual_game(italy):
         population_change(italy)
         economic_decisions(italy)
         military_functions(italy)
+        randomized_functions(italy)
         if italy.stability > 50:
             choice = input("view stats: ")
             if choice.lower() == "yes" or choice.lower() == "y":
