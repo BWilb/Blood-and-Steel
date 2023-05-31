@@ -416,6 +416,7 @@ def economic_stimulus(germany):
                 print(f"The Reichstag has enacted a tax hike of {tax_hike} points")
             else:
                 print(f"The Bundestag has enacted a tax hike of {tax_hike} points")
+
 def economic_state(germany):
     if germany.date >= germany.economic_change_date:
         """comparing current date with possible shift in business cycle, based upon 3 month cycle"""
@@ -442,7 +443,7 @@ def economic_state(germany):
                               "after exceeding 6 months of decayed growth.\n")
                         time.sleep(3)
                         germany.economic_state = business_cycle[i]
-                        germany.economic_change_date = germany.date + timedelta(days=210)
+                        germany.economic_change_date = germany.date + timedelta(days=270)
                         economic_stimulus(germany)
                         """
                         Since it takes awhile to escape a depression, amount of time on change date is increased
@@ -610,11 +611,12 @@ def economic_decisions(germany):
                            f"Would you like to apply a stimulus?: ")
 
             if choice.lower() == "yes" or choice.lower() == "y":
-                # economic_stimulus(germany)
+                economic_stimulus(germany)
                 pass
 
     else:
         gdp_changes(germany)
+        economic_state(germany)
 
 """Political functions"""
 def political_change(germany):
