@@ -57,6 +57,7 @@ tax_rate = {
     "1936": 60.0,
     "1939": 80.0
 }
+"""Event functions"""
 """Population functions"""
 def population_change(britain):
     if britain.past_year < britain.date.year:
@@ -209,73 +210,90 @@ def economic_decisions(britain):
     pass
 
 """Political functions"""
-"""def politics_change(britain):
-    chance = random.randrange(0, 4)
-    print(chance)
-    if chance == 0:
-        """Chance that labour party loses popularity"""
-        loss = round(britain.lp * round(random.uniform(0.001, 0.09), 2), 0)
-        britain.lp -= loss
-        chance = random.randrange(0, 3)
+def politics_change(britain):
+    if britain.date > britain.political_census:
+
+        chance = random.randrange(0, 4)
         if chance == 0:
-            """Chance that the CLUP gains in popularity"""
-            britain.clup += loss
+            """Chance that the labour party loses support"""
+            loss = round(britain.lp * round(random.uniform(0.001, 0.09), 4), 0)
+            britain.lp -= loss
+
+            chance = random.randrange(0, 3)
+            if chance == 0:
+                """Chance that the CLUP party picks up support"""
+                britain.clup += loss
+
+            elif chance == 1:
+                britain.liberal += loss
+
+            elif chance == 2:
+                britain.independents += loss
+
+            britain.political_census = britain.date + timedelta(days=3)
+            """Resetting of check in regards to political censuses"""
 
         elif chance == 1:
-            """Chance that the liberal party gains in popularity"""
-            britain.liberal += loss
+            """Chance that Conservative Labour unionist party loses support"""
+            loss = round(britain.clup * round(random.uniform(0.01, 0.09), 4), 0)
+            britain.clup -= loss
+            chance = random.randrange(0, 3)
+            if chance == 0:
+                """Chance that the Labour party picks up support"""
+                britain.lp += loss
+
+            elif chance == 1:
+                """Chance that liberals pick up support"""
+                britain.liberal += loss
+
+            elif chance == 2:
+                """Chance that independent parties pick up support"""
+                britain.independents += loss
+
+            britain.political_census = britain.date + timedelta(days=3)
+            """Resetting of check in regards to political censuses"""
 
         elif chance == 2:
-            britain.independents += loss
+            """Chance that independents lose support"""
+            loss = round(britain.independents * round(random.uniform(0.01, 0.09), 4), 0)
+            britain.independents -= loss
 
-    elif chance == 1:
-        """Chance that liberal party loses popularity"""
-        loss = round(britain.liberal * round(random.uniform(0.001, 0.09), 2), 0)
+            chance = random.randrange(0, 3)
+            if chance == 0:
+                """Chance that the CLUP party picks up support"""
+                britain.clup += loss
 
-        britain.liberal -= loss
-        chance = random.randrange(0, 3)
-        if chance == 0:
-            """Chance that the CLUP gains in popularity"""
-            britain.clup += loss
+            elif chance == 1:
+                """Chance that liberals pick up support"""
+                britain.liberal += loss
 
-        elif chance == 1:
-            """Chance that the labour party gains in popularity"""
-            britain.lp += loss
+            elif chance == 2:
+                """Chance that the labour party pick up support"""
+                britain.lp += loss
 
-        elif chance == 2:
-            britain.independents += loss
+            britain.political_census = britain.date + timedelta(days=3)
+            """Resetting of check in regards to political censuses"""
 
-    elif chance == 2:
-        """Chance that the CLUP party loses popularity"""
-        loss = round(britain.clup * round(random.uniform(0.001, 0.09), 2), 0)
-        britain.clup -= loss
-        chance = random.randrange(0, 3)
-        if chance == 0:
-            """Chance that the liberal party gains in popularity"""
-            britain.liberal += loss
+        elif chance == 3:
+            """Chance that liberal party loses support"""
+            loss = round(britain.liberal * round(random.uniform(0.01, 0.09), 4), 0)
+            britain.liberal -= loss
 
-        elif chance == 1:
-            """Chance that the labour party gains in popularity"""
-            britain.lp += loss
+            chance = random.randrange(0, 3)
+            if chance == 0:
+                """Chance that the CLUP party picks up support"""
+                britain.clup += loss
 
-        elif chance == 2:
-            britain.independents += loss
+            elif chance == 1:
+                """Chance that the Labour party picks up support"""
+                britain.lp += loss
 
-    elif chance == 3:
-        """Chance that independents lose popularity"""
-        loss = round(britain.independents * round(random.uniform(0.001, 0.09), 2), 0)
-        britain.independents -= loss
+            elif chance == 2:
+                """Chance that Independent parties picks up support"""
+                britain.independents += loss
 
-        if chance == 0:
-            """Chance that the liberal party gains in popularity"""
-            britain.liberal += loss
-
-        elif chance == 1:
-            """Chance that the labour party gains in popularity"""
-            britain.lp += loss
-
-        elif chance == 2:
-            britain.clup += loss"""
+            britain.political_census = britain.date + timedelta(days=3)
+            """Resetting of check in regards to political censuses"""
 
 """Stats function"""
 def stats(britain):
@@ -291,10 +309,10 @@ def stats(britain):
           f"There have been {britain.deaths} deaths in {britain.past_year}.\n"
           f"Your current prime minister is {britain.pm}.\n"
           f"Your current monarch is {britain.monarch}.\n"
-          f"The liberal party makes up {round(round(britain.liberal / britain.current_pop, 2) * 100, 2)}% of the population.\n"
-          f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 2) * 100, 2)}% of the population.\n"
-          f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 2) * 100, 2)}% of the population.\n"
-          f"Independents make up {round(round(britain.independents / britain.current_pop, 2) * 100, 2)}% of the population.\n"
+          f"The liberal party makes up {round(round(britain.liberal / britain.current_pop, 4) * 100, 4)}% of the population.\n"
+          f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 4) * 100, 4)}% of the population.\n"
+          f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 4) * 100, 4)}% of the population.\n"
+          f"Independents make up {round(round(britain.independents / britain.current_pop, 4) * 100, 4)}% of the population.\n"
           f"Your current GDP is {britain.current_gdp}.\n")
 def manual_game(britain):
     while britain.current_pop > 500000:
@@ -314,6 +332,7 @@ class Britain:
         """time variables"""
         self.date = datetime(int(time), 1, 1)
         self.past_year = self.date.year
+        self.political_census = self.date + timedelta(days=3)
         """population variables"""
         self.current_pop = population[time]
         self.births = 0
