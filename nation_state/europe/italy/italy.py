@@ -572,7 +572,7 @@ def military_functions(italy):
 
 """population functions"""
 def population_change(italy):
-    if italy.past_year > italy.date.year:
+    if italy.past_year < italy.date.year:
         italy.population_change = (italy.current_pop - italy.past_pop / (
                     (italy.current_pop + italy.current_pop) / 2)) * 100
         italy.past_pop = italy.current_pop

@@ -5,7 +5,7 @@ import button
 import time
 import pyautogui
 from nation_state.north_america.united_states import us_reformed
-import nation_state.europe.britain.britain
+from nation_state.europe.britain import britain
 from nation_state.europe.italy import italy
 import nation_state.europe.france.france
 import nation_state.europe.russia.russia
@@ -241,7 +241,7 @@ while run:
             screen.blit(nation, ((width / 2) - 300, 60))
             if britain_button.draw(screen):
                 nation_chosen = "Great Britain"
-                game_state = "unavailable"
+                game_state = "chosen"
 
             if russian_button.draw(screen):
                 nation_chosen = "Russia"
@@ -342,3 +342,7 @@ elif nation_chosen == "Germany":
 elif nation_chosen == "Italy":
     national = italy.Italy(time_chosen)
     italy.manual_game(national)
+
+elif nation_chosen == "Great Britain":
+    national = britain.Britain(time_chosen)
+    britain.manual_game(national)

@@ -1,5 +1,7 @@
 # political variables and dictionaries
-from datetime import datetime
+import random
+import time
+from datetime import datetime, timedelta
 
 monarchs = {
     """Dictionary for english monarchs
@@ -55,23 +57,284 @@ tax_rate = {
     "1936": 60.0,
     "1939": 80.0
 }
+"""Population functions"""
+def population_change(britain):
+    if britain.past_year < britain.date.year:
+        britain.population_change = (britain.current_pop - britain.past_pop / ((britain.current_pop + britain.past_pop) / 2)) * 100
+
+        britain.past_pop = britain.population
+        """Resetting of current population(past)"""
+        if britain.population_change <= 1.5:
+            """Incorporation of what happens when population growth becomes too small"""
+            print(f"Your population growth for {britain.current_year} was {britain.population_change}%\n")
+
+            choice = input("Would you like to subsidize viagra for your population?: ")
+            if choice.lower() == "yes" or choice.lower() == 'y':
+                britain.viagra_subsidy = True
+
+                if britain.condom_subsidy == True:
+                    """Checking to see if condom subsidies exist"""
+                    britain.condom_subsidy = False
+
+        elif britain.population_change >= 10.5:
+            """Incorporation of what happens when population growth becomes too large"""
+            print(f"Your population growth for {britain.current_year} was {britain.population_change}%.\n")
+            choice = input("Would you like to subsidize condoms?: ")
+            if choice.lower() == "yes" or choice.lower() == "y":
+                britain.condom_subsidy = True
+
+                if britain.viagra_subsidy == True:
+                    """Checking to see if viagra subsidies exist"""
+                    britain.viagra_subsidy = False
+
+    else:
+        if britain.viagra_subsidy:
+            births = random.randrange(300, 600)
+            britain.births += births
+            britain.current_pop += births
+            for i in range(0, births):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp += 1
+
+                elif chance == 1:
+                    britain.liberal += 1
+
+                elif chance == 2:
+                    britain.clup += 1
+
+                elif chance == 3:
+                    britain.independents += 1
+
+            deaths = random.randrange(200, 400)
+            britain.deaths += deaths
+            britain.current_pop -= deaths
+
+            for i in range(0, deaths):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp -= 1
+
+                elif chance == 1:
+                    britain.liberal -= 1
+
+                elif chance == 2:
+                    britain.clup -= 1
+
+                elif chance == 3:
+                    britain.independents -= 1
+
+        elif britain.condom_subsidy:
+            births = random.randrange(100, 300)
+            britain.births += births
+            britain.current_pop += births
+
+            for i in range(0, births):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp += 1
+
+                elif chance == 1:
+                    britain.liberal += 1
+
+                elif chance == 2:
+                    britain.clup += 1
+
+                elif chance == 3:
+                    britain.independents += 1
+
+            deaths = random.randrange(100, 200)
+            britain.deaths += deaths
+            britain.current_pop -= deaths
+
+            for i in range(0, deaths):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp -= 1
+
+                elif chance == 1:
+                    britain.liberal -= 1
+
+                elif chance == 2:
+                    britain.clup -= 1
+
+                elif chance == 3:
+                    britain.independents -= 1
+
+        else:
+            births = random.randrange(200, 400)
+            britain.births += births
+            britain.current_pop += births
+
+            for i in range(0, births):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp += 1
+
+                elif chance == 1:
+                    britain.liberal += 1
+
+                elif chance == 2:
+                    britain.clup += 1
+
+                elif chance == 3:
+                    britain.independents += 1
+
+            deaths = random.randrange(150, 300)
+            britain.deaths += deaths
+            britain.current_pop -= deaths
+
+            for i in range(0, deaths):
+                """Assigning births to political parties"""
+                chance = random.randrange(0, 4)
+                if chance == 0:
+                    britain.lp -= 1
+
+                elif chance == 1:
+                    britain.liberal -= 1
+
+                elif chance == 2:
+                    britain.clup -= 1
+
+                elif chance == 3:
+                    britain.independents -= 1
+
+"""Economic Functions"""
+def economic_decisions(britain):
+    pass
+
+"""Political functions"""
+"""def politics_change(britain):
+    chance = random.randrange(0, 4)
+    print(chance)
+    if chance == 0:
+        """Chance that labour party loses popularity"""
+        loss = round(britain.lp * round(random.uniform(0.001, 0.09), 2), 0)
+        britain.lp -= loss
+        chance = random.randrange(0, 3)
+        if chance == 0:
+            """Chance that the CLUP gains in popularity"""
+            britain.clup += loss
+
+        elif chance == 1:
+            """Chance that the liberal party gains in popularity"""
+            britain.liberal += loss
+
+        elif chance == 2:
+            britain.independents += loss
+
+    elif chance == 1:
+        """Chance that liberal party loses popularity"""
+        loss = round(britain.liberal * round(random.uniform(0.001, 0.09), 2), 0)
+
+        britain.liberal -= loss
+        chance = random.randrange(0, 3)
+        if chance == 0:
+            """Chance that the CLUP gains in popularity"""
+            britain.clup += loss
+
+        elif chance == 1:
+            """Chance that the labour party gains in popularity"""
+            britain.lp += loss
+
+        elif chance == 2:
+            britain.independents += loss
+
+    elif chance == 2:
+        """Chance that the CLUP party loses popularity"""
+        loss = round(britain.clup * round(random.uniform(0.001, 0.09), 2), 0)
+        britain.clup -= loss
+        chance = random.randrange(0, 3)
+        if chance == 0:
+            """Chance that the liberal party gains in popularity"""
+            britain.liberal += loss
+
+        elif chance == 1:
+            """Chance that the labour party gains in popularity"""
+            britain.lp += loss
+
+        elif chance == 2:
+            britain.independents += loss
+
+    elif chance == 3:
+        """Chance that independents lose popularity"""
+        loss = round(britain.independents * round(random.uniform(0.001, 0.09), 2), 0)
+        britain.independents -= loss
+
+        if chance == 0:
+            """Chance that the liberal party gains in popularity"""
+            britain.liberal += loss
+
+        elif chance == 1:
+            """Chance that the labour party gains in popularity"""
+            britain.lp += loss
+
+        elif chance == 2:
+            britain.clup += loss"""
+
+"""Stats function"""
+def stats(britain):
+    """stats function
+    1. population
+    2. political
+    3. economic
+    4. social
+    5. others
+    """
+    print(f"Your current population is {britain.current_pop}.\n"
+          f"There have been {britain.births} births in {britain.past_year}.\n"
+          f"There have been {britain.deaths} deaths in {britain.past_year}.\n"
+          f"Your current prime minister is {britain.pm}.\n"
+          f"Your current monarch is {britain.monarch}.\n"
+          f"The liberal party makes up {round(round(britain.liberal / britain.current_pop, 2) * 100, 2)}% of the population.\n"
+          f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 2) * 100, 2)}% of the population.\n"
+          f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 2) * 100, 2)}% of the population.\n"
+          f"Independents make up {round(round(britain.independents / britain.current_pop, 2) * 100, 2)}% of the population.\n"
+          f"Your current GDP is {britain.current_gdp}.\n")
+def manual_game(britain):
+    while britain.current_pop > 500000:
+        # establishment of check upon game status
+        print(britain.date)
+        population_change(britain)
+        politics_change(britain)
+        if britain.stability > 5:
+            choice = input("Would you like to view your stats?: ")
+            if choice.lower() == "y" or choice.lower() == "yes":
+                stats(britain)
+        britain.date += timedelta(days=1)
+        time.sleep(3)
+
 class Britain:
     def __init__(self, time):
         """time variables"""
         self.date = datetime(int(time), 1, 1)
+        self.past_year = self.date.year
+        """population variables"""
+        self.current_pop = population[time]
+        self.births = 0
+        self.deaths = 0
+        self.past_pop = self.current_pop
+        self.population_change = None
+        self.viagra_subsidy = False
+        self.condom_subsidy = False
         """Political variables"""
         self.monarch = monarchs[time]
         self.pm = pm[time]
-
+        self.stability = 90.00
+        self.lp = round(self.current_pop * round(random.uniform(0.09, 0.35), 4), 0)
+        # labour party
+        self.clup = round((self.current_pop - self.lp) * round(random.uniform(0.09, 0.35), 4), 0)
+        # conservative and liberal unionist party
+        self.liberal = round((self.current_pop - self.lp - self.clup) * round(random.uniform(0.09, 0.35), 4), 0)
+        # liberal party
+        self.independents = self.current_pop - self.clup - self.lp - self.liberal
         """economic variables"""
         self.current_gdp = gdp[time]
         self.past_gdp = self.current_gdp
-        """population variables"""
-        self.current_pop = population[time]
-        self.past_pop = self.current_pop
-        # leader isn't initialized until time_frame is established.
-
-
-"""def main(time):
-    britain = Britain(time)
-    print(britain.population)"""
+        """Social variables"""
+        self.happiness = 90.00
