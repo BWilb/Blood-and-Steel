@@ -58,6 +58,43 @@ tax_rate = {
     "1939": 80.0
 }
 """Event functions"""
+def political_events(britain):
+    if britain.date == datetime(1936, 1, 20):
+        """Date for George V's death"""
+        print(f"{britain.monarch} is dead!!!")
+        britain.monarch = "Edward VIII"
+        print(f"{britain.monarch} is your new king. All hail Brittania.\n")
+
+    if britain.date == datetime(1910, 5, 6):
+        """Date for when Edward VII dies"""
+        print(f"{britain.monarch} is dead!!")
+        britain.monarch = "George V"
+        print(f"{britain.monarch} is your new king. All hail Brittania.\n")
+
+    if britain.date == datetime(1936, 12, 11):
+        """Date for when Edward VIII abdicates"""
+        print(f"{britain.monarch} has abdicated the throne.")
+        britain.monarch = "George VI"
+        print(f"{britain.monarch} is your new king. All hail Brittania.\n")
+
+def economic_events(britain):
+    if britain.date == datetime(1929, 10, 24):
+        print("Britain has fallen into a severe depression.\n"
+              "It is being reported that nations across the globe are experiencing similar events.\n")
+        time.sleep(3)
+    if britain.date > datetime(1929, 10, 24) and britain.date < datetime(1937, 1, 1):
+        decrease_happiness = round(random.uniform(0.01, 0.05), 2)
+        decrease_stability = round(random.uniform(0.01, 0.05), 2)
+        if (britain.happiness - decrease_happiness) > 5:
+            britain.happiness -= decrease_happiness
+        elif (britain.stability - decrease_stability) > 5:
+            britain.happiness -= decrease_stability
+def social_events(britain):
+    pass
+def events(britain):
+    political_events(britain)
+    economic_events(britain)
+    social_events(britain)
 """Population functions"""
 def population_change(britain):
     if britain.past_year < britain.date.year:
