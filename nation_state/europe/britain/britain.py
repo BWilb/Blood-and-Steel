@@ -205,6 +205,40 @@ def random_crime(britain):
                     elif chance == 3:
                         britain.independents -= 1
 def random_economics(britian):
+    chance = random.randrange(10, 20000)
+    if chance % 6 == 5:
+        """Chance that somebody begins to invest
+        - very slight increase in GDP
+        - increase in happines
+        """
+
+    elif chance % 10 == 7:
+        """Chance that somebody loses at their local casino
+        - loss in GDP
+        - decrease in happiness
+        """
+
+    elif chance % 16 == 11:
+        """Chance that somebody or government takes out a loan on a specific item(house, car, etc)
+        - increase in GDP
+        - increase in National debt
+        """
+
+    elif chance % 28 == 16:
+        """Chance that somebody wins National Lottery
+        - increase in GDP
+        - increase in national debt
+        - decrease in happiness and stability
+        """
+
+    elif chance % 36 == 23:
+        """Chance that somebody defaults on their loan
+        - decrease in GDP
+        - decrease in happiness and stability
+        """
+
+    elif chance % 44 == 34:
+        """Chance that a random amount of banks collapse"""
     pass
 def random_social(britain):
     pass
