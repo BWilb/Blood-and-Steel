@@ -82,6 +82,7 @@ def economic_events(britain):
         print("Britain has fallen into a severe depression.\n"
               "It is being reported that nations across the globe are experiencing similar events.\n")
         time.sleep(3)
+
     if britain.date > datetime(1929, 10, 24) and britain.date < datetime(1937, 1, 1):
         decrease_happiness = round(random.uniform(0.01, 0.05), 2)
         decrease_stability = round(random.uniform(0.01, 0.05), 2)
@@ -90,11 +91,130 @@ def economic_events(britain):
         elif (britain.stability - decrease_stability) > 5:
             britain.happiness -= decrease_stability
 def social_events(britain):
-    pass
+    if britain.date == datetime(britain.date.year, 3, 17):
+        print("Today is St. Patrick's Day in Britain.\n")
+        time.sleep(3)
+
 def events(britain):
     political_events(britain)
     economic_events(britain)
     social_events(britain)
+
+def random_crime(britain):
+    chance = random.randrange(10, 20000)
+    if chance % 5 == 4:
+        """Chance that a stabbing occurs
+        * chance that victim dies
+            -> decrease in population
+        - decrease in happiness
+        """
+
+    elif chance % 8 == 6:
+        """Chance that a raping occurs
+        * chance that victim dies from rape, as well as rapist
+        * decrease in happiness
+        """
+
+    elif chance % 12 == 5:
+        """Chance that a homicide occurs
+        - reduction in population and political influences
+        - decrease in happiness and stability
+        """
+        losses = random.randrange(2, 35)
+        print(f"A homicide just occurred. {losses} people were killed.\n")
+        britain.current_pop -= losses
+        britain.deaths += losses
+        for i in range(0, losses):
+            """Assigning births to political parties"""
+            chance = random.randrange(0, 4)
+            if chance == 0:
+                britain.lp -= 1
+
+            elif chance == 1:
+                britain.liberal -= 1
+
+            elif chance == 2:
+                britain.clup -= 1
+
+            elif chance == 3:
+                britain.independents -= 1
+
+    elif chance % 16 == 12:
+        """Chance that bank robbery occurs
+        - internal chance of success
+        - internal chance of potential deaths
+            -> decrease in population
+        - decrease in stability and happiness
+        """
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            print("There was an unsuccessful attempt at robbing a bank/\n")
+
+            chance = random.randrange(0, 2)
+            if chance == 0:
+                print("Nobody was harmed in the process")
+
+            elif chance == 1:
+                losses = random.randrange(2, 35)
+                print(f"{losses} people were killed in the process though.\n")
+                britain.current_pop -= losses
+                britain.deaths += losses
+                for i in range(0, losses):
+                    """Assigning births to political parties"""
+                    chance = random.randrange(0, 4)
+                    if chance == 0:
+                        britain.lp -= 1
+
+                    elif chance == 1:
+                        britain.liberal -= 1
+
+                    elif chance == 2:
+                        britain.clup -= 1
+
+                    elif chance == 3:
+                        britain.independents -= 1
+
+        elif chance == 1:
+            thievery = round(random.uniform(10000, 300000), 2)
+            print(f"A bank robbery just occurred. ${thievery} was stolen.")
+            britain.current_gdp -= thievery
+            """Loss in gdp"""
+            britain.national_debt += round(thievery * round(random.uniform(0.009, 0.09), 5), 2)
+
+            chance = random.randrange(0, 2)
+            if chance == 0:
+                print("Nobody was harmed in the process")
+
+            elif chance == 1:
+                losses = random.randrange(2, 35)
+                print(f"{losses} people were killed in the process though.\n")
+                britain.current_pop -= losses
+                britain.deaths += losses
+                for i in range(0, losses):
+                    """Assigning births to political parties"""
+                    chance = random.randrange(0, 4)
+                    if chance == 0:
+                        britain.lp -= 1
+
+                    elif chance == 1:
+                        britain.liberal -= 1
+
+                    elif chance == 2:
+                        britain.clup -= 1
+
+                    elif chance == 3:
+                        britain.independents -= 1
+def random_economics(britian):
+    pass
+def random_social(britain):
+    pass
+def random_politics(britain):
+    pass
+def random_functions(britain):
+    random_economics(britain)
+    random_social(britain)
+    random_politics(britain)
+    random_crime(britain)
 """Population functions"""
 def population_change(britain):
     if britain.past_year < britain.date.year:
@@ -357,6 +477,7 @@ def manual_game(britain):
         print(britain.date)
         population_change(britain)
         politics_change(britain)
+        random_functions(britain)
         if britain.stability > 5:
             choice = input("Would you like to view your stats?: ")
             if choice.lower() == "y" or choice.lower() == "yes":
@@ -392,5 +513,6 @@ class Britain:
         """economic variables"""
         self.current_gdp = gdp[time]
         self.past_gdp = self.current_gdp
+        self.national_debt = 0
         """Social variables"""
         self.happiness = 90.00
