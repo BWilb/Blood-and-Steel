@@ -204,7 +204,7 @@ def random_crime(britain):
 
                     elif chance == 3:
                         britain.independents -= 1
-def random_economics(britian):
+def random_economics(britain):
     chance = random.randrange(10, 20000)
     if chance % 6 == 5:
         """Chance that somebody begins to invest
@@ -223,6 +223,32 @@ def random_economics(britian):
         - increase in GDP
         - increase in National debt
         """
+        objects = ["car", "home", "boat", "store", "PC", "college degree"]
+        loan = round(random.uniform(1000, 1000000), 2)
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            """Chance that individual defaults"""
+            print(f"Somebody just took a ${loan} loan out for a new {objects[random.randrange(0, len(objects) - 1)]}.\n")
+            britain.current_gdp += loan
+            britain.national_debt += round(loan * round(random.uniform(0.001, 0.09), 4), 2)
+            increase_happiness = round(random.uniform(0.25, 0.75), 2)
+            if (britain.happiness + increase_happiness) < 98:
+                britain.happiness += increase_happiness
+
+        elif chance == 1:
+            """Chance that the government defaults"""
+            programs_objects = ["social program", "economic program", "debt paying program", "immigration program",
+                                "colonial program"]
+            print(f"Our government just took out a ${loan} for a new {programs_objects[random.randrange(0, len(programs_objects) - 1)]}\n")
+            britain.current_gdp += loan
+            britain.national_debt += round(loan * round(random.uniform(0.001, 0.09), 4), 2)
+            increase_happiness = round(random.uniform(0.25, 0.75), 2)
+            increase_stability = round(random.uniform(0.01, 0.25), 2)
+
+            if (britain.happiness + increase_happiness) < 98:
+                britain.happiness += increase_happiness
+            if (britain.stability + increase_stability) < 98:
+                britain.stability += increase_stability
 
     elif chance % 28 == 16:
         """Chance that somebody wins National Lottery
@@ -230,16 +256,98 @@ def random_economics(britian):
         - increase in national debt
         - decrease in happiness and stability
         """
+        lottery = round(random.uniform(1000, 500000), 2)
+        print(f"Somebody just won ${lottery} in our national lottery")
+        britain.current_gdp += lottery
+        britain.national_debt += round(lottery * round(random.uniform(0.001, 0.09), 4), 2)
+
+        increase_happiness = round(random.uniform(0.25, 0.75), 2)
+        increase_stability = round(random.uniform(0.01, 0.25), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
+        if (britain.stability + increase_stability) < 98:
+            britain.stability += increase_stability
 
     elif chance % 36 == 23:
-        """Chance that somebody defaults on their loan
+        """Chance that somebody or government defaults on their loan
         - decrease in GDP
+        - increase in national debt if government
         - decrease in happiness and stability
         """
+        default = round(random.uniform(1000, 1000000), 2)
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            """Chance that individual defaults"""
+            print(f"Somebody just defaulted on their loan of ${default}.\n")
+            britain.current_gdp -= default
+            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+
+        elif chance == 1:
+            """Chance that the government defaults"""
+            print(f"Our government just defaulted on one of our loans of ${default}.\n")
+            britain.current_gdp -= default
+            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+            decrease_stability = round(random.uniform(0.01, 0.25), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+            if (britain.stability - decrease_stability) > 5:
+                britain.stability -= decrease_stability
 
     elif chance % 44 == 34:
-        """Chance that a random amount of banks collapse"""
-    pass
+        """Chance that a random amount of banks collapse
+        - internal chance of either recession or depression(depends upon severity)-> economic stimulus function is called
+        - decrease in GDP
+        - increase in National Debt(government spending)
+        - decrease in happiness and stability
+        """
+        banks = random.randrange(2, 45)
+        if banks <= 20:
+            loss = round(random.uniform(100000, 500000), 2)
+            britain.current_gdp -= loss
+            britain.national_debt += round(loss * round(random.uniform(0.001, 0.09), 4), 2)
+            print(f"{banks} banks just collapsed, resulting in a loss of ${loss}.")
+
+            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+            decrease_stability = round(random.uniform(0.01, 0.25), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+            if (britain.stability - decrease_stability) > 5:
+                britain.stability -= decrease_stability
+
+        elif banks > 20 and banks < 35:
+            loss = round(random.uniform(1.25, 2.25), 2)
+            gdp_loss = britain.current_gdp - (britain.current_gdp / loss)
+            britain.current_gdp /= loss
+            britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
+            print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
+            print("Your economy has also fallen into a recession from the severity of the collapse.\n")
+            #britain.economic_state = "recession"
+            # economic_stimulus(britain)
+
+            decrease_happiness = round(random.uniform(1.25, 2.75), 2)
+            decrease_stability = round(random.uniform(0.25, 1.25), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+            if (britain.stability - decrease_stability) > 5:
+                britain.stability -= decrease_stability
+
+        elif banks > 35:
+            loss = round(random.uniform(2.25, 4.25), 2)
+            gdp_loss = britain.current_gdp - (britain.current_gdp / loss)
+            britain.current_gdp /= loss
+            britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
+            print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
+            print("Your economy has also fallen into a depression from the severity of the collapse.\n")
+            # britain.economic_state = "depression"
+            # economic_stimulus(britain)
+            decrease_happiness = round(random.uniform(3.25, 4.75), 2)
+            decrease_stability = round(random.uniform(1.25, 2.25), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+            if (britain.stability - decrease_stability) > 5:
+                britain.stability -= decrease_stability
 def random_social(britain):
     pass
 def random_politics(britain):
