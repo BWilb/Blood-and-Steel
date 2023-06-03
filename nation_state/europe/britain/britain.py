@@ -108,12 +108,30 @@ def random_crime(britain):
             -> decrease in population
         - decrease in happiness
         """
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            print("A stabbing just occurred. However the victim survived.\n")
+            time.sleep(3)
+            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
+        elif chance == 1:
+            print("A stabbing just occurred, which the victim died.\n")
+            time.sleep(3)
+            britain.current_pop -= 1
+            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+            if (britain.happiness - decrease_happiness) > 5:
+                britain.happiness -= decrease_happiness
 
     elif chance % 8 == 6:
         """Chance that a raping occurs
-        * chance that victim dies from rape, as well as rapist
         * decrease in happiness
         """
+        print("A rape just occurred.\n")
+        time.sleep(3)
+        decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+        if (britain.happiness - decrease_happiness) > 5:
+            britain.happiness -= decrease_happiness
 
     elif chance % 12 == 5:
         """Chance that a homicide occurs
@@ -148,7 +166,7 @@ def random_crime(britain):
         """
         chance = random.randrange(0, 2)
         if chance == 0:
-            print("There was an unsuccessful attempt at robbing a bank/\n")
+            print("There was an unsuccessful attempt at robbing a bank\n")
 
             chance = random.randrange(0, 2)
             if chance == 0:
@@ -211,12 +229,26 @@ def random_economics(britain):
         - very slight increase in GDP
         - increase in happines
         """
+        invest = round(random.uniform(1000, 100000), 2)
+        print(f"Somebody started to invest with an amount of ${invest}. What a smart lad.\n")
+        time.sleep(3)
+        britain.current_gdp += invest
+        increase_happiness = round(random.uniform(0.25, 0.75), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
 
     elif chance % 10 == 7:
         """Chance that somebody loses at their local casino
         - loss in GDP
         - decrease in happiness
         """
+        loss = round(random.uniform(10000, 1000000), 2)
+        print(f"Somebody just lost ${loss} at their casino.\n")
+        time.sleep(3)
+        britain.current_gdp -= loss
+        decrease_happiness = round(random.uniform(0.25, 0.75), 2)
+        if (britain.happiness - decrease_happiness) > 5:
+            britain.happiness -= decrease_happiness
 
     elif chance % 16 == 11:
         """Chance that somebody or government takes out a loan on a specific item(house, car, etc)
@@ -612,7 +644,8 @@ def stats(britain):
           f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 4) * 100, 4)}% of the population.\n"
           f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 4) * 100, 4)}% of the population.\n"
           f"Independents make up {round(round(britain.independents / britain.current_pop, 4) * 100, 4)}% of the population.\n"
-          f"Your current GDP is {britain.current_gdp}.\n")
+          f"Your current GDP is ${britain.current_gdp}.\n"
+          f"Your current GDP growth is {round((britain.current_gdp - britain.past_gdp) / ((britain.current_gdp + britain.current_gdp)/2) * 100, 6)}%\n")
 def manual_game(britain):
     while britain.current_pop > 500000:
         # establishment of check upon game status
