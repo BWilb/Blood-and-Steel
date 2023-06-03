@@ -381,7 +381,40 @@ def random_economics(britain):
             if (britain.stability - decrease_stability) > 5:
                 britain.stability -= decrease_stability
 def random_social(britain):
-    pass
+    chance = random.randrange(20, 20000)
+    if chance % 6 == 8:
+        """chance that someone throws a surprise birthday party
+        - increase in happiness
+        """
+        print("Somebody just threw a surprise party.\n")
+        time.sleep(3)
+        increase_happiness = round(random.uniform(0.25, 0.75), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
+
+    elif chance % 8 == 5:
+        """Chance that a parade occurs
+        - increase in happiness
+        """
+        print("A parade just occurred.\n")
+        time.sleep(3)
+        increase_happiness = round(random.uniform(0.25, 0.75), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
+
+    elif chance % 13 == 11:
+        """Chance that somebody gets married
+        - increase in happiness and stability
+        """
+        print("Someone just got married.\n")
+        time.sleep(3)
+
+        increase_happiness = round(random.uniform(0.25, 0.75), 2)
+        increase_stability = round(random.uniform(0.01, 0.25), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
+        if (britain.stability + increase_stability) < 98:
+            britain.stability += increase_stability
 def random_politics(britain):
     pass
 def random_functions(britain):
