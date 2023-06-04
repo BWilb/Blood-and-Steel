@@ -1077,7 +1077,7 @@ def economic_decisions(italy):
         """Calculation of yearly economic growth"""
         if italy.economic_growth <= 1.5:
             if not italy.economic_stimulus:
-                choice = input(f"Your GDP grew {italy.economic_growth} last year.\n"
+                choice = input(f"Your GDP grew {italy.economic_growth}% last year.\n"
                                f"Would you like to apply a stimulus?: ")
                 if choice.lower() == "y" or choice.lower() == "yes":
                     economic_stimulus(italy)

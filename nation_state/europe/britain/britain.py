@@ -90,6 +90,7 @@ def economic_events(britain):
             britain.happiness -= decrease_happiness
         elif (britain.stability - decrease_stability) > 5:
             britain.happiness -= decrease_stability
+
 def social_events(britain):
     if britain.date == datetime(britain.date.year, 3, 17):
         print("Today is St. Patrick's Day in Britain.\n")
@@ -227,7 +228,7 @@ def random_economics(britain):
     if chance % 6 == 5:
         """Chance that somebody begins to invest
         - very slight increase in GDP
-        - increase in happines
+        - increase in happiness
         """
         invest = round(random.uniform(1000, 100000), 2)
         print(f"Somebody started to invest with an amount of ${invest}. What a smart lad.\n")
@@ -415,6 +416,7 @@ def random_social(britain):
             britain.happiness += increase_happiness
         if (britain.stability + increase_stability) < 98:
             britain.stability += increase_stability
+
 def random_politics(britain):
     pass
 def random_functions(britain):
@@ -570,8 +572,258 @@ def population_change(britain):
                     britain.independents -= 1
 
 """Economic Functions"""
-def economic_decisions(britain):
+def recovery(britain):
+    if britain.economic_stimulus:
+        """Depression with economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+
+            britain.consumer_spending = round(random.uniform(10000, 20000), 2)
+            britain.investment = round(random.uniform(30000, 45000), 2)
+            britain.government_spending = round(random.uniform(30000, 46000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.055), 4), 2))
+
+            britain.exports = round(random.uniform(300000, 800000), 2)
+            britain.imports = round(random.uniform(200000, 660000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = round(random.uniform(5000, 15000), 2)
+            britain.investment = round(random.uniform(15000, 35000), 2)
+            britain.government_spending = round(random.uniform(40000, 66000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+
+            britain.exports = round(random.uniform(300000, 600000), 2)
+            britain.imports = round(random.uniform(120000, 560000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+    else:
+        """Recovery without economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+            britain.consumer_spending = round(random.uniform(6000, 15000), 2)
+            britain.investment = round(random.uniform(5000, 20000), 2)
+            britain.government_spending = round(random.uniform(10000, 25000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.0011, 0.05), 2), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+
+            britain.exports = round(random.uniform(320000, 700000), 2)
+            britain.imports = round(random.uniform(300000, 560000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = round(random.uniform(3000, 10000), 2)
+            britain.investment = round(random.uniform(5000, 15000), 2)
+            britain.government_spending = round(random.uniform(30000, 70000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+
+            britain.exports = round(random.uniform(220000, 450000), 2)
+            britain.imports = round(random.uniform(220000, 420000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+def expansion(britain):
     pass
+def recession(britain):
+    """Recession simulation based upon stimulus and tax rate"""
+    if britain.economic_stimulus:
+        """Recession with economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+
+            britain.consumer_spending = -round(random.uniform(3000, 6000), 2)
+            britain.investment = -round(random.uniform(1000, 4000), 2)
+            britain.government_spending = round(random.uniform(10000, 16000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+
+            britain.exports = round(random.uniform(120000, 750000), 2)
+            britain.imports = round(random.uniform(120000, 1100000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = -round(random.uniform(1000, 4000), 2)
+            britain.investment = -round(random.uniform(1000, 3000), 2)
+            britain.government_spending = round(random.uniform(20000, 60000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+
+            britain.exports = round(random.uniform(120000, 560000), 2)
+            britain.imports = round(random.uniform(120000, 1100000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+    else:
+        """Recession without economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+            britain.consumer_spending = -round(random.uniform(1000, 2500), 2)
+            britain.investment = -round(random.uniform(1000, 4000), 2)
+            britain.government_spending = round(random.uniform(10000, 25000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+
+            britain.exports = round(random.uniform(120000, 560000), 2)
+            britain.imports = round(random.uniform(120000, 1100000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = -round(random.uniform(1000, 6000), 2)
+            britain.investment = -round(random.uniform(1000, 6000), 2)
+            britain.government_spending = round(random.uniform(25000, 35000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+
+            britain.exports = round(random.uniform(120000, 460000), 2)
+            britain.imports = round(random.uniform(120000, 1100000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+def depression(britain):
+    if britain.economic_stimulus:
+        """Depression with economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+
+            britain.consumer_spending = -round(random.uniform(5000, 9000), 2)
+            britain.investment = -round(random.uniform(2000, 6000), 2)
+            britain.government_spending = round(random.uniform(10000, 25000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.15), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
+
+            britain.exports = round(random.uniform(240000, 800000), 2)
+            britain.imports = round(random.uniform(300000, 2000000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = -round(random.uniform(7000, 11000), 2)
+            britain.investment = -round(random.uniform(3000, 8000), 2)
+            britain.government_spending = round(random.uniform(25000, 40000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
+
+
+            britain.exports = round(random.uniform(120000, 590000), 2)
+            britain.imports = round(random.uniform(120000, 1400000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+    else:
+        """Depression without economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+            britain.consumer_spending = -round(random.uniform(1000, 2500), 2)
+            britain.investment = -round(random.uniform(1000, 4000), 2)
+            britain.government_spending = round(random.uniform(1000, 25000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
+
+            britain.exports = round(random.uniform(120000, 750000), 2)
+            britain.imports = round(random.uniform(120000, 1400000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = -round(random.uniform(1000, 10000), 2)
+            britain.investment = -round(random.uniform(1000, 16000), 2)
+            britain.government_spending = round(random.uniform(1000, 35000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.21), 2), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+
+            britain.exports = round(random.uniform(120000, 590000), 2)
+            britain.imports = round(random.uniform(120000, 1400000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+def gdp_changes(britain):
+    if britain.economic_state == "recovery":
+        recovery(britain)
+    elif britain.economic_state == "expansion":
+        expansion(britain)
+    elif britain.economic_state == "recession":
+        recession(britain)
+    elif britain.economic_state == "depression":
+        depression(britain)
+def economic_state(britain):
+    pass
+def economic_stimulus(britain):
+    britain.economic_stimulus = True
+
+    if britain.economic_state == "recession":
+        choice = input("Do you want to increase the tax rate in order to support increased spending?\n"
+                       "(Remember this will apply to the entire population): ")
+
+        if choice.lower() == "yes" or choice.lower() == "y":
+            valid_choice = False
+
+            while valid_choice:
+
+                tax_hike = float(input("By how much do you to increase taxes(max cap is 10)?: "))
+                if tax_hike <= 10 and tax_hike >= 1.0:
+                    britain.tax_rate += tax_hike
+                    print(f"{britain.tax_rate}% is your new tax rate.\n")
+                    time.sleep(3)
+                    decrease = round(random.uniform(0.25, 1.45), 2)
+
+                    if (britain.happiness - decrease) < 5:
+                        britain.happiness -= decrease
+
+                    valid_choice = True
+
+                elif tax_hike <= 0 or tax_hike > 10:
+                    print(f"New tax hike of {tax_hike}% is improper.\n"
+                          f"Try again.")
+                    time.sleep(3)
+
+                else:
+                    print("Not a valid tax rate")
+                    time.sleep(3)
+
+    elif britain.economic_state == "depression":
+        tax_hike = round(random.uniform(0.5, 10), 2)
+        if (britain.tax_rate + tax_hike) <= 68.00:
+            if britain.date.year <= 1922 or britain.date.year >= 1946:
+                print(f"Parliament has enacted a tax hike of {tax_hike}%\n")
+
+            if britain.date.year > 1922 and britain.date.year < 1946:
+                print(f"Il Duce has enacted a tax hike of {tax_hike}%\n")
+            time.sleep(3)
+def economic_decisions(britain):
+    if britain.past_year < britain.date.year:
+        britain.economic_growth = round((britain.current_gdp - britain.past_gdp / ((britain.past_gdp + britain.current_gdp) / 2)) * 100, 2)
+        """Calculation of yearly economic growth"""
+        if britain.economic_growth <= 2.0:
+            if not britain.economic_stimulus:
+                choice = input(f"Your GDP grew {britain.economic_growth}% last year.\n")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    pass
+                    economic_stimulus(britain)
+
+        elif britain.economic_growth >= 15.00:
+            if britain.economic_stimulus:
+                britain.economic_stimulus = False
+    else:
+        gdp_changes(britain)
+        economic_state(britain)
 
 """Political functions"""
 def politics_change(britain):
@@ -686,6 +938,7 @@ def manual_game(britain):
         population_change(britain)
         politics_change(britain)
         random_functions(britain)
+        economic_decisions(britain)
         if britain.stability > 5:
             choice = input("Would you like to view your stats?: ")
             if choice.lower() == "y" or choice.lower() == "yes":
@@ -722,5 +975,9 @@ class Britain:
         self.current_gdp = gdp[time]
         self.past_gdp = self.current_gdp
         self.national_debt = 0
+        self.economic_growth = None
+        self.economic_state = "recovery"
+        self.economic_stimulus = False
+        self.tax_rate = tax_rate[time]
         """Social variables"""
         self.happiness = 90.00
