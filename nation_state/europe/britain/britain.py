@@ -25,6 +25,12 @@ pm = {
     "1939": "Neville Chamberlain"
 }
 
+spare_pms = ["Duncan Pirie", "Henry Cowan", "Harold Baker", "James Calmont", "Ellis Ellis-Griffith",
+             "Charles Craig", "William Jones", "Alfred Scott", "Sir Charles Hunter"]
+
+spare_1900_1950_monarchs = ["Louis", "Prince Arthur", "Beatrice", "Prince Henry", "Alexander Ramsay", "Alexander Cambridge",
+                            "Albert Victor", "Victoria II", "George VI"]
+
 # population variables and dictionaries
 population = {
     """Dictionary for population
@@ -57,6 +63,9 @@ tax_rate = {
     "1936": 60.0,
     "1939": 80.0
 }
+
+business_cycle = ["recession", "recovery", "expansion", "depression"]
+
 """Event functions"""
 def political_events(britain):
     if britain.date == datetime(1936, 1, 20):
@@ -356,8 +365,8 @@ def random_economics(britain):
             britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
             print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
             print("Your economy has also fallen into a recession from the severity of the collapse.\n")
-            #britain.economic_state = "recession"
-            # economic_stimulus(britain)
+            britain.economic_state = "recession"
+            economic_stimulus(britain)
 
             decrease_happiness = round(random.uniform(1.25, 2.75), 2)
             decrease_stability = round(random.uniform(0.25, 1.25), 2)
@@ -373,14 +382,69 @@ def random_economics(britain):
             britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
             print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
             print("Your economy has also fallen into a depression from the severity of the collapse.\n")
-            # britain.economic_state = "depression"
-            # economic_stimulus(britain)
+            britain.economic_state = "depression"
+            economic_stimulus(britain)
             decrease_happiness = round(random.uniform(3.25, 4.75), 2)
             decrease_stability = round(random.uniform(1.25, 2.25), 2)
             if (britain.happiness - decrease_happiness) > 5:
                 britain.happiness -= decrease_happiness
             if (britain.stability - decrease_stability) > 5:
                 britain.stability -= decrease_stability
+
+    elif chance % 67 == 43 and britain.date > britain.econonmic_change_date:
+        """Chance that britain falls into a depression
+        - decrease in happiness and stability
+        - economy slashed by factor of ten
+        - potential for monarch or prime minister to be assassinated
+        - later on, potential for britain to break up and lose empire
+        """
+        print("The English economy has randomly fallen into a depression, which the economy has been slashed by 10.\n")
+        economic_stimulus(britain)
+        britain.economic_state = "depression"
+        britain.current_gdp /= 10
+
+        decrease_happiness = round(random.uniform(6.25, 11.75), 2)
+        decrease_stability = round(random.uniform(3.25, 6.25), 2)
+        if (britain.happiness - decrease_happiness) > 5:
+            britain.happiness -= decrease_happiness
+        if (britain.stability - decrease_stability) > 5:
+            britain.stability -= decrease_stability
+
+        chance = random.randrange(0, 11)
+        if chance % 5 == 0:
+            """Chance that an assassination occurs"""
+
+            chance = random.randrange(0, 2)
+            if chance == 0:
+                """Chance that monarch gets assassinated"""
+                print(f"{britain.monarch} has also been assassinated.")
+                britain.monarch = spare_1900_1950_monarchs[random.randrange(0, len(spare_1900_1950_monarchs) - 1)]
+                print(f"{britain.monarch} is your new monarch.\n")
+
+            elif chance == 1:
+                """Chance that prime minister gets assassinated"""
+                print(f"{britain.pm} has also been assassinated.")
+                britain.monarch = spare_pms[random.randrange(0, len(spare_pms) - 1)]
+                print(f"{britain.pm} is your new prime minister.\n")
+        britain.economic_change_date = britain.date + timedelta(days=100)
+
+    elif chance % 78 == 65 and britain.date > britain.econonmic_change_date:
+        """Chance that britain falls into an expansion
+        - increase in happiness and stability
+        - economy multiplied by factor of ten
+        """
+        print("The English economy has randomly fallen into an expansion, which the economy has been multiplied by 10.\n")
+        britain.economic_state = "expansion"
+        britain.current_gdp *= 10
+
+        increase_happiness = round(random.uniform(6.25, 11.75), 2)
+        increase_stability = round(random.uniform(3.25, 6.25), 2)
+        if (britain.happiness + increase_happiness) < 98:
+            britain.happiness += increase_happiness
+        if (britain.stability + increase_stability) < 98:
+            britain.stability += increase_stability
+
+        britain.economic_change_date = britain.date + timedelta(days=100)
 def random_social(britain):
     chance = random.randrange(20, 20000)
     if chance % 6 == 8:
@@ -595,8 +659,8 @@ def recovery(britain):
             britain.consumer_spending = round(random.uniform(5000, 15000), 2)
             britain.investment = round(random.uniform(15000, 35000), 2)
             britain.government_spending = round(random.uniform(40000, 66000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
-                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
 
             britain.exports = round(random.uniform(300000, 600000), 2)
             britain.imports = round(random.uniform(120000, 560000), 2)
@@ -611,8 +675,8 @@ def recovery(britain):
             britain.consumer_spending = round(random.uniform(6000, 15000), 2)
             britain.investment = round(random.uniform(5000, 20000), 2)
             britain.government_spending = round(random.uniform(10000, 25000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.0011, 0.05), 2), 2) +
-                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.0011, 0.05), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
 
             britain.exports = round(random.uniform(320000, 700000), 2)
             britain.imports = round(random.uniform(300000, 560000), 2)
@@ -623,8 +687,8 @@ def recovery(britain):
             britain.consumer_spending = round(random.uniform(3000, 10000), 2)
             britain.investment = round(random.uniform(5000, 15000), 2)
             britain.government_spending = round(random.uniform(30000, 70000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
-                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
 
             britain.exports = round(random.uniform(220000, 450000), 2)
             britain.imports = round(random.uniform(220000, 420000), 2)
@@ -632,7 +696,64 @@ def recovery(britain):
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
                                   (britain.exports - britain.imports))
 def expansion(britain):
-    pass
+    if britain.economic_stimulus:
+        """Expansion with economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+
+            britain.consumer_spending = round(random.uniform(10000, 60000), 2)
+            britain.investment = round(random.uniform(10000, 65000), 2)
+            britain.government_spending = round(random.uniform(100000, 200000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.01, 0.095), 4), 2))
+
+            britain.exports = round(random.uniform(120000, 1500000), 2)
+            britain.imports = round(random.uniform(120000, 950000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = round(random.uniform(10000, 45000), 2)
+            britain.investment = round(random.uniform(10000, 45000), 2)
+            britain.government_spending = round(random.uniform(100000, 300000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.009), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.01, 0.095), 4), 2))
+
+            britain.exports = round(random.uniform(120000, 750000), 2)
+            britain.imports = round(random.uniform(120000, 650000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+    else:
+        """Expansion without economic stimulus in place alongside tax rate
+        * severity of losses depend upon tax rate
+        """
+        if britain.tax_rate < 25.00:
+            britain.consumer_spending = round(random.uniform(10000, 40000), 2)
+            britain.investment = round(random.uniform(10000, 45000), 2)
+            britain.government_spending = round(random.uniform(100000, 300000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.01), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.0095), 4), 2))
+
+            britain.exports = round(random.uniform(120000, 1300000), 2)
+            britain.imports = round(random.uniform(120000, 900000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
+        elif britain.tax_rate > 25.00:
+            britain.consumer_spending = round(random.uniform(100, 4500), 2)
+            britain.investment = round(random.uniform(100, 3500), 2)
+            britain.government_spending = round(random.uniform(1000, 55000), 2)
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.01), 4), 2) +
+                                    round(britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
+
+            britain.exports = round(random.uniform(120000, 1100000), 2)
+            britain.imports = round(random.uniform(120000, 950000), 2)
+
+            britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
+                                  (britain.exports - britain.imports))
 def recession(britain):
     """Recession simulation based upon stimulus and tax rate"""
     if britain.economic_stimulus:
@@ -641,11 +762,11 @@ def recession(britain):
         """
         if britain.tax_rate < 25.00:
 
-            britain.consumer_spending = -round(random.uniform(3000, 6000), 2)
+            britain.consumer_spending = -round(random.uniform(1000, 6000), 2)
             britain.investment = -round(random.uniform(1000, 4000), 2)
             britain.government_spending = round(random.uniform(10000, 16000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
             britain.exports = round(random.uniform(120000, 750000), 2)
             britain.imports = round(random.uniform(120000, 1100000), 2)
@@ -656,8 +777,8 @@ def recession(britain):
             britain.consumer_spending = -round(random.uniform(1000, 4000), 2)
             britain.investment = -round(random.uniform(1000, 3000), 2)
             britain.government_spending = round(random.uniform(20000, 60000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
             britain.exports = round(random.uniform(120000, 560000), 2)
             britain.imports = round(random.uniform(120000, 1100000), 2)
@@ -672,8 +793,8 @@ def recession(britain):
             britain.consumer_spending = -round(random.uniform(1000, 2500), 2)
             britain.investment = -round(random.uniform(1000, 4000), 2)
             britain.government_spending = round(random.uniform(10000, 25000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
             britain.exports = round(random.uniform(120000, 560000), 2)
             britain.imports = round(random.uniform(120000, 1100000), 2)
@@ -684,8 +805,8 @@ def recession(britain):
             britain.consumer_spending = -round(random.uniform(1000, 6000), 2)
             britain.investment = -round(random.uniform(1000, 6000), 2)
             britain.government_spending = round(random.uniform(25000, 35000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
             britain.exports = round(random.uniform(120000, 460000), 2)
             britain.imports = round(random.uniform(120000, 1100000), 2)
@@ -702,8 +823,8 @@ def depression(britain):
             britain.consumer_spending = -round(random.uniform(5000, 9000), 2)
             britain.investment = -round(random.uniform(2000, 6000), 2)
             britain.government_spending = round(random.uniform(10000, 25000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.15), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.15), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
 
             britain.exports = round(random.uniform(240000, 800000), 2)
@@ -715,8 +836,8 @@ def depression(britain):
             britain.consumer_spending = -round(random.uniform(7000, 11000), 2)
             britain.investment = -round(random.uniform(3000, 8000), 2)
             britain.government_spending = round(random.uniform(25000, 40000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
 
 
@@ -733,8 +854,8 @@ def depression(britain):
             britain.consumer_spending = -round(random.uniform(1000, 2500), 2)
             britain.investment = -round(random.uniform(1000, 4000), 2)
             britain.government_spending = round(random.uniform(1000, 25000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
 
             britain.exports = round(random.uniform(120000, 750000), 2)
@@ -746,8 +867,8 @@ def depression(britain):
             britain.consumer_spending = -round(random.uniform(1000, 10000), 2)
             britain.investment = -round(random.uniform(1000, 16000), 2)
             britain.government_spending = round(random.uniform(1000, 35000), 2)
-            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.21), 2), 2) +
-                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
+            britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.21), 4), 2) +
+                                    round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
 
             britain.exports = round(random.uniform(120000, 590000), 2)
             britain.imports = round(random.uniform(120000, 1400000), 2)
@@ -764,7 +885,60 @@ def gdp_changes(britain):
     elif britain.economic_state == "depression":
         depression(britain)
 def economic_state(britain):
-    pass
+    if britain.date >= britain.economic_change_date:
+        """Comparing current date to when Italy's economic state could change"""
+        chance = random.randrange(0, 2000)
+        if chance % 37 == 10:
+            """Making potential for economic disaster really low"""
+            if britain.current_gdp < britain.past_gdp:
+                """Comparison of current gdp to past gdp"""
+                if britain.economic_state == "expansion" or britain.economic_state == "recovery":
+                    for i in range(0, len(business_cycle) - 1):
+                        if business_cycle[i] == "recession":
+                            print("Your economy has entered into a recession after 6 months of decayed growth.\n")
+                            time.sleep(3)
+                            britain.economic_state = business_cycle[i]
+                            britain.economic_change_date = britain.date + timedelta(days=240)
+                            economic_stimulus(britain)
+                            """increasing amount of time to check up on GDP
+                            Time is average amount(6 months cycle)
+                            """
+                elif britain.economic_state == "recession":
+                    for i in range(0, len(business_cycle) - 1):
+                        if business_cycle[i] == "depression":
+                            print("Your economy has entered into a depression "
+                                  "after exceeding 6 months of decayed growth.\n")
+                            time.sleep(3)
+                            britain.economic_state = business_cycle[i]
+                            britain.economic_change_date = britain.date + timedelta(days=270)
+                            economic_stimulus(britain)
+                            """
+                            Since it takes awhile to escape a depression, amount of time on change date is increased
+                            """
+
+        if chance % 40 == 37:
+            """making potential for economic expansion or recovery very low"""
+            if britain.economic_state == "depression" or britain.economic_state == "recession":
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recovery":
+                        print("Your economy hs finally entered its recovery period\n")
+                        time.sleep(3)
+                        britain.economic_state = business_cycle[i]
+                        britain.economic_change_date = britain.date + timedelta(days=240)
+                        """increasing amount of time to check up on GDP
+                        Time is average amount(6 months cycle)
+                        """
+
+            elif britain.economic_state == "recovery":
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "expansion":
+                        print("Your economy has blasted into an expansionary period. Woo!\n")
+                        time.sleep(3)
+                        britain.economic_state = business_cycle[i]
+                        britain.economic_change_date = britain.date + timedelta(days=270)
+                        """
+                        Since it takes awhile to escape a depression, amount of time on change date is increased
+                        """
 def economic_stimulus(britain):
     britain.economic_stimulus = True
 
@@ -952,6 +1126,7 @@ class Britain:
         self.date = datetime(int(time), 1, 1)
         self.past_year = self.date.year
         self.political_census = self.date + timedelta(days=3)
+        self.economic_change_date = self.date + timedelta(days=60)
         """population variables"""
         self.current_pop = population[time]
         self.births = 0
