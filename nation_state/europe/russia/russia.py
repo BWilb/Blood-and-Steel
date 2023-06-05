@@ -1,4 +1,4 @@
-leaders = {
+dictators = {
     "1910" : "Nicolaus II",
     "1914" : "Nicolaus II",
     "1918" : "Vladimir Lenin",
@@ -15,10 +15,25 @@ population = {
     "1936": 104900000,
     "1939": 109397463
 }
+
+"""Economic Dictionaries and Variables"""
+gdp = {
+    "1910": 12003528421,
+    "1914": 15085307368,
+    "1918": 14723268421,
+    "1932": 39024526316,
+    "1936": 44568947368,
+    "1939": 44428052632
+}
 class Russia:
     def __init__(self, year):
-        self.leader = leaders[year]
+        """Political Variables"""
+        self.leader = dictators[year]
+        """Population Variables"""
         self.population = population[year]
+        """Economic Variables"""
+        self.current_gdp = gdp[year]
+        self.past_gdp = self.current_gdp
         # leader isn't initialized until time_frame is established.
 
 

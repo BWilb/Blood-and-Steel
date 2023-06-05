@@ -643,9 +643,9 @@ def recovery(britain):
         """
         if britain.tax_rate < 25.00:
 
-            britain.consumer_spending = round(random.uniform(10000, 20000), 2)
-            britain.investment = round(random.uniform(30000, 45000), 2)
-            britain.government_spending = round(random.uniform(30000, 46000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 20000), 2)
+            britain.investment = round(random.uniform(1000, 45000), 2)
+            britain.government_spending = round(random.uniform(1000, 46000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.055), 4), 2))
 
@@ -656,9 +656,9 @@ def recovery(britain):
                                   (britain.exports - britain.imports))
 
         elif britain.tax_rate > 25.00:
-            britain.consumer_spending = round(random.uniform(5000, 15000), 2)
-            britain.investment = round(random.uniform(15000, 35000), 2)
-            britain.government_spending = round(random.uniform(40000, 66000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 15000), 2)
+            britain.investment = round(random.uniform(1500, 35000), 2)
+            britain.government_spending = round(random.uniform(4000, 66000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
 
@@ -672,8 +672,8 @@ def recovery(britain):
         * severity of losses depend upon tax rate
         """
         if britain.tax_rate < 25.00:
-            britain.consumer_spending = round(random.uniform(6000, 15000), 2)
-            britain.investment = round(random.uniform(5000, 20000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 15000), 2)
+            britain.investment = round(random.uniform(1000, 20000), 2)
             britain.government_spending = round(random.uniform(10000, 25000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.0011, 0.05), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
@@ -684,8 +684,8 @@ def recovery(britain):
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
                                   (britain.exports - britain.imports))
         elif britain.tax_rate > 25.00:
-            britain.consumer_spending = round(random.uniform(3000, 10000), 2)
-            britain.investment = round(random.uniform(5000, 15000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 10000), 2)
+            britain.investment = round(random.uniform(1000, 15000), 2)
             britain.government_spending = round(random.uniform(30000, 70000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.05), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.05), 4), 2))
@@ -702,9 +702,9 @@ def expansion(britain):
         """
         if britain.tax_rate < 25.00:
 
-            britain.consumer_spending = round(random.uniform(10000, 60000), 2)
-            britain.investment = round(random.uniform(10000, 65000), 2)
-            britain.government_spending = round(random.uniform(100000, 200000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 60000), 2)
+            britain.investment = round(random.uniform(1000, 65000), 2)
+            britain.government_spending = round(random.uniform(1000, 200000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.01, 0.095), 4), 2))
 
@@ -715,9 +715,9 @@ def expansion(britain):
                                   (britain.exports - britain.imports))
 
         elif britain.tax_rate > 25.00:
-            britain.consumer_spending = round(random.uniform(10000, 45000), 2)
-            britain.investment = round(random.uniform(10000, 45000), 2)
-            britain.government_spending = round(random.uniform(100000, 300000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 45000), 2)
+            britain.investment = round(random.uniform(1000, 45000), 2)
+            britain.government_spending = round(random.uniform(1000, 300000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.009), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.01, 0.095), 4), 2))
 
@@ -731,9 +731,9 @@ def expansion(britain):
         * severity of losses depend upon tax rate
         """
         if britain.tax_rate < 25.00:
-            britain.consumer_spending = round(random.uniform(10000, 40000), 2)
-            britain.investment = round(random.uniform(10000, 45000), 2)
-            britain.government_spending = round(random.uniform(100000, 300000), 2)
+            britain.consumer_spending = round(random.uniform(1000, 40000), 2)
+            britain.investment = round(random.uniform(1000, 45000), 2)
+            britain.government_spending = round(random.uniform(1000, 300000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.01), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.0095), 4), 2))
 
@@ -743,8 +743,8 @@ def expansion(britain):
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
                                   (britain.exports - britain.imports))
         elif britain.tax_rate > 25.00:
-            britain.consumer_spending = round(random.uniform(100, 4500), 2)
-            britain.investment = round(random.uniform(100, 3500), 2)
+            britain.consumer_spending = round(random.uniform(1000, 4500), 2)
+            britain.investment = round(random.uniform(1000, 3500), 2)
             britain.government_spending = round(random.uniform(1000, 55000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.01), 4), 2) +
                                     round(britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
@@ -764,7 +764,7 @@ def recession(britain):
 
             britain.consumer_spending = -round(random.uniform(1000, 6000), 2)
             britain.investment = -round(random.uniform(1000, 4000), 2)
-            britain.government_spending = round(random.uniform(10000, 16000), 2)
+            britain.government_spending = round(random.uniform(1000, 16000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
                                     round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
@@ -792,7 +792,7 @@ def recession(britain):
         if britain.tax_rate < 25.00:
             britain.consumer_spending = -round(random.uniform(1000, 2500), 2)
             britain.investment = -round(random.uniform(1000, 4000), 2)
-            britain.government_spending = round(random.uniform(10000, 25000), 2)
+            britain.government_spending = round(random.uniform(1000, 25000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
                                     round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
@@ -804,11 +804,11 @@ def recession(britain):
         elif britain.tax_rate > 25.00:
             britain.consumer_spending = -round(random.uniform(1000, 6000), 2)
             britain.investment = -round(random.uniform(1000, 6000), 2)
-            britain.government_spending = round(random.uniform(25000, 35000), 2)
+            britain.government_spending = round(random.uniform(1000, 35000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.09), 4), 2) +
                                     round(-britain.consumer_spending * round(random.uniform(0.01, 0.09), 4), 2))
 
-            britain.exports = round(random.uniform(120000, 460000), 2)
+            britain.exports = round(random.uniform(120000, 860000), 2)
             britain.imports = round(random.uniform(120000, 1100000), 2)
 
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
@@ -820,9 +820,9 @@ def depression(britain):
         """
         if britain.tax_rate < 25.00:
 
-            britain.consumer_spending = -round(random.uniform(5000, 9000), 2)
-            britain.investment = -round(random.uniform(2000, 6000), 2)
-            britain.government_spending = round(random.uniform(10000, 25000), 2)
+            britain.consumer_spending = -round(random.uniform(1000, 9000), 2)
+            britain.investment = -round(random.uniform(1000, 6000), 2)
+            britain.government_spending = round(random.uniform(1000, 25000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.001, 0.15), 4), 2) +
                                     round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
@@ -833,15 +833,15 @@ def depression(britain):
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
                                   (britain.exports - britain.imports))
         elif britain.tax_rate > 25.00:
-            britain.consumer_spending = -round(random.uniform(7000, 11000), 2)
-            britain.investment = -round(random.uniform(3000, 8000), 2)
-            britain.government_spending = round(random.uniform(25000, 40000), 2)
+            britain.consumer_spending = -round(random.uniform(1000, 11000), 2)
+            britain.investment = -round(random.uniform(1000, 8000), 2)
+            britain.government_spending = round(random.uniform(1000, 40000), 2)
             britain.national_debt += (round(britain.government_spending * round(random.uniform(0.01, 0.11), 4), 2) +
                                     round(-britain.consumer_spending * round(random.uniform(0.001, 0.009), 4), 2))
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment)
 
 
-            britain.exports = round(random.uniform(120000, 590000), 2)
+            britain.exports = round(random.uniform(120000, 800000), 2)
             britain.imports = round(random.uniform(120000, 1400000), 2)
 
             britain.current_gdp += (britain.consumer_spending + britain.government_spending + britain.investment +
