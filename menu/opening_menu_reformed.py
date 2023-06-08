@@ -245,7 +245,7 @@ while run:
 
             if russian_button.draw(screen):
                 nation_chosen = "Russia"
-                game_state = "unavailable"
+                game_state = "chosen"
 
             if german_button.draw(screen):
                 nation_chosen = "Germany"
@@ -344,5 +344,9 @@ elif nation_chosen == "Italy":
     italy.manual_game(national)
 
 elif nation_chosen == "Great Britain":
+    national = britain.Britain(time_chosen)
+    britain.manual_game(national)
+
+elif nation_chosen == "Russia":
     national = britain.Britain(time_chosen)
     britain.manual_game(national)
