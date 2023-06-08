@@ -8,7 +8,7 @@ from nation_state.north_america.united_states import us_reformed
 from nation_state.europe.britain import britain
 from nation_state.europe.italy import italy
 import nation_state.europe.france.france
-import nation_state.europe.russia.russia
+from nation_state.europe.russia import russia
 from nation_state.europe.germany import germany_reformed
 import nation_state.asia.japan.japan
 
@@ -74,7 +74,7 @@ uk = pygame.image.load("region_buttons/europe/nation_buttons/britain_button.png"
 germany = pygame.image.load("region_buttons/europe/nation_buttons/germany_button.png").convert_alpha()
 italian = pygame.image.load("region_buttons/europe/nation_buttons/Italy_button.png").convert_alpha()
 france = pygame.image.load("region_buttons/europe/nation_buttons/france_button.png").convert_alpha()
-russia = pygame.image.load("region_buttons/europe/nation_buttons/russia_button.png").convert_alpha()
+russia_img = pygame.image.load("region_buttons/europe/nation_buttons/russia_button.png").convert_alpha()
 
 """africa"""
 img_africa = pygame.image.load("region_buttons/africa/africa_button.png").convert_alpha()
@@ -119,7 +119,7 @@ us_button = button.Button(width * 0.43, 600, img_us, 0.25)
 europe_button = button.Button(width * 0.65, 200, img_europe, 0.25)
 britain_button = button.Button(width * 0.20, 200, uk, 0.25)
 german_button = button.Button(width * 0.65, 200, germany, 0.25)
-russian_button = button.Button(width * 0.20, 400, russia, 0.25)
+russian_button = button.Button(width * 0.20, 400, russia_img, 0.25)
 italian_button = button.Button(width * 0.65, 400, italian, 0.25)
 france_button = button.Button(width * 0.425, 600, france, 0.25)
 
@@ -348,5 +348,5 @@ elif nation_chosen == "Great Britain":
     britain.manual_game(national)
 
 elif nation_chosen == "Russia":
-    national = britain.Britain(time_chosen)
-    britain.manual_game(national)
+    national = russia.Russia(time_chosen)
+    russia.manual_game(time_chosen)
