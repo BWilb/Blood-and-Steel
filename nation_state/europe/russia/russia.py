@@ -41,6 +41,8 @@ business_cycle = ["recession", "recovery", "expansion", "depression"]
 """Political Functions"""
 
 """Randomized functions"""
+
+
 def random_politics(russia):
     chance = random.randrange(10, 20000)
 
@@ -91,8 +93,9 @@ def random_politics(russia):
 
                         if chance == 39:
                             """Chance that monarch is assassinated"""
-                            print(f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
-                                  f"before they could do anymore damage")
+                            print(
+                                f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
+                                f"before they could do anymore damage")
                             time.sleep(3)
                             russia.leader = alternate_monarchs[random.randrange(0, len(alternate_monarchs) - 1)]
                             print(f"{russia.leader} is your new monarch.\n")
@@ -105,7 +108,8 @@ def random_politics(russia):
                     if chance % 2 == 1:
                         """Chance that the prisoners don't escape and that the deportation is successful"""
                         nations = ["Switzerland", "France", "Great Britain", "Germany", "United States"]
-                        print(f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
+                        print(
+                            f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
 
                         russia.current_pop -= amount
                         russia.deportees += amount
@@ -171,7 +175,7 @@ def random_politics(russia):
                             if (russia.stability - stability) > 5:
                                 russia.stability -= stability
 
-        if russia.date < datetime.datetime(1924, 1, 21):
+        if russia.date < datetime.datetime(1924, 1, 21) and russia.date > datetime.datetime(1917, 3, 1):
             choice = input(f"{russia.ae} anti-Bolsheviks live within your Union...an alarming number!!!\n"
                            f"Would you like to depopulate their ranks?(y or n): ")
 
@@ -205,8 +209,9 @@ def random_politics(russia):
 
                         if chance == 39:
                             """Chance that monarch is assassinated"""
-                            print(f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
-                                  f"before they could do anymore damage")
+                            print(
+                                f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
+                                f"before they could do anymore damage")
                             time.sleep(3)
                             russia.leader = lenin_successors[random.randrange(0, len(lenin_successors) - 1)]
                             print(f"{russia.leader} is your new commissar.\n")
@@ -219,7 +224,8 @@ def random_politics(russia):
                     if chance % 2 == 1:
                         """Chance that the prisoners don't escape and that the deportation is successful"""
                         nations = ["Switzerland", "France", "Great Britain", "Germany", "United States"]
-                        print(f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
+                        print(
+                            f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
 
                         russia.current_pop -= amount
                         russia.deportees += amount
@@ -319,8 +325,9 @@ def random_politics(russia):
 
                         if chance == 39:
                             """Chance that monarch is assassinated"""
-                            print(f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
-                                  f"before they could do anymore damage")
+                            print(
+                                f"SHIT!!! {russia.leader} was just assassinated...the assassins were successfully killed,\n"
+                                f"before they could do anymore damage")
                             time.sleep(3)
                             russia.leader = lenin_successors[random.randrange(0, len(lenin_successors) - 1)]
                             print(f"{russia.leader} is your new commissar.\n")
@@ -333,7 +340,8 @@ def random_politics(russia):
                     if chance % 2 == 1:
                         """Chance that the prisoners don't escape and that the deportation is successful"""
                         nations = ["Switzerland", "France", "Great Britain", "Germany", "United States"]
-                        print(f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
+                        print(
+                            f"The anti-Tsarists have been deported to {nations[random.randrange(0, len(nations) - 1)]}")
 
                         russia.current_pop -= amount
                         russia.deportees += amount
@@ -412,6 +420,61 @@ def random_politics(russia):
                 * death of all conspirators
                 * 
         """
+        chance = random.randrange(0, 5)
+        if chance % 2 == 0:
+            """Chance that an assassination attempt succeeds"""
+            amount = round(russia.ae * round(random.uniform(0.001, 0.009), 5), 0)
+            if russia.date < datetime.datetime(1917, 3, 1):
+                print(f"SHIT!!! A group of {amount} anti-Tsarists just assassinated {russia.leader}.\n")
+                russia.leader = alternate_monarchs[random.randrange(0, len(alternate_monarchs) - 1)]
+                for i in range(0, len(alternate_monarchs) - 1):
+                    if alternate_monarchs[i] == russia.leader:
+                        """Removing selected alternate monarch from list"""
+                        alternate_monarchs.pop(i)
+                time.sleep(3)
+
+                choice = input("How would you like to punish these captured assassins?\n"
+                               "Through internment in Siberia, deportation, or death?: ")
+
+                if choice.lower() == "internment" or choice.lower() == "gulag" or choice.lower() == "siberia":
+                    """choice if user selects internment"""
+                    chance = random.randrange(0, 5)
+                    if chance % 2 == 1:
+                        print("The internees overpowered their guards and have escaped. Fortunately no further damage\n"
+                              "has been done to the royal family.\n")
+                        time.sleep(3)
+                    else:
+                        print(f"The {amount} prisoners have joined the other {russia.siberians} internees.\n")
+                        russia.siberians += amount
+                        russia.ae -= amount
+
+                elif choice.lower() == "death":
+                    """choice if user selects death"""
+                    chance = random.randrange(0, 5)
+                    if chance % 2 == 1:
+                        print("The internees overpowered their guards and have escaped. Fortunately no further damage\n"
+                              "has been done to the royal family.\n")
+                        time.sleep(3)
+                    else:
+                        print(f"The {amount} prisoners have been successfully wiped away from history\n")
+                        russia.deaths += amount
+                        russia.ae -= amount
+                        russia.current_pop -= amount
+
+                elif choice.lower() == "deportation":
+                    """choice if user selects death"""
+                    chance = random.randrange(0, 5)
+                    if chance % 2 == 1:
+                        print("The internees overpowered their guards and have escaped. Fortunately no further damage\n"
+                              "has been done to the royal family.\n")
+                        time.sleep(3)
+                    else:
+                        nations = ["Switzerland", "France", "Great Britain", "Germany", "United States"]
+                        print(f"The {amount} prisoners have joined the other {russia.deportees} deported\n"
+                              f"Which they were deported to {nations[random.randrange(0, len(nations) - 1)]}")
+                        russia.deportees += amount
+                        russia.ae -= amount
+                        russia.current_pop -= amount
 def random_functions(russia):
     random_politics(russia)
 
