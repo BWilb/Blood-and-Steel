@@ -477,7 +477,7 @@ def random_politics(russia):
 
             elif russia.date > datetime(1917, 3, 1) and russia.date < datetime(1924, 1, 30):
                 print(f"SHIT!!! A group of {amount} anti-Bolsheviks just assassinated {russia.leader}.\n")
-                russia.leader = lenin_successors[random.randrange(0, len(lenin_successors) - 1)]
+                russia.leader = lenin_successors[random.randrange(0, len(lenin_successors))]
                 for i in range(0, len(alternate_monarchs) - 1):
                     if lenin_successors[i] == russia.leader:
                         """Removing selected alternate monarch from list"""
@@ -785,6 +785,24 @@ def random_functions(russia):
     random_crime(russia)
     random_economics(russia)
     random_international(russia)
+"""famine function"""
+def famine(russia):
+    """Function deals with Russian famine from exporting too much grain"""
+    if russia.famine:
+        deaths = random.randrange(10, 200)
+        russia.current_pop -= deaths
+        russia.deaths += deaths
+        print("hi")
+
+        for i in range(0, deaths):
+            chance = random.randrange(0, 6)
+            if chance % 2 == 1:
+                russia.ae -= 1
+            elif chance % 2 == 0:
+                russia.pe -= 1
+
+    if russia.date > russia.famine_time:
+        russia.famine = False
 
 """Political Functions"""
 def political_change(russia):
@@ -1687,6 +1705,7 @@ def manual_game(year):
         economic_decisions(russia)
         population_change(russia)
         random_functions(russia)
+        famine(russia)
         answer = input("would you like to view your stats?: ")
         if answer.lower() == "y" or answer.lower() == "yes":
             stats(russia)
