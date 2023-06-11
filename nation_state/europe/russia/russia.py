@@ -579,6 +579,124 @@ def random_politics(russia):
                         russia.ae -= amount
                         russia.current_pop -= amount
 
+
+def random_economics(russia):
+    chance = random.randrange(10, 20000)
+
+    if chance % 7 == 6:
+        """Chance that a factory opens...
+        - if military factory
+            -> later on increases amount of soldiers in army
+            -> increase in stability
+        - if civilian factory 
+            -> gdp multiplied by 1.15
+            -> increase in happiness
+        """
+
+    elif chance % 9 == 5:
+        """Chance that leader of Russia siphons off some of Russia's GDP for himself
+        - player will not be alerted of siphoning
+            -> GDP loss based off random amount
+        """
+        loss = round(random.uniform(1000, 1000000), 2)
+        russia.current_gdp -= loss
+
+    elif chance % 11 == 10:
+        """Chance that raw material exports rise in a given day
+        - GDP multiplied by 1.25
+        - increase in happiness and stability
+        """
+        print("Your current raw material exports have doubled.\n")
+        time.sleep(3)
+        russia.current_gdp *= 1.25
+        increase = round(random.uniform(0.25, 1.5), 2)
+
+        if (russia.happiness + increase) < 98:
+            russia.happiness += increase
+
+        if (russia.stability + increase) < 98:
+            russia.stability += increase
+
+    elif chance % 15 == 13:
+        """Chance that grain exports increase by 2-4 usual amount for any given day
+        - GDP multiplied by 1.5
+        - decrease in happiness
+        - increase in stability
+        - potential for famine to start
+            -> influences population growth
+        """
+        increase = round(random.uniform(1, 5), 2)
+        decrease = round(random.uniform(1, 5), 2)
+        print(f"Your nation's grain exports have multiplied by {increase} times.\n")
+        time.sleep(3)
+        russia.current_gdp *= 1.5
+
+        if (russia.happiness - decrease) > 5:
+            russia.happiness -= decrease
+
+        if (russia.stability + increase) < 98:
+            russia.stability += increase
+
+        chance = random.randrange(0, 20)
+        if chance == 15 and russia.date > russia.famine_time:
+            print("due to focusing on exporting your grain and not feeding your population, famines have begun.\n")
+            time.sleep(3)
+            russia.famine_time = russia.date + timedelta(days=90)
+            russia.famine = True
+
+    elif chance % 25 == 16:
+        """Chance that secret police raid a random amount of private banks
+        - will not alert player, due to police covering it up
+            -> decrease in stability and happiness
+            -> GDP loss based upon amount of banks raided
+        """
+        raided_banks = random.randrange(2, 30)
+        decrease = round(random.uniform(1, 5), 2)
+
+        if raided_banks < 10:
+            russia.current_gdp -= round(random.uniform(1000, 100000), 2)
+
+        elif raided_banks < 20 and raided_banks > 10:
+            russia.current_gdp -= round(random.uniform(100000, 900000), 2)
+
+        elif raided_banks > 20:
+            russia.current_gdp /= 1.5
+
+        if (russia.happiness - decrease) > 5:
+            russia.happiness -= decrease
+
+        if (russia.stability - decrease) > 5:
+            russia.stability -= decrease
+
+    elif chance % 35 == 25:
+        """Chance that a random amount of banks collapse
+        - decrease in stability and happiness
+        - GDP loss based upon amount of banks collapsed
+        """
+
+        collapse = random.randrange(2, 30)
+        if collapse < 10:
+            loss = round(random.uniform(1000, 100000), 2)
+            russia.current_gdp -= loss
+            print(f"{collapse} banks have collapsed, resulting in a loss of ${loss}")
+
+        elif collapse < 20 and collapse > 10:
+            loss = round(random.uniform(100000, 900000), 2)
+            russia.current_gdp -= loss
+            print(f"{collapse} banks have collapsed, resulting in a loss of ${loss}")
+
+        elif collapse > 20:
+            russia.current_gdp /= 1.5
+            print(f"{collapse} banks have collapsed, resulting in a slashing of gdp by 1.5")
+
+        decrease = round(random.uniform(1, 5), 2)
+
+        if (russia.happiness - decrease) > 5:
+            russia.happiness -= decrease
+
+        if (russia.stability - decrease) > 5:
+            russia.stability -= decrease
+
 def random_social(russia):
     chance = random.randrange(10, 20000)
 
@@ -658,8 +776,7 @@ def random_social(russia):
 
 def random_crime(russia):
     pass
-def random_economics(russia):
-    pass
+
 def random_international(russia):
     pass
 def random_functions(russia):
@@ -1583,6 +1700,7 @@ class Russia:
         self.economic_change_date = self.date + timedelta(days=60)
         self.political_census = self.date + timedelta(days=3)
         self.year_plan_date = None
+        self.famine_time = self.date
         """Population Variables"""
         self.current_pop = population[year]
         self.past_pop = self.current_pop
@@ -1594,6 +1712,7 @@ class Russia:
         self.viagra_subsidy = None
         self.siberians = 0
         self.deportees = 0
+        self.famine = False
         """Political Variables"""
         self.leader = dictators[year]
         self.pe = self.current_pop * 0.99
