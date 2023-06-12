@@ -857,7 +857,7 @@ def political_change(russia):
 def population_change(russia):
     if russia.past_year < russia.date.year:
         russia.pop_change = (russia.current_pop - russia.past_pop / (
-                (russia.current_pop + russia.current_pop) / 2)) * 100
+                (russia.current_pop + russia.past_pop) / 2)) * 100
 
         russia.past_pop = russia.current_pop
 
