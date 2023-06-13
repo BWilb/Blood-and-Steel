@@ -1,6 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
+import us_states
 import arcade
 """Population Dictionaries"""
 population = {
@@ -52,6 +53,8 @@ tax_rate = {
 }
 
 """Subsidiary functions of game"""
+def establishment_states(us):
+    us.states.append(us_states.iowa.Iowa(us.date.year, us))
 
 """Weather functions"""
 def blackout(us):
@@ -1364,6 +1367,7 @@ def check_stats(us):
 """Main function of US_Version of game"""
 def manual_game(us):
     # Establishment of date variable
+    establishment_states(us)
     while us.population > 2000000:
         us.date = us.date + timedelta(days=1)
         print(f"Date: {us.date}")
@@ -1382,6 +1386,8 @@ def manual_game(us):
                 check_stats(us)
 class UnitedStates:
     def __init__(self, year):
+        # regional variables
+        self.states = []
         # population variables
         self.population = population[year]
         self.population_change = 0
