@@ -1,7 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
-from us_states import iowa
+from us_states import iowa, alabama
 import arcade
 
 """Political Dictionaries"""
@@ -24,30 +24,38 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 """establishment of states within US(national and regional files will influence each other)"""
+def establish_economy(us):
+    for i in range(0, len(us.states)):
+        us.current_gdp += us.states[i].gdp
 def establish_population(us):
     """Incorporating state population into overall population
     doing in a separate function in order to prevent oversaturation
     """
     for i in range(0, len(us.states)):
-        us.population += us.states[i].population
+        us.current_pop += us.states[i].population
 
 def establish_states(us):
     us.states.append(iowa.Iowa(us.date.year, us))
+    us.states.append(alabama.Alabama(us.date.year, us))
     # establishment of national population
     establish_population(us)
+    establish_economy(us)
 
 def manual_game(us):
     establish_states(us)
-
+    print(us.current_pop)
+    print(us.current_gdp)
+    while us.current_pop > 1000000:
+        pass
 
 class UnitedStates:
     def __init__(self, year):
         # regional variables
         self.states = []
         # population variables
-        self.population = 0
+        self.current_pop = 0
         self.population_change = 0
-        self.current_pop = self.population
+        #self.past_pop = self.current_pop
         self.births = 0
         self.deaths = 0
         self.happiness = 96.56
@@ -60,8 +68,8 @@ class UnitedStates:
         self.president = presidents[year]
         self.vice_president = vice_presidents[year]
         """Political parties of US"""
-        self.republicans = self.population * 0.5
-        self.democrats = self.population - self.republicans
+        """self.republicans = self.population * 0.5
+        self.democrats = self.population - self.republicans"""
         """Other political variables"""
         self.stability = 95.00
         # economic variables
