@@ -17,11 +17,11 @@ gdp = {
     "1936": 3210359,
     "1939": 3390039
 }
-def population_growth(iowa):
+def population_growth(alabama):
     births = random.randrange(10, 20)
     deaths = random.randrange(5, 10)
-    iowa.population += (births - deaths)
-    return (births - deaths)
+    alabama.population += (births - deaths)
+    alabama.nation.current_pop += (births - deaths)
 
 """economic_functions"""
 def recovery(alabama):
@@ -44,7 +44,8 @@ def recovery(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -65,7 +66,8 @@ def recovery(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 def expansion(alabama):
     if alabama.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
@@ -86,7 +88,8 @@ def expansion(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -107,7 +110,8 @@ def expansion(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
 def recession(alabama):
     if alabama.nation.economic_stimulus:
@@ -130,7 +134,8 @@ def recession(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -151,7 +156,8 @@ def recession(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
 def depression(alabama):
     if alabama.nation.economic_stimulus:
@@ -162,7 +168,7 @@ def depression(alabama):
 
         alabama.government_spending = round(random.uniform(100, 1400), 2)
 
-        alabama.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alabama.nation.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -174,7 +180,8 @@ def depression(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+                                       (alabama.exports - alabama.imports))
 
     else:
 
@@ -196,7 +203,7 @@ def depression(alabama):
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending +
+        alabama.nation.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                 (alabama.exports - alabama.imports))
 
 def economic_growth(alabama):

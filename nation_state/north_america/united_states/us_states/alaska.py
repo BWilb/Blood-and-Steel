@@ -10,104 +10,113 @@ population = {
 }
 
 gdp = {
-    "1910": 2500000,
-    "1914": 2593747,
-    "1918": 2890098,
-    "1932": 2989984,
-    "1936": 3210359,
-    "1939": 3390039
+    "1910": 250000,
+    "1914": 259374,
+    "1918": 289009,
+    "1932": 298998,
+    "1936": 321035,
+    "1939": 339003
 }
-def population_growth(iowa):
-    births = random.randrange(10, 20)
-    deaths = random.randrange(5, 10)
-    iowa.population += (births - deaths)
-    iowa.nation.current_pop += (births - deaths)
+def population_growth(alaska):
+    births = random.randrange(5, 15)
+    deaths = random.randrange(2, 10)
+    alaska.population += (births - deaths)
+    alaska.nation.current_pop += (births - deaths)
 
 """economic_functions"""
-def recovery(alabama):
-    if alabama.nation.economic_stimulus:
+def recovery(alaska):
+    if alaska.nation.economic_stimulus:
         """If United States has implemented an economic stimulus"""
-        alabama.consumer_spending = round(random.uniform(10, 75), 2)
-        alabama.investment = round(random.uniform(25, 250), 2)
+        alaska.consumer_spending = round(random.uniform(10, 75), 2)
+        alaska.investment = round(random.uniform(25, 100), 2)
 
-        alabama.government_spending = round(random.uniform(100, 500), 2)
+        alaska.government_spending = round(random.uniform(100, 500), 2)
 
-        alabama.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        alaska.debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        alabama.exports = round(random.uniform(450, 750), 2)
-        alabama.imports = round(random.uniform(320, 560), 2)
-        alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
-                             (alabama.exports - alabama.imports))
+        alaska.exports = round(random.uniform(150, 350), 2)
+        alaska.imports = round(random.uniform(20, 360), 2)
+        alaska.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                             (alaska.exports - alaska.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alaska.nation.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                                      (alaska.exports - alaska.imports))
+
+    else:
+        """If United States has implemented an economic stimulus"""
+        alaska.consumer_spending = round(random.uniform(10, 55), 2)
+        alaska.investment = round(random.uniform(25, 80), 2)
+
+        alaska.government_spending = round(random.uniform(100, 750), 2)
+
+        alaska.debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+        alaska.exports = round(random.uniform(150, 350), 2)
+        alaska.imports = round(random.uniform(20, 360), 2)
+        alaska.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                             (alaska.exports - alaska.imports))
+        """implementing two ways of expanding regional and national gdp"""
+        alaska.nation.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                                      (alaska.exports - alaska.imports))
+def expansion(alaska):
+    if alaska.nation.economic_stimulus:
+        """If United States hasn't implemented an economic stimulus"""
+        alaska.consumer_spending = round(random.uniform(10, 550), 2)
+        alaska.investment = round(random.uniform(25, 750), 2)
+
+        alaska.government_spending = round(random.uniform(100, 1000), 2)
+
+        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        """
+        National debt includes both portions of US government spending and consumer spending.
+        The portions are comprised of the loans and bonds that are bought and sold
+        """
+
+        alaska.exports = round(random.uniform(450, 1150), 2)
+        alaska.imports = round(random.uniform(320, 760), 2)
+        alaska.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                             (alaska.exports - alaska.imports))
+        """implementing two ways of expanding regional and national gdp"""
+        alaska.nation.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                                      (alaska.exports - alaska.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
-        alabama.consumer_spending = round(random.uniform(10, 250), 2)
-        alabama.investment = round(random.uniform(25, 350), 2)
+        alaska.consumer_spending = round(random.uniform(10, 550), 2)
+        alaska.investment = round(random.uniform(25, 750), 2)
 
-        alabama.government_spending = round(random.uniform(100, 800), 2)
+        alaska.government_spending = round(random.uniform(100, 1200), 2)
 
-        alabama.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        alabama.exports = round(random.uniform(450, 750), 2)
-        alabama.imports = round(random.uniform(320, 560), 2)
-        alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
-                             (alabama.exports - alabama.imports))
+        alaska.exports = round(random.uniform(450, 1150), 2)
+        alaska.imports = round(random.uniform(320, 760), 2)
+        alaska.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                             (alaska.exports - alaska.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
-def expansion(alabama):
-    if alabama.nation.economic_stimulus:
-        """If United States hasn't implemented an economic stimulus"""
-        alabama.consumer_spending = round(random.uniform(10, 550), 2)
-        alabama.investment = round(random.uniform(25, 750), 2)
-
-        alabama.government_spending = round(random.uniform(100, 1000), 2)
-
-        alabama.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
-        """
-        National debt includes both portions of US government spending and consumer spending.
-        The portions are comprised of the loans and bonds that are bought and sold
-        """
-
-        alabama.exports = round(random.uniform(450, 1150), 2)
-        alabama.imports = round(random.uniform(320, 760), 2)
-        alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
-                             (alabama.exports - alabama.imports))
-        """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
-
-    else:
-        """If United States hasn't implemented an economic stimulus"""
-        alabama.consumer_spending = round(random.uniform(10, 550), 2)
-        alabama.investment = round(random.uniform(25, 750), 2)
-
-        alabama.government_spending = round(random.uniform(100, 1200), 2)
-
-        alabama.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
-        """
-        National debt includes both portions of US government spending and consumer spending.
-        The portions are comprised of the loans and bonds that are bought and sold
-        """
-
-        alabama.exports = round(random.uniform(450, 1150), 2)
-        alabama.imports = round(random.uniform(320, 760), 2)
-        alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
-                             (alabama.exports - alabama.imports))
-        """implementing two ways of expanding regional and national gdp"""
-        return (alabama.consumer_spending + alabama.investment + alabama.government_spending + (alabama.exports - alabama.imports))
+        alaska.nation.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                                      (alaska.exports - alaska.imports))
 
 def recession(alaska):
     if alaska.nation.economic_stimulus:
@@ -130,7 +139,8 @@ def recession(alaska):
         alaska.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
                              (alaska.exports - alaska.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (alaska.consumer_spending + alaska.investment + alaska.government_spending + (alaska.exports - alaska.imports))
+        alaska.nation.current_gdp += (alaska.consumer_spending + alaska.investment + alaska.government_spending +
+                                      (alaska.exports - alaska.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -231,3 +241,4 @@ class Alaska:
         self.exports = None
         self.imports = None
         self.economic_state = "recovery"
+        self.debt = 0

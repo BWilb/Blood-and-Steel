@@ -21,7 +21,7 @@ def population_growth(iowa):
     births = random.randrange(10, 25)
     deaths = random.randrange(5, 15)
     iowa.population += (births - deaths)
-    return (births - deaths)
+    iowa.nation.current_pop += (births - deaths)
 
 """economic_functions"""
 def recovery(iowa):
@@ -44,7 +44,8 @@ def recovery(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -65,7 +66,9 @@ def recovery(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
+
 def expansion(iowa):
     if iowa.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
@@ -86,7 +89,8 @@ def expansion(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -107,7 +111,8 @@ def expansion(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
 def recession(iowa):
     if iowa.nation.economic_stimulus:
@@ -130,7 +135,8 @@ def recession(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -151,7 +157,8 @@ def recession(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
 def depression(iowa):
     if iowa.nation.economic_stimulus:
@@ -174,7 +181,8 @@ def depression(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
     else:
 
@@ -196,7 +204,8 @@ def depression(iowa):
         iowa.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
                              (iowa.exports - iowa.imports))
         """implementing two ways of expanding regional and national gdp"""
-        return (iowa.consumer_spending + iowa.investment + iowa.government_spending + (iowa.exports - iowa.imports))
+        iowa.nation.current_gdp += (iowa.consumer_spending + iowa.investment + iowa.government_spending +
+                                    (iowa.exports - iowa.imports))
 
 def economic_growth(iowa):
     """Economic growth of iowa as individual state"""

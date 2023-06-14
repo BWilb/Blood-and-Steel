@@ -1,9 +1,23 @@
 import random
 import time
 from datetime import datetime, timedelta
-from us_states import iowa, alabama
+from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois,
+                       indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachuesetts,
+                       missouri, michigan, minnesota, mississppi, n_d, n_m, nebraska, nevada,
+                       new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+                       rhode_island, s_d, south_carolina, tennessee, texas, utah, vermont, virginia,
+                       washington, west_virginia, wisconsin, wyoming)
+"""Storing files into an array in order to access state functions for population and economic growth"""
+states = [alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois,
+                       indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachuesetts,
+                       missouri, michigan, minnesota, mississppi, n_d, n_m, nebraska, nevada,
+                       new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+                       rhode_island, s_d, south_carolina, tennessee, texas, utah, vermont, virginia,
+                       washington, west_virginia, wisconsin, wyoming]
 import arcade
-
+import os
 """Political Dictionaries"""
 presidents = {
     "1910": "William Howard Taft",
@@ -35,12 +49,30 @@ def establish_population(us):
         us.current_pop += us.states[i].population
 
 def establish_states(us):
-    us.states.append(iowa.Iowa(us.date.year, us))
-    us.states.append(alabama.Alabama(us.date.year, us))
+    """us.states.append(iowa.Iowa(us.date.year, us))
+    us.states.append(alabama.Alabama(us.date.year, us))"""
+    folder = "us_states"
+    for file in os.listdir(folder):
+        """Looping through us states folder, will be refined later on"""
+        if file != '__pycache__':
+            if file.removesuffix(".py") == "alabama":
+                us.states.append(alabama.Alabama(us.date.year, us))
+            if file.removesuffix(".py") == "alaska":
+                us.states.append(alaska.Alaska(us.date.year, us))
+            if file.removesuffix(".py") == "arizona":
+                us.states.append(arizona.Arizona(us.date.year, us))
+            if file.removesuffix(".py") == "arkansas":
+                us.states.append(arkansas.Arkansas(us.date.year, us))
+            if file.removesuffix(".py") == "california":
+                us.states.append(california.California(us.date.year, us))
+            if file.removesuffix(".py") == "iowa":
+                us.states.append(iowa.Iowa(us.date.year, us))
     # establishment of national population
     establish_population(us)
     establish_economy(us)
+"""economic functions"""
 
+"""population functions"""
 def manual_game(us):
     establish_states(us)
     print(us.current_pop)
