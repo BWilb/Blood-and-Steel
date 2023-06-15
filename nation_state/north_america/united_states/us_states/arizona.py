@@ -81,7 +81,7 @@ def expansion(arizona):
 
         arizona.government_spending = round(random.uniform(100, 1000), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -103,7 +103,7 @@ def expansion(arizona):
 
         arizona.government_spending = round(random.uniform(100, 1200), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -127,7 +127,7 @@ def recession(arizona):
 
         arizona.government_spending = round(random.uniform(100, 300), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -149,7 +149,7 @@ def recession(arizona):
 
         arizona.government_spending = round(random.uniform(100, 500), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -173,7 +173,7 @@ def depression(arizona):
 
         arizona.government_spending = round(random.uniform(100, 1400), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -196,7 +196,7 @@ def depression(arizona):
 
         arizona.government_spending = round(random.uniform(100, 500), 2)
 
-        arizona.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arizona.nation.national_debt += (arizona.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arizona.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -234,7 +234,7 @@ class Arizona:
         """Population variables"""
         self.population = population[str(year)]
         """economic variables"""
-        self.gdp = gdp[str(year)]
+        self.current_gdp = gdp[str(year)]
         self.consumer_spending = None
         self.government_spending = None
         self.investment = None

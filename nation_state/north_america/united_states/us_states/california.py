@@ -81,7 +81,7 @@ def expansion(arkansas):
 
         arkansas.government_spending = round(random.uniform(100, 1000), 2)
 
-        arkansas.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -104,7 +104,7 @@ def expansion(arkansas):
 
         arkansas.government_spending = round(random.uniform(100, 1200), 2)
 
-        arkansas.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -129,7 +129,7 @@ def recession(arkansas):
 
         arkansas.government_spending = round(random.uniform(100, 300), 2)
 
-        arkansas.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -152,7 +152,7 @@ def recession(arkansas):
 
         arkansas.government_spending = round(random.uniform(100, 500), 2)
 
-        arkansas.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -176,7 +176,7 @@ def depression(california):
 
         california.government_spending = round(random.uniform(100, 1400), 2)
 
-        california.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -199,7 +199,7 @@ def depression(california):
 
         california.government_spending = round(random.uniform(100, 500), 2)
 
-        california.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -237,7 +237,7 @@ class California:
         """Population variables"""
         self.population = population[str(year)]
         """economic variables"""
-        self.gdp = gdp[str(year)]
+        self.current_gdp = gdp[str(year)]
         self.consumer_spending = None
         self.government_spending = None
         self.investment = None

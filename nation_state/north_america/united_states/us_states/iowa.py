@@ -32,7 +32,7 @@ def recovery(iowa):
 
         iowa.government_spending = round(random.uniform(100, 500), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                              iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -54,7 +54,7 @@ def recovery(iowa):
 
         iowa.government_spending = round(random.uniform(100, 800), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -77,7 +77,7 @@ def expansion(iowa):
 
         iowa.government_spending = round(random.uniform(100, 1000), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -99,7 +99,7 @@ def expansion(iowa):
 
         iowa.government_spending = round(random.uniform(100, 1200), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -123,7 +123,7 @@ def recession(iowa):
 
         iowa.government_spending = round(random.uniform(100, 300), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -145,7 +145,7 @@ def recession(iowa):
 
         iowa.government_spending = round(random.uniform(100, 500), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -169,7 +169,7 @@ def depression(iowa):
 
         iowa.government_spending = round(random.uniform(100, 1400), 2)
 
-        iowa.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        iowa.nation.national_debt += (iowa.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -iowa.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -230,10 +230,11 @@ class Iowa:
         """Population variables"""
         self.population = population[str(year)]
         """economic variables"""
-        self.gdp = gdp[str(year)]
+        self.current_gdp = gdp[str(year)]
         self.consumer_spending = None
         self.government_spending = None
         self.investment = None
         self.exports = None
         self.imports = None
         self.economic_state = "recovery"
+        self.debt = 0

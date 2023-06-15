@@ -56,8 +56,8 @@ def recovery(alaska):
 
         alaska.government_spending = round(random.uniform(100, 750), 2)
 
-        alaska.debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        """alaska.debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))"""
 
         alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                              alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
@@ -81,7 +81,7 @@ def expansion(alaska):
 
         alaska.government_spending = round(random.uniform(100, 1000), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -103,7 +103,7 @@ def expansion(alaska):
 
         alaska.government_spending = round(random.uniform(100, 1200), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -127,7 +127,7 @@ def recession(alaska):
 
         alaska.government_spending = round(random.uniform(100, 300), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -149,7 +149,7 @@ def recession(alaska):
 
         alaska.government_spending = round(random.uniform(100, 500), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -173,7 +173,7 @@ def depression(alaska):
 
         alaska.government_spending = round(random.uniform(100, 1400), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -196,7 +196,7 @@ def depression(alaska):
 
         alaska.government_spending = round(random.uniform(100, 500), 2)
 
-        alaska.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
+        alaska.nation.national_debt += (alaska.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alaska.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
@@ -234,7 +234,7 @@ class Alaska:
         """Population variables"""
         self.population = population[str(year)]
         """economic variables"""
-        self.gdp = gdp[str(year)]
+        self.current_gdp = gdp[str(year)]
         self.consumer_spending = None
         self.government_spending = None
         self.investment = None

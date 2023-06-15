@@ -2,20 +2,11 @@ import random
 import time
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois,
-                       indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachuesetts,
-                       missouri, michigan, minnesota, mississppi, n_d, n_m, nebraska, nevada,
-                       new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
-                       rhode_island, s_d, south_carolina, tennessee, texas, utah, vermont, virginia,
-                       washington, west_virginia, wisconsin, wyoming)
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa)
 """Storing files into an array in order to access state functions for population and economic growth"""
 states = [alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois,
-                       indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachuesetts,
-                       missouri, michigan, minnesota, mississppi, n_d, n_m, nebraska, nevada,
-                       new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
-                       rhode_island, s_d, south_carolina, tennessee, texas, utah, vermont, virginia,
-                       washington, west_virginia, wisconsin, wyoming]
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa]
+folder = "us_states"
 import arcade
 import os
 """Political Dictionaries"""
@@ -40,7 +31,8 @@ vice_presidents = {
 """establishment of states within US(national and regional files will influence each other)"""
 def establish_economy(us):
     for i in range(0, len(us.states)):
-        us.current_gdp += us.states[i].gdp
+        us.current_gdp += us.states[i].current_gdp
+    us.past_gdp = us.current_gdp
 def establish_population(us):
     """Incorporating state population into overall population
     doing in a separate function in order to prevent oversaturation
@@ -65,21 +57,56 @@ def establish_states(us):
                 us.states.append(arkansas.Arkansas(us.date.year, us))
             if file.removesuffix(".py") == "california":
                 us.states.append(california.California(us.date.year, us))
+            if file.removesuffix(".py") == "colorado":
+                us.states.append(colorado.Colorado(us.date.year, us))
+            if file.removesuffix(".py") == "connecticut":
+                us.states.append(conneticut.Conneticut(us.date.year, us))
+            if file.removesuffix(".py") == "delaware":
+                us.states.append(delaware.Delaware(us.date.year, us))
+            if file.removesuffix(".py") == "florida":
+                us.states.append(florida.Florida(us.date.year, us))
+            if file.removesuffix(".py") == "georgia":
+                us.states.append(georgia.Georgia(us.date.year, us))
+            if file.removesuffix(".py") == "hawaii":
+                us.states.append(hawaii.Hawaii(us.date.year, us))
+            if file.removesuffix(".py") == "idaho":
+                us.states.append(idaho.Idaho(us.date.year, us))
+            if file.removesuffix(".py") == "illinois":
+                us.states.append(illinois.Illinois(us.date.year, us))
+            if file.removesuffix(".py") == "indiana":
+                us.states.append(indiana.Indiana(us.date.year, us))
             if file.removesuffix(".py") == "iowa":
                 us.states.append(iowa.Iowa(us.date.year, us))
     # establishment of national population
     establish_population(us)
     establish_economy(us)
-"""economic functions"""
-
-"""population functions"""
+def check_stats(us):
+    print(f"Your current President is {us.president}\n"
+          f"Your current Vice President is {us.vice_president}\n"
+          f"Your current political stability is {round(us.stability, 2)}%\n"
+          f"Your current GDP is ${round(us.current_gdp, 2)}\n"
+          f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
+          f"Your current national debt is ${round(us.national_debt, 2)}\n"
+          f"There have been {us.deaths} deaths that have occurred in {us.current_year}\n"
+          f"There have been {us.births} births that have occurred in {us.current_year}\n"
+          f"The current happiness rating of the United States is {round(us.happiness, 2)}%\n"
+          f"There are currently {len(us.states)} states in the Union")
 def manual_game(us):
     establish_states(us)
     print(us.current_pop)
     print(us.current_gdp)
     while us.current_pop > 1000000:
-        pass
+        check = input("view stats?: ")
+        """viewing stats"""
+        if check.lower() == "yes" or check.lower() == 'y':
+            check_stats(us)
 
+        for i in range(0, len(states) - 1):
+            """looping through list of state files to access population and economic growth functions
+            each iteration interacts with each state Object
+            """
+            states[i].economic_growth(us.states[i])
+            states[i].population_growth(us.states[i])
 class UnitedStates:
     def __init__(self, year):
         # regional variables
