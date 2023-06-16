@@ -2,13 +2,15 @@ import random
 import time
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa)
-"""Storing files into an array in order to access state functions for population and economic growth"""
-states = [alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa]
-folder = "us_states"
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+                       kentucky, louisiana)
 import arcade
 import os
+"""Storing files into an array in order to access state functions for population and economic growth"""
+states = [alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+          kentucky, louisiana]
+folder = "us_states"
 """Political Dictionaries"""
 presidents = {
     "1910": "William Howard Taft",
@@ -75,6 +77,12 @@ def establish_states(us):
                 us.states.append(illinois.Illinois(us.date.year, us))
             if file.removesuffix(".py") == "indiana":
                 us.states.append(indiana.Indiana(us.date.year, us))
+            if file.removesuffix(".py") == "kansas":
+                us.states.append(kansas.Kansas(us.date.year, us))
+            if file.removesuffix(".py") == "kentucky":
+                us.states.append(kentucky.Kentucky(us.date.year, us))
+            if file.removesuffix(".py") == "louisiana":
+                us.states.append(louisiana.Louisiana(us.date.year, us))
             if file.removesuffix(".py") == "iowa":
                 us.states.append(iowa.Iowa(us.date.year, us))
     # establishment of national population
