@@ -3,13 +3,13 @@ import time
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana)
+                       kentucky, louisiana, maine, maryland)
 import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
 states = [alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-          kentucky, louisiana]
+          kentucky, louisiana, maine, maryland]
 folder = "us_states"
 """Political Dictionaries"""
 presidents = {
@@ -83,6 +83,10 @@ def establish_states(us):
                 us.states.append(kentucky.Kentucky(us.date.year, us))
             if file.removesuffix(".py") == "louisiana":
                 us.states.append(louisiana.Louisiana(us.date.year, us))
+            if file.removesuffix(".py") == "maine":
+                us.states.append(maine.Maine(us.date.year, us))
+            if file.removesuffix(".py") == "maryland":
+                us.states.append(maryland.Maryland(us.date.year, us))
             if file.removesuffix(".py") == "iowa":
                 us.states.append(iowa.Iowa(us.date.year, us))
     # establishment of national population
