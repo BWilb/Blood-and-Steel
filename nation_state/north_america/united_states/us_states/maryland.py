@@ -19,13 +19,13 @@ gdp = {
 }
 def population_growth(maryland):
     births = random.randrange(10, 20)
-    deaths = random.randrange(5, 10)
+    deaths = random.randrange(5, 15)
     maryland.population += (births - deaths)
     maryland.nation.current_pop += (births - deaths)
 
 """economic_functions"""
 def recovery(maryland):
-    if maine.nation.economic_stimulus:
+    if maryland.nation.economic_stimulus:
         """If United States has implemented an economic stimulus"""
         maryland.consumer_spending = round(random.uniform(10, 75), 2)
         maryland.investment = round(random.uniform(25, 250), 2)
@@ -41,10 +41,10 @@ def recovery(maryland):
 
         maryland.exports = round(random.uniform(450, 750), 2)
         maryland.imports = round(random.uniform(320, 560), 2)
-        maryland.current_gdp += (maine.consumer_spending + maryland.investment + maryland.government_spending +
-                             (maine.exports - maryland.imports))
+        maryland.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                             (maryland.exports - maryland.imports))
         """implementing two ways of expanding regional and national gdp"""
-        maryland.nation.current_gdp += (maine.consumer_spending + maryland.investment + maryland.government_spending +
+        maryland.nation.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
                                        (maryland.exports - maryland.imports))
 
     else:
@@ -113,112 +113,112 @@ def expansion(maine):
         maine.nation.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
                                        (maine.exports - maine.imports))
 
-def recession(maine):
-    if maine.nation.economic_stimulus:
+def recession(maryland):
+    if maryland.nation.economic_stimulus:
 
         """If United States hasn't implemented an economic stimulus"""
-        maine.consumer_spending = -round(random.uniform(10, 250), 2)
-        maine.investment = -round(random.uniform(25, 350), 2)
+        maryland.consumer_spending = -round(random.uniform(10, 250), 2)
+        maryland.investment = -round(random.uniform(25, 350), 2)
 
-        maine.government_spending = round(random.uniform(100, 300), 2)
+        maryland.government_spending = round(random.uniform(100, 300), 2)
 
-        maine.nation.national_debt += (maine.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -maine.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        maryland.nation.national_debt += (maryland.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -maryland.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        maine.exports = round(random.uniform(250, 450), 2)
-        maine.imports = round(random.uniform(320, 760), 2)
-        maine.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                             (maine.exports - maine.imports))
+        maryland.exports = round(random.uniform(250, 450), 2)
+        maryland.imports = round(random.uniform(320, 760), 2)
+        maryland.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                             (maryland.exports - maryland.imports))
         """implementing two ways of expanding regional and national gdp"""
-        maine.nation.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                                       (maine.exports - maine.imports))
+        maryland.nation.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                                       (maryland.exports - maryland.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
-        maine.consumer_spending = -round(random.uniform(10, 350), 2)
-        maine.investment = -round(random.uniform(25, 550), 2)
+        maryland.consumer_spending = -round(random.uniform(10, 350), 2)
+        maryland.investment = -round(random.uniform(25, 550), 2)
 
-        maine.government_spending = round(random.uniform(100, 500), 2)
+        maryland.government_spending = round(random.uniform(100, 500), 2)
 
-        maine.nation.national_debt += (maine.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -maine.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        maryland.nation.national_debt += (maryland.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -maryland.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        maine.exports = round(random.uniform(250, 350), 2)
-        maine.imports = round(random.uniform(320, 860), 2)
-        maine.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                             (maine.exports - maine.imports))
+        maryland.exports = round(random.uniform(250, 350), 2)
+        maryland.imports = round(random.uniform(320, 860), 2)
+        maryland.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                             (maryland.exports - maryland.imports))
         """implementing two ways of expanding regional and national gdp"""
-        maine.nation.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                                       (maine.exports - maine.imports))
+        maryland.nation.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                                       (maryland.exports - maryland.imports))
 
-def depression(maine):
-    if maine.nation.economic_stimulus:
+def depression(maryland):
+    if maryland.nation.economic_stimulus:
 
         """If United States hasn't implemented an economic stimulus"""
-        maine.consumer_spending = -round(random.uniform(10, 550), 2)
-        maine.investment = -round(random.uniform(25, 750), 2)
+        maryland.consumer_spending = -round(random.uniform(10, 550), 2)
+        maryland.investment = -round(random.uniform(25, 750), 2)
 
-        maine.government_spending = round(random.uniform(100, 1400), 2)
+        maryland.government_spending = round(random.uniform(100, 1400), 2)
 
-        maine.nation.national_debt += (maine.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -maine.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        maryland.nation.national_debt += (maryland.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -maryland.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        maine.exports = round(random.uniform(250, 750), 2)
-        maine.imports = round(random.uniform(320, 760), 2)
-        maine.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                             (maine.exports - maine.imports))
+        maryland.exports = round(random.uniform(250, 750), 2)
+        maryland.imports = round(random.uniform(320, 760), 2)
+        maryland.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                             (maryland.exports - maryland.imports))
         """implementing two ways of expanding regional and national gdp"""
-        maine.nation.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                                       (maine.exports - maine.imports))
+        maryland.nation.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                                       (maryland.exports - maryland.imports))
 
     else:
 
         """If United States hasn't implemented an economic stimulus"""
-        maine.consumer_spending = -round(random.uniform(10, 350), 2)
-        maine.investment = -round(random.uniform(25, 550), 2)
+        maryland.consumer_spending = -round(random.uniform(10, 350), 2)
+        maryland.investment = -round(random.uniform(25, 550), 2)
 
-        maine.government_spending = round(random.uniform(100, 500), 2)
+        maryland.government_spending = round(random.uniform(100, 500), 2)
 
-        maine.nation.national_debt += (maine.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -maine.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        maryland.nation.national_debt += (maryland.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -maryland.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        maine.exports = round(random.uniform(250, 350), 2)
-        maine.imports = round(random.uniform(320, 1200), 2)
-        maine.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                             (maine.exports - maine.imports))
+        maryland.exports = round(random.uniform(250, 350), 2)
+        maryland.imports = round(random.uniform(320, 1200), 2)
+        maryland.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                             (maryland.exports - maryland.imports))
         """implementing two ways of expanding regional and national gdp"""
-        maine.nation.current_gdp += (maine.consumer_spending + maine.investment + maine.government_spending +
-                (maine.exports - maine.imports))
+        maryland.nation.current_gdp += (maryland.consumer_spending + maryland.investment + maryland.government_spending +
+                (maryland.exports - maryland.imports))
 
-def economic_growth(maine):
+def economic_growth(maryland):
     """Economic growth of iowa as individual state"""
-    if maine.economic_state == "recovery":
-        recovery(maine)
+    if maryland.economic_state == "recovery":
+        recovery(maryland)
 
-    elif maine.economic_state == "depression":
-        depression(maine)
+    elif maryland.economic_state == "depression":
+        depression(maryland)
 
-    elif maine.economic_state == "recession":
-        recession(maine)
+    elif maryland.economic_state == "recession":
+        recession(maryland)
 
-    elif maine.economic_state == "expansion":
-        expansion(maine)
+    elif maryland.economic_state == "expansion":
+        expansion(maryland)
 
 class Maryland:
     def __init__(self, year, us):
