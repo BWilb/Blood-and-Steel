@@ -3,13 +3,15 @@ import time
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri)
+                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+                       n_m, nebraska, nevada, new_hampshire)
 import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
 states = [alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-          kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri]
+          kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+          n_m, nebraska, nevada, new_hampshire]
 folder = "us_states"
 """Political Dictionaries"""
 presidents = {
@@ -32,14 +34,14 @@ vice_presidents = {
 }
 """establishment of states within US(national and regional files will influence each other)"""
 def establish_economy(us):
-    for i in range(0, len(us.states)):
+    for i in range(0, len(us.states) - 1):
         us.current_gdp += us.states[i].current_gdp
     us.past_gdp = us.current_gdp
 def establish_population(us):
     """Incorporating state population into overall population
     doing in a separate function in order to prevent oversaturation
     """
-    for i in range(0, len(us.states)):
+    for i in range(0, len(us.states) - 1):
         us.current_pop += us.states[i].population
 
 def establish_states(us):
@@ -77,6 +79,8 @@ def establish_states(us):
                 us.states.append(illinois.Illinois(us.date.year, us))
             if file.removesuffix(".py") == "indiana":
                 us.states.append(indiana.Indiana(us.date.year, us))
+            if file.removesuffix(".py") == "iowa":
+                us.states.append(iowa.Iowa(us.date.year, us))
             if file.removesuffix(".py") == "kansas":
                 us.states.append(kansas.Kansas(us.date.year, us))
             if file.removesuffix(".py") == "kentucky":
@@ -93,8 +97,18 @@ def establish_states(us):
                 us.states.append(mississppi.Mississippi(us.date.year, us))
             if file.removesuffix(".py") == "missouri":
                 us.states.append(missouri.Missouri(us.date.year, us))
-            if file.removesuffix(".py") == "iowa":
-                us.states.append(iowa.Iowa(us.date.year, us))
+            if file.removesuffix(".py") == "montana":
+                us.states.append(montana.Montana(us.date.year, us))
+            if file.removesuffix(".py") == "n_d":
+                us.states.append(n_d.NorthDakota(us.date.year, us))
+            if file.removesuffix(".py") == "n_m":
+                us.states.append(n_m.NewMexico(us.date.year, us))
+            if file.removesuffix(".py") == "nebraska":
+                us.states.append(nebraska.Nebraska(us.date.year, us))
+            if file.removesuffix(".py") == "nebraska":
+                us.states.append(nebraska.Nebraska(us.date.year, us))
+            if file.removesuffix(".py") == "new_hampshire":
+                us.states.append(new_hampshire.NewHampshire(us.date.year, us))
     # establishment of national population
     establish_population(us)
     establish_economy(us)
@@ -119,7 +133,7 @@ def manual_game(us):
         if check.lower() == "yes" or check.lower() == 'y':
             check_stats(us)
 
-        for i in range(0, len(states) - 1):
+        for i in range(0, len(us.states) - 1):
             """looping through list of state files to access population and economic growth functions
             each iteration interacts with each state Object
             """
