@@ -1,27 +1,28 @@
 import random
 
 population = {
-    "1910": 1198000,
-    "1914": 1264000,
-    "1918": 1260000,
-    "1932": 1386000,
-    "1936": 1358000,
-    "1939": 1318000
+    "1910": 3910052,
+    "1914": 4220548,
+    "1918": 4531111,
+    "1932": 5959894,
+    "1936": 6194104,
+    "1939": 6370558
 }
 
 gdp = {
-    "1910": 7500000,
-    "1914": 7593747,
-    "1918": 7890098,
-    "1932": 7989984,
-    "1936": 8210359,
-    "1939": 8390039
+    "1910": 890000000,
+    "1914": 891224232,
+    "1918": 912013823,
+    "1932": 902324722,
+    "1936": 909394732,
+    "1939": 912373422
 }
 def population_growth(alabama):
     births = random.randrange(10, 20)
     deaths = random.randrange(5, 10)
     alabama.population += (births - deaths)
     alabama.nation.current_pop += (births - deaths)
+
 
 """economic_functions"""
 def recovery(alabama):
@@ -220,10 +221,10 @@ def economic_growth(alabama):
     elif alabama.economic_state == "expansion":
         expansion(alabama)
 
-class Nebraska:
+class Texas:
     def __init__(self, year, us):
         """regional variables"""
-        self.name = "Nebraska"
+        self.name = "Texas"
         # establishment of connection to United States
         self.nation = us
         """Population variables"""

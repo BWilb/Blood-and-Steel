@@ -4,14 +4,18 @@ from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
                        kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
-                       n_m, nebraska, nevada, new_hampshire)
+                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
+                       west_virginia, wisconsin, wyoming)
 import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
 states = [alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
           kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
-          n_m, nebraska, nevada, new_hampshire]
+          n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+          rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
+          west_virginia, wisconsin, wyoming]
 folder = "us_states"
 """Political Dictionaries"""
 presidents = {
@@ -106,9 +110,47 @@ def establish_states(us):
             if file.removesuffix(".py") == "nebraska":
                 us.states.append(nebraska.Nebraska(us.date.year, us))
             if file.removesuffix(".py") == "nebraska":
-                us.states.append(nebraska.Nebraska(us.date.year, us))
+                us.states.append(nevada.Nevada(us.date.year, us))
             if file.removesuffix(".py") == "new_hampshire":
                 us.states.append(new_hampshire.NewHampshire(us.date.year, us))
+            if file.removesuffix(".py") == "new_jersey":
+                us.states.append(new_jersey.NewJersey(us.date.year, us))
+            if file.removesuffix(".py") == "new_york":
+                us.states.append(new_york.NewYork(us.date.year, us))
+            if file.removesuffix(".py") == "north_carolina":
+                us.states.append(north_carolina.NorthCarolina(us.date.year, us))
+            if file.removesuffix(".py") == "ohio":
+                us.states.append(ohio.Ohio(us.date.year, us))
+            if file.removesuffix(".py") == "ok":
+                us.states.append(ok.Oklahoma(us.date.year, us))
+            if file.removesuffix(".py") == "oregon":
+                us.states.append(oregon.Oregon(us.date.year, us))
+            if file.removesuffix(".py") == "pennsylvania":
+                us.states.append(pennsylvania.Pennsylvania(us.date.year, us))
+            if file.removesuffix(".py") == "rhode_island":
+                us.states.append(rhode_island.RhodeIsland(us.date.year, us))
+            if file.removesuffix(".py") == "s_d":
+                us.states.append(s_d.SouthDakota(us.date.year, us))
+            if file.removesuffix(".py") == "south_carolina":
+                us.states.append(south_carolina.SouthCarolina(us.date.year, us))
+            if file.removesuffix(".py") == "tennessee":
+                us.states.append(tennessee.Tennessee(us.date.year, us))
+            if file.removesuffix(".py") == "texas":
+                us.states.append(texas.Texas(us.date.year, us))
+            if file.removesuffix(".py") == "utah":
+                us.states.append(utah.Utah(us.date.year, us))
+            if file.removesuffix(".py") == "vermont":
+                us.states.append(vermont.Vermont(us.date.year, us))
+            if file.removesuffix(".py") == "virginia":
+                us.states.append(virginia.Virginia(us.date.year, us))
+            if file.removesuffix(".py") == "washington":
+                us.states.append(washington.Washington(us.date.year, us))
+            if file.removesuffix(".py") == "west_virginia":
+                us.states.append(west_virginia.WestVirginia(us.date.year, us))
+            if file.removesuffix(".py") == "wisconsin":
+                us.states.append(wisconsin.Wisconsin(us.date.year, us))
+            if file.removesuffix(".py") == "wyoming":
+                us.states.append(wyoming.Wyoming(us.date.year, us))
     # establishment of national population
     establish_population(us)
     establish_economy(us)
@@ -193,5 +235,5 @@ class UnitedStates:
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
 
-us = UnitedStates("1910")
+us = UnitedStates("1918")
 manual_game(us)

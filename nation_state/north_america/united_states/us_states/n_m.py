@@ -22,7 +22,6 @@ def population_growth(alabama):
     deaths = random.randrange(5, 10)
     alabama.population += (births - deaths)
     alabama.nation.current_pop += (births - deaths)
-    print(alabama.population)
 
 """economic_functions"""
 def recovery(alabama):

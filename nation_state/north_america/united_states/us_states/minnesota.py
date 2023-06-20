@@ -153,7 +153,7 @@ def recession(minnesota):
 
         minnesota.exports = round(random.uniform(250, 350), 2)
         minnesota.imports = round(random.uniform(320, 860), 2)
-        minnesota.current_gdp += (minnesota.consumer_spending + minnesota.investment + massachuesetts.government_spending +
+        minnesota.current_gdp += (minnesota.consumer_spending + minnesota.investment + minnesota.government_spending +
                              (minnesota.exports - minnesota.imports))
         """implementing two ways of expanding regional and national gdp"""
         minnesota.nation.current_gdp += (minnesota.consumer_spending + minnesota.investment + minnesota.government_spending +
