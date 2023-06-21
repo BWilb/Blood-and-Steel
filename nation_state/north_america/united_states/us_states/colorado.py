@@ -17,18 +17,20 @@ gdp = {
     "1936": 545873,
     "1939": 567348
 }
-def population_growth(arkansas):
+def population_growth(colorado):
     births = random.randrange(7, 19)
     deaths = random.randrange(2, 15)
-    arkansas.population += (births - deaths)
-    arkansas.nation.current_pop += (births - deaths)
+    colorado.population += (births - deaths)
+    colorado.nation.current_pop += (births - deaths)
+    colorado.nation.births += births
+    colorado.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(colorado):
     if colorado.nation.economic_stimulus:
         """If United States has implemented an economic stimulus"""
-        colorado.consumer_spending = round(random.uniform(10, 75), 2)
-        colorado.investment = round(random.uniform(25, 100), 2)
+        colorado.consumer_spending = round(random.uniform(10, 55), 2)
+        colorado.investment = round(random.uniform(25, 50), 2)
 
         colorado.government_spending = round(random.uniform(100, 500), 2)
 
@@ -42,7 +44,7 @@ def recovery(colorado):
         """
 
         colorado.exports = round(random.uniform(150, 350), 2)
-        colorado.imports = round(random.uniform(20, 360), 2)
+        colorado.imports = round(random.uniform(20, 160), 2)
         colorado.current_gdp += (colorado.consumer_spending + colorado.investment + colorado.government_spending +
                              (colorado.exports - colorado.imports))
         """implementing two ways of expanding regional and national gdp"""
@@ -51,8 +53,8 @@ def recovery(colorado):
 
     else:
         """If United States has implemented an economic stimulus"""
-        colorado.consumer_spending = round(random.uniform(10, 55), 2)
-        colorado.investment = round(random.uniform(25, 80), 2)
+        colorado.consumer_spending = round(random.uniform(10, 35), 2)
+        colorado.investment = round(random.uniform(25, 40), 2)
 
         colorado.government_spending = round(random.uniform(100, 750), 2)
 
@@ -67,7 +69,7 @@ def recovery(colorado):
         """
 
         colorado.exports = round(random.uniform(150, 350), 2)
-        colorado.imports = round(random.uniform(20, 360), 2)
+        colorado.imports = round(random.uniform(20, 260), 2)
         colorado.current_gdp += (colorado.consumer_spending + colorado.investment + colorado.government_spending +
                              (colorado.exports - colorado.imports))
         """implementing two ways of expanding regional and national gdp"""
@@ -76,8 +78,8 @@ def recovery(colorado):
 def expansion(colorado):
     if colorado.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
-        colorado.consumer_spending = round(random.uniform(10, 550), 2)
-        colorado.investment = round(random.uniform(25, 750), 2)
+        colorado.consumer_spending = round(random.uniform(10, 250), 2)
+        colorado.investment = round(random.uniform(25, 350), 2)
 
         colorado.government_spending = round(random.uniform(100, 1000), 2)
 
@@ -99,8 +101,8 @@ def expansion(colorado):
 
     else:
         """If United States hasn't implemented an economic stimulus"""
-        colorado.consumer_spending = round(random.uniform(10, 550), 2)
-        colorado.investment = round(random.uniform(25, 750), 2)
+        colorado.consumer_spending = round(random.uniform(10, 150), 2)
+        colorado.investment = round(random.uniform(25, 250), 2)
 
         colorado.government_spending = round(random.uniform(100, 1200), 2)
 

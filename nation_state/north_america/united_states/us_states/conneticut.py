@@ -22,7 +22,8 @@ def population_growth(connecticut):
     deaths = random.randrange(2, 15)
     connecticut.population += (births - deaths)
     connecticut.nation.current_pop += (births - deaths)
-
+    connecticut.nation.births += births
+    connecticut.nation.deaths += deaths
 """economic_functions"""
 def recovery(connecticut):
     if connecticut.nation.economic_stimulus:
@@ -41,8 +42,8 @@ def recovery(connecticut):
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        connecticut.exports = round(random.uniform(150, 350), 2)
-        connecticut.imports = round(random.uniform(20, 360), 2)
+        connecticut.exports = round(random.uniform(150, 250), 2)
+        connecticut.imports = round(random.uniform(20, 60), 2)
         connecticut.current_gdp += (connecticut.consumer_spending + connecticut.investment + connecticut.government_spending +
                              (connecticut.exports - connecticut.imports))
         """implementing two ways of expanding regional and national gdp"""
@@ -67,7 +68,7 @@ def recovery(connecticut):
         """
 
         connecticut.exports = round(random.uniform(150, 350), 2)
-        connecticut.imports = round(random.uniform(20, 360), 2)
+        connecticut.imports = round(random.uniform(20, 160), 2)
         connecticut.current_gdp += (connecticut.consumer_spending + connecticut.investment + connecticut.government_spending +
                              (connecticut.exports - connecticut.imports))
         """implementing two ways of expanding regional and national gdp"""
@@ -76,8 +77,8 @@ def recovery(connecticut):
 def expansion(connecticut):
     if connecticut.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
-        connecticut.consumer_spending = round(random.uniform(10, 550), 2)
-        connecticut.investment = round(random.uniform(25, 750), 2)
+        connecticut.consumer_spending = round(random.uniform(10, 350), 2)
+        connecticut.investment = round(random.uniform(25, 450), 2)
 
         connecticut.government_spending = round(random.uniform(100, 1000), 2)
 

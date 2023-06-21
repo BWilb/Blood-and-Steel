@@ -22,6 +22,8 @@ def population_growth(michigan):
     deaths = random.randrange(5, 15)
     michigan.population += (births - deaths)
     michigan.nation.current_pop += (births - deaths)
+    michigan.nation.births += births
+    michigan.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(michigan):

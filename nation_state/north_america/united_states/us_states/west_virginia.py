@@ -17,12 +17,13 @@ gdp = {
     "1936": 7210359,
     "1939": 7390039
 }
-def population_growth(alabama):
-    births = random.randrange(10, 20)
-    deaths = random.randrange(5, 10)
-    alabama.population += (births - deaths)
-    alabama.nation.current_pop += (births - deaths)
-
+def population_growth(w_v):
+    births = random.randrange(1, 10)
+    deaths = random.randrange(1, 8)
+    w_v.population += (births - deaths)
+    w_v.nation.current_pop += (births - deaths)
+    w_v.nation.births += births
+    w_v.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(alabama):

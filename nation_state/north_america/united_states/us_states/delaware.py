@@ -22,6 +22,8 @@ def population_growth(delaware):
     deaths = random.randrange(2, 8)
     delaware.population += (births - deaths)
     delaware.nation.current_pop += (births - deaths)
+    delaware.nation.births += births
+    delaware.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(delaware):

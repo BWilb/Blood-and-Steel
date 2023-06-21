@@ -22,6 +22,8 @@ def population_growth(alabama):
     deaths = random.randrange(5, 10)
     alabama.population += (births - deaths)
     alabama.nation.current_pop += (births - deaths)
+    alabama.nation.births += births
+    alabama.nation.deaths += deaths
 
 
 """economic_functions"""
@@ -31,7 +33,7 @@ def recovery(alabama):
         alabama.consumer_spending = round(random.uniform(10, 75), 2)
         alabama.investment = round(random.uniform(25, 250), 2)
 
-        alabama.government_spending = round(random.uniform(100, 500), 2)
+        alabama.government_spending = round(random.uniform(100, 450), 2)
 
         alabama.nation.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
                              alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
@@ -167,7 +169,7 @@ def depression(alabama):
         alabama.consumer_spending = -round(random.uniform(10, 550), 2)
         alabama.investment = -round(random.uniform(25, 750), 2)
 
-        alabama.government_spending = round(random.uniform(100, 1400), 2)
+        alabama.government_spending = round(random.uniform(100, 1500), 2)
 
         alabama.nation.national_debt += (alabama.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -alabama.consumer_spending * round(random.uniform(0.001, 0.009), 5))
@@ -176,7 +178,7 @@ def depression(alabama):
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        alabama.exports = round(random.uniform(250, 750), 2)
+        alabama.exports = round(random.uniform(250, 550), 2)
         alabama.imports = round(random.uniform(320, 760), 2)
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))
@@ -199,7 +201,7 @@ def depression(alabama):
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        alabama.exports = round(random.uniform(250, 350), 2)
+        alabama.exports = round(random.uniform(250, 750), 2)
         alabama.imports = round(random.uniform(320, 1200), 2)
         alabama.current_gdp += (alabama.consumer_spending + alabama.investment + alabama.government_spending +
                              (alabama.exports - alabama.imports))

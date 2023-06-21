@@ -17,155 +17,157 @@ gdp = {
     "1936": 945873,
     "1939": 967348
 }
-def population_growth(arkansas):
+def population_growth(california):
     births = random.randrange(7, 25)
     deaths = random.randrange(2, 18)
-    arkansas.population += (births - deaths)
-    arkansas.nation.current_pop += (births - deaths)
+    california.population += (births - deaths)
+    california.nation.current_pop += (births - deaths)
+    california.nation.births += births
+    california.nation.deaths += deaths
 
 """economic_functions"""
-def recovery(arkansas):
-    if arkansas.nation.economic_stimulus:
+def recovery(california):
+    if california.nation.economic_stimulus:
         """If United States has implemented an economic stimulus"""
-        arkansas.consumer_spending = round(random.uniform(10, 75), 2)
-        arkansas.investment = round(random.uniform(25, 100), 2)
+        california.consumer_spending = round(random.uniform(10, 225), 2)
+        california.investment = round(random.uniform(25, 200), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 500), 2)
+        california.government_spending = round(random.uniform(100, 600), 2)
 
-        arkansas.debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(150, 350), 2)
-        arkansas.imports = round(random.uniform(20, 360), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(150, 650), 2)
+        california.imports = round(random.uniform(20, 360), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+        california.nation.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                                      (california.exports - california.imports))
 
     else:
         """If United States has implemented an economic stimulus"""
-        arkansas.consumer_spending = round(random.uniform(10, 55), 2)
-        arkansas.investment = round(random.uniform(25, 80), 2)
+        california.consumer_spending = round(random.uniform(10, 175), 2)
+        california.investment = round(random.uniform(25, 150), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 750), 2)
+        california.government_spending = round(random.uniform(100, 750), 2)
 
-        arkansas.debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
 
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                             california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(150, 350), 2)
-        arkansas.imports = round(random.uniform(20, 360), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(150, 550), 2)
+        california.imports = round(random.uniform(20, 360), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
-def expansion(arkansas):
-    if arkansas.nation.economic_stimulus:
+        california.nation.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                                      (california.exports - california.imports))
+def expansion(california):
+    if california.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
-        arkansas.consumer_spending = round(random.uniform(10, 550), 2)
-        arkansas.investment = round(random.uniform(25, 750), 2)
+        california.consumer_spending = round(random.uniform(10, 550), 2)
+        california.investment = round(random.uniform(25, 750), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 1000), 2)
+        california.government_spending = round(random.uniform(100, 1000), 2)
 
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(450, 1150), 2)
-        arkansas.imports = round(random.uniform(320, 760), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(450, 1450), 2)
+        california.imports = round(random.uniform(320, 760), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        california.nation.current_gdp += (
+                    california.consumer_spending + california.investment + california.government_spending +
+                    (california.exports - california.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
-        arkansas.consumer_spending = round(random.uniform(10, 550), 2)
-        arkansas.investment = round(random.uniform(25, 750), 2)
+        california.consumer_spending = round(random.uniform(10, 550), 2)
+        california.investment = round(random.uniform(25, 750), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 1200), 2)
+        california.government_spending = round(random.uniform(100, 1800), 2)
 
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(450, 1150), 2)
-        arkansas.imports = round(random.uniform(320, 760), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(450, 1150), 2)
+        california.imports = round(random.uniform(320, 760), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        california.nation.current_gdp += (
+                    california.consumer_spending + california.investment + california.government_spending +
+                    (california.exports - california.imports))
 
-def recession(arkansas):
-    if arkansas.nation.economic_stimulus:
+def recession(california):
+    if california.nation.economic_stimulus:
 
         """If United States hasn't implemented an economic stimulus"""
-        arkansas.consumer_spending = -round(random.uniform(10, 250), 2)
-        arkansas.investment = -round(random.uniform(25, 350), 2)
+        california.consumer_spending = -round(random.uniform(10, 250), 2)
+        california.investment = -round(random.uniform(25, 350), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 300), 2)
+        california.government_spending = round(random.uniform(100, 300), 2)
 
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(250, 450), 2)
-        arkansas.imports = round(random.uniform(320, 760), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(250, 450), 2)
+        california.imports = round(random.uniform(320, 760), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        california.nation.current_gdp += (
+                    california.consumer_spending + california.investment + california.government_spending +
+                    (california.exports - california.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
-        arkansas.consumer_spending = -round(random.uniform(10, 350), 2)
-        arkansas.investment = -round(random.uniform(25, 550), 2)
+        california.consumer_spending = -round(random.uniform(10, 350), 2)
+        california.investment = -round(random.uniform(25, 550), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 500), 2)
+        california.government_spending = round(random.uniform(100, 500), 2)
 
-        arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
+                               -california.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(250, 350), 2)
-        arkansas.imports = round(random.uniform(320, 860), 2)
-        arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+        california.exports = round(random.uniform(250, 350), 2)
+        california.imports = round(random.uniform(320, 860), 2)
+        california.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                             (california.exports - california.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+        california.nation.current_gdp += (california.consumer_spending + california.investment + california.government_spending +
+                                      (california.exports - california.imports))
 
 def depression(california):
     if california.nation.economic_stimulus:
@@ -194,10 +196,10 @@ def depression(california):
     else:
 
         """If United States hasn't implemented an economic stimulus"""
-        california.consumer_spending = -round(random.uniform(10, 350), 2)
-        california.investment = -round(random.uniform(25, 550), 2)
+        california.consumer_spending = -round(random.uniform(10, 750), 2)
+        california.investment = -round(random.uniform(25, 1050), 2)
 
-        california.government_spending = round(random.uniform(100, 500), 2)
+        california.government_spending = round(random.uniform(100, 1900), 2)
 
         california.nation.national_debt += (california.government_spending * round(random.uniform(0.001, 0.009), 5) +
                                -california.consumer_spending * round(random.uniform(0.001, 0.009), 5))

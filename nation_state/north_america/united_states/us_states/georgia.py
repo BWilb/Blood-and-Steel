@@ -22,6 +22,8 @@ def population_growth(georgia):
     deaths = random.randrange(5, 45)
     georgia.population += (births - deaths)
     georgia.nation.current_pop += (births - deaths)
+    georgia.nation.births += births
+    georgia.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(georgia):

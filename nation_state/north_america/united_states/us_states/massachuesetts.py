@@ -17,11 +17,13 @@ gdp = {
     "1936": 3210359000,
     "1939": 3390039000
 }
-def population_growth(maryland):
+def population_growth(massachuesetts):
     births = random.randrange(10, 20)
     deaths = random.randrange(5, 15)
-    maryland.population += (births - deaths)
-    maryland.nation.current_pop += (births - deaths)
+    massachuesetts.population += (births - deaths)
+    massachuesetts.nation.current_pop += (births - deaths)
+    massachuesetts.nation.births += births
+    massachuesetts.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(maryland):

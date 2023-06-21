@@ -22,57 +22,54 @@ def population_growth(arkansas):
     deaths = random.randrange(2, 18)
     arkansas.population += (births - deaths)
     arkansas.nation.current_pop += (births - deaths)
+    arkansas.nation.births += births
+    arkansas.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(arkansas):
     if arkansas.nation.economic_stimulus:
         """If United States has implemented an economic stimulus"""
         arkansas.consumer_spending = round(random.uniform(10, 75), 2)
-        arkansas.investment = round(random.uniform(25, 100), 2)
+        arkansas.investment = round(random.uniform(25, 250), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 500), 2)
+        arkansas.government_spending = round(random.uniform(100, 450), 2)
 
-        arkansas.debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(150, 350), 2)
-        arkansas.imports = round(random.uniform(20, 360), 2)
+        arkansas.exports = round(random.uniform(450, 750), 2)
+        arkansas.imports = round(random.uniform(320, 560), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+        arkansas.nation.current_gdp += (alabama.consumer_spending + arkansas.investment + arkansas.government_spending +
+                                       (arkansas.exports - arkansas.imports))
 
     else:
-        """If United States has implemented an economic stimulus"""
-        arkansas.consumer_spending = round(random.uniform(10, 55), 2)
-        arkansas.investment = round(random.uniform(25, 80), 2)
+        """If United States hasn't implemented an economic stimulus"""
+        arkansas.consumer_spending = round(random.uniform(10, 250), 2)
+        arkansas.investment = round(random.uniform(25, 350), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 750), 2)
-
-        arkansas.debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+        arkansas.government_spending = round(random.uniform(100, 800), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                             arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(150, 350), 2)
-        arkansas.imports = round(random.uniform(20, 360), 2)
+        arkansas.exports = round(random.uniform(450, 750), 2)
+        arkansas.imports = round(random.uniform(320, 560), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
         arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+                                       (arkansas.exports - arkansas.imports))
 def expansion(arkansas):
     if arkansas.nation.economic_stimulus:
         """If United States hasn't implemented an economic stimulus"""
@@ -82,7 +79,7 @@ def expansion(arkansas):
         arkansas.government_spending = round(random.uniform(100, 1000), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
@@ -91,11 +88,10 @@ def expansion(arkansas):
         arkansas.exports = round(random.uniform(450, 1150), 2)
         arkansas.imports = round(random.uniform(320, 760), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
+                                       (arkansas.exports - arkansas.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -105,7 +101,7 @@ def expansion(arkansas):
         arkansas.government_spending = round(random.uniform(100, 1200), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
@@ -114,11 +110,10 @@ def expansion(arkansas):
         arkansas.exports = round(random.uniform(450, 1150), 2)
         arkansas.imports = round(random.uniform(320, 760), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
+                                       (arkansas.exports - arkansas.imports))
 
 def recession(arkansas):
     if arkansas.nation.economic_stimulus:
@@ -130,7 +125,7 @@ def recession(arkansas):
         arkansas.government_spending = round(random.uniform(100, 300), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
@@ -139,11 +134,10 @@ def recession(arkansas):
         arkansas.exports = round(random.uniform(250, 450), 2)
         arkansas.imports = round(random.uniform(320, 760), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
-        arkansas.nation.current_gdp += (
-                    arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                    (arkansas.exports - arkansas.imports))
+        arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
+                                       (arkansas.exports - arkansas.imports))
 
     else:
         """If United States hasn't implemented an economic stimulus"""
@@ -153,7 +147,7 @@ def recession(arkansas):
         arkansas.government_spending = round(random.uniform(100, 500), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
@@ -162,10 +156,10 @@ def recession(arkansas):
         arkansas.exports = round(random.uniform(250, 350), 2)
         arkansas.imports = round(random.uniform(320, 860), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
         arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+                                       (arkansas.exports - arkansas.imports))
 
 def depression(arkansas):
     if arkansas.nation.economic_stimulus:
@@ -174,22 +168,22 @@ def depression(arkansas):
         arkansas.consumer_spending = -round(random.uniform(10, 550), 2)
         arkansas.investment = -round(random.uniform(25, 750), 2)
 
-        arkansas.government_spending = round(random.uniform(100, 1400), 2)
+        arkansas.government_spending = round(random.uniform(100, 1500), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(250, 750), 2)
+        arkansas.exports = round(random.uniform(250, 550), 2)
         arkansas.imports = round(random.uniform(320, 760), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
         arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                                      (arkansas.exports - arkansas.imports))
+                                       (arkansas.exports - arkansas.imports))
 
     else:
 
@@ -200,19 +194,19 @@ def depression(arkansas):
         arkansas.government_spending = round(random.uniform(100, 500), 2)
 
         arkansas.nation.national_debt += (arkansas.government_spending * round(random.uniform(0.001, 0.009), 5) +
-                               -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
+                                         -arkansas.consumer_spending * round(random.uniform(0.001, 0.009), 5))
         """
         National debt includes both portions of US government spending and consumer spending.
         The portions are comprised of the loans and bonds that are bought and sold
         """
 
-        arkansas.exports = round(random.uniform(250, 350), 2)
+        arkansas.exports = round(random.uniform(250, 750), 2)
         arkansas.imports = round(random.uniform(320, 1200), 2)
         arkansas.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                             (arkansas.exports - arkansas.imports))
+                                (arkansas.exports - arkansas.imports))
         """implementing two ways of expanding regional and national gdp"""
         arkansas.nation.current_gdp += (arkansas.consumer_spending + arkansas.investment + arkansas.government_spending +
-                (arkansas.exports - arkansas.imports))
+                                       (arkansas.exports - arkansas.imports))
 
 def economic_growth(arkansas):
     """Economic growth of iowa as individual state"""

@@ -22,6 +22,8 @@ def population_growth(illinois):
     deaths = random.randrange(1, 20)
     illinois.population += (births - deaths)
     illinois.nation.current_pop += (births - deaths)
+    illinois.nation.births += births
+    illinois.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(illinois):

@@ -22,6 +22,8 @@ def population_growth(florida):
     deaths = random.randrange(5, 20)
     florida.population += (births - deaths)
     florida.nation.current_pop += (births - deaths)
+    florida.nation.births += births
+    florida.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(florida):

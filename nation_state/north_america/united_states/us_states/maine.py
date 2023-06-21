@@ -22,6 +22,8 @@ def population_growth(maine):
     deaths = random.randrange(5, 10)
     maine.population += (births - deaths)
     maine.nation.current_pop += (births - deaths)
+    maine.nation.births += births
+    maine.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(maine):

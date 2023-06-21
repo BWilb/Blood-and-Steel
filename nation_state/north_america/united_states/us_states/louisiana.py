@@ -22,6 +22,8 @@ def population_growth(louisiana):
     deaths = random.randrange(1, 10)
     louisiana.population += (births - deaths)
     louisiana.nation.current_pop += (births - deaths)
+    louisiana.nation.births += births
+    louisiana.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(louisiana):

@@ -22,6 +22,8 @@ def population_growth(kansas):
     deaths = random.randrange(1, 10)
     kansas.population += (births - deaths)
     kansas.nation.current_pop += (births - deaths)
+    kansas.nation.births += births
+    kansas.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(kansas):

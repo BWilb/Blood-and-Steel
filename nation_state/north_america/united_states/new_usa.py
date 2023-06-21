@@ -154,6 +154,7 @@ def establish_states(us):
     # establishment of national population
     establish_population(us)
     establish_economy(us)
+
 def check_stats(us):
     print(f"Your current President is {us.president}\n"
           f"Your current Vice President is {us.vice_president}\n"

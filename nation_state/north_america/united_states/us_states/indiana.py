@@ -22,6 +22,8 @@ def population_growth(indiana):
     deaths = random.randrange(1, 20)
     indiana.population += (births - deaths)
     indiana.nation.current_pop += (births - deaths)
+    indiana.nation.births += births
+    indiana.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(indiana):

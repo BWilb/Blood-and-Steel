@@ -22,6 +22,8 @@ def population_growth(iowa):
     deaths = random.randrange(5, 15)
     iowa.population += (births - deaths)
     iowa.nation.current_pop += (births - deaths)
+    iowa.nation.births += births
+    iowa.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(iowa):

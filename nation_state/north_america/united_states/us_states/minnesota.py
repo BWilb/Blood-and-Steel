@@ -22,6 +22,8 @@ def population_growth(minnesota):
     deaths = random.randrange(5, 15)
     minnesota.population += (births - deaths)
     minnesota.nation.current_pop += (births - deaths)
+    minnesota.nation.births += births
+    minnesota.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(minnesota):

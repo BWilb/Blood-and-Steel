@@ -22,6 +22,8 @@ def population_growth(hawaii):
     deaths = random.randrange(0, 3)
     hawaii.population += (births - deaths)
     hawaii.nation.current_pop += (births - deaths)
+    hawaii.nation.births += births
+    hawaii.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(hawaii):

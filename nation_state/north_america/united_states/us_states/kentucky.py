@@ -22,6 +22,8 @@ def population_growth(kentucky):
     deaths = random.randrange(1, 10)
     kentucky.population += (births - deaths)
     kentucky.nation.current_pop += (births - deaths)
+    kentucky.nation.births += births
+    kentucky.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(kentucky):

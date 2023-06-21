@@ -22,6 +22,8 @@ def population_growth(maryland):
     deaths = random.randrange(5, 15)
     maryland.population += (births - deaths)
     maryland.nation.current_pop += (births - deaths)
+    maryland.nation.births += births
+    maryland.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(maryland):

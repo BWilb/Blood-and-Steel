@@ -22,6 +22,8 @@ def population_growth(idaho):
     deaths = random.randrange(0, 3)
     idaho.population += (births - deaths)
     idaho.nation.current_pop += (births - deaths)
+    idaho.nation.births += births
+    idaho.nation.deaths += deaths
 
 """economic_functions"""
 def recovery(idaho):
