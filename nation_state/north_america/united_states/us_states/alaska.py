@@ -1,4 +1,5 @@
 import random
+import time
 
 population = {
     "1910": 2142069,
@@ -18,13 +19,102 @@ gdp = {
     "1939": 339003
 }
 def population_growth(alaska):
-    births = random.randrange(5, 15)
-    deaths = random.randrange(2, 10)
+    births = random.randrange(1, 15)
+    deaths = random.randrange(1, 10)
     alaska.population += (births - deaths)
     alaska.nation.current_pop += (births - deaths)
     alaska.nation.births += births
     alaska.nation.deaths += deaths
 
+
+def random_social(alaska):
+    chance = random.randrange(10, 20000)
+    if chance % 5 == 4:
+        """Chance that a moose attack occurs"""
+        print("A moose attack just occurred in Alaska.\n")
+        time.sleep(3)
+
+    elif chance % 8 == 7:
+        """Chance that parade occurs"""
+        print("A parade just occurred in Alaska.\n")
+        time.sleep(3)
+
+    elif chance % 10 == 7:
+        """chance that someone has a surprise birthday thrown for them"""
+        print("Someone just had a surprise birthday thrown for them.\n")
+        time.sleep(3)
+
+def random_crime(alaska):
+    chance = random.randrange(10, 20000)
+    if chance % 5 == 3:
+        """Chance that rape occurs
+        - decrease in happiness
+        """
+        print("A rape just occurred in Alaska.\n")
+        time.sleep(3)
+        decrease = round(random.uniform(0.75, 1.75), 2)
+        if (alaska.happiness - decrease) > 7.56 and (alaska.nation.happiness - decrease) > 5:
+            alaska.happiness -= decrease
+            alaska.nation.happiness -= decrease
+
+    elif chance % 8 == 7:
+        """Chance that a stabbing occurs
+        - no chance of survival
+        - decrease in population and happiness
+        """
+        print("A fatal stabbing just occurred in Alaska.\n")
+        time.sleep(3)
+        decrease = round(random.uniform(0.75, 1.75), 2)
+        if (alaska.happiness - decrease) > 7.56 and (alaska.nation.happiness - decrease) > 5:
+            alaska.happiness -= decrease
+            alaska.nation.happiness -= decrease
+
+    elif chance % 12 == 9:
+        """chance that a homicide occurs
+        - decrease in population and happiness
+        """
+        homicide = random.randrange(10, 100)
+        print(f"A homicide ring has been uncovered in Alabama, with {homicide} victims.\n.")
+        time.sleep(3)
+        alaska.population -= homicide
+        alaska.nation.current_pop -= homicide
+        decrease = round(random.uniform(0.25, 1.00), 2)
+        if (alaska.happiness - decrease) > 5 and (alaska.nation.happiness - decrease) > 5:
+            alaska.happiness -= decrease
+            alaska.nation.happiness -= decrease
+
+    elif chance % 40 == 25:
+        """Chance for bank robbery
+        - internal chance of death
+        - decrease in gdp(national and regional)
+        - decrease in happiness and stability
+        """
+        loss = round(alaska.current_gdp * round(random.uniform(0.001, 0.009), 5), 2)
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            """Chance that people die in robbery"""
+            deaths = random.randrange(13, 50)
+            print(f"A bank robbery just occurred in Alabama, with {deaths} dead and ${loss} lost.\n")
+            time.sleep(3)
+            alaska.population -= deaths
+            alaska.nation.current_pop -= deaths
+            alaska.nation.current_gdp -= loss
+            alaska.current_gdp -= loss
+
+        else:
+            print(f"A bank robbery just occurred in Alabama, nobody was hurt, but ${loss} was lost.\n")
+            time.sleep(3)
+        decrease = round(random.uniform(0.25, 1.00), 2)
+        if (alaska.happiness - decrease) > 5 and (alaska.nation.happiness - decrease) > 5:
+            alaska.happiness -= decrease
+            alaska.nation.happiness -= decrease
+
+        if (alaska.stability - decrease) > 7.56 and (alaska.nation.stability - decrease) > 5:
+            alaska.stability -= decrease
+            alaska.nation.stability -= decrease
+def random_events(alabama):
+    random_social(alabama)
+    random_crime(alabama)
 """economic_functions"""
 def recovery(alaska):
     if alaska.nation.economic_stimulus:

@@ -19,7 +19,7 @@ gdp = {
 }
 def population_growth(s_c):
     births = random.randrange(1, 20)
-    deaths = random.randrange(1, 15)
+    deaths = random.randrange(1, 17)
     s_c.population += (births - deaths)
     s_c.nation.current_pop += (births - deaths)
     s_c.nation.births += births

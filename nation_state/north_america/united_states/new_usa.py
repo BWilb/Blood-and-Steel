@@ -36,6 +36,24 @@ vice_presidents = {
     "1936": "John Garner",
     "1939": "Henry Wallace"
 }
+"""Random function"""
+def random_function(us):
+    for i in range(0, len(us.states) - 1):
+        us.states[i].random_events(us.states[i])
+
+"""Internal Population migration"""
+def population_migrations(us):
+    migrants = 0
+    if us.date > us.migrant_change:
+        for i in range(0, len(us.states) - 1):
+            migrants += round(us.states[i].population * round(random.uniform(0.001, 0.009), 5), 0)
+            """Amount of people from each state that will be leaving the specific state"""
+        for i in range(0, len(us.states) - 1):
+            us.states[i].population += round(migrants * round(random.uniform(0.001, 0.009), 5), 0)
+            """Amount of people migrating to new specific state"""
+
+        us.migrant_change = us.date + timedelta(days=3)
+
 """establishment of states within US(national and regional files will influence each other)"""
 def establish_economy(us):
     for i in range(0, len(us.states) - 1):
@@ -182,6 +200,9 @@ def manual_game(us):
             """
             states[i].economic_growth(us.states[i])
             states[i].population_growth(us.states[i])
+        population_migrations(us)
+
+
 class UnitedStates:
     def __init__(self, year):
         # regional variables
@@ -235,6 +256,7 @@ class UnitedStates:
         self.tax_change_date = self.date + timedelta(days=75)
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
+        self.migrant_change = self.date + timedelta(days=3)
 
 us = UnitedStates("1918")
 manual_game(us)

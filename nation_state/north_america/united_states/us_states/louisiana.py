@@ -19,7 +19,7 @@ gdp = {
 }
 def population_growth(louisiana):
     births = random.randrange(1, 10)
-    deaths = random.randrange(1, 10)
+    deaths = random.randrange(1, 8)
     louisiana.population += (births - deaths)
     louisiana.nation.current_pop += (births - deaths)
     louisiana.nation.births += births

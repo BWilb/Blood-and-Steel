@@ -18,8 +18,8 @@ gdp = {
     "1939": 912373422
 }
 def population_growth(texas):
-    births = random.randrange(10, 20)
-    deaths = random.randrange(5, 17)
+    births = random.randrange(1, 20)
+    deaths = random.randrange(1, 17)
     texas.population += (births - deaths)
     texas.nation.current_pop += (births - deaths)
     texas.nation.births += births

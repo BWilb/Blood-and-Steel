@@ -19,7 +19,7 @@ gdp = {
 }
 def population_growth(illinois):
     births = random.randrange(1, 30)
-    deaths = random.randrange(1, 20)
+    deaths = random.randrange(1, 25)
     illinois.population += (births - deaths)
     illinois.nation.current_pop += (births - deaths)
     illinois.nation.births += births

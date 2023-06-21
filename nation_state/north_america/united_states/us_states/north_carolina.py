@@ -18,8 +18,8 @@ gdp = {
     "1939": 24904530300
 }
 def population_growth(n_c):
-    births = random.randrange(10, 20)
-    deaths = random.randrange(5, 10)
+    births = random.randrange(1, 20)
+    deaths = random.randrange(1, 16)
     n_c.population += (births - deaths)
     n_c.nation.current_pop += (births - deaths)
     n_c.nation.births += births

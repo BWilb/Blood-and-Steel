@@ -18,8 +18,8 @@ gdp = {
     "1939": 38904
 }
 def population_growth(hawaii):
-    births = random.randrange(1, 5)
-    deaths = random.randrange(0, 3)
+    births = random.randrange(1, 9)
+    deaths = random.randrange(1, 8)
     hawaii.population += (births - deaths)
     hawaii.nation.current_pop += (births - deaths)
     hawaii.nation.births += births
