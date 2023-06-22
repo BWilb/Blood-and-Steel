@@ -80,459 +80,7 @@ def stability_happiness(italy):
             italy.happiness -= decrease_happiness
         if (italy.stability - decrease_stability) > 5:
             italy.stability -= decrease_stability
-def random_economic(italy):
-    chance = random.randrange(10, 5000)
-    if chance % 5 == 7:
-        """Chance that somebody loses at their casino
-        - decrease in gdp and happiness
-        - increase in national debt
-        """
-        loss = round(random.uniform(55000, 350000), 2)
-        print(f"Someone just lost ${loss} at their local casino\n")
-        italy.current_gdp -= loss
-        italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
-        decrease = round(random.uniform(0.25, 1.25), 2)
-        if (italy.happiness - decrease) > 5:
-            italy.happiness -= decrease
 
-    elif chance % 10 == 6:
-        """chance that somebody wins at their casino
-        - increase in GDP and national debt(consumer debt)
-        - increase in happiness
-        """
-        win = round(random.uniform(10000, 400000), 2)
-        print(f"Someone won ${win} at their local casino.\n")
-        time.sleep(3)
-        italy.current_gdp += win
-        italy.national_debt += round(win * round(random.uniform(0.001, 0.009), 5), 2)
-        increase = round(random.uniform(0.25, 1.25), 2)
-        if (italy.happiness + increase) < 98:
-            italy.happiness += increase
-
-    elif chance % 20 == 18:
-        """Chance that somebody wins the Enalotto(italian lottery)
-        - increase in GDP and national debt(consumer spending)
-        - increase in happiness
-        """
-        lottery = round(random.uniform(10000, 6000000), 2)
-        print(f"Somebody just won ${lottery} in their local Enalotto.\n")
-        time.sleep(3)
-        italy.current_gdp += lottery
-        italy.national_debt += round(lottery * round(random.uniform(0.001, 0.009), 5), 2)
-        increase = round(random.uniform(0.25, 1.56), 2)
-        if (italy.happiness + increase) < 98:
-            italy.happiness += increase
-
-    elif chance % 70 == 56:
-        """Chance that a random amount of banks collapse
-        - decrease in GDP(depending upon severity), could be slashed by 2 or 4
-        - potential for recession or depression
-        - increase in national debt(govt spending to recover)
-        - decrease in happiness and stability
-        """
-        amount = random.randrange(2, 25)
-        print(f"{amount} banks collapsed today.\n")
-        time.sleep(3)
-        if amount < 5:
-            """Less severe outlook/probability"""
-            loss = round(random.uniform(10000, 400000), 2)
-            print(f"The collapse resulted in a loss of ${loss}\n")
-            time.sleep(3)
-            italy.current_gdp -= loss
-            italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
-            increase = round(random.uniform(0.25, 1.56), 2)
-            if (italy.happiness - increase) > 5:
-                italy.happiness -= increase
-
-        elif amount > 5 and amount < 20:
-            """more moderately severe outlook/probability"""
-            loss = round(random.uniform(90000, 900000), 2)
-            print(f"The collapse resulted in a loss of ${loss}\n")
-            time.sleep(3)
-            italy.current_gdp /= 2
-            italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
-            print("The Italian economy faced a severe backlash from the bank failures.\n"
-                  "It experienced a slash factor of 2. However, thanks to 'quick' government action,\n"
-                  "a major economic downturn was avoided\n")
-            time.sleep(3)
-            increase = round(random.uniform(0.25, 3.56), 2)
-            if (italy.happiness - increase) > 5:
-                italy.happiness -= increase
-
-        elif amount > 20:
-            """most severe outlook/probability"""
-            loss = round(random.uniform(300000, 900000), 2)
-            print(f"The collapse resulted in a loss of ${loss}\n")
-            time.sleep(3)
-            italy.current_gdp /= 5
-            italy.national_debt += round(loss * round(random.uniform(0.001, 0.09), 5), 2)
-            chance = random.randrange(0, 2)
-            """Internal chance of moderate or severe economic backlash"""
-            if chance == 0:
-                italy.economic_state = "recession"
-            elif chance == 1:
-                italy.economic_state = "depression"
-            print("The Italian economy faced a severe backlash from the bank failures.\n"
-                  "It experienced a slash factor of 5. Unfortunately 'quick' government responses weren't enough.\n"
-                  f"The Italian economy is now in a(n) {italy.economic_state}!!!!\n")
-            italy.economic_change_date = italy.date + timedelta(days=60)
-
-            time.sleep(3)
-            increase = round(random.uniform(0.25, 10.56), 2)
-            if (italy.happiness - increase) > 5:
-                italy.happiness -= increase
-
-    elif chance % 100 == 77 and italy.date > italy.economic_change_date:
-        """chance that italian economy falls into a depression
-        - decrease in gdp 
-        - increase in national debt
-        - decrease in happiness and stability
-        - later on, potential for Italy to break apart
-        """
-        print("Welp, the Italian economy has fallen into a Depression.\n")
-        italy.current_gdp /= 10
-        spending = round(random.uniform(100000, 10000000), 2)
-        italy.national_debt += round(spending * round(random.uniform(0.01, 0.10), 5), 2)
-        italy.economic_state = "depression"
-        # economic_stimulus(italy)
-        decrease_happiness = round(random.uniform(0.25, 15.5), 3)
-        decrease_stability = round(random.uniform(0.25, 10.5), 3)
-
-        if (italy.happiness - decrease_happiness) > 5:
-            italy.happiness -= decrease_happiness
-        if (italy.stability - decrease_stability) > 5:
-            italy.stability -= decrease_stability
-        italy.economic_change_date = italy.date + timedelta(days=60)
-
-    elif chance % 160 == 57:
-        """chance that italian economy falls into an expansion
-        - decrease in gdp 
-        - increase in national debt(govt and consumer)
-        - decrease in happiness and stability
-        """
-        print("Welp, the Italian economy has risen into an expansion.\n")
-        italy.current_gdp *= 10
-        spending = round(random.uniform(100000, 5000000), 2)
-        italy.national_debt += round(spending * round(random.uniform(0.01, 0.10), 5), 2)
-        italy.economic_state = "expansion"
-        # economic_stimulus(italy)
-        increase_happiness = round(random.uniform(0.25, 15.5), 3)
-        increase_stability = round(random.uniform(0.25, 10.5), 3)
-
-        if (italy.happiness + increase_happiness) < 98:
-            italy.happiness += increase_happiness
-        if (italy.stability + increase_stability) < 98:
-            italy.stability += increase_stability
-        italy.economic_change_date = italy.date + timedelta(days=60)
-
-def random_social(italy):
-    chance = random.randrange(10, 5000)
-    print(chance)
-    if chance % 5 == 0:
-        """Chance that someone throws a surprise birthday for their kid
-        - increase in happiness and stability
-        """
-        print("Someone just threw their child a surprise party.\n")
-        time.sleep(3)
-        increase = round(random.uniform(0.25, 1.5), 2)
-        if (italy.happiness + increase) < 98:
-            italy.happiness += increase
-
-        if(italy.stability + increase) < 98:
-            italy.stability += increase
-
-    elif chance % 7 == 8:
-        """Chance that someone gets married
-        - increase in happiness and stability
-        """
-        print("Somebody just got married.\n")
-        time.sleep(3)
-        increase = round(random.uniform(0.25, 1.5), 2)
-        if (italy.happiness + increase) < 98:
-            italy.happiness += increase
-
-        if (italy.stability + increase) < 98:
-            italy.stability += increase
-
-    elif chance % 15 == 6:
-        """Chance that the mafia recruits a random amount of people
-        - decrease in stability
-        - increase in gdp(due to spending of mafia)
-        """
-        people = random.randrange(2, 25)
-        print(f"The mafia just recruited {people} people to their ranks.\n")
-        time.sleep(3)
-        italy.current_gdp += round(random.uniform(1000, 50000), 2)
-        decrease = round(random.uniform(0.25, 1.5), 2)
-
-        if (italy.stability - decrease) > 5:
-            italy.stability -= decrease
-
-    elif chance % 20 == 15:
-        """Chance that a random parade occurs
-        - increase in happiness
-        """
-        print("A parade just occurred.\n")
-        time.sleep(3)
-
-        increase = round(random.uniform(0.25, 1.5), 2)
-        if (italy.happiness + increase) < 98:
-            italy.happiness += increase
-def random_crime(italy):
-    chance = random.randrange(10, 5000)
-    if chance % 6 == 6:
-        """Chance that the mafia attacks someone/group of people
-        - internal chance that attack kills the person/people
-        * decrease in stability and happiness
-        * decrease in population
-        """
-        chance = random.randrange(1, 5)
-        if chance % 2 == 0:
-            kills = random.randrange(10, 50)
-            print(f"The Mafia just killed {kills} people.\n")
-            time.sleep(3)
-            italy.current_pop -= kills
-            italy.deaths += kills
-
-            for i in range(0, kills):
-                """Looping through deaths to un-assign political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party -= 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party -= 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party -= 1
-
-                elif chance == 3:
-                    italy.italian_republican_party -= 1
-
-        elif chance % 7 == 5:
-            """Chance that the Mafia robs a bank(s)
-            - no alert given(Mafia pays government to cover up)
-            - decrease in GDP
-            - Increase in national debt
-            """
-            stolen = round(random.uniform(100000, 1000000), 2)
-            italy.current_gdp -= stolen
-            italy.national_debt += round(stolen * round(random.uniform(0.001, 0.09), 5), 2)
-
-        elif chance % 10 == 9:
-            """Chance that a rape occurs
-            - internal chance of rapist or victim being killed
-            - decrease in happiness
-            """
-            chance = random.randrange(0, 2)
-
-            if chance == 0:
-                """chance that rape is attempted, but unsuccessful"""
-                print("A rape was just attempted, however the attempt failed.")
-                time.sleep(3)
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    """Chance that rapist is killed"""
-                    print("After pursuing their attempted rapist, the victim slit the throat of the rapist.\n")
-                    time.sleep(3)
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-                elif chance == 1:
-                    print("after alerting bystanders with the unsuccessful rape, the rapist is forced to kill the victim.\n")
-                    time.sleep(3)
-
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-
-            if chance == 1:
-                """Chance that rape is successful"""
-                print("A rape was just attempted, which the attempt was successful")
-                time.sleep(3)
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    """Chance that rapist is killed"""
-                    print("After being raped, the victim was filled with anger and decided to kill the rapist via flaying\n")
-                    time.sleep(3)
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-                elif chance == 1:
-                    print(
-                        "after alerting bystanders with the successful rape, the rapist is forced to kill the victim.\n")
-                    time.sleep(3)
-
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-
-        elif chance % 12 == 8:
-            """Chance that street performers rob tourists
-            - internal chance of success and death(of either street performer or tourist)
-            """
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                """Chance that robbing is unsuccessful"""
-                chance = random.randrange(0, 2)
-                print("A street performer attempted to rob a tourist but was unsuccessful.")
-                time.sleep(3)
-                if chance == 0:
-                    """chance that street performer dies"""
-                    print("The street performer was also killed by the tourist.\n")
-                    time.sleep(3)
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-
-                elif chance == 1:
-                    """Chance that tourist dies"""
-                    print("Due to the unsuccessful robbery, the street performer decided to kill the tourist.\n")
-                    time.sleep(3)
-
-            elif chance == 1:
-                """Chance that the robbing is successful"""
-                chance = random.randrange(0, 2)
-                print("A street performer just robbed a tourist.")
-                time.sleep(3)
-                if chance == 0:
-                    """chance that street performer dies"""
-                    print("The street performer, however, was tracked down and killed by the tourist.\n")
-                    time.sleep(3)
-                    italy.current_pop -= 1
-                    italy.deaths += 1
-                    for i in range(0, 1):
-                        """Looping through deaths to un-assign political parties"""
-                        chance = random.randrange(0, 4)
-                        # chance of chance variable being 0 - 3
-                        if chance == 0:
-                            italy.italian_socialist_party -= 1
-
-                        elif chance == 1:
-                            italy.italian_liberal_party -= 1
-
-                        elif chance == 2:
-                            italy.italian_peoples_party -= 1
-
-                        elif chance == 3:
-                            italy.italian_republican_party -= 1
-
-                elif chance == 1:
-                    """Chance that tourist dies"""
-                    print("Due to the tourist fighting back, the street performer decide to kill the tourist\n")
-                    time.sleep(3)
-
-        elif chance % 20 == 17:
-            """Chance that a homicide occurs
-            - decrease in population
-            - decrease in happiness and stability
-            """
-            homicides = random.randrange(1, 12)
-            print(f"{homicides} homicide(s) just occurred.\n")
-            time.sleep(3)
-            italy.current_pop -= homicides
-            italy.deaths += homicides
-            decrease = round(random.uniform(0.25, 1.25), 2)
-            if (italy.happiness - decrease) > 5:
-                italy.happiness -= decrease
-
-            for i in range(0, homicides):
-                """Looping through deaths to un-assign political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party -= 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party -= 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party -= 1
-
-                elif chance == 3:
-                    italy.italian_republican_party -= 1
-def random_politics(italy):
-    pass
-def random_international(italy):
-    pass
-def randomized_functions(italy):
-    random_social(italy)
-    random_economic(italy)
-    random_crime(italy)
-    random_politics(italy)
-    random_international(italy)
 
 def retire_soldiers(italy):
     """function for retiring old, wounded, or stupid soldiers"""
@@ -1090,33 +638,58 @@ def economic_decisions(italy):
         economic_state(italy)
 
 """stats functions"""
-def stats(italy):
-    """Stats go from...
-    1. Political
-    2. Population
-    3. Economic
-    4. Social???
-    5. Other
-    """
-    print(f"Your current monarch is {italy.monarch}\n"
-          f"Your current prime minister is {italy.pm}\n"
-          f"Your current stability is {round(italy.stability, 3)}\n"
-          f"Your current population is {italy.current_pop}\n"
-          f"Socialists make up {round((italy.italian_socialist_party / italy.current_pop) * 100, 4)}% of population.\n"
-          f"Republicans make up {round((italy.italian_republican_party / italy.current_pop) * 100, 4)}% of the population.\n"
-          f"The peoples party make up {round((italy.italian_peoples_party / italy.current_pop) * 100, 4)}% of the population.\n"
-          f"Liberals make up {round((italy.italian_liberal_party / italy.current_pop) * 100, 4)}% of the population.\n"
-          f"Your current happiness level is {round(italy.happiness, 3)}\n"
-          f"There have been {italy.births} births in {italy.past_year}\n"
-          f"There have been {italy.deaths} deaths in {italy.past_year}\n"
-          f"Your current GDP is ${round(italy.current_gdp, 2)}\n"
-          f"Your current GDP growth rate is {round((italy.current_gdp - italy.past_gdp) / ((italy.current_gdp + italy.past_gdp)/2) * 100, 5)}%\n"
-          f"Your current debt to GDP ratio is {round((italy.national_debt / italy.current_gdp), 2)}%\n"
-          f"Your current tax rate is {italy.tax_rate}\n"
-          f"Your economy is currently in a(n) {italy.economic_state}\n"
-          f"Your current national debt it ${round(italy.national_debt, 2)}.\n"
-          f"Your current tax rate is {italy.tax_rate}%\n"
-          f"Your current army size is {italy.army}\n")
+def social_stats(us):
+    print(f"Your current happiness level is {us.happiness}%.\n")
+    time.sleep(3)
+    if us.happiness < 35.45 and not us.improve_happiness:
+        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_happiness = us.date + timedelta(days=30)
+    print(f"Your current population {us.current_pop}.\n")
+    time.sleep(3)
+    print(f"There have been {us.births} births in {us.date.year}.\n")
+    time.sleep(3)
+    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
+    time.sleep(3)
+
+def political_stats(us):
+    print(f"Your current political stability is {us.stability}%.\n")
+    time.sleep(3)
+    if us.stability < 45.45 and not us.improve_stability:
+        choice = input(f"{us.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_stability = us.date + timedelta(days=30)
+    time.sleep(3)
+
+def economic_stats(us):
+    print(f"Your current GDP is ${round(us.current_gdp, 2)}.\n")
+    time.sleep(3)
+    print(f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5)}%\n")
+    time.sleep(3)
+    print(f"Your current national debt is ${round(us.national_debt, 2)}.\n")
+    time.sleep(3)
+
+    if us.national_debt > 1000000000 and not us.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            us.debt_repayment = us.date + timedelta(days=120)
+def daily_decisions(us):
+    done = True
+    while done:
+        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(us)
+        elif choice.lower() == "economic":
+            economic_stats(us)
+        elif choice.lower() == "social":
+            social_stats(us)
+        elif choice.lower() == "quit":
+            done = False
+            us.check_stats = us.date + timedelta(days=3)
 def social_events(italy):
     if italy.date.year > 1945 and italy.date == datetime(italy.year, 4, 25):
         print("Today is the day that we wrestled our futures from Mussolini's tyranny.\n")
@@ -1154,18 +727,15 @@ def events(italy):
 def manual_game(italy):
     while italy.current_pop > 150000:
         print(f"Date: {italy.date}")
-        italy.date += timedelta(days=1)
         # incrementing of time
         stability_happiness(italy)
         events(italy)
         population_change(italy)
         economic_decisions(italy)
         military_functions(italy)
-        randomized_functions(italy)
-        if italy.stability > 50:
-            choice = input("view stats: ")
-            if choice.lower() == "yes" or choice.lower() == "y":
-                stats(italy)
+        if italy.date > italy.check_stats:
+            daily_decisions(italy)
+        italy.date += timedelta(days=1)
         time.sleep(3)
 class Italy:
     def __init__(self, year):
@@ -1173,7 +743,13 @@ class Italy:
         self.date = datetime(int(year), 1, 1)
 
         self.past_year = self.date.year
-
+        """Variable for improving stability of nation over given time"""
+        self.improve_stability = None
+        """Ditto to improve stability"""
+        self.improve_happiness = None
+        """variable for repaying debt over given time"""
+        self.debt_repayment = None
+        self.check_stats = self.date + timedelta(days=3)
         """Population variables"""
         self.current_pop = population[year]
         self.population_change = 0

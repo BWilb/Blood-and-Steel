@@ -7,6 +7,10 @@ from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
                        rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
                        west_virginia, wisconsin, wyoming)
+from nation_state.europe.britain import britain_ai
+from nation_state.europe.germany import german_ai
+from nation_state.europe.russia import russia_ai
+from nation_state.europe.italy import italy_ai
 import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
@@ -37,10 +41,62 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 """Random function"""
-def random_function(us):
+"""def random_function(us):
     for i in range(0, len(us.states) - 1):
-        us.states[i].random_events(us.states[i])
+        us.states[i].random_events(us.states[i])"""
+def social_stats(us):
+    print(f"Your current happiness level is {us.happiness}%.\n")
+    time.sleep(3)
+    if us.happiness < 35.45 and not us.improve_happiness:
+        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_happiness = us.date + timedelta(days=30)
+    print(f"Your current population {us.current_pop}.\n")
+    time.sleep(3)
+    print(f"There have been {us.births} births in {us.date.year}.\n")
+    time.sleep(3)
+    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
+    time.sleep(3)
 
+def political_stats(us):
+    print(f"Your current political stability is {us.stability}%.\n")
+    time.sleep(3)
+    if us.stability < 45.45 and not us.improve_stability:
+        choice = input(f"{us.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_stability = us.date + timedelta(days=30)
+    print(f"There are {len(us.states)} states in the Union\n")
+    time.sleep(3)
+
+def economic_stats(us):
+    print(f"Your current GDP is ${round(us.current_gdp, 2)}.\n")
+    time.sleep(3)
+    print(f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5)}%\n")
+    time.sleep(3)
+    print(f"Your current national debt is ${round(us.national_debt, 2)}.\n")
+    time.sleep(3)
+
+    if us.national_debt > 1000000000 and not us.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            us.debt_repayment = us.date + timedelta(days=120)
+def daily_decisions(us):
+    done = True
+    while done:
+        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(us)
+        elif choice.lower() == "economic":
+            economic_stats(us)
+        elif choice.lower() == "social":
+            social_stats(us)
+        elif choice.lower() == "quit":
+            done = False
+            us.check_stats = us.date + timedelta(days=3)
 """Internal Population migration"""
 def population_migrations(us):
     migrants = 0
@@ -172,27 +228,14 @@ def establish_states(us):
     # establishment of national population
     establish_population(us)
     establish_economy(us)
-
-def check_stats(us):
-    print(f"Your current President is {us.president}\n"
-          f"Your current Vice President is {us.vice_president}\n"
-          f"Your current political stability is {round(us.stability, 2)}%\n"
-          f"Your current GDP is ${round(us.current_gdp, 2)}\n"
-          f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
-          f"Your current national debt is ${round(us.national_debt, 2)}\n"
-          f"There have been {us.deaths} deaths that have occurred in {us.current_year}\n"
-          f"There have been {us.births} births that have occurred in {us.current_year}\n"
-          f"The current happiness rating of the United States is {round(us.happiness, 2)}%\n"
-          f"There are currently {len(us.states)} states in the Union")
+    daily_decisions(us)
 def manual_game(us):
     establish_states(us)
     print(us.current_pop)
     print(us.current_gdp)
     while us.current_pop > 1000000:
-        check = input("view stats?: ")
-        """viewing stats"""
-        if check.lower() == "yes" or check.lower() == 'y':
-            check_stats(us)
+        print(f"Current date: {us.date.date()}\n")
+        time.sleep(3)
 
         for i in range(0, len(us.states) - 1):
             """looping through list of state files to access population and economic growth functions
@@ -200,8 +243,11 @@ def manual_game(us):
             """
             states[i].economic_growth(us.states[i])
             states[i].population_growth(us.states[i])
-        population_migrations(us)
 
+        population_migrations(us)
+        if us.date > us.check_stats:
+            daily_decisions(us)
+        us.date += timedelta(days=1)
 
 class UnitedStates:
     def __init__(self, year):
@@ -209,23 +255,14 @@ class UnitedStates:
         self.states = []
         # population variables
         self.current_pop = 0
-        self.population_change = 0
-        #self.past_pop = self.current_pop
         self.births = 0
         self.deaths = 0
         self.happiness = 96.56
-        """Population controller if birth rate gets out of control"""
-        self.condom_subsidy = False
-        """Population controller if birth rate flops"""
-        self.viagra_subsidy = False
         # political variables
         """Leaders of US"""
         self.president = presidents[year]
         self.vice_president = vice_presidents[year]
         """Political parties of US"""
-        """self.republicans = self.population * 0.5
-        self.democrats = self.population - self.republicans"""
-        """Other political variables"""
         self.stability = 95.00
         # economic variables
         #self.economic_state = business_cycle[0]
@@ -235,28 +272,21 @@ class UnitedStates:
         to determine GDP growth)
         """
         self.national_debt = 0
-        """Components of GDP
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0"""
         """Economic Stimulus components"""
         self.economic_stimulus = False
-        """Taxes components"""
-        #self.tax_rate = tax_rate[year]
-        # weather variables
-        self.blackout = False
-        self.blackout_date = None
-        # military variables
-        # international variables
-        self.alliance = ""
         # time variables
         self.date = datetime(int(year), 1, 1)
-        self.tax_change_date = self.date + timedelta(days=75)
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
+        """Internal redistribution of citizens"""
         self.migrant_change = self.date + timedelta(days=3)
+        """Variable for improving stability of nation over given time"""
+        self.improve_stability = None
+        """Ditto to improve stability"""
+        self.improve_happiness = None
+        """variable for repaying debt over given time"""
+        self.debt_repayment = None
+        self.check_stats = self.date + timedelta(days=3)
 
 us = UnitedStates("1918")
 manual_game(us)

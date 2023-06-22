@@ -4,7 +4,7 @@ import pygame
 import button
 import time
 import pyautogui
-from nation_state.north_america.united_states import us_reformed
+from nation_state.north_america.united_states import new_usa
 from nation_state.europe.britain import britain
 from nation_state.europe.italy import italy
 from nation_state.europe.france import france
@@ -15,8 +15,8 @@ import nation_state.asia.japan.japan
 
 def begin_game(nation, time):
     if nation == "United States":
-        national = us_reformed.UnitedStates(time)
-        us_reformed.manual_game(national)
+        national = new_usa.UnitedStates(time)
+        new_usa.manual_game(national)
         pygame.quit()
 
 pygame.init()
@@ -333,8 +333,8 @@ while run:
 pygame.quit()
 print(nation_chosen)
 if nation_chosen == "United States":
-    national = us_reformed.UnitedStates(time_chosen)
-    us_reformed.manual_game(national)
+    national = new_usa.UnitedStates(time_chosen)
+    new_usa.manual_game(national)
 
 elif nation_chosen == "Germany":
     national = germany_reformed.Germany(time_chosen)

@@ -110,384 +110,6 @@ def events(britain):
     economic_events(britain)
     social_events(britain)
 
-def random_crime(britain):
-    chance = random.randrange(10, 20000)
-    if chance % 5 == 4:
-        """Chance that a stabbing occurs
-        * chance that victim dies
-            -> decrease in population
-        - decrease in happiness
-        """
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            print("A stabbing just occurred. However the victim survived.\n")
-            time.sleep(3)
-            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-        elif chance == 1:
-            print("A stabbing just occurred, which the victim died.\n")
-            time.sleep(3)
-            britain.current_pop -= 1
-            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-
-    elif chance % 8 == 6:
-        """Chance that a raping occurs
-        * decrease in happiness
-        """
-        print("A rape just occurred.\n")
-        time.sleep(3)
-        decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-        if (britain.happiness - decrease_happiness) > 5:
-            britain.happiness -= decrease_happiness
-
-    elif chance % 12 == 5:
-        """Chance that a homicide occurs
-        - reduction in population and political influences
-        - decrease in happiness and stability
-        """
-        losses = random.randrange(2, 35)
-        print(f"A homicide just occurred. {losses} people were killed.\n")
-        britain.current_pop -= losses
-        britain.deaths += losses
-        for i in range(0, losses):
-            """Assigning births to political parties"""
-            chance = random.randrange(0, 4)
-            if chance == 0:
-                britain.lp -= 1
-
-            elif chance == 1:
-                britain.liberal -= 1
-
-            elif chance == 2:
-                britain.clup -= 1
-
-            elif chance == 3:
-                britain.independents -= 1
-
-    elif chance % 16 == 12:
-        """Chance that bank robbery occurs
-        - internal chance of success
-        - internal chance of potential deaths
-            -> decrease in population
-        - decrease in stability and happiness
-        """
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            print("There was an unsuccessful attempt at robbing a bank\n")
-
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                print("Nobody was harmed in the process")
-
-            elif chance == 1:
-                losses = random.randrange(2, 35)
-                print(f"{losses} people were killed in the process though.\n")
-                britain.current_pop -= losses
-                britain.deaths += losses
-                for i in range(0, losses):
-                    """Assigning births to political parties"""
-                    chance = random.randrange(0, 4)
-                    if chance == 0:
-                        britain.lp -= 1
-
-                    elif chance == 1:
-                        britain.liberal -= 1
-
-                    elif chance == 2:
-                        britain.clup -= 1
-
-                    elif chance == 3:
-                        britain.independents -= 1
-
-        elif chance == 1:
-            thievery = round(random.uniform(10000, 300000), 2)
-            print(f"A bank robbery just occurred. ${thievery} was stolen.")
-            britain.current_gdp -= thievery
-            """Loss in gdp"""
-            britain.national_debt += round(thievery * round(random.uniform(0.009, 0.09), 5), 2)
-
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                print("Nobody was harmed in the process")
-
-            elif chance == 1:
-                losses = random.randrange(2, 35)
-                print(f"{losses} people were killed in the process though.\n")
-                britain.current_pop -= losses
-                britain.deaths += losses
-                for i in range(0, losses):
-                    """Assigning births to political parties"""
-                    chance = random.randrange(0, 4)
-                    if chance == 0:
-                        britain.lp -= 1
-
-                    elif chance == 1:
-                        britain.liberal -= 1
-
-                    elif chance == 2:
-                        britain.clup -= 1
-
-                    elif chance == 3:
-                        britain.independents -= 1
-def random_economics(britain):
-    chance = random.randrange(10, 20000)
-    if chance % 6 == 5:
-        """Chance that somebody begins to invest
-        - very slight increase in GDP
-        - increase in happiness
-        """
-        invest = round(random.uniform(1000, 100000), 2)
-        print(f"Somebody started to invest with an amount of ${invest}. What a smart lad.\n")
-        time.sleep(3)
-        britain.current_gdp += invest
-        increase_happiness = round(random.uniform(0.25, 0.75), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-
-    elif chance % 10 == 7:
-        """Chance that somebody loses at their local casino
-        - loss in GDP
-        - decrease in happiness
-        """
-        loss = round(random.uniform(10000, 1000000), 2)
-        print(f"Somebody just lost ${loss} at their casino.\n")
-        time.sleep(3)
-        britain.current_gdp -= loss
-        decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-        if (britain.happiness - decrease_happiness) > 5:
-            britain.happiness -= decrease_happiness
-
-    elif chance % 16 == 11:
-        """Chance that somebody or government takes out a loan on a specific item(house, car, etc)
-        - increase in GDP
-        - increase in National debt
-        """
-        objects = ["car", "home", "boat", "store", "PC", "college degree"]
-        loan = round(random.uniform(1000, 1000000), 2)
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            """Chance that individual defaults"""
-            print(f"Somebody just took a ${loan} loan out for a new {objects[random.randrange(0, len(objects) - 1)]}.\n")
-            britain.current_gdp += loan
-            britain.national_debt += round(loan * round(random.uniform(0.001, 0.09), 4), 2)
-            increase_happiness = round(random.uniform(0.25, 0.75), 2)
-            if (britain.happiness + increase_happiness) < 98:
-                britain.happiness += increase_happiness
-
-        elif chance == 1:
-            """Chance that the government defaults"""
-            programs_objects = ["social program", "economic program", "debt paying program", "immigration program",
-                                "colonial program"]
-            print(f"Our government just took out a ${loan} for a new {programs_objects[random.randrange(0, len(programs_objects) - 1)]}\n")
-            britain.current_gdp += loan
-            britain.national_debt += round(loan * round(random.uniform(0.001, 0.09), 4), 2)
-            increase_happiness = round(random.uniform(0.25, 0.75), 2)
-            increase_stability = round(random.uniform(0.01, 0.25), 2)
-
-            if (britain.happiness + increase_happiness) < 98:
-                britain.happiness += increase_happiness
-            if (britain.stability + increase_stability) < 98:
-                britain.stability += increase_stability
-
-    elif chance % 28 == 16:
-        """Chance that somebody wins National Lottery
-        - increase in GDP
-        - increase in national debt
-        - decrease in happiness and stability
-        """
-        lottery = round(random.uniform(1000, 500000), 2)
-        print(f"Somebody just won ${lottery} in our national lottery")
-        britain.current_gdp += lottery
-        britain.national_debt += round(lottery * round(random.uniform(0.001, 0.09), 4), 2)
-
-        increase_happiness = round(random.uniform(0.25, 0.75), 2)
-        increase_stability = round(random.uniform(0.01, 0.25), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-        if (britain.stability + increase_stability) < 98:
-            britain.stability += increase_stability
-
-    elif chance % 36 == 23:
-        """Chance that somebody or government defaults on their loan
-        - decrease in GDP
-        - increase in national debt if government
-        - decrease in happiness and stability
-        """
-        default = round(random.uniform(1000, 1000000), 2)
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            """Chance that individual defaults"""
-            print(f"Somebody just defaulted on their loan of ${default}.\n")
-            britain.current_gdp -= default
-            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-
-        elif chance == 1:
-            """Chance that the government defaults"""
-            print(f"Our government just defaulted on one of our loans of ${default}.\n")
-            britain.current_gdp -= default
-            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-            decrease_stability = round(random.uniform(0.01, 0.25), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-            if (britain.stability - decrease_stability) > 5:
-                britain.stability -= decrease_stability
-
-    elif chance % 44 == 34:
-        """Chance that a random amount of banks collapse
-        - internal chance of either recession or depression(depends upon severity)-> economic stimulus function is called
-        - decrease in GDP
-        - increase in National Debt(government spending)
-        - decrease in happiness and stability
-        """
-        banks = random.randrange(2, 45)
-        if banks <= 20:
-            loss = round(random.uniform(100000, 500000), 2)
-            britain.current_gdp -= loss
-            britain.national_debt += round(loss * round(random.uniform(0.001, 0.09), 4), 2)
-            print(f"{banks} banks just collapsed, resulting in a loss of ${loss}.")
-
-            decrease_happiness = round(random.uniform(0.25, 0.75), 2)
-            decrease_stability = round(random.uniform(0.01, 0.25), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-            if (britain.stability - decrease_stability) > 5:
-                britain.stability -= decrease_stability
-
-        elif banks > 20 and banks < 35:
-            loss = round(random.uniform(1.25, 2.25), 2)
-            gdp_loss = britain.current_gdp - (britain.current_gdp / loss)
-            britain.current_gdp /= loss
-            britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
-            print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
-            print("Your economy has also fallen into a recession from the severity of the collapse.\n")
-            britain.economic_state = "recession"
-            economic_stimulus(britain)
-
-            decrease_happiness = round(random.uniform(1.25, 2.75), 2)
-            decrease_stability = round(random.uniform(0.25, 1.25), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-            if (britain.stability - decrease_stability) > 5:
-                britain.stability -= decrease_stability
-
-        elif banks > 35:
-            loss = round(random.uniform(2.25, 4.25), 2)
-            gdp_loss = britain.current_gdp - (britain.current_gdp / loss)
-            britain.current_gdp /= loss
-            britain.national_debt += round(gdp_loss * round(random.uniform(0.001, 0.09), 4), 2)
-            print(f"{banks} banks just collapsed, resulting in a loss of ${gdp_loss}.")
-            print("Your economy has also fallen into a depression from the severity of the collapse.\n")
-            britain.economic_state = "depression"
-            economic_stimulus(britain)
-            decrease_happiness = round(random.uniform(3.25, 4.75), 2)
-            decrease_stability = round(random.uniform(1.25, 2.25), 2)
-            if (britain.happiness - decrease_happiness) > 5:
-                britain.happiness -= decrease_happiness
-            if (britain.stability - decrease_stability) > 5:
-                britain.stability -= decrease_stability
-
-    elif chance % 67 == 43 and britain.date > britain.econonmic_change_date:
-        """Chance that britain falls into a depression
-        - decrease in happiness and stability
-        - economy slashed by factor of ten
-        - potential for monarch or prime minister to be assassinated
-        - later on, potential for britain to break up and lose empire
-        """
-        print("The English economy has randomly fallen into a depression, which the economy has been slashed by 10.\n")
-        economic_stimulus(britain)
-        britain.economic_state = "depression"
-        britain.current_gdp /= 10
-
-        decrease_happiness = round(random.uniform(6.25, 11.75), 2)
-        decrease_stability = round(random.uniform(3.25, 6.25), 2)
-        if (britain.happiness - decrease_happiness) > 5:
-            britain.happiness -= decrease_happiness
-        if (britain.stability - decrease_stability) > 5:
-            britain.stability -= decrease_stability
-
-        chance = random.randrange(0, 11)
-        if chance % 5 == 0:
-            """Chance that an assassination occurs"""
-
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                """Chance that monarch gets assassinated"""
-                print(f"{britain.monarch} has also been assassinated.")
-                britain.monarch = spare_1900_1950_monarchs[random.randrange(0, len(spare_1900_1950_monarchs) - 1)]
-                print(f"{britain.monarch} is your new monarch.\n")
-
-            elif chance == 1:
-                """Chance that prime minister gets assassinated"""
-                print(f"{britain.pm} has also been assassinated.")
-                britain.monarch = spare_pms[random.randrange(0, len(spare_pms) - 1)]
-                print(f"{britain.pm} is your new prime minister.\n")
-        britain.economic_change_date = britain.date + timedelta(days=100)
-
-    elif chance % 78 == 65 and britain.date > britain.econonmic_change_date:
-        """Chance that britain falls into an expansion
-        - increase in happiness and stability
-        - economy multiplied by factor of ten
-        """
-        print("The English economy has randomly fallen into an expansion, which the economy has been multiplied by 10.\n")
-        britain.economic_state = "expansion"
-        britain.current_gdp *= 10
-
-        increase_happiness = round(random.uniform(6.25, 11.75), 2)
-        increase_stability = round(random.uniform(3.25, 6.25), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-        if (britain.stability + increase_stability) < 98:
-            britain.stability += increase_stability
-
-        britain.economic_change_date = britain.date + timedelta(days=100)
-def random_social(britain):
-    chance = random.randrange(20, 20000)
-    if chance % 6 == 8:
-        """chance that someone throws a surprise birthday party
-        - increase in happiness
-        """
-        print("Somebody just threw a surprise party.\n")
-        time.sleep(3)
-        increase_happiness = round(random.uniform(0.25, 0.75), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-
-    elif chance % 8 == 5:
-        """Chance that a parade occurs
-        - increase in happiness
-        """
-        print("A parade just occurred.\n")
-        time.sleep(3)
-        increase_happiness = round(random.uniform(0.25, 0.75), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-
-    elif chance % 13 == 11:
-        """Chance that somebody gets married
-        - increase in happiness and stability
-        """
-        print("Someone just got married.\n")
-        time.sleep(3)
-
-        increase_happiness = round(random.uniform(0.25, 0.75), 2)
-        increase_stability = round(random.uniform(0.01, 0.25), 2)
-        if (britain.happiness + increase_happiness) < 98:
-            britain.happiness += increase_happiness
-        if (britain.stability + increase_stability) < 98:
-            britain.stability += increase_stability
-
-def random_politics(britain):
-    pass
-def random_functions(britain):
-    random_economics(britain)
-    random_social(britain)
-    random_politics(britain)
-    random_crime(britain)
 """Population functions"""
 def population_change(britain):
     if britain.past_year < britain.date.year:
@@ -1086,37 +708,79 @@ def politics_change(britain):
             """Resetting of check in regards to political censuses"""
 
 """Stats function"""
-def stats(britain):
-    """stats function
-    1. population
-    2. political
-    3. economic
-    4. social
-    5. others
-    """
-    print(f"Your current population is {britain.current_pop}.\n"
-          f"There have been {britain.births} births in {britain.past_year}.\n"
-          f"There have been {britain.deaths} deaths in {britain.past_year}.\n"
-          f"Your current prime minister is {britain.pm}.\n"
-          f"Your current monarch is {britain.monarch}.\n"
-          f"The liberal party makes up {round(round(britain.liberal / britain.current_pop, 4) * 100, 4)}% of the population.\n"
-          f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 4) * 100, 4)}% of the population.\n"
-          f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 4) * 100, 4)}% of the population.\n"
-          f"Independents make up {round(round(britain.independents / britain.current_pop, 4) * 100, 4)}% of the population.\n"
-          f"Your current GDP is ${britain.current_gdp}.\n"
-          f"Your current GDP growth is {round((britain.current_gdp - britain.past_gdp) / ((britain.current_gdp + britain.current_gdp)/2) * 100, 6)}%\n")
+def social_stats(britain):
+    print(f"Your current happiness level is {britain.happiness}%.")
+    time.sleep(3)
+    if britain.happiness < 35.45 and not britain.improve_happiness:
+        choice = input(f"{britain.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            britain.improve_happiness = britain.date + timedelta(days=30)
+    print(f"Your current population {britain.current_pop}.\n")
+    time.sleep(3)
+    print(f"There have been {britain.births} births in {britain.date.year}.\n")
+    time.sleep(3)
+    print(f"There have been {britain.deaths} deaths in {britain.date.year}.\n")
+    time.sleep(3)
+
+def political_stats(britain):
+    print(f"Your current political stability is {britain.stability}%.\n")
+    time.sleep(3)
+    if britain.stability < 45.45 and not britain.improve_stability:
+        choice = input(f"{britain.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            britain.improve_stability = britain.date + timedelta(days=30)
+    print(f"Britain's current monarch is {britain.monarch}\n")
+    time.sleep(3)
+    print(f"Britain's current prime minister is {britain.pm}\n")
+    time.sleep(3)
+
+    print(f"Britain's liberal party makes up {round(round(britain.liberal / britain.current_pop, 4) * 100, 4)}% of the population.\n")
+    time.sleep(3)
+    print(f"The conservative and liberal unionist party makes up {round(round(britain.clup / britain.current_pop, 4) * 100, 4)}% of the population.\n")
+    time.sleep(3)
+    print(f"The Labour Party makes up {round(round(britain.lp / britain.current_pop, 4) * 100, 4)}% of the population.\n")
+    time.sleep(3)
+    print(f"Independents make up {round(round(britain.independents / britain.current_pop, 4) * 100, 4)}% of the population.\n")
+    time.sleep(3)
+
+def economic_stats(britain):
+    print(f"Your current GDP is ${round(britain.current_gdp, 2)}.\n")
+    time.sleep(3)
+    print(f"Your current yearly gdp growth is {round(((britain.current_gdp - britain.past_gdp) / ((britain.past_gdp + britain.current_gdp) / 2)) * 100, 5)}%\n")
+    time.sleep(3)
+    print(f"Your current national debt is ${round(britain.national_debt, 2)}.\n")
+    time.sleep(3)
+
+    if britain.national_debt > 1000000000 and not britain.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            britain.debt_repayment = britain.date + timedelta(days=120)
+def daily_decisions(britain):
+    done = True
+    while done:
+        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(britain)
+        elif choice.lower() == "economic":
+            economic_stats(britain)
+        elif choice.lower() == "social":
+            social_stats(britain)
+        elif choice.lower() == "quit":
+            done = False
+            britain.check_stats = britain.date + timedelta(days=3)
 def manual_game(britain):
     while britain.current_pop > 500000:
         # establishment of check upon game status
-        print(britain.date)
+        print(f"Current Date: {britain.date.date()}\n")
         population_change(britain)
         politics_change(britain)
-        random_functions(britain)
         economic_decisions(britain)
-        if britain.stability > 5:
-            choice = input("Would you like to view your stats?: ")
-            if choice.lower() == "y" or choice.lower() == "yes":
-                stats(britain)
+        if britain.date > britain.check_stats:
+            daily_decisions(britain)
         britain.date += timedelta(days=1)
         time.sleep(3)
 
@@ -1127,6 +791,13 @@ class Britain:
         self.past_year = self.date.year
         self.political_census = self.date + timedelta(days=3)
         self.economic_change_date = self.date + timedelta(days=60)
+        """Variable for improving stability of nation over given time"""
+        self.improve_stability = None
+        """Ditto to improve stability"""
+        self.improve_happiness = None
+        """variable for repaying debt over given time"""
+        self.debt_repayment = None
+        self.check_stats = self.date + timedelta(days=3)
         """population variables"""
         self.current_pop = population[time]
         self.births = 0
@@ -1156,3 +827,5 @@ class Britain:
         self.tax_rate = tax_rate[time]
         """Social variables"""
         self.happiness = 90.00
+britain = Britain("1918")
+manual_game(britain)

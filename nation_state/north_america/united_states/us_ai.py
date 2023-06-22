@@ -1,97 +1,31 @@
 import random
 import time
-from datetime import timedelta, datetime
-from nation_state.europe.germany.germany import *
-from nation_state.europe.italy.italy import *
-from nation_state.europe.france.france import *
-from nation_state.europe.britain.britain import *
-from nation_state.europe.russia.russia import *
-from nation_state.asia.japan.japan import *
-from menu import options_menu
-import globe
-import keyboard
-import math
-
-on_going_conflicts = []
-"""variable established for any conflicts occurring"""
-pop_difference = 0
-
-leader_options = ["Justify War Goal",
-                  "Disband Congress",
-                  "Dissolve Congress",
-                  "Call Congress to order",
-                  "Switch Parties",
-                  "Veto Bill",
-                  "Make Executive Order"]
-
-congressional_options = ["Declare War",
-                         "Impose Sanctions",
-                         "Propose Bill",
-                         "Investigate Company",
-                         "Impeach President",
-                         "Remove President"]
-
-judicial_options = ["Declare President Unconstitutional",
-                    "Declare Congress Unconstitutional"]
-
-historical_leaders = {
+from datetime import datetime, timedelta
+from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
+                       west_virginia, wisconsin, wyoming)
+business_cycle = ["recession", "depression", "recovery", "expansion"]
+import arcade
+import os
+"""Storing files into an array in order to access state functions for population and economic growth"""
+states = [alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+          kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+          n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+          rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
+          west_virginia, wisconsin, wyoming]
+folder = "us_states"
+"""Political Dictionaries"""
+presidents = {
     "1910": "William Howard Taft",
     "1914": "Woodrow Wilson",
     "1918": "Woodrow Wilson",
     "1932": "Herbert Hoover",
     "1936": "Franklin D. Roosevelt",
     "1939": "Franklin D. Roosevelt"
-}
-communist_party_leaders = {
-    "1910": "C. E. Ruthenberg",
-    "1914": "C. E. Ruthenberg",
-    "1918": "C. E. Ruthenberg",
-    "1932": "William Z. Foster",
-    "1936": "Earl Browder",
-    "1939": "Earl Browder"
-}
-
-nationalist_leaders = {
-    "1910": "Theodore Roosevelt",
-    "1914": "Theodore Roosevelt",
-    "1918": "Theodore Roosevelt",
-    "1932": "Heinz Spanknöbel",
-    "1936": "Douglass MacArthur",
-    "1939": "Douglass MacArthur"
-}
-
-socialist_leaders = {
-    "1910": "Eugene V Debs",
-    "1914": "Eugene V Debs",
-    "1918": "Eugene V Debs",
-    "1932": "Morris Hillquit",
-    "1936": "Clarence Senior",
-    "1939": "Norman Thomas"
-}
-
-population = {
-    # population will be set up to increase or decrease randomly throughout every year
-    "1910": 92410000,
-    "1914": 99110000,
-    "1918": 103210000,
-    "1932": 124840000,
-    "1936": 128050000,
-    "1939": 130880000
-}
-
-alternative_parties = ["Libertarian Party", "Communist Party USA", "Trans-humanist party",
-                       "Green Party", "Constitution Party", "Reform Party", "American Nazi Party"
-                                                                            "Socialist Party USA",
-                       "American Freedom Party", "Republican Party", "Democratic Party"]
-
-political_parties = {
-    # elections will be implemented later on
-    "1910": "Republican",
-    "1914": "Democratic",
-    "1918": "Democratic",
-    "1932": "Republican",
-    "1936": "Democratic",
-    "1939": "Democratic"
 }
 
 vice_presidents = {
@@ -103,392 +37,324 @@ vice_presidents = {
     "1936": "John Garner",
     "1939": "Henry Wallace"
 }
+"""Random function"""
+"""def random_function(us):
+    for i in range(0, len(us.states) - 1):
+        us.states[i].random_events(us.states[i])"""
+"""Daily decisions"""
+def social_stats(us):
+    print(f"Your current happiness level is {us.happiness}%.\n")
+    time.sleep(3)
+    if us.happiness < 35.45 and not us.improve_happiness:
+        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_happiness = us.date + timedelta(days=30)
+    print(f"Your current population {us.current_pop}.\n")
+    print(f"There have been {us.births} births in {us.date.year}.\n")
+    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
 
-"""def us_civil_war(us, time):
-    # will be coded in later"""
+def political_stats(us):
+    print(f"Your current political stability is {us.stability}%.\n")
+    if us.stability < 45.45 and not us.improve_stability:
+        choice = input(f"{us.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            us.improve_stability = us.date + timedelta(days=30)
+    print(f"There are {len(us.states) - 1} states in the Union\n")
+    time.sleep(3)
 
-def random_events(us, time):
-    """
-    Random events will be able to influence...
-    population, political parties, stability, whether your nation is at war,
-    potential political deaths (whether natural or assassination).
-    Random Events could lead to potential civil war
-    """
+def economic_stats(us):
+    print(f"Your current GDP is ${us.current_gdp}.\n"
+          f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
+          f"Your current national debt is ${us.national_debt}.\n")
 
-    parties = ["Democratic", "Republican"]
+    if us.national_debt > 1000000000 and not us.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            us.debt_repayment = us.date + timedelta(days=120)
+def daily_decisions(us):
+    done = False
+    while done:
+        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(us)
+        elif choice.lower() == "economic":
+            economic_stats(us)
+        elif choice.lower() == "social":
+            social_stats(us)
+        elif choice.lower() == "quit":
+            done = True
 
-    fringes = ["Communist", "Nationalist", "Socialist"]
+"""Economic Functions"""
+def economic_state(us):
+    if us.date >= us.economic_change_date:
+        """comparing current date with possible shift in business cycle, based upon 3 month cycle"""
+        if us.past_gdp > us.current_gdp:
+            """comparing past gdp to current gdp"""
+            if us.economic_state == "expansion" or us.economic_state == "recovery":
+                """current state is expansion or recovery"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recession":
+                        print("Your economy has entered into a recession after 6 months of decayed growth.\n")
+                        time.sleep(3)
+                        us.economic_state = business_cycle[i]
+                        us.economic_change_date = us.date + timedelta(days=240)
+                        if not us.economic_stimulus:
+                            us.economic_stimulus = True
+                        """increasing amount of time to check up on GDP
+                        Time is average amount(5 months cycle)
+                        """
 
-    random_number = random.randrange(0, 1000)
-    if random_number % 2 == 0:
-        # random event of civilians winning lottery
-        print("One of your civilians won the lottery...Yay!!")
-    elif random_number % 20 == 0:
-        # random event of senator dying
-        choice = random.randrange(0, len(parties))
-        if choice == 0:
-            print(f"Oh no a {parties[choice]} senator has died.")
-        elif choice == 1:
-            print(f"Oh no a {parties[choice]} senator has died.")
+            elif us.economic_state == "recession":
+                """current state is recession and cycle is switching to depression"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "depression":
+                        print("Your economy has entered into a depression "
+                              "after exceeding 6 months of decayed growth.\n")
+                        time.sleep(3)
+                        us.economic_state = business_cycle[i]
+                        us.economic_change_date = us.date + timedelta(days=210)
+                        if not us.economic_stimulus:
+                            us.economic_stimulus = True
+                        """
+                        Since it takes awhile to escape a depression, amount of time on change date is increased
+                        """
 
-        choice = random.randrange(0, len(parties))
-        if choice == 0:
-            print(f"A {parties[choice]} senator has replaced the old.")
-        elif choice == 1:
-            print(f"A {parties[choice]} has replaced the old.")
+        elif us.past_gdp < us.current_gdp:
+            if us.economic_state == "depression" or us.economic_state == "recession":
+                """current state is expansion or recovery"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "recovery":
+                        print("Your economy has finally entered its recovery period.\n")
+                        time.sleep(3)
+                        us.economic_state = business_cycle[i]
+                        us.economic_change_date = us.date + timedelta(days=360)
+                        """increasing amount of time to check up on GDP
+                        Time is average amount(5 months cycle)
+                        """
 
-    elif (random_number % 25 == 0):
-        choice = random.randrange(0, len(fringes))
-        party = fringes[choice]
-        attendees = random.randrange(10, 5000)
-        if party.lower() == "communist":
-            us.republican_supporters -= round(attendees * 0.5, 0)
-            us.democratic_supporters -= round(attendees * 0.5, 0)
-            us.communist_supporters += attendees
-        elif party.lower() == "nationalist":
-            us.republican_supporters -= round(attendees * 0.3, 0)
-            us.democratic_supporters -= round(attendees * 0.7, 0)
-            us.nationalist_supporters += attendees
-        elif party.lower() == "socialist":
-            us.republican_supporters -= round(attendees * 0.7, 0)
-            us.democratic_supporters -= round(attendees * 0.3, 0)
-            us.socialist_supporters += attendees
-        print(f"The {party} party held a rally with {attendees} attendees\n")
-        time.sleep(3)
+            elif us.economic_state == "recovery":
+                """current state is recession and cycle is switching to depression"""
+                for i in range(0, len(business_cycle) - 1):
+                    if business_cycle[i] == "expansion":
+                        print("Your economy has finally entered its expansionary period. Woo!!!\n")
+                        time.sleep(3)
+                        us.economic_state = business_cycle[i]
+                        us.economic_change_date = us.date + timedelta(days=120)
+                        """
+                        Since it takes awhile to escape a depression, amount of time on change date is increased
+                        """
 
-    elif (random_number % 50 and time.year >= 1945) or us.at_war:
-        """Random event of nuclear attack.
-        pre-emptive strike if not at war
-        """
-        print("You've been struck with a nuclear weapon...OH SHIT!!!")
-        time.sleep(3)
-        people_killed = random.randrange(1000, 10000000)
-        us.population -= people_killed
-        print(f"{people_killed} people died in a nuclear raid")
+def economic_decisions(us):
+    if us.current_year < us.date.year:
+        us.economic_growth = (us.current_gdp - us.past_gdp / ((us.past_gdp + us.current_gdp) / 2)) * 100
 
-def show_statistics(nation, date):
-    # shows statistics of the current state of the nation
-    if nation.at_war:
-        print(f"The current date is {date}.\n"
-              f"Your current country is {nation.nation_name}.\n"
-              f"Your current leader is {nation.leader}\n"
-              f"Your current political party is {nation.political_party}"
-              f"Your current population is {nation.population}\n"
-              f"Your nation's current stability is {nation.stability}%.\n"
-              f"Your nation is currently at war!\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
-              f"{round((nation.fascist_supporters / nation.population) * 100, 2)}% of your civilians are fascists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
+        if us.economic_growth <= 1.5:
+            chance = random.randrange(0, 2)
+            if chance == 0:
+                print("The US congress has decided to enact a stimulus to the US economy.\n")
+                time.sleep(3)
+                us.economic_stimulus = True
+
+        elif us.economic_growth > 7.5 and us.economic_stimulus:
+            chance = random.randrange(0, 2)
+            if chance == 1:
+                print("The US congress has decide to remove their economic stimulus, due to very high growth in last years economy.\n")
+                time.sleep(3)
+                us.economic_stimulus = False
     else:
-        print(f"The current date is {date}.\n"
-              f"Your current country is {nation.nation_name}.\n"
-              f"Your current leader is {nation.leader}\n"
-              f"Your current political party is {nation.political_party}\n"
-              f"Your current population is {nation.population}\n"
-              f"Your nation is currently not at war!\n"
-              f"Your nation's current stability is {round(nation.stability, 2)}%.\n"
-              f"{round((nation.democratic_supporters / nation.population) * 100, 2)}% of your civilians are democrats\n"
-              f"{round((nation.republican_supporters / nation.population) * 100, 2)}% of your civilians are republicans\n"
-              f"{round((nation.nationalist_supporters / nation.population) * 100, 2)}% of your civilians are nationalists\n"
-              f"{round((nation.fascist_supporters / nation.population) * 100, 2)}% of your civilians are fascists\n"
-              f"{round((nation.socialist_supporters / nation.population) * 100, 2)}% of your civilians are socialists\n"
-              f"{round((nation.communist_supporters / nation.population) * 100, 2)}% of your civilians are communists\n"
-              f"{round((nation.non_alligned / nation.population) * 100, 2)}% of your civilians are independent\n")
+        for i in range(0, len(us.states) - 1):
+            """looping through list of state files to access population and economic growth functions
+            each iteration interacts with each state Object
+            """
+            states[i].economic_growth(us.states[i])
 
-def us_collapse(us):
-    print(f"Unfortunately your nation has collapsed due to low population.\n"
-          f"{us.population} people remain.")
-    us.stability = (us.stability - us.stability)
-    # stability of United States collapses due to lack of population
+"""Internal Population migration"""
+def population_migrations(us):
+    migrants = 0
+    if us.date > us.migrant_change:
+        for i in range(0, len(us.states) - 1):
+            migrants += round(us.states[i].population * round(random.uniform(0.001, 0.009), 5), 0)
+            """Amount of people from each state that will be leaving the specific state"""
+        for i in range(0, len(us.states) - 1):
+            us.states[i].population += round(migrants * round(random.uniform(0.001, 0.009), 5), 0)
+            """Amount of people migrating to new specific state"""
 
-def us_election(us):
-    print("\nIts election time")
-    if (us.democratic_supporters / us.population) * 100 >= 50:
-        print(f"Democrats won the elections, with {us.democratic_supporters} votes")
-        if not us.goverment_type.lower() == "democracy":
-            us.nation_name = "United States of America"
-            us.goverment_type = "democracy"
-            print("the US government is now a democracy\n")
+        us.migrant_change = us.date + timedelta(days=3)
 
-    elif (us.republican_supporters / us.population) * 100 >= 50:
-        print(f"republicans won the elections, with {us.republican_supporters} votes")
-        if not us.goverment_type.lower() == "republic":
-            us.nation_name = "Republic of the United States"
-            us.goverment_type = "republic"
-            print("The US is now a Republic\n")
-
-    elif (us.socialist_supporters / us.population) * 100 >= 50:
-        print(f"socialists won the elections, with {us.socialist_supporters} votes")
-        if not us.goverment_type.lower() == "social democracy":
-            us.nation_name = "Socialist States of America"
-            print("the United States is now a social democracy\n")
-            us.goverment_type = "social democracy"
-
-    elif (us.nationalist_supporters / us.population) * 100 >= 50:
-        print(f"The nationalists won the election, with {us.nationalist_supporters} votes")
-        if not us.goverment_type.lower() == "nationalist state":
-            print("The United States is now a fascist state\n")
-            us.goverment_type = "nationalist state"
-            us.nation_name = "Confederated States of America"
-
-    elif (us.fascist_supporters / us.population) * 100 >= 50:
-        print(f"The fascists won the election, with {us.fascist_supporters} votes")
-        if not us.goverment_type.lower() == "fascist state":
-            print("The United States is now a fascist state")
-            us.goverment_type = "fascist state"
-            us.nation_name = "National Peoples Republic of America"
-
-    elif (us.communist_supporters / us.population) * 100 >= 50:
-        print(f"The communists won the election, with {us.communist_supporters} votes")
-        if not us.goverment_type.lower() == "communist state":
-            print("The united states is now a communist state\n")
-            us.goverment_type = "communist state"
-            us.nation_name = "Peoples Republic of America"
-
-    elif (us.non_alligned / us.population) * 100 >= 50:
-        print(f"The royalists won the election, with {us.non_alligned} votes")
-        if not us.goverment_type.lower() == "monarchy":
-            print("The united states is now a monarchy\n")
-            us.goverment_type = "monarchy"
-            us.nation_name = "The Kingdom of America"
-    time.sleep(5)
-
-def us_stability(us):
+"""establishment of states within US(national and regional files will influence each other)"""
+def establish_economy(us):
+    for i in range(0, len(us.states) - 1):
+        us.current_gdp += us.states[i].current_gdp
+    us.past_gdp = us.current_gdp
+def establish_population(us):
+    """Incorporating state population into overall population
+    doing in a separate function in order to prevent oversaturation
     """
-    stability of government resets itself if exceeds 100% or drops below 0%
-    will be affected by random events as well
-    """
-    chance = random.randrange(1, 3)
-    if chance == 1:
-        us.stability -= (random.randrange(1, 10) * 0.5)
-    elif chance == 2:
-        us.stability += (random.randrange(1, 10) * 0.5)
+    for i in range(0, len(us.states) - 1):
+        us.current_pop += us.states[i].population
 
-    if us.stability >= 100:
-        us.stability = 100
-    elif us.stability <= 75:
-        us.democratic_supporters -= 1000
-        us.republican_supporters -= 1000
-        us.fascist_supporters += 250
-        us.socialist_supporters += 250
-        us.communist_supporters += 250
-        us.nationalist_supporters += 250
-    elif us.stability <= 25:
-        print("The United states is near total collapse\n"
-              f"{us.stability}")
-    elif us.stability <= 0:
-        us.stability = 0
+def establish_states(us):
+    """us.states.append(iowa.Iowa(us.date.year, us))
+    us.states.append(alabama.Alabama(us.date.year, us))"""
+    folder = "us_states"
+    for file in os.listdir(folder):
+        """Looping through us states folder, will be refined later on"""
+        if file != '__pycache__':
+            if file.removesuffix(".py") == "alabama":
+                us.states.append(alabama.Alabama(us.date.year, us))
+            if file.removesuffix(".py") == "alaska":
+                us.states.append(alaska.Alaska(us.date.year, us))
+            if file.removesuffix(".py") == "arizona":
+                us.states.append(arizona.Arizona(us.date.year, us))
+            if file.removesuffix(".py") == "arkansas":
+                us.states.append(arkansas.Arkansas(us.date.year, us))
+            if file.removesuffix(".py") == "california":
+                us.states.append(california.California(us.date.year, us))
+            if file.removesuffix(".py") == "colorado":
+                us.states.append(colorado.Colorado(us.date.year, us))
+            if file.removesuffix(".py") == "connecticut":
+                us.states.append(conneticut.Conneticut(us.date.year, us))
+            if file.removesuffix(".py") == "delaware":
+                us.states.append(delaware.Delaware(us.date.year, us))
+            if file.removesuffix(".py") == "florida":
+                us.states.append(florida.Florida(us.date.year, us))
+            if file.removesuffix(".py") == "georgia":
+                us.states.append(georgia.Georgia(us.date.year, us))
+            if file.removesuffix(".py") == "hawaii":
+                us.states.append(hawaii.Hawaii(us.date.year, us))
+            if file.removesuffix(".py") == "idaho":
+                us.states.append(idaho.Idaho(us.date.year, us))
+            if file.removesuffix(".py") == "illinois":
+                us.states.append(illinois.Illinois(us.date.year, us))
+            if file.removesuffix(".py") == "indiana":
+                us.states.append(indiana.Indiana(us.date.year, us))
+            if file.removesuffix(".py") == "iowa":
+                us.states.append(iowa.Iowa(us.date.year, us))
+            if file.removesuffix(".py") == "kansas":
+                us.states.append(kansas.Kansas(us.date.year, us))
+            if file.removesuffix(".py") == "kentucky":
+                us.states.append(kentucky.Kentucky(us.date.year, us))
+            if file.removesuffix(".py") == "louisiana":
+                us.states.append(louisiana.Louisiana(us.date.year, us))
+            if file.removesuffix(".py") == "maine":
+                us.states.append(maine.Maine(us.date.year, us))
+            if file.removesuffix(".py") == "maryland":
+                us.states.append(maryland.Maryland(us.date.year, us))
+            if file.removesuffix(".py") == "michigan":
+                us.states.append(michigan.Michigan(us.date.year, us))
+            if file.removesuffix(".py") == "mississippi":
+                us.states.append(mississppi.Mississippi(us.date.year, us))
+            if file.removesuffix(".py") == "missouri":
+                us.states.append(missouri.Missouri(us.date.year, us))
+            if file.removesuffix(".py") == "montana":
+                us.states.append(montana.Montana(us.date.year, us))
+            if file.removesuffix(".py") == "n_d":
+                us.states.append(n_d.NorthDakota(us.date.year, us))
+            if file.removesuffix(".py") == "n_m":
+                us.states.append(n_m.NewMexico(us.date.year, us))
+            if file.removesuffix(".py") == "nebraska":
+                us.states.append(nebraska.Nebraska(us.date.year, us))
+            if file.removesuffix(".py") == "nebraska":
+                us.states.append(nevada.Nevada(us.date.year, us))
+            if file.removesuffix(".py") == "new_hampshire":
+                us.states.append(new_hampshire.NewHampshire(us.date.year, us))
+            if file.removesuffix(".py") == "new_jersey":
+                us.states.append(new_jersey.NewJersey(us.date.year, us))
+            if file.removesuffix(".py") == "new_york":
+                us.states.append(new_york.NewYork(us.date.year, us))
+            if file.removesuffix(".py") == "north_carolina":
+                us.states.append(north_carolina.NorthCarolina(us.date.year, us))
+            if file.removesuffix(".py") == "ohio":
+                us.states.append(ohio.Ohio(us.date.year, us))
+            if file.removesuffix(".py") == "ok":
+                us.states.append(ok.Oklahoma(us.date.year, us))
+            if file.removesuffix(".py") == "oregon":
+                us.states.append(oregon.Oregon(us.date.year, us))
+            if file.removesuffix(".py") == "pennsylvania":
+                us.states.append(pennsylvania.Pennsylvania(us.date.year, us))
+            if file.removesuffix(".py") == "rhode_island":
+                us.states.append(rhode_island.RhodeIsland(us.date.year, us))
+            if file.removesuffix(".py") == "s_d":
+                us.states.append(s_d.SouthDakota(us.date.year, us))
+            if file.removesuffix(".py") == "south_carolina":
+                us.states.append(south_carolina.SouthCarolina(us.date.year, us))
+            if file.removesuffix(".py") == "tennessee":
+                us.states.append(tennessee.Tennessee(us.date.year, us))
+            if file.removesuffix(".py") == "texas":
+                us.states.append(texas.Texas(us.date.year, us))
+            if file.removesuffix(".py") == "utah":
+                us.states.append(utah.Utah(us.date.year, us))
+            if file.removesuffix(".py") == "vermont":
+                us.states.append(vermont.Vermont(us.date.year, us))
+            if file.removesuffix(".py") == "virginia":
+                us.states.append(virginia.Virginia(us.date.year, us))
+            if file.removesuffix(".py") == "washington":
+                us.states.append(washington.Washington(us.date.year, us))
+            if file.removesuffix(".py") == "west_virginia":
+                us.states.append(west_virginia.WestVirginia(us.date.year, us))
+            if file.removesuffix(".py") == "wisconsin":
+                us.states.append(wisconsin.Wisconsin(us.date.year, us))
+            if file.removesuffix(".py") == "wyoming":
+                us.states.append(wyoming.Wyoming(us.date.year, us))
+    # establishment of national population
+    establish_population(us)
+    establish_economy(us)
+def manual_game(us):
+    establish_states(us)
+    print(us.current_pop)
+    print(us.current_gdp)
+    while us.current_pop > 1000000:
 
-def politics_change(us):
-    """
-    function manipulates membership of political parties
-    based on stability of nation
-    """
-    loss_gain = random.randrange(0, (round(us.population * 0.05, 0)))
-    loss_gain = round(loss_gain, 0)
-    # loss_gain variable for amount of population that could change parties
-    percent = random.randrange(1, 3)
-    # percent variable used for randomizing losses or gains per party
-
-    if (us.stability < 75):
-        if percent == 1:
-            us.democratic_supporters -= loss_gain
-            us.republican_supporters -= round(loss_gain * 0.50, 0)
-            us.communist_supporters += random.randrange(0, int(loss_gain * 0.14))
-            us.socialist_supporters += random.randrange(0, int(loss_gain * 0.11))
-            us.nationalist_supporters += random.randrange(0, int(loss_gain * 0.15))
-            us.fascist_supporters += random.randrange(0, int(loss_gain * 0.20))
-            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
-                                                us.communist_supporters + us.socialist_supporters +
-                                                us.nationalist_supporters + us.fascist_supporters))
-        elif percent == 2:
-            us.democratic_supporters += loss_gain
-            us.republican_supporters += round(loss_gain * 0.50, 0)
-            us.communist_supporters -= random.randrange(0, int(loss_gain * 0.14))
-            us.socialist_supporters -= random.randrange(0, int(loss_gain * 0.11))
-            us.nationalist_supporters -= random.randrange(0, int(loss_gain * 0.15))
-            us.fascist_supporters -= random.randrange(0, int(loss_gain * 0.20))
-            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
-                                                us.communist_supporters + us.socialist_supporters +
-                                                us.nationalist_supporters + us.fascist_supporters))
-    elif us.stability > 75:
-        if percent == 1:
-            us.democratic_supporters -= loss_gain
-            us.republican_supporters -= round(loss_gain * 0.50, 0)
-            us.communist_supporters += random.randrange(0, int(loss_gain * 0.14))
-            us.socialist_supporters += random.randrange(0, int(loss_gain * 0.11))
-            us.nationalist_supporters += random.randrange(0, int(loss_gain * 0.15))
-            us.fascist_supporters += random.randrange(0, int(loss_gain * 0.20))
-            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
-                                                us.communist_supporters + us.socialist_supporters +
-                                                us.nationalist_supporters + us.fascist_supporters))
-        elif percent == 2:
-            us.democratic_supporters += loss_gain
-            us.republican_supporters += round(loss_gain * 0.50, 0)
-            us.communist_supporters -= random.randrange(0, int(loss_gain * 0.14))
-            us.socialist_supporters -= random.randrange(0, int(loss_gain * 0.11))
-            us.nationalist_supporters -= random.randrange(0, int(loss_gain * 0.15))
-            us.fascist_supporters -= random.randrange(0, int(loss_gain * 0.20))
-            us.non_alligned = (us.population - (us.democratic_supporters + us.republican_supporters +
-                                                us.communist_supporters + us.socialist_supporters +
-                                                us.nationalist_supporters + us.fascist_supporters))
-    if us.democratic_supporters <= 0:
-        us.democratic_supporters = 0
-    elif us.democratic_supporters > us.population:
-        us.democratic_supporters = us.population
-
-    if us.republican_supporters <= 0:
-        us.republican_supporters = 0
-    elif us.republican_supporters > us.population:
-        us.republican_supporters = us.population
-
-    if us.communist_supporters <= 0:
-        us.communist_supporters = 0
-    elif us.communist_supporters > us.population:
-        us.communist_supporters = us.population
-
-    if us.nationalist_supporters <= 0:
-        us.nationalist_supporters = 0
-    elif us.nationalist_supporters > us.population:
-        us.nationalist_supporters = us.population
-
-    if us.socialist_supporters <= 0:
-        us.socialist_supporters = 0
-    elif us.socialist_supporters > us.population:
-        us.socialist_supporters = us.population
-
-    if us.fascist_supporters <= 0:
-        us.fascist_supporters = 0
-    elif us.fascist_supporters > us.population:
-        us.fascist_supporters = us.population
-
-    if us.non_alligned <= 0:
-        us.non_alligned = 0
-    elif us.non_alligned > us.population:
-        us.non_alligned = us.population
-    """
-    if political parties receive 0 or less supporters
-    get automatically set to 0
-    """
-    time.sleep(1)
-
-def manual_game(us, year):
-    date = datetime(int(year), 1, 1)
-    # establishment of date variable
-    germany = Germany(year)
-    italy = Italy(year)
-    # britain = Britain(year)
-    russia = Russia(year)
-    france = France(year)
-    # establishment of European(partial) AIs
-    japan = Japan(year)
-    # establishment of Japanese (partial AI)
-    """establishment of nations not chosen (based upon preset AI)"""
-    globe_var = globe.Globe()
-    print(date)
-    while us.population >= 20000:
-        """Control set up to 
-        make sure that US doesn't somehow 
-        survive with 0 people
-        """
-        if date.year % 4 == 0 and date.month == 11 and date.day == 7:
-            us_election(us)
-        date = date + timedelta(days=1)
-        # date variable increments by one day
-        politics_change(us)
-        us_stability(us)
-        us.population += random.randrange(0, 10000)
-        random_events(us, date)
-        show_statistics(us, date)
-        time.sleep(3)
-
-    time.sleep(1)
-    us_collapse(us)
-
+        for i in range(0, len(us.states) - 1):
+            """looping through list of state files to access population and economic growth functions
+            each iteration interacts with each state Object
+            """
+            states[i].economic_growth(us.states[i])
+            states[i].population_growth(us.states[i])
+        population_migrations(us)
+        daily_decisions(us)
+        us.date += timedelta(days=3)
 class UnitedStates:
     def __init__(self, year):
-        self.leader = historical_leaders[year]
-        self.population = population[year]
-        self.political_party = political_parties[year]
-        self.nation_name = "United States"
-        """first 4 variables description of nation, not established until
-        time frame chosen in opening menu file
+        # regional variables
+        self.states = []
+        # population variables
+        self.current_pop = 0
+        self.births = 0
+        self.deaths = 0
+        self.happiness = 96.56
+        # political variables
+        """Leaders of US"""
+        self.president = presidents[year]
+        self.vice_president = vice_presidents[year]
+        """Political parties of US"""
+        self.stability = 95.00
+        # economic variables
+        #self.economic_state = business_cycle[0]
+        self.current_gdp = 0
+        self.past_gdp = 0
+        """holds current year of gdp(used for comparing with future GDP
+        to determine GDP growth)
         """
-        if int(year) >= 1932:
-            self.scotus_size = 9
-        elif int(year) < 1932:
-            self.scotus_size = 7
+        self.national_debt = 0
+        """Economic Stimulus components"""
+        self.economic_stimulus = False
+        # time variables
+        self.date = datetime(int(year), 1, 1)
+        self.economic_change_date = self.date + timedelta(days=60)
+        self.current_year = self.date.year
+        """Internal redistribution of citizens"""
+        self.migrant_change = self.date + timedelta(days=3)
+        """Variable for improving stability of nation over given time"""
+        self.improve_stability = None
+        """Ditto to improve stability"""
+        self.improve_happiness = None
+        """variable for repaying debt over given time"""
+        self.debt_repayment = None
 
-        self.representative_size = 435
-
-        if int(year) > 1945:
-            self.senate_size = 100
-        elif int(year) < 1945:
-            self.senate_size = 48
-
-        if int(year) > 1945:
-            self.defcon = 5
-
-        if (int(year) >= 1930 and int(year) <= 1939):
-            self.stability = 72
-        else:
-            self.stability = 92
-        self.leader_popularity = 95
-        self.goverment_type = "Republic"
-        # stability, type, and popularity of nation and parties
-
-        if self.political_party.lower() == "democratic":
-            self.democratic_supporters = self.population * 0.65
-            self.republican_supporters = (self.population - self.democratic_supporters) * 0.80
-            self.communist_supporters = (self.population - (
-                        self.democratic_supporters + self.republican_supporters)) * 0.5
-            self.socialist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                            self.communist_supporters)) * 0.5
-            self.nationalist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                              self.communist_supporters + self.socialist_supporters)) * 0.5
-            self.fascist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                          self.communist_supporters + self.socialist_supporters +
-                                                          self.nationalist_supporters)) * 0.72
-            self.non_alligned = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                    self.communist_supporters + self.socialist_supporters +
-                                                    self.nationalist_supporters + self.fascist_supporters))
-        elif self.political_party.lower() == "republican":
-            self.democratic_supporters = self.population * 0.65
-            self.republican_supporters = (self.population - self.democratic_supporters) * 0.80
-            self.communist_supporters = (self.population - (
-                    self.democratic_supporters + self.republican_supporters)) * 0.3
-            self.socialist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                            self.communist_supporters)) * 0.2
-            self.nationalist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                              self.communist_supporters + self.socialist_supporters)) * 0.75
-            self.fascist_supporters = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                          self.communist_supporters + self.socialist_supporters +
-                                                          self.nationalist_supporters)) * 0.80
-            self.non_alligned = (self.population - (self.democratic_supporters + self.republican_supporters +
-                                                    self.communist_supporters + self.socialist_supporters +
-                                                    self.nationalist_supporters + self.fascist_supporters))
-
-        """
-        population proportioned by political parties.
-        main two are obviously republican and democrat.
-        fringe parties are also involved.
-        As parties switch and population grows
-        popularity of parties will fluctuate.
-        """
-        self.at_war = False
-        self.nations_at_war_with = []
-        self.german_relations = 100
-        self.english_relations = 100
-        self.french_relations = 100
-        self.italian_relations = 100
-        self.russian_relations = 100
-        self.japanese_relations = 100
-        # foreign relations
-
-def main(time):
-    united_states = UnitedStates(time)
-    manual_game(united_states, time)
+us = UnitedStates("1918")
+manual_game(us)

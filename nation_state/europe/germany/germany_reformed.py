@@ -114,38 +114,6 @@ def military_functions(germany):
     increase_army_size(germany)
     retire_soldiers(germany)
 
-"""Statistics function"""
-def check_stats(german):
-    """Stats organized by...
-    1. Politics
-    2. Economics
-    3. Social aspects
-    4. Others
-    """
-    print(f"Your current Kaiser is {german.kaiser}\n"
-          f"Your current Chancellor is {german.chancellor}.\n"
-          f"Your current population is {german.population}.\n"
-          f"You have {german.conscripts} conscripts.\n"
-          f"Your army has {german.army_size} soldiers")
-    if german.date < datetime(1933, 1, 30):
-        print(f"Progressives make up {round((german.progressives / german.population) * 100, 2)}% of the population\n"
-              f"Conservatives make up {round((german.free_conservatives / german.population) * 100, 2)}% of the population\n"
-              f"Independents make up {round((german.center_party / german.population) * 100, 2)}% of the population")
-
-    elif german.date >= datetime(1933, 1, 30) and german.date <= datetime(1945, 5, 2):
-        print(f"National Socialists make up {round((german.national_socialists / german.population), 3) * 100}% of the population.\n"
-              f"German Rebels make up {round((german.rebels / german.population), 3) * 100}% of the population.")
-
-    print(f"Your current political stability is {round(german.stability, 2)}%\n"
-          f"Your current GDP is ${round(german.current_gdp, 2)}\n"
-          f"Your economy is currently in a(n) {german.economic_state} period\n"
-          f"Your current yearly gdp growth is {round(((german.current_gdp - german.past_gdp) / ((german.past_gdp + german.current_gdp) / 2)) * 100, 5 )}%\n"
-          f"Your current national debt is ${round(german.national_debt, 2)}\n"
-          f"Your current tax rate is {round(german.tax_rate, 2)}%\n"
-          f"There have been {german.deaths} deaths that have occurred in {german.current_year}\n"
-          f"There have been {german.births} births that have occurred in {german.current_year}\n"
-          f"The current happiness rating of Germany is {round(german.happiness, 2)}%\n")
-
 """Primary events function"""
 def social_events(germany):
     """definitive national social events in germany"""
@@ -805,798 +773,6 @@ def population_change(germany):
             germany.deaths += deaths
             germany.population -= deaths
 
-"""Random Functions"""
-def random_politics(germany):
-    chance = random.randrange(10, 20000)
-    if chance % 5 == 10:
-        """Chance that politician of any political party makes a speech
-        - if politician is making speech from 1932 to 1945
-            * Potential for politicians death and portion of rebels death
-            * increase in stability and decrease in happiness
-        """
-        if germany.date < datetime(1932, 1, 30):
-            chance = random.randrange(0, 3)
-
-            if chance == 0:
-                """Chance that the free conservative party holds a speech"""
-                print("The free conservative party just held a speech in Berlin.\n")
-                time.sleep(3)
-                for i in range(0, random.randrange(100, 2000)):
-                    chance = random.randrange(0, 2)
-                    """Chance that influence either takes supporters away from progressive
-                    or center party
-                    """
-                    if chance == 0:
-                        germany.center_party -= 1
-                        germany.free_conservatives += 1
-                    elif chance == 1:
-                        germany.progressives -= 1
-                        germany.free_conservatives += 1
-
-            elif chance == 1:
-                """Chance that the progressive party holds a speech"""
-                print("The progressive party just held a speech in Berlin.\n")
-                time.sleep(3)
-
-                for i in range(0, random.randrange(100, 2000)):
-                    chance = random.randrange(0, 2)
-                    """Chance that influence either takes supporters away from progressive
-                    or center party
-                    """
-                    if chance == 0:
-                        germany.center_party -= 1
-                        germany.progressives += 1
-                    elif chance == 1:
-                        germany.free_conservatives -= 1
-                        germany.progressives += 1
-
-            elif chance == 2:
-                """Chance that the center party holds a speech"""
-                print("The center party just held a speech in Berlin.\n")
-                time.sleep(3)
-
-                for i in range(0, random.randrange(100, 2000)):
-                    chance = random.randrange(0, 2)
-                    """Chance that influence either takes supporters away from progressive
-                    or center party
-                    """
-                    if chance == 0:
-                        germany.progressives -= 1
-                        germany.center_party += 1
-                    elif chance == 1:
-                        germany.free_conservatives -= 1
-                        germany.center_party += 1
-
-    elif chance % 19 == 15:
-        """Chance that politician secretly influences GDP
-        - increase in GDP and national debt
-        """
-        increase = round(random.uniform(12000, 300000), 2)
-        germany.current_gdp += increase
-        germany.national_debt += round(round(random.uniform(0.09, 0.30), 2), 2)
-
-    elif chance % 25 == 21:
-        """Chance that politician secretly influences population
-        - increases in population
-        """
-        births = random.randrange(13, 2000)
-        germany.births += births
-        germany.population += births
-        for i in range(0, births):
-            chance = random.randrange(0, 3)
-            if chance == 0:
-                germany.free_conservatives += 1
-
-            elif chance == 1:
-                germany.progressives += 1
-
-            elif chance == 2:
-                germany.center_party += 1
-
-    elif chance % 48 == 38:
-        """Chance that an assassination attempt is made on the German Chancellor
-        - internal chance if successful or not
-            -> other people will die as well
-        - economy goes into recession
-            -> GDP slashed by 1.25
-        - decrease in stability
-        """
-
-    elif chance % 60 == 59:
-        """Chance that the Kaiser or Heir to the throne is assassinated
-        - internal chance if successful or not
-            -> other people will die as well
-        - if Kaiser is in power...GDP will be slashed by 1.5
-        - decrease in stability
-        """
-        chance = random.randrange(0, 9)
-        if germany.date < datetime(1918, 11, 11):
-            if chance % 8 == 0:
-                print(f"Kaiser {germany.kaiser} has been assassinated!!!\n")
-                germany.kaiser = kaisers[0]
-                kaisers.pop(0)
-                print(f"{germany.kaiser} has replace him")
-                germany.current_gdp /= 1.5
-                economic_stimulus(germany)
-                germany.stability -= round(random.uniform(1.25, 10.25), 2)
-def random_economics(germany):
-    chance = random.randrange(10, 20000)
-    if chance % 3 == 7:
-        """Chance that someone starts a new business
-        - slight increase in GDP
-            -> investment
-        - increase in happiness and stability
-        - increase in national debt
-            -> loans required for starting business
-        """
-        print("Someone has begun a new business.\n")
-        time.sleep(3)
-
-        gdp_increase = round(random.uniform(1200, 3000), 2)
-        germany.current_gdp += gdp_increase
-        germany.national_debt += round(gdp_increase * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(0.1, 1.00), 2)
-        happiness_increase = round(random.uniform(0.1, 1.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability + stability_increase) < 98:
-            germany.stability += stability_increase
-
-    elif chance % 6 == 5:
-        """Chance that someone gets sued
-        - decrease in happiness
-        - slight decrease in GDP
-            -> Consumer spending
-        """
-        print("Someone just got sued.\n")
-        time.sleep(3)
-
-        germany.current_gdp -= round(random.uniform(1000, 30000), 2)
-        # representing loss in CPP
-
-        happiness_decrease = round(random.uniform(0.1, 1.00), 2)
-        if (germany.happiness - happiness_decrease) > 5:
-            germany.happiness -= happiness_decrease
-
-    if chance % 8 == 3:
-        """Chance that somebod loses their savings @ a casino
-        - decrease in happiness
-        - slight decrease in GDP(Consumer spending)
-        """
-        loss = round(random.uniform(10000, 600000), 2)
-        print(f"Someone just lost ${loss} at their local casino")
-
-        decrease = round(random.uniform(0.25, 2.56), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
-
-        germany.current_gdp -= round(loss * round(random.uniform(0.25, 0.55), 2), 2)
-
-    elif chance % 9 == 5:
-        """Chance that somebody begins to invest in economy
-        - increase in happiness and stability
-        - slight increase in GDP
-            -> Investment
-        """
-        print("Someone has begun to invest. "
-              "What a smart lad\n")
-
-        germany.current_gdp += round(random.uniform(1200, 6000), 2)
-
-        stability_increase = round(random.uniform(0.1, 1.00), 2)
-        happiness_increase = round(random.uniform(0.1, 1.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability + stability_increase) < 98:
-            germany.stability += stability_increase
-
-    elif chance % 17 == 9:
-        """Chance that somebody wins the lottery
-        - increase in GDP by 3/4 of winnings
-        - increase in national debt by randomized selection of 1/4 to 3/4
-            -> consumer debt
-        - increase in happiness and stability
-        """
-        winnings = round(random.uniform(100000, 2000000), 2)
-        print(f"somebody won {winnings} in the Eurojackpot.\n")
-        time.sleep(3)
-
-        germany.current_gdp += winnings * 0.75
-        germany.national_debt += round(winnings * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(0.1, 0.5), 2)
-        happiness_increase = round(random.uniform(1.25, 3.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability + stability_increase) < 98:
-            germany.stability += stability_increase
-
-    elif chance % 20 == 11:
-        """Chance of the Bundestag/Reichstag spending an extra amount of money
-        - increase in GDP by randomized selection of 1/4 to 3/4 of money
-            -> increase in national debt by same amount
-        - increase in stability and happiness
-        """
-        spending = round(random.uniform(10000, 500000), 2)
-        print(f"The Bundestag decided to spend an extra ${spending} today\n")
-        time.sleep(3)
-
-        germany.current_gdp += round(spending * round(random.uniform(0.25, 0.75), 2), 2)
-        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(1.00, 1.5), 2)
-        happiness_increase = round(random.uniform(0.25, 1.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability + stability_increase) < 98:
-            germany.stability += stability_increase
-
-    elif chance % 27 == 17:
-        """Chance of a certain amount of banks(1-15) collapse
-        - Decrease in GDP
-            -> loss based upon severity
-        - increase in national debt
-            -> government and consumer spending
-        - decrease in stability and happiness
-        """
-        banks = random.randrange(1, 16)
-        loss = 0
-        if banks < 10:
-            loss = round(random.uniform(10000, 200000), 2)
-        if banks > 10:
-            loss = round(random.uniform(200000, 1000000), 2)
-
-        print(f"{banks} bank(s) collapsed today resulting in a loss of ${loss}.\n")
-        time.sleep(3)
-        germany.current_gdp -= loss
-        germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(1.00, 5.5), 2)
-        happiness_increase = round(random.uniform(2.25, 8.00), 2)
-
-        if (germany.happiness - happiness_increase) > 5:
-            germany.happiness -= happiness_increase
-
-        if (germany.stability - stability_increase) > 5:
-            germany.stability -= stability_increase
-
-    elif chance % 32 == 11 and germany.date >= germany.tax_change_date:
-        """Chance that the Bundestag/Reichstag raises taxes
-        - decrease in stability and happiness
-        **Internal checks will be put in place to prevent 
-        rates over 100%**
-        """
-        tax_hike = round(random.uniform(0.25, 5.56), 2)
-        if (germany.tax_rate + tax_hike) < 100:
-            print(f"the Bundestag raised taxes by {tax_hike}% today.\n")
-            time.sleep(3)
-            stability_increase = round(random.uniform(0.20, 1.00), 2)
-            happiness_increase = round(random.uniform(0.25, 2.00), 2)
-
-            if (germany.happiness - happiness_increase) > 5:
-                germany.happiness -= happiness_increase
-
-            if (germany.stability - stability_increase) > 5:
-                germany.stability -= stability_increase
-            germany.tax_change_date = germany.date + timedelta(days=60)
-
-        else:
-            print(f"the Bundestag attempted to raise taxes by {tax_hike}%.\n"
-                  f"However the hike would've made the tax rate exceed 100%.\n")
-
-    elif chance % 39 == 13 and germany.date >= germany.tax_change_date:
-        """Chance that the Bundestag/Reichstag lowers taxes
-        - increase in stability and happiness
-        - increase in GDP
-            -> Consumer and government spending and investment
-        - increase in National debt
-            -> government and consumer spending
-        **Internal checks will be put in place to prevent 
-        rates below 10% **
-        """
-        tax_hike = round(random.uniform(0.25, 5.56), 2)
-        if (germany.tax_rate - tax_hike) >= 10:
-            print(f"the Bundestag lowered taxes by {tax_hike}% today.\n")
-            time.sleep(3)
-            stability_increase = round(random.uniform(0.20, 1.00), 2)
-            happiness_increase = round(random.uniform(0.25, 2.00), 2)
-
-            if (germany.happiness + happiness_increase) < 98:
-                germany.happiness += happiness_increase
-
-            if (germany.stability + stability_increase) < 98:
-                germany.stability += stability_increase
-            germany.tax_change_date = germany.date + timedelta(days=60)
-
-        else:
-            print(f"the Bundestag attempted to lower taxes by {tax_hike}%.\n"
-                  f"However the hike would've made the tax rate dip below 10%.\n")
-
-    elif chance % 49 == 20 and (germany.date >= germany.economic_change_date) and \
-            germany.economic_state != "recession":
-        """Chance that German economy shifts into a Recession
-        - stimulus function gets called
-        - GDP gets slashed by 1.5
-        - stability and happiness decrease
-        - Government spending increases alongside national debt by 1/4 to 3/4 of that spending
-        - later on, potential for Brandenburg-Prussia to lose control of other states
-            -> especially Bavaria
-        """
-        print("The German economy has randomly fallen into a Recession.\n")
-        time.sleep(3)
-        germany.economic_state = "recession"
-        germany.current_gdp /= 1.5
-        spending = round(random.uniform(120000, 1000000), 2)
-        germany.current_gdp += spending
-        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(2.20, 5.00), 2)
-        happiness_increase = round(random.uniform(3.25, 8.00), 2)
-
-        if (germany.happiness - happiness_increase) > 5:
-            germany.happiness -= happiness_increase
-
-        if (germany.stability - stability_increase) > 5:
-            germany.stability -= stability_increase
-
-        germany.economic_change_date = germany.date + timedelta(days=120)
-        economic_stimulus(germany)
-
-    elif chance % 49 == 15 and (germany.date >= germany.economic_change_date) and \
-            germany.economic_state != "recovery":
-        """Chance that German economy shifts into a Recovery stage
-                - GDP gets multiplied by 1.5
-                - stability and happiness increase
-                - Government spending increases alongside national debt by 1/4 to 3/4 of that spending
-        """
-
-        print("The German economy has randomly fallen into a Recession.\n")
-        time.sleep(3)
-        germany.economic_state = "recovery"
-        germany.current_gdp *= 1.5
-        consumer_spending = round(random.uniform(120000, 1000000), 2)
-        germany.current_gdp += consumer_spending
-        germany.national_debt += round(consumer_spending * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(2.20, 5.00), 2)
-        happiness_increase = round(random.uniform(3.25, 8.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability - stability_increase) < 98:
-            germany.stability -= stability_increase
-
-        germany.economic_change_date = germany.date + timedelta(days=120)
-
-    elif chance % 60 == 29 and (germany.date >= germany.economic_change_date) and \
-            germany.economic_state != "depression":
-        """Chance that German economy collapses in a depression
-        - stimulus function gets called
-        - GDP gets slashed by 3
-        - stability and happiness decrease
-        - Government spending increases alongside national debt by 1/4 to 3/4 of that spending
-        - later on, potential for Brandenburg-Prussia to lose control of other states
-            -> especially Bavaria
-        """
-        print("The German economy has randomly fallen into a Depression.\n")
-        time.sleep(3)
-        germany.economic_state = "depression"
-        germany.current_gdp /= 3
-        spending = round(random.uniform(1000000, 9000000), 2)
-        germany.current_gdp += spending
-        germany.national_debt += round(spending * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(10.20, 15.00), 2)
-        happiness_increase = round(random.uniform(13.25, 20.00), 2)
-
-        if (germany.happiness - happiness_increase) > 5:
-            germany.happiness -= happiness_increase
-
-        if (germany.stability - stability_increase) > 5:
-            germany.stability -= stability_increase
-        economic_stimulus(germany)
-
-    elif chance % 60 == 15 and (germany.date >= germany.economic_change_date) and \
-            germany.economic_state != "expansion":
-        """Chance that German economy shifts into an expansion stage
-                - GDP gets multiplied by 3
-                - stability and happiness increase
-                - Government spending increases alongside national debt by 1/4 to 3/4 of that spending
-        """
-        print("The German economy has randomly fallen into an expansion.\n")
-        time.sleep(3)
-        germany.economic_state = "expansion"
-        germany.current_gdp *= 3
-        consumer_spending = round(random.uniform(1000000, 9000000), 2)
-        germany.current_gdp += consumer_spending
-        germany.national_debt += round(consumer_spending * round(random.uniform(0.05, 0.25), 2), 2)
-
-        stability_increase = round(random.uniform(10.20, 15.00), 2)
-        happiness_increase = round(random.uniform(13.25, 20.00), 2)
-
-        if (germany.happiness + happiness_increase) < 98:
-            germany.happiness += happiness_increase
-
-        if (germany.stability + stability_increase) < 98:
-            germany.stability += stability_increase
-def random_social(germany):
-    chance = random.randrange(10, 20000)
-
-    if chance % 10 == 3:
-        """Chance that a parade occurs
-        - increase in happiness and stability
-        """
-        print("A parade just occurred.\n")
-        time.sleep(3)
-
-    elif chance % 16 == 5:
-        """Chance that someone gets married
-        - increase in happiness and stability
-        """
-        print("someone just got married\n")
-        time.sleep(3)
-        decrease = round(random.uniform(0.25, 0.75), 2)
-        decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
-
-        if (germany.stability - decrease_stability) > 10:
-            germany.stability -= decrease_stability
-
-    elif chance % 18 == 7:
-        """Chance that a college dorm throws a party
-        - increase in happiness
-        - internal chance of death
-            -> if death 
-                - decrease in happiness
-        """
-        print("A college dorm is throwing a wild party\n")
-        time.sleep(3)
-        chance = random.randrange(0, 2)
-        if chance == 1:
-            people = random.randrange(1, 30)
-            print(f"Well bad news...{people} people died from partying a little to hard.\n")
-            time.sleep(3)
-            germany.population -= people
-            germany.deaths += people
-            time.sleep(3)
-            germany.happiness -= random.randrange(1, 4)
-        else:
-            germany.happiness += random.randrange(2, 7)
-
-    elif chance % 21 == 10:
-        """Chance that a high schooler throws a party
-        - increase in happiness
-        - internal chance of death
-            -> if death 
-                - decrease in happiness
-        """
-        print("A popular high schooler is throwing a wild party\n")
-        time.sleep(3)
-        chance = random.randrange(0, 2)
-        if chance == 1:
-            people = random.randrange(1, 30)
-            print(f"Well bad news...{people} people died from partying a little to hard.\n")
-            germany.population -= people
-            germany.deaths += people
-            time.sleep(3)
-            germany.happiness -= random.randrange(1, 4)
-        else:
-            germany.happiness += random.randrange(2, 7)
-
-    elif chance % 26 == 8:
-        """Chance that car rolls into group of people
-        - decrease in population
-        - decrease in happiness and stability
-        """
-        deaths = random.randrange(3, 25)
-        print(f"Someone just rolled their car into a group of people. {deaths} people died.\n")
-        germany.population -= deaths
-        time.sleep(3)
-
-        decrease = round(random.uniform(0.25, 0.75), 2)
-        decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
-
-        if (germany.stability - decrease_stability) > 10:
-            germany.stability -= decrease_stability
-
-    elif chance % 36 == 7:
-        """Chance that somebody converts and begins to believe in God
-        -> Christian, Islamic, Jewish, or other
-        - increase in happiness and stability
-        """
-        religions = ["Jewish", "Christian", "Islamic"]
-        print(
-            f"An Atheist just converted to believing in the {religions[random.randrange(0, len(religions) - 1)]} God\n")
-        decrease = round(random.uniform(0.25, 0.75), 2)
-        decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness + decrease) < 98:
-            germany.happiness += decrease
-
-        if (germany.stability + decrease_stability) < 98:
-            germany.stability += decrease_stability
-        time.sleep(3)
-
-def random_crime(germany):
-    chance = random.randrange(10, 20000)
-    if chance % 4 == 5:
-        """Chance that somebody gets mugged
-        - chance for death
-        - decrease in happiness
-        """
-        death_chance = random.randrange(0, 2)
-        print("A mugging has just occurred.\n")
-        if death_chance == 1:
-            print("The mugging has resulted in the victims death")
-            germany.deaths += 1
-            germany.population -= 1
-            decrease = round(random.uniform(0.1, 0.56), 2)
-            if (germany.happiness - decrease) > 5:
-                germany.happiness -= decrease
-        else:
-            decrease = round(random.uniform(0.1, 0.56), 2)
-            if (germany.happiness - decrease) > 5:
-                germany.happiness -= decrease
-
-    elif chance % 6 == 7:
-        """Chance that someone burglarizes a house
-        - internal chance for death
-        - decrease in happiness
-        """
-        death_chance = random.randrange(0, 2)
-        print("A burglary has just occurred.\n")
-        if death_chance == 1:
-            deaths = random.randrange(1, 7)
-            print(f"The burglary has resulted in the {deaths} death(s)")
-            germany.deaths += deaths
-            germany.population -= deaths
-            decrease = round(random.uniform(0.1, 0.56), 2)
-            if (germany.happiness - decrease) > 5:
-                germany.happiness -= decrease
-        else:
-            decrease = round(random.uniform(0.1, 0.56), 2)
-            if (germany.happiness - decrease) > 5:
-                germany.happiness -= decrease
-
-    elif chance % 12 == 9:
-        """Chance that a homicide occurs
-        - decrease in stability and happiness
-        - decrease in population
-        """
-        deaths = random.randrange(3, 56)
-        print(f"A homicide has just occurred.\n"
-              f"{deaths} deaths occurred during this homicide.\n")
-        time.sleep(3)
-        germany.population -= deaths
-        germany.deaths += deaths
-
-        decrease = round(random.uniform(0.25, 0.75), 2)
-        decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
-
-        if (germany.stability - decrease_stability) > 10:
-            germany.stability -= decrease_stability
-
-    elif chance % 13 == 7:
-        """Chance that somebody decides to rob a bank
-        - internal chance of it being successful or not
-            -> further internal chance if death occurs
-                * Decrease happiness and stability
-                * Decrease in population if people are killed
-            * Decrease in happiness and stability
-            * Decrease in GDP
-                - will be a drop by 3/4 of what was lost
-            * increase in national debt to replace losses
-                - both government and consumer spending
-        """
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            """Chance if bank robbery is successful"""
-            chance_two = random.randrange(0, 2)
-            if chance_two == 0:
-                """Chance that the failed robbery is non-lethal"""
-                print("A bank robbery was just attempted.\n"
-                      "The robber was unsuccessful and nobody got hurt.\n")
-                time.sleep(3)
-
-            elif chance_two == 1:
-                """Chance that failed robbery is lethal"""
-                deaths = random.randrange(3, 20)
-                print("A bank robbery was just attempted.\n"
-                      f"The robber was unsuccessful, but killed {deaths} people in the process\n")
-                time.sleep(3)
-                germany.deaths += deaths
-                germany.population -= deaths
-                stability_increase = round(random.uniform(0.1, 1.00), 2)
-                happiness_increase = round(random.uniform(1.25, 3.00), 2)
-
-                if (germany.happiness - happiness_increase) > 5:
-                    germany.happiness -= happiness_increase
-
-                if (germany.stability - stability_increase) > 5:
-                    germany.stability -= stability_increase
-
-        elif chance == 1:
-            """Chance that bank robbery is successful"""
-            chance_two = random.randrange(0, 2)
-            if chance_two == 0:
-                """Chance that bank robbery was successful yet non lethal"""
-                loss = round(random.uniform(10000, 900000), 2)
-                print(f"A bank robbery just occurred. The specific bank lost ${loss}.\n"
-                      f"Fortunately nobody was hurt")
-                time.sleep(3)
-
-                germany.current_gdp -= loss
-                germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
-
-                stability_increase = round(random.uniform(0.5, 1.25), 2)
-                happiness_increase = round(random.uniform(1.00, 2.25), 2)
-
-                if (germany.happiness - happiness_increase) < 5:
-                    germany.happiness -= happiness_increase
-
-                if (germany.stability - stability_increase) < 5:
-                    germany.stability -= stability_increase
-
-            elif chance == 1:
-                """Chance that bank robbery is successful and lethal"""
-                loss = round(random.uniform(10000, 900000), 2)
-                deaths = random.randrange(3, 20)
-                print(f"A bank robbery just occurred. The specific bank lost ${loss}.\n"
-                      f"{deaths} deaths occurred during this bank robbery\n")
-                time.sleep(3)
-
-                germany.current_gdp -= loss
-                germany.national_debt += round(loss * round(random.uniform(0.05, 0.25), 2), 2)
-
-                stability_increase = round(random.uniform(1.00, 2.00), 2)
-                happiness_increase = round(random.uniform(1.00, 3.25), 2)
-
-                if (germany.happiness - happiness_increase) > 5:
-                    germany.happiness -= happiness_increase
-
-                if (germany.stability - stability_increase) > 5:
-                    germany.stability -= stability_increase
-
-    elif chance % 14 == 10:
-        """Chance that a certain public space gets shot up
-        - Decrease in population
-        - Decrease in stability and happiness
-        """
-        locations = ["School", "Library", "Restaurant", "Bakery", "Courthouse", "Bank"]
-        deaths = random.randrange(6, 100)
-        print(f"Oh no there was a shooting at a local {locations[random.randrange(0, len(locations) - 1)]}.\n"
-              f"This shooting resulted in the deaths of {deaths} people.\n")
-        germany.stability += round(random.uniform(0.25, 1.75), 2)
-        germany.happiness += round(random.uniform(0.25, 4.75), 2)
-        germany.population -= deaths
-        germany.deaths += deaths
-
-        decrease = round(random.uniform(0.25, 0.75), 2)
-        decrease_stability = round(random.uniform(0.25, 1.75), 2)
-        if (germany.happiness - decrease) > 5:
-            germany.happiness -= decrease
-
-        if (germany.stability - decrease_stability) > 10:
-            germany.stability -= decrease_stability
-
-        time.sleep(3)
-
-    elif chance % 17 == 13:
-        """Chance that a human trafficking ring gets exposed(suppose all victims died)
-        - decrease in population
-        - decrease in happiness and stability
-        - increase in national debt and GDP
-            -> govt spending to clean mess up
-        """
-        if germany.date.year > 1918:
-            people = random.randrange(700, 15000)
-            print(f"A human trafficking ring with {people} victims was just uncovered")
-            time.sleep(3)
-            germany.population -= people
-            decrease = round(random.uniform(1.10, 5.56), 2)
-            if (germany.happiness - decrease) > 5:
-                germany.happiness -= decrease
-            if (germany.stability - decrease) > 5:
-                germany.stability -= decrease
-            increase = round(random.uniform(10000, 2000000), 2)
-            germany.current_gdp += increase
-            germany.national_debt += round(increase * round(random.uniform(0.05, 0.25), 2), 2)
-
-    elif chance % 25 == 30:
-        """Chance that a major political scandal is uncovered
-        - potential rebellion occurs
-        - major decrease in stability and GDP(slash by 1.5)
-        """
-        loss = round(random.uniform(100000, 3000000), 2)
-        print(f"A major political scandal has just been uncovered.\n"
-              f"It is being reported that ${loss} was siphoned from Germany's GDP")
-        time.sleep(3)
-        germany.current_gdp -= loss
-
-    elif chance % 60 == 50 and germany.rebellion != True:
-        """Chance that a riot begins(could lead to rebellion)
-        - major decrease in stability and happiness
-        - can arise in any of the states of Germany
-        - major decrease in GDP(slashed by factor of 2.5 or 5, depends)
-            -> causes economy to go into depression or recession
-                * based on chance
-        - increase in national debt
-        - later on, initiates a buildup of troops
-        """
-        days = random.randrange(30, 120)
-        rebels = germany.population * round(random.uniform(0.01, 0.15), 2)
-        print(f"A riot has begun in the region of {germany.regions[random.randrange(0, len(germany.regions) - 1)]}\n"
-              f"It is being said that it will take {days} to quell this riot before it gets out of hand.\n'"
-              f"So far, only {rebels} rebels have joined the cause/riot.\n")
-        time.sleep(3)
-        economic_chance = random.randrange(0, 2)
-        if economic_chance == 0:
-            print("Due to infighting the Germany economy has fallen into a Recession.\n")
-            time.sleep(3)
-            germany.economic_state = "recession"
-            germany.economic_change_date = germany.date + timedelta(days=days)
-            # economic_stimulus(germany)
-
-        elif chance == 1:
-            print("Due to infighting the Germany economy has fallen into a Depression.\n")
-            time.sleep(3)
-            germany.economic_state = "depression"
-            germany.economic_change_date = germany.date + timedelta(days=days)
-            # economic_stimulus(germany)
-        germany.riot_over = germany.date + timedelta(days=days)
-
-def random_international(germany):
-    chance = random.randrange(10, 20000)
-    if chance % 6 == 9:
-        """Chance that Germany's relations with another nation improves
-        - later on...
-            * improved relations with other nation
-            * more potential for trade relations
-        """
-    elif chance % 10 == 11:
-        """Chance that Germany's relations with another nation deteriorate
-        - later on...
-            * worsened relations with specific nation
-            * less potential for trade
-        """
-
-    elif chance % 15 == 14:
-        """Chance that Germany randomly embargoes another nation
-        - nation will not be in alliance
-        """
-
-    elif chance % 34 == 19:
-        """Chance that a terrorist attack occurs on German soil
-        - nation that commences terrorism will not be in alliance
-        """
-
-    elif chance % 50 == 46:
-        """Random chance that Germany decides to go to war with another nation
-        - nation will not be in alliance
-        """
-    pass
-
-"""Primary Random Function"""
-def random_functions(germany):
-    random_social(germany)
-    random_politics(germany)
-    random_economics(germany)
-    random_crime(germany)
-
 """Function dealing with potential rebellions"""
 def rebellion(germany):
     if (germany.date <= germany.riot_over) or germany.rebellers != 0:
@@ -1622,30 +798,100 @@ def rebellion(germany):
         germany.stability += round(random.uniform(0.75, 3.75), 2)
         germany.happiness += round(random.uniform(1.75, 5.75), 2)
 
+def social_stats(germany):
+    print(f"Your current happiness level is {germany.happiness}%.\n")
+    time.sleep(3)
+    if germany.happiness < 35.45 and not germany.improve_happiness:
+        choice = input(f"{germany.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            germany.improve_happiness = germany.date + timedelta(days=30)
+    print(f"Your current population {germany.current_pop}.\n")
+    time.sleep(3)
+    print(f"There have been {germany.births} births in {germany.date.year}.\n")
+    time.sleep(3)
+    print(f"There have been {germany.deaths} deaths in {germany.date.year}.\n")
+    time.sleep(3)
+
+def political_stats(germany):
+    print(f"Your current political stability is {germany.stability}%.\n")
+    time.sleep(3)
+    if germany.stability < 45.45 and not germany.improve_stability:
+        choice = input(f"{germany.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            germany.improve_stability = germany.date + timedelta(days=30)
+    print(f"There are {len(germany.states)} states in the Union\n")
+    time.sleep(3)
+
+def economic_stats(germany):
+    print(f"Your current GDP is ${round(germany.current_gdp, 2)}.\n")
+    time.sleep(3)
+    print(f"Your current yearly gdp growth is {round(((germany.current_gdp - germany.past_gdp) / ((germany.past_gdp + germany.current_gdp) / 2)) * 100, 5)}%\n")
+    time.sleep(3)
+    print(f"Your current national debt is ${round(germany.national_debt, 2)}.\n")
+    time.sleep(3)
+
+    if germany.national_debt > 1000000000 and not germany.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            germany.debt_repayment = germany.date + timedelta(days=120)
+def military_stats(germany):
+    print(f"Your current army size is {germany.army_size} soldiers.\n")
+    time.sleep(3)
+    print(f"Your current conscription law is {germany.conscription_status}.\n")
+    time.sleep(3)
+    print(f"You currently have {germany.conscripts} recruitable soldiers.\n")
+    time.sleep(3)
+def daily_decisions(germany):
+    done = True
+    while done:
+        choice = input("Would you like to view your political, social, military, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(germany)
+        elif choice.lower() == "economic":
+            economic_stats(germany)
+        elif choice.lower() == "social":
+            social_stats(germany)
+        elif choice.lower() == "military":
+            military_stats(germany)
+        elif choice.lower() == "quit":
+            done = False
+            germany.check_stats = germany.date + timedelta(days=3)
+
 """Main function of manual German version of game"""
 def manual_game(germany):
     # establishment of check upon game status
     while germany.population > 200000:
-        germany.date = germany.date + timedelta(days=1)
-        # incrementing of time
-        print(germany.date)
+        print(f"Date: {germany.date}")
         # primary functions
         events(germany)
         economic_decisions(germany)
         population_change(germany)
         political_change(germany)
-        random_functions(germany)
         military_functions(germany)
-        if germany.stability >= 50:
-            choice = input("Important!!! view your stats: ")
-            if choice == "y" or choice == "yes":
-                check_stats(germany)
+
+        if germany.date > germany.check_stats:
+            daily_decisions(germany)
+
         if germany.rebellion == True:
             rebellion(germany)
+
+        # incrementing of time
+        germany.date = germany.date + timedelta(days=1)
         time.sleep(3)
 class Germany:
     def __init__(self, year):
         self.date = datetime(int(year), 1, 1)
+        """Variable for improving stability of nation over given time"""
+        self.improve_stability = None
+        """Ditto to improve stability"""
+        self.improve_happiness = None
+        """variable for repaying debt over given time"""
+        self.debt_repayment = None
+        self.check_stats = self.date + timedelta(days=3)
         # population variables
         self.population = population[year]
         self.population_change = 0
@@ -1714,32 +960,15 @@ class Germany:
         self.economic_stimulus = False
         """Taxes components"""
         self.tax_rate = tax_rate[year]
-        # weather variables
-        self.blackout = False
-        self.blackout_date = None
-        # land variables
-        if int(year) < 1918:
-            self.regions = ["East Prussia", "Posen", "Silesia", "West Prussia", "Pomerania", "Brandenburg",
-                            "Schleswig-Holstein", "Saxony", "Bavaria", "Alsace-Lorraine", "Hanover",
-                            "Rhine", "Baden", "Wurttemberg", "Westphalia"]
-        if int(year) > 1918 and int(year) < 1938:
-            self.regions = ["East Prussia", "Silesia", "Brandenburg", "Pomerania", "Schleswig-Holstein", "Saxony",
-                            "Bavaria", "Baden", "Wurttemberg", "Westphalia", "Hessen-Nassau"]
 
-        if int(year) > 1938 and int(year) < 1944:
-            self.regions = ["East Prussia", "Silesia", "Brandenburg", "Pomerania", "Schleswig-Holstein", "Saxony",
-                            "Bavaria", "Baden", "Wurttemberg", "Westphalia", "Hessen-Nassau", "Bohemia", "Moravia",
-                            "Austria", "Sudetenland"]
         # military variables
         self.conscription_status = "limited"
         """Will also include extensive, required, and volunteer(Weimar Republic)"""
         self.war_deaths = 0
         self.conscripts = round(self.population * round(random.uniform(0.0001, 0.0009), 5), 2)
-
         self.army_size = army_size[year]
         # international variables
         self.alliance = ""
-        self.global_market_share = 0
         """Wont be utilized until other nations are developed"""
         # time variables
         self.conscript_census = self.date + timedelta(days=75)
