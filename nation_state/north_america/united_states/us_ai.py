@@ -318,7 +318,8 @@ def manual_game(us):
         population_migrations(us)
         daily_decisions(us)
         us.date += timedelta(days=3)
-class UnitedStates:
+
+class UnitedStatesAI:
     def __init__(self, year):
         # regional variables
         self.states = []
@@ -355,6 +356,3 @@ class UnitedStates:
         self.improve_happiness = None
         """variable for repaying debt over given time"""
         self.debt_repayment = None
-
-us = UnitedStates("1918")
-manual_game(us)

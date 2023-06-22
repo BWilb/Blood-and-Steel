@@ -46,6 +46,7 @@ vice_presidents = {
         us.states[i].random_events(us.states[i])"""
 def social_stats(us):
     print(f"Your current happiness level is {us.happiness}%.\n")
+    print("hi")
     time.sleep(3)
     if us.happiness < 35.45 and not us.improve_happiness:
         choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
@@ -97,6 +98,7 @@ def daily_decisions(us):
         elif choice.lower() == "quit":
             done = False
             us.check_stats = us.date + timedelta(days=3)
+
 """Internal Population migration"""
 def population_migrations(us):
     migrants = 0
@@ -231,8 +233,9 @@ def establish_states(us):
     daily_decisions(us)
 def manual_game(us):
     establish_states(us)
-    print(us.current_pop)
-    print(us.current_gdp)
+    italy = italy_ai.Italy(str(us.date.year))
+    germany = german_ai.GermanAI(str(us.date.year))
+    britain = britain_ai.BritainAI(str(us.date.year))
     while us.current_pop > 1000000:
         print(f"Current date: {us.date.date()}\n")
         time.sleep(3)
@@ -248,6 +251,9 @@ def manual_game(us):
         if us.date > us.check_stats:
             daily_decisions(us)
         us.date += timedelta(days=1)
+        italy_ai.ai_game(italy)
+        german_ai.ai_game(germany)
+        britain_ai.ai_game(britain)
 
 class UnitedStates:
     def __init__(self, year):

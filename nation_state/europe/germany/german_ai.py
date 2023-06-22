@@ -121,7 +121,7 @@ def social_events(germany):
 
     if germany.date == datetime(germany.date.year, 2, 16):
         """Checking of date to see if the German version of Karneval has begun"""
-        print("Karneval hat begonnen!!")
+        print("Karneval hat begonnen fur Duetschland!!")
         time.sleep(3)
 
     if germany.date >= datetime(germany.date.year, 2, 16) and germany.date <= datetime(germany.date.year, 2, 22):
@@ -162,7 +162,7 @@ def social_events(germany):
 
     if germany.date == datetime(germany.date.year, 4, 7):
         """Checking to see if Easter weekend has begun"""
-        print("Das Osterwochenende hat begonnen")
+        print("Das Osterwochenende hat begonnen fur Duetschland")
         time.sleep(3)
 
     if germany.date <= datetime(germany.date.year, 4, 7) and germany.date >= datetime(germany.date.year, 4, 10):
@@ -200,7 +200,7 @@ def social_events(germany):
 
     if germany.date == datetime(germany.date.year, 9, 16):
         """Checking of date to see if Oktoberfest has begun"""
-        print("Oktoberfest hat begonnen!!")
+        print("Oktoberfest hat begonnen fur Duetschland!!")
         time.sleep(3)
 
     if germany.date >= datetime(germany.date.year, 9, 16) and germany.date <= datetime(germany.date.year, 10, 3):
@@ -283,13 +283,12 @@ def economic_events(germany):
         elif (germany.stability - decrease_stability) > 5:
             germany.happiness -= decrease_stability
 
-
 def political_events(germany):
     """definitive national political events in germany"""
 
     # events in January
     if germany.date == datetime(1919, 1, 5):
-        print("\nGerman Workers Party has just been formed!!")
+        print("\nGerman Workers Party has just been formed within Germany!!")
         time.sleep(3)
 
     elif germany.date == datetime(1932, 1, 30):
@@ -300,8 +299,8 @@ def political_events(germany):
         """
         print("Adolf Hitler has taken full control of the government.\n"
               "The Third Reich has begun.")
-        germany.chancellor = "Adolf Hitler"
         time.sleep(3)
+        germany.chancellor = "Adolf Hitler"
         germany.national_socialists = round(germany.population * 0.85, 0)
         germany.rebels = germany.population - germany.national_socialists
         germany.progressives = 0
@@ -352,34 +351,30 @@ def economic_stimulus(germany):
         """since AI, random chance"""
 
         if choice == 0:
-            valid_choice = False
+            tax_hike = round(random.uniform(1, 10), 3)
+            germany.tax_rate += round(tax_hike, 2)
+            print(f"The German government has decided to raise taxes by {tax_hike}%")
+            time.sleep(3)
+            decrease_happiness = round(random.uniform(0.25, 3.45), 2)
+            decrease_stability = round(random.uniform(0.25, 1.45), 2)
+            if (germany.happiness - decrease_happiness) < 5:
+                germany.happiness -= decrease_happiness
 
-            while valid_choice:
-                tax_hike = round(random.uniform(1, 10), 3)
-
-                if tax_hike <= 10 and tax_hike >= 0.5:
-                    """if statement covering if tax hike meets criteria"""
-
-                    germany.tax_rate += round(tax_hike, 2)
-                    print(f"The German governmetn has decided to raise taxes by {tax_hike}%")
-                    time.sleep(3)
-                    decrease_happiness = round(random.uniform(0.25, 3.45), 2)
-                    decrease_stability = round(random.uniform(0.25, 1.45), 2)
-                    if (germany.happiness - decrease_happiness) < 5:
-                        germany.happiness -= decrease_happiness
-
-                    if (germany.stability - decrease_stability) < 5:
-                        germany.stability -= decrease_stability
-                    valid_choice = True
-
-                elif tax_hike <= 0 or tax_hike > 10:
-                    pass
-
-                else:
-                    pass
+            if (germany.stability - decrease_stability) < 5:
+                germany.stability -= decrease_stability
 
     elif germany.economic_state.lower() == "depression":
         tax_hike = round(random.uniform(0.5, 10), 2)
+        germany.tax_rate += round(tax_hike, 2)
+        print(f"The German government has decided to raise taxes by {tax_hike}%")
+        time.sleep(3)
+        decrease_happiness = round(random.uniform(0.25, 3.45), 2)
+        decrease_stability = round(random.uniform(0.25, 1.45), 2)
+        if (germany.happiness - decrease_happiness) < 5:
+            germany.happiness -= decrease_happiness
+
+        if (germany.stability - decrease_stability) < 5:
+            germany.stability -= decrease_stability
 
 def economic_state(germany):
     if germany.date >= germany.economic_change_date:
@@ -390,7 +385,7 @@ def economic_state(germany):
                 """current state is expansion or recovery"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "recession":
-                        print("Your economy has entered into a recession after 6 months of decayed growth.\n")
+                        print("The German economy has fallen into a recession\n")
                         time.sleep(3)
                         germany.economic_state = business_cycle[i]
                         germany.economic_change_date = germany.date + timedelta(days=240)
@@ -403,8 +398,7 @@ def economic_state(germany):
                 """current state is recession and cycle is switching to depression"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "depression":
-                        print("Your economy has entered into a depression "
-                              "after exceeding 6 months of decayed growth.\n")
+                        print("The German economy has fallen into a depression\n")
                         time.sleep(3)
                         germany.economic_state = business_cycle[i]
                         germany.economic_change_date = germany.date + timedelta(days=270)
@@ -418,7 +412,7 @@ def economic_state(germany):
                 """current state is expansion or recovery"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "recovery":
-                        print("Your economy has finally entered its recovery period.\n")
+                        print("The German economy has hit a recovery period.\n")
                         time.sleep(3)
                         germany.economic_state = business_cycle[i]
                         germany.economic_change_date = germany.date + timedelta(days=360)
@@ -430,14 +424,13 @@ def economic_state(germany):
                 """current state is recession and cycle is switching to depression"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "expansion":
-                        print("Your economy has finally entered its expansionary period. Woo!!!\n")
+                        print("The German economy is currently experiencing an expansionary period\n")
                         time.sleep(3)
                         germany.economic_state = business_cycle[i]
                         germany.economic_change_date = germany.date + timedelta(days=120)
                         """
                         Since it takes awhile to escape a depression, amount of time on change date is increased
                         """
-
 def recovery(germany):
     """Path taken if economy is currently in recovery"""
     if germany.economic_stimulus:
@@ -497,7 +490,6 @@ def expansion(germany):
     germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
                             (germany.exports - germany.imports))
 
-
 def recession(germany):
     """Path taken if economy is currently in recession"""
     if germany.economic_stimulus:
@@ -526,7 +518,6 @@ def recession(germany):
     germany.imports = round(random.uniform(8000, 90000), 2)
     germany.current_gdp += (germany.consumer_spending + germany.investment + germany.government_spending +
                             (germany.exports - germany.imports))
-
 
 def depression(germany):
     """Path taken if economy is currently in depression"""
@@ -583,7 +574,6 @@ def economic_decisions(germany):
 
             if choice == 0:
                 economic_stimulus(germany)
-                pass
 
     else:
         gdp_changes(germany)
@@ -635,8 +625,6 @@ def political_change(germany):
 
 
 """Population functions"""
-
-
 def population_change(germany):
     if germany.current_year < germany.date.year:
         germany.population_change = (germany.population - germany.current_pop / (
@@ -802,7 +790,6 @@ def rebellion(germany):
         germany.happiness += round(random.uniform(1.75, 5.75), 2)
 
 def social_stats(germany):
-    print(f"Your current happiness level is {germany.happiness}%.\n")
     time.sleep(3)
     if germany.happiness < 35.45 and not germany.improve_happiness:
         choice = random.randrange(0, 2)
@@ -824,7 +811,7 @@ def economic_stats(germany):
         choice = random.randrange(0, 2)
         if choice == 0:
             germany.debt_repayment = germany.date + timedelta(days=120)
-            print("The German government has decided to repay their debts over a 120 day period.\n")
+            print("The German government has decided to repay a part of their national debt over a 120 day period.\n")
             time.sleep(3)
 
 def daily_decisions(germany):
@@ -834,8 +821,7 @@ def daily_decisions(germany):
 
 """Main function of manual German version of game"""
 
-
-def manual_game(germany):
+def ai_game(germany):
     # establishment of check upon game status
     while germany.population > 200000:
         # primary functions
@@ -852,7 +838,7 @@ def manual_game(germany):
 
         # incrementing of time
         germany.date = germany.date + timedelta(days=1)
-        time.sleep(3)
+        break
 
 class GermanAI:
     def __init__(self, year):
@@ -931,23 +917,8 @@ class GermanAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         """Taxes components"""
+        self.economic_state = "recovery"
         self.tax_rate = tax_rate[year]
-        # weather variables
-        self.blackout = False
-        self.blackout_date = None
-        # land variables
-        if int(year) < 1918:
-            self.regions = ["East Prussia", "Posen", "Silesia", "West Prussia", "Pomerania", "Brandenburg",
-                            "Schleswig-Holstein", "Saxony", "Bavaria", "Alsace-Lorraine", "Hanover",
-                            "Rhine", "Baden", "Wurttemberg", "Westphalia"]
-        if int(year) > 1918 and int(year) < 1938:
-            self.regions = ["East Prussia", "Silesia", "Brandenburg", "Pomerania", "Schleswig-Holstein", "Saxony",
-                            "Bavaria", "Baden", "Wurttemberg", "Westphalia", "Hessen-Nassau"]
-
-        if int(year) > 1938 and int(year) < 1944:
-            self.regions = ["East Prussia", "Silesia", "Brandenburg", "Pomerania", "Schleswig-Holstein", "Saxony",
-                            "Bavaria", "Baden", "Wurttemberg", "Westphalia", "Hessen-Nassau", "Bohemia", "Moravia",
-                            "Austria", "Sudetenland"]
         # military variables
         self.conscription_status = "limited"
         """Will also include extensive, required, and volunteer(Weimar Republic)"""
