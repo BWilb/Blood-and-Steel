@@ -171,6 +171,21 @@ def economic_decisions(us):
             each iteration interacts with each state Object
             """
             states[i].economic_growth(us.states[i])
+def improvements(us):
+    if us.date < us.debt_repayment:
+        payment = round(us.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
+        us.national_debt -= payment
+        us.current_gdp -= payment
+
+    if us.date < us.improve_stability:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + us.stability) < 100:
+            us.stability += increase
+
+    if us.date < us.happiness:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + us.happiness) < 100:
+            us.happiness += increase
 
 """Internal Population migration"""
 def population_migrations(us):

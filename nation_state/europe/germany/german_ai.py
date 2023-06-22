@@ -806,7 +806,6 @@ def political_stats(germany):
             time.sleep(3)
 
 def economic_stats(germany):
-
     if germany.national_debt > 1000000000 and not germany.debt_repayment:
         choice = random.randrange(0, 2)
         if choice == 0:
@@ -818,6 +817,23 @@ def daily_decisions(germany):
     economic_stats(germany)
     social_stats(germany)
     political_stats(germany)
+    germany.check_stats = germany.date + timedelta(days=3)
+
+def improvements(germany):
+    if germany.date < germany.debt_repayment:
+        payment = round(germany.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
+        germany.national_debt -= payment
+        germany.current_gdp -= payment
+
+    if germany.date < germany.improve_stability:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + germany.stability) < 100:
+            germany.stability += increase
+
+    if germany.date < germany.happiness:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + germany.happiness) < 100:
+            germany.happiness += increase
 
 """Main function of manual German version of game"""
 
@@ -830,7 +846,7 @@ def ai_game(germany):
         population_change(germany)
         political_change(germany)
         military_functions(germany)
-
+        improvements(germany)
         if germany.date > germany.check_stats:
             daily_decisions(germany)
         if germany.rebellion == True:

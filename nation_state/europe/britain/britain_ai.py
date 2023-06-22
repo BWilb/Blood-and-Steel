@@ -709,20 +709,34 @@ def economic_stats(britain):
             print("The British parliament has decided to pay back some of their national debt for a period of 120 days.\n")
             time.sleep(3)
 def daily_decisions(britain):
-        choice = random.randrange(0, 3)
-        if choice == 0:
-            political_stats(britain)
-        elif choice == 1:
-            economic_stats(britain)
-        elif choice == 2:
-            social_stats(britain)
-        britain.check_stats = britain.date + timedelta(days=3)
+    political_stats(britain)
+    economic_stats(britain)
+    social_stats(britain)
+    britain.check_stats = britain.date + timedelta(days=3)
+
+def improvements(britain):
+    if britain.date < britain.debt_repayment:
+        payment = round(britain.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
+        britain.national_debt -= payment
+        britain.current_gdp -= payment
+
+    if britain.date < britain.improve_stability:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + britain.stability) < 100:
+            britain.stability += increase
+
+    if britain.date < britain.happiness:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + britain.happiness) < 100:
+            britain.happiness += increase
+
 def ai_game(britain):
     while britain.current_pop > 500000:
         # establishment of check upon game status
         population_change(britain)
         politics_change(britain)
         economic_decisions(britain)
+        improvements(britain)
         if britain.date > britain.check_stats:
             daily_decisions(britain)
         britain.date += timedelta(days=1)

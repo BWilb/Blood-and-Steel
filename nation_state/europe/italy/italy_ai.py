@@ -646,18 +646,11 @@ def economic_stats(italy):
             print("The Italian government has decided to repay part of their national debt over a period of 120 days")
             time.sleep(3)
 def daily_decisions(italy):
-    done = True
-    while done:
-        choice = random.randrange(0, 4)
-        if choice == 0:
-            political_stats(italy)
-        elif choice == 1:
-            economic_stats(italy)
-        elif choice == 2:
-            social_stats(italy)
-        elif choice == 3:
-            done = False
-            italy.check_stats = italy.date + timedelta(days=3)
+    political_stats(italy)
+    economic_stats(italy)
+    social_stats(italy)
+    italy.check_stats = italy.date + timedelta(days=3)
+
 def social_events(italy):
     if italy.date.year > 1945 and italy.date == datetime(italy.year, 4, 25):
         print("Italy is celebrating freedom from Fascism day\n")

@@ -46,7 +46,6 @@ vice_presidents = {
         us.states[i].random_events(us.states[i])"""
 def social_stats(us):
     print(f"Your current happiness level is {us.happiness}%.\n")
-    print("hi")
     time.sleep(3)
     if us.happiness < 35.45 and not us.improve_happiness:
         choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
@@ -63,6 +62,8 @@ def social_stats(us):
 
 def political_stats(us):
     print(f"Your current political stability is {us.stability}%.\n")
+    time.sleep(3)
+    print(f"Your current political capital and power is {us.political_power}.\n")
     time.sleep(3)
     if us.stability < 45.45 and not us.improve_stability:
         choice = input(f"{us.stability}% doesnt represent a functional government.\n"
@@ -85,19 +86,53 @@ def economic_stats(us):
               f"Would you like to pay back some of your debt for 120 days?(y or n): ")
         if choice.lower() == "y":
             us.debt_repayment = us.date + timedelta(days=120)
+
+def international_stats(us):
+    done = False
+    while done:
+        choice = input("Would you like to view European, Asian, or Latin American relations")
+        if choice.lower() == "european":
+            print(f"Your relations with Great Britain are {us.english_relations}.\n")
+            time.sleep(3)
+            print(f"Your relations with Russia are {us.russian_relations}.\n")
+            time.sleep(3)
+            print(f"Your relations with Italy are {us.italian_relations}.\n")
+            time.sleep(3)
+            print(f"Your relations with Germany are {us.german_relations}.\n")
+            time.sleep(3)
+            improvement = input("would you like to improve relations")
+
 def daily_decisions(us):
     done = True
     while done:
-        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        choice = input("Would you like to view your political, social, economic, or international stats?(enter quit to quit): ")
         if choice.lower() == "political":
             political_stats(us)
         elif choice.lower() == "economic":
             economic_stats(us)
         elif choice.lower() == "social":
             social_stats(us)
+        elif choice.lower() == "international":
+            international_stats(us)
         elif choice.lower() == "quit":
             done = False
             us.check_stats = us.date + timedelta(days=3)
+
+def improvements(us):
+    if us.date < us.debt_repayment:
+        payment = round(us.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
+        us.national_debt -= payment
+        us.current_gdp -= payment
+
+    if us.date < us.improve_stability:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + us.stability) < 100:
+            us.stability += increase
+
+    if us.date < us.happiness:
+        increase = round(random.uniform(0.01, 1.25), 2)
+        if (increase + us.happiness) < 100:
+            us.happiness += increase
 
 """Internal Population migration"""
 def population_migrations(us):
@@ -247,9 +282,11 @@ def manual_game(us):
             states[i].economic_growth(us.states[i])
             states[i].population_growth(us.states[i])
 
+        improvements(us)
         population_migrations(us)
         if us.date > us.check_stats:
             daily_decisions(us)
+        us.political_power += us.political_exponent
         us.date += timedelta(days=1)
         italy_ai.ai_game(italy)
         german_ai.ai_game(germany)
@@ -268,8 +305,14 @@ class UnitedStates:
         """Leaders of US"""
         self.president = presidents[year]
         self.vice_president = vice_presidents[year]
-        """Political parties of US"""
         self.stability = 95.00
+        self.political_power = 200
+        self.political_exponent = 3.56
+        # international variables
+        self.italian_relations = 56
+        self.english_relations = 34
+        self.russian_relations = 10
+        self.german_relations = 15
         # economic variables
         #self.economic_state = business_cycle[0]
         self.current_gdp = 0
@@ -293,6 +336,5 @@ class UnitedStates:
         """variable for repaying debt over given time"""
         self.debt_repayment = None
         self.check_stats = self.date + timedelta(days=3)
-
 us = UnitedStates("1918")
 manual_game(us)
