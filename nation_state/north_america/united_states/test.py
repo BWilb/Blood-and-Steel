@@ -1,6 +1,6 @@
 import os
-from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, iowa)
+from nation_state.north_america.united_states.us_states import alaska, arkansas, delaware, alabama, conneticut, \
+    california, arizona, colorado, iowa
 
 folder = "us_states"
 
@@ -10,7 +10,7 @@ for file in os.listdir(folder):
         #print(file.removesuffix(".py"))
 
 states = [alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, iowa]
+          conneticut, delaware, iowa]
 us_states = ["alabama", "alaska", "arizona", "arkansas", "california", "colorado",
                        "conneticut", "delaware", "iowa"]
 state = us_states[0]

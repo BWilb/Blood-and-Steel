@@ -144,7 +144,6 @@ def population_change(italy):
     else:
         if italy.viagra_subsidy:
             births = random.randrange(50, 600)
-            italy.births += births
             italy.current_pop += births
 
             for i in range(0, births):
@@ -164,7 +163,6 @@ def population_change(italy):
                     italy.italian_republican_party += 1
 
             deaths = random.randrange(25, 150)
-            italy.deaths += deaths
             italy.current_pop -= deaths
 
             for i in range(0, births):
@@ -185,7 +183,6 @@ def population_change(italy):
 
         elif italy.condom_subsidy:
             births = random.randrange(50, 200)
-            italy.births += births
             italy.current_pop += births
 
             for i in range(0, births):
@@ -205,7 +202,6 @@ def population_change(italy):
                     italy.italian_republican_party += 1
 
             deaths = random.randrange(25, 150)
-            italy.deaths += deaths
             italy.current_pop -= deaths
 
             for i in range(0, deaths):
@@ -226,7 +222,6 @@ def population_change(italy):
 
         else:
             births = random.randrange(50, 300)
-            italy.births += births
             italy.current_pop += births
             for i in range(0, births):
                 """Looping through births to assign to political parties"""
@@ -245,7 +240,6 @@ def population_change(italy):
                     italy.italian_republican_party += 1
 
             deaths = random.randrange(25, 150)
-            italy.deaths += deaths
             italy.current_pop -= deaths
 
             for i in range(0, deaths):
@@ -621,6 +615,16 @@ def economic_decisions(italy):
         gdp_changes(italy)
         economic_state(italy)
 
+"""international functions"""
+def us_relations(us, italy):
+    # function isn't called from AI file, is called from new_usa file
+    done = False
+    while done:
+        choices = ["improve relations", "establish an alliance", "increase trade", "declare war", "establish an embassy"]
+        # potential choices for user to select
+        for i in choices:
+            print(i, end="\n")
+
 """stats functions"""
 def social_stats(italy):
     time.sleep(3)
@@ -639,7 +643,7 @@ def political_stats(italy):
     time.sleep(3)
 
 def economic_stats(italy):
-    if italy.national_debt > 1000000000 and not italy.debt_repayment:
+    if italy.national_debt > 100000 and not italy.debt_repayment:
         choice = random.randrange(0, 2)
         if choice == 0:
             italy.debt_repayment = italy.date + timedelta(days=120)
@@ -684,7 +688,7 @@ def events(italy):
     political_events(italy)
     economic_events(italy)
     social_events(italy)
-def ai_game(italy):
+def ai_game(italy, globe):
     while italy.current_pop > 150000:
         # incrementing of time
         stability_happiness(italy)
@@ -698,10 +702,9 @@ def ai_game(italy):
         break
 class Italy:
     def __init__(self, year):
-        self.exists = True
+        self.name = "Italy"
         """Time variables"""
         self.date = datetime(int(year), 1, 1)
-
         self.past_year = self.date.year
         """Variable for improving stability of nation over given time"""
         self.improve_stability = None
@@ -714,13 +717,10 @@ class Italy:
         self.current_pop = population[year]
         self.population_change = 0
         self.past_pop = self.current_pop
-        self.births = 0
-        self.deaths = 0
         self.happiness = 95.56
         # population controller if birth rate gets out of hand
         self.condom_subsidy = False
         # population controller if birth rate flops
-
         self.viagra_subsidy = False
         """Political variables"""
         self.pm = prime_ministers[year]
@@ -741,7 +741,6 @@ class Italy:
 
             self.italian_liberal_party = round((self.current_pop - self.italian_socialist_party -
                                                 self.italian_republican_party - self.italian_peoples_party))
-
         """Economic_variables"""
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -757,9 +756,9 @@ class Italy:
         self.imports = 0
         # political economic variables
         self.government_spending = 0
-        self.national_debt = 10000000
+        self.national_debt = 0
         """international variables"""
-        self.alliance = None
+        self.us_relations = 45.56
         """military variables"""
         self.army = army_size[year]
         self.conscripts = round(self.current_pop * round(random.uniform(0.001, 0.009), 5), 0)

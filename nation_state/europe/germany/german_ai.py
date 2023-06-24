@@ -806,7 +806,7 @@ def political_stats(germany):
             time.sleep(3)
 
 def economic_stats(germany):
-    if germany.national_debt > 1000000000 and not germany.debt_repayment:
+    if germany.national_debt > 950000 and not germany.debt_repayment:
         choice = random.randrange(0, 2)
         if choice == 0:
             germany.debt_repayment = germany.date + timedelta(days=120)
@@ -830,14 +830,24 @@ def improvements(germany):
         if (increase + germany.stability) < 100:
             germany.stability += increase
 
-    if germany.date < germany.happiness:
+    if germany.date < germany.improve_happiness:
         increase = round(random.uniform(0.01, 1.25), 2)
         if (increase + germany.happiness) < 100:
             germany.happiness += increase
 
+"""international functions"""
+def us_relations(us, germany, globe):
+    """Function is called from new_usa if user wants to improve relations with Germany(You can also worsen relations)"""
+    positive = ["increase trade", "improve relations", "establish an embassy", "Guarantee German Independence",
+                "Establish An Alliance"]
+
+    negative = ["Subvert German government", "Embargo Germany", "Place tariffs on German goods", "Expel legal German "
+                "residents within the US", "Imprison some legal German residents within the US", "Kill German Nationals",
+                "Declare War against Germany(May bring German allies into war)"]
+    pass
 """Main function of manual German version of game"""
 
-def ai_game(germany):
+def ai_game(germany, globe):
     # establishment of check upon game status
     while germany.population > 200000:
         # primary functions
@@ -858,13 +868,14 @@ def ai_game(germany):
 
 class GermanAI:
     def __init__(self, year):
+        self.name = "Germany"
         self.date = datetime(int(year), 1, 1)
         """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
+        self.improve_stability = self.date
         """Ditto to improve stability"""
-        self.improve_happiness = None
+        self.improve_happiness = self.date
         """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
         # population variables
         self.population = population[year]

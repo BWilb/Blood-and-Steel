@@ -1,18 +1,17 @@
 import random
 import time
 from datetime import datetime, timedelta
-from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
-                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
-                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
-                       west_virginia, wisconsin, wyoming)
+from nation_state.north_america.united_states.us_states import illinois, tennessee, pennsylvania, alaska, idaho, \
+    michigan, maryland, florida, arkansas, indiana, new_jersey, s_d, vermont, south_carolina, montana, minnesota, texas, \
+    missouri, north_carolina, west_virginia, new_york, oregon, nevada, delaware, alabama, conneticut, utah, mississppi, \
+    nebraska, virginia, rhode_island, n_m, georgia, california, arizona, colorado, washington, n_d, wyoming, maine, \
+    ohio, hawaii, iowa, kentucky, ok, louisiana, wisconsin, new_hampshire, kansas
+
 business_cycle = ["recession", "depression", "recovery", "expansion"]
-import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
 states = [alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+          conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
           kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
           n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
           rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
@@ -37,56 +36,35 @@ vice_presidents = {
     "1936": "John Garner",
     "1939": "Henry Wallace"
 }
-"""Random function"""
-"""def random_function(us):
-    for i in range(0, len(us.states) - 1):
-        us.states[i].random_events(us.states[i])"""
 """Daily decisions"""
 def social_stats(us):
     print(f"Your current happiness level is {us.happiness}%.\n")
     time.sleep(3)
     if us.happiness < 35.45 and not us.improve_happiness:
-        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
-                       f"A low happiness could lead to potential rebellions occurring.\n"
-                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
-        if choice.lower() == "y":
+        choice = random.randrange(0, 2)
+        if choice == 1:
             us.improve_happiness = us.date + timedelta(days=30)
-    print(f"Your current population {us.current_pop}.\n")
-    print(f"There have been {us.births} births in {us.date.year}.\n")
-    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
-
+            print("The US government has decided to improve its relationship with its citizens")
+            time.sleep(3)
 def political_stats(us):
     print(f"Your current political stability is {us.stability}%.\n")
     if us.stability < 45.45 and not us.improve_stability:
-        choice = input(f"{us.stability}% doesnt represent a functional government.\n"
-                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
-        if choice.lower() == "y":
+        choice = random.randrange(0, 2)
+        if choice == 0:
             us.improve_stability = us.date + timedelta(days=30)
-    print(f"There are {len(us.states) - 1} states in the Union\n")
-    time.sleep(3)
+            print("The US government has decided to improve its stability and political capital over 30 days")
+            time.sleep(3)
 
 def economic_stats(us):
-    print(f"Your current GDP is ${us.current_gdp}.\n"
-          f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5 )}%\n"
-          f"Your current national debt is ${us.national_debt}.\n")
-
     if us.national_debt > 1000000000 and not us.debt_repayment:
-        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
-              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
-        if choice.lower() == "y":
+        choice = random.randrange(0, 2)
+        if choice == 0:
             us.debt_repayment = us.date + timedelta(days=120)
+            print("The US government has decide to pay back some of its national debt over a 120 day period")
 def daily_decisions(us):
-    done = False
-    while done:
-        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
-        if choice.lower() == "political":
-            political_stats(us)
-        elif choice.lower() == "economic":
-            economic_stats(us)
-        elif choice.lower() == "social":
-            social_stats(us)
-        elif choice.lower() == "quit":
-            done = True
+    political_stats(us)
+    economic_stats(us)
+    social_stats(us)
 
 """Economic Functions"""
 def economic_state(us):
@@ -98,7 +76,7 @@ def economic_state(us):
                 """current state is expansion or recovery"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "recession":
-                        print("Your economy has entered into a recession after 6 months of decayed growth.\n")
+                        print("The US economy has fallen into a recession\n")
                         time.sleep(3)
                         us.economic_state = business_cycle[i]
                         us.economic_change_date = us.date + timedelta(days=240)
@@ -112,8 +90,7 @@ def economic_state(us):
                 """current state is recession and cycle is switching to depression"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "depression":
-                        print("Your economy has entered into a depression "
-                              "after exceeding 6 months of decayed growth.\n")
+                        print("The US economy has fallen into a depression")
                         time.sleep(3)
                         us.economic_state = business_cycle[i]
                         us.economic_change_date = us.date + timedelta(days=210)
@@ -128,7 +105,7 @@ def economic_state(us):
                 """current state is expansion or recovery"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "recovery":
-                        print("Your economy has finally entered its recovery period.\n")
+                        print("The US economy has quickened into a recovery\n")
                         time.sleep(3)
                         us.economic_state = business_cycle[i]
                         us.economic_change_date = us.date + timedelta(days=360)
@@ -140,7 +117,7 @@ def economic_state(us):
                 """current state is recession and cycle is switching to depression"""
                 for i in range(0, len(business_cycle) - 1):
                     if business_cycle[i] == "expansion":
-                        print("Your economy has finally entered its expansionary period. Woo!!!\n")
+                        print("The US economy has entered into an expansionary period\n")
                         time.sleep(3)
                         us.economic_state = business_cycle[i]
                         us.economic_change_date = us.date + timedelta(days=120)
@@ -171,6 +148,7 @@ def economic_decisions(us):
             each iteration interacts with each state Object
             """
             states[i].economic_growth(us.states[i])
+
 def improvements(us):
     if us.date < us.debt_repayment:
         payment = round(us.national_debt * round(random.uniform(0.001, 0.009), 5), 2)

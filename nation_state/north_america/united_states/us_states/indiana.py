@@ -222,7 +222,7 @@ def economic_growth(illinois):
         expansion(illinois)
 
 class Indiana:
-    def __init__(self, year, us):
+    def __init__(self, year: object, us: object) -> object:
         """regional variables"""
         self.name = "Indiana"
         # establishment of connection to United States

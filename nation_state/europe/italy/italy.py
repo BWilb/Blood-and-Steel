@@ -2,6 +2,12 @@
 import random
 from datetime import datetime, timedelta
 import time
+from nation_state.north_america.united_states import us_ai
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.britain import britain_ai
+from nation_state.north_america.united_states import us_ai
+from nation_state.europe.germany import german_ai
+from nation_state.europe.britain import britain_ai
 
 prime_ministers = {
     "1910": "Luigi Luzzatti",
@@ -725,6 +731,9 @@ def events(italy):
     social_events(italy)
 
 def manual_game(italy):
+    germany = german_ai.GermanAI(italy.date.year)
+    britain = britain_ai.BritainAI(italy.date.year)
+    us = us_ai.UnitedStatesAI(italy.date.year)
     while italy.current_pop > 150000:
         print(f"Date: {italy.date}")
         # incrementing of time
@@ -735,6 +744,9 @@ def manual_game(italy):
         military_functions(italy)
         if italy.date > italy.check_stats:
             daily_decisions(italy)
+        german_ai.ai_game(germany)
+        us_ai.manual_game(us)
+        britain_ai.ai_game(britain)
         italy.date += timedelta(days=1)
         time.sleep(3)
 class Italy:

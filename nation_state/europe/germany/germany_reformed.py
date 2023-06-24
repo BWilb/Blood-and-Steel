@@ -1,6 +1,9 @@
 import random
 import time
 from datetime import datetime, timedelta
+from nation_state.north_america.united_states import us_ai
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.britain import britain_ai
 
 """Population Dictionaries"""
 population = {
@@ -822,8 +825,6 @@ def political_stats(germany):
                        f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
         if choice.lower() == "y":
             germany.improve_stability = germany.date + timedelta(days=30)
-    print(f"There are {len(germany.states)} states in the Union\n")
-    time.sleep(3)
 
 def economic_stats(germany):
     print(f"Your current GDP is ${round(germany.current_gdp, 2)}.\n")
@@ -833,7 +834,7 @@ def economic_stats(germany):
     print(f"Your current national debt is ${round(germany.national_debt, 2)}.\n")
     time.sleep(3)
 
-    if germany.national_debt > 1000000000 and not germany.debt_repayment:
+    if germany.national_debt > 1000000 and not germany.debt_repayment:
         choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
               f"Would you like to pay back some of your debt for 120 days?(y or n): ")
         if choice.lower() == "y":
@@ -845,6 +846,7 @@ def military_stats(germany):
     time.sleep(3)
     print(f"You currently have {germany.conscripts} recruitable soldiers.\n")
     time.sleep(3)
+
 def daily_decisions(germany):
     done = True
     while done:
@@ -864,6 +866,9 @@ def daily_decisions(germany):
 """Main function of manual German version of game"""
 def manual_game(germany):
     # establishment of check upon game status
+    us = us_ai.UnitedStatesAI(germany.date.year)
+    italy = italy_ai.Italy(germany.date.year)
+    britain = britain_ai.BritainAI(germany.date.year)
     while germany.population > 200000:
         print(f"Date: {germany.date}")
         # primary functions
@@ -876,9 +881,9 @@ def manual_game(germany):
         if germany.date > germany.check_stats:
             daily_decisions(germany)
 
-        if germany.rebellion == True:
-            rebellion(germany)
-
+        italy_ai.ai_game(italy)
+        britain_ai.ai_game(britain)
+        us_ai.manual_game(us)
         # incrementing of time
         germany.date = germany.date + timedelta(days=1)
         time.sleep(3)

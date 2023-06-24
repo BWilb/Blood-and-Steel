@@ -11,6 +11,7 @@ from nation_state.europe.britain import britain_ai
 from nation_state.europe.germany import german_ai
 from nation_state.europe.russia import russia_ai
 from nation_state.europe.italy import italy_ai
+import globe
 import arcade
 import os
 """Storing files into an array in order to access state functions for population and economic growth"""
@@ -87,7 +88,7 @@ def economic_stats(us):
         if choice.lower() == "y":
             us.debt_repayment = us.date + timedelta(days=120)
 
-def international_stats(us):
+def international_stats(us, globe, nations):
     done = False
     while done:
         choice = input("Would you like to view European, Asian, or Latin American relations")
@@ -100,9 +101,19 @@ def international_stats(us):
             time.sleep(3)
             print(f"Your relations with Germany are {us.german_relations}.\n")
             time.sleep(3)
-            improvement = input("would you like to improve relations")
+            improvement = input("would you like to improve your international status?(y or n): ")
+            if improvement.lower() == "y":
+                done = False
+                while done:
+                    nation = input("Which nation would you like to save face with?(if done, enter none): ")
+                    # if user wants to do multiple maneuvers towards another nation
+                    if nation.lower() == "germany":
+                        for i in range(0, len(nations) - 1):
+                            if nations[i].name == "Germany":
+                                pass
 
-def daily_decisions(us):
+
+def daily_decisions(us, globe, nations):
     done = True
     while done:
         choice = input("Would you like to view your political, social, economic, or international stats?(enter quit to quit): ")
@@ -113,7 +124,7 @@ def daily_decisions(us):
         elif choice.lower() == "social":
             social_stats(us)
         elif choice.lower() == "international":
-            international_stats(us)
+            international_stats(us, globe, nations)
         elif choice.lower() == "quit":
             done = False
             us.check_stats = us.date + timedelta(days=3)
@@ -262,15 +273,21 @@ def establish_states(us):
                 us.states.append(wisconsin.Wisconsin(us.date.year, us))
             if file.removesuffix(".py") == "wyoming":
                 us.states.append(wyoming.Wyoming(us.date.year, us))
-    # establishment of national population
+    # establishment of national population and economy
     establish_population(us)
     establish_economy(us)
-    daily_decisions(us)
-def manual_game(us):
+
+def manual_game(us, globe2):
+    foreign_nations = []
     establish_states(us)
+
     italy = italy_ai.Italy(str(us.date.year))
+    foreign_nations.append(italy)
     germany = german_ai.GermanAI(str(us.date.year))
+    foreign_nations.append(germany)
     britain = britain_ai.BritainAI(str(us.date.year))
+    foreign_nations.append(britain)
+
     while us.current_pop > 1000000:
         print(f"Current date: {us.date.date()}\n")
         time.sleep(3)
@@ -285,12 +302,12 @@ def manual_game(us):
         improvements(us)
         population_migrations(us)
         if us.date > us.check_stats:
-            daily_decisions(us)
+            daily_decisions(us, globe2, foreign_nations)
         us.political_power += us.political_exponent
         us.date += timedelta(days=1)
-        italy_ai.ai_game(italy)
-        german_ai.ai_game(germany)
-        britain_ai.ai_game(britain)
+        italy_ai.ai_game(italy, globe2)
+        german_ai.ai_game(germany, globe2)
+        britain_ai.ai_game(britain, globe2)
 
 class UnitedStates:
     def __init__(self, year):
@@ -336,5 +353,6 @@ class UnitedStates:
         """variable for repaying debt over given time"""
         self.debt_repayment = None
         self.check_stats = self.date + timedelta(days=3)
+globe1 = globe.Globe()
 us = UnitedStates("1918")
-manual_game(us)
+manual_game(us, globe1)

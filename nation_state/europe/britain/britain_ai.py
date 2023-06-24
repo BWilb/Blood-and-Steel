@@ -141,7 +141,6 @@ def population_change(britain):
     else:
         if britain.viagra_subsidy:
             births = random.randrange(300, 600)
-            britain.births += births
             britain.current_pop += births
             for i in range(0, births):
                 """Assigning births to political parties"""
@@ -159,7 +158,6 @@ def population_change(britain):
                     britain.independents += 1
 
             deaths = random.randrange(200, 400)
-            britain.deaths += deaths
             britain.current_pop -= deaths
 
             for i in range(0, deaths):
@@ -179,7 +177,6 @@ def population_change(britain):
 
         elif britain.condom_subsidy:
             births = random.randrange(100, 300)
-            britain.births += births
             britain.current_pop += births
 
             for i in range(0, births):
@@ -198,7 +195,6 @@ def population_change(britain):
                     britain.independents += 1
 
             deaths = random.randrange(100, 200)
-            britain.deaths += deaths
             britain.current_pop -= deaths
 
             for i in range(0, deaths):
@@ -218,7 +214,6 @@ def population_change(britain):
 
         else:
             births = random.randrange(200, 400)
-            britain.births += births
             britain.current_pop += births
 
             for i in range(0, births):
@@ -237,7 +232,6 @@ def population_change(britain):
                     britain.independents += 1
 
             deaths = random.randrange(150, 300)
-            britain.deaths += deaths
             britain.current_pop -= deaths
 
             for i in range(0, deaths):
@@ -702,7 +696,7 @@ def political_stats(britain):
             print("The British parliament has decided to improve their political capital over a period of 120 days.\n")
             time.sleep(3)
 def economic_stats(britain):
-    if britain.national_debt > 1000000000 and not britain.debt_repayment:
+    if britain.national_debt > 3560000 and not britain.debt_repayment:
         choice = random.randrange(0, 2)
         if choice == 0:
             britain.debt_repayment = britain.date + timedelta(days=120)
@@ -725,12 +719,12 @@ def improvements(britain):
         if (increase + britain.stability) < 100:
             britain.stability += increase
 
-    if britain.date < britain.happiness:
+    if britain.date < britain.improve_happiness:
         increase = round(random.uniform(0.01, 1.25), 2)
         if (increase + britain.happiness) < 100:
             britain.happiness += increase
 
-def ai_game(britain):
+def ai_game(britain, globe):
     while britain.current_pop > 500000:
         # establishment of check upon game status
         population_change(britain)
@@ -741,19 +735,23 @@ def ai_game(britain):
             daily_decisions(britain)
         britain.date += timedelta(days=1)
         break
+
+    if britain.current_pop < 500000:
+        print("britain has collapsed")
 class BritainAI:
     def __init__(self, time):
+        self.name = "Britain"
         """time variables"""
         self.date = datetime(int(time), 1, 1)
         self.past_year = self.date.year
         self.political_census = self.date + timedelta(days=3)
         self.economic_change_date = self.date + timedelta(days=60)
         """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
+        self.improve_stability = self.date
         """Ditto to improve stability"""
-        self.improve_happiness = None
+        self.improve_happiness = self.date
         """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
         """population variables"""
         self.current_pop = population[time]

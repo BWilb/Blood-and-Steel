@@ -2,6 +2,9 @@
 import random
 import time
 from datetime import datetime, timedelta
+from nation_state.north_america.united_states import us_ai
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.germany import german_ai
 
 monarchs = {
     """Dictionary for english monarchs
