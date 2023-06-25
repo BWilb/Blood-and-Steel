@@ -89,9 +89,9 @@ def economic_stats(us):
             us.debt_repayment = us.date + timedelta(days=120)
 
 def international_stats(us, globe, nations):
-    done = False
+    done = True
     while done:
-        choice = input("Would you like to view European, Asian, or Latin American relations")
+        choice = input("Would you like to view European, Asian, or Latin American relations?: ")
         if choice.lower() == "european":
             print(f"Your relations with Great Britain are {us.english_relations}.\n")
             time.sleep(3)
@@ -103,19 +103,19 @@ def international_stats(us, globe, nations):
             time.sleep(3)
             improvement = input("would you like to improve your international status?(y or n): ")
             if improvement.lower() == "y":
-                done = False
+                done = True
                 while done:
                     nation = input("Which nation would you like to save face with?(if done, enter none): ")
                     # if user wants to do multiple maneuvers towards another nation
                     if nation.lower() == "germany":
                         for i in range(0, len(nations) - 1):
                             if nations[i].name == "Germany":
-                                pass
-
+                                german_ai.us_relations(us, nations[i], globe)
 
 def daily_decisions(us, globe, nations):
     done = True
     while done:
+        print("hi")
         choice = input("Would you like to view your political, social, economic, or international stats?(enter quit to quit): ")
         if choice.lower() == "political":
             political_stats(us)
@@ -140,7 +140,7 @@ def improvements(us):
         if (increase + us.stability) < 100:
             us.stability += increase
 
-    if us.date < us.happiness:
+    if us.date < us.improve_happiness:
         increase = round(random.uniform(0.01, 1.25), 2)
         if (increase + us.happiness) < 100:
             us.happiness += increase
@@ -326,10 +326,10 @@ class UnitedStates:
         self.political_power = 200
         self.political_exponent = 3.56
         # international variables
-        self.italian_relations = 56
-        self.english_relations = 34
-        self.russian_relations = 10
-        self.german_relations = 15
+        self.italian_relations = 50
+        self.english_relations = 50
+        self.russian_relations = 50
+        self.german_relations = 50
         # economic variables
         #self.economic_state = business_cycle[0]
         self.current_gdp = 0
@@ -347,12 +347,14 @@ class UnitedStates:
         """Internal redistribution of citizens"""
         self.migrant_change = self.date + timedelta(days=3)
         """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
+        self.improve_stability = self.date
         """Ditto to improve stability"""
-        self.improve_happiness = None
+        self.improve_happiness = self.date
         """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
+        """international time variables"""
+        self.improve_german_trade = self.date
 globe1 = globe.Globe()
 us = UnitedStates("1918")
 manual_game(us, globe1)

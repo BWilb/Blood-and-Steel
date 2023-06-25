@@ -578,6 +578,7 @@ def economic_decisions(germany):
     else:
         gdp_changes(germany)
         economic_state(germany)
+
 """Political functions"""
 def political_change(germany):
     if germany.date < datetime(1932, 1, 30):
@@ -622,7 +623,6 @@ def political_change(germany):
             germany.national_socialists += rebel_loss
     else:
         pass
-
 
 """Population functions"""
 def population_change(germany):
@@ -765,7 +765,6 @@ def population_change(germany):
             germany.deaths += deaths
             germany.population -= deaths
 
-
 """Function dealing with potential rebellions"""
 def rebellion(germany):
     if (germany.date <= germany.riot_over) or germany.rebellers != 0:
@@ -837,14 +836,69 @@ def improvements(germany):
 
 """international functions"""
 def us_relations(us, germany, globe):
-    """Function is called from new_usa if user wants to improve relations with Germany(You can also worsen relations)"""
-    positive = ["increase trade", "improve relations", "establish an embassy", "Guarantee German Independence",
-                "Establish An Alliance"]
+    """Function is called from new_usa if user wants to improve relations with Germany(You can also worsen relations)
+    - if you worsen relations, you increase global tensions
+    """
+    positive = ["1. increase trade(5 political power per day, lasts 50 days)", "2. improve relations(1.5 political power per day, lasts 30 days)",
+                "3. establish an embassy", "4. Guarantee German Independence(Decreases potential for political power growth, 25 political power)",
+                "5. Establish An Alliance(join alliance, if Germany is in one already)"]
 
-    negative = ["Subvert German government", "Embargo Germany", "Place tariffs on German goods", "Expel legal German "
-                "residents within the US", "Imprison some legal German residents within the US", "Kill German Nationals",
-                "Declare War against Germany(May bring German allies into war)"]
-    pass
+    negative = ["1. Subvert German government(50 political power)", "2. Embargo Germany(hurts German economy)",
+                "3. Impose tariffs on German goods(hurts both German and US economies)",
+                "4. Expel legal German residents within the US(20 political power)",
+                "5. Imprison some legal German residents within the US(20 political power)", "6. Kill German Nationals(15 political power)",
+                "7. Declare War against Germany(May bring German allies into war)", "8. Dissolve alliance with Germany(10 political power)",
+                "9. Expel German diplomats(10 political power)"]
+
+    not_finished = True
+    while not_finished:
+        choice = input("Would you like to improve or hinder relations with Germany?(enter quit to leave relations with Germany): ")
+        if choice.lower() == "improve":
+            for pos in range(0, len(positive) - 1):
+                """looping through positive geopolitical actions"""
+                print(f"\n{positive[pos]}")
+            choice = int(input("which number do you choose(1 - 5)?: "))
+
+            if choice == 1 and us.political_power > 5:
+                """Choice that you would like to increase trade"""
+                if globe.tension < 50 and us.german_relations < 25:
+                    """If tensions are low, but US relations with Germany are sour, 50% chance of German government accepting
+                    - chance that dialogue occurs or German government kicks your diplomats out of the Reichstag(closes relations all together)
+                    """
+                    chance = random.randrange(0, 4)
+                    if chance % 2 == 0:
+                        """Chance that German government accepts your offer of increasing trade"""
+                        print("The German government has fully accepted your offer of improving trade for 50 days.\n")
+                        time.sleep(3)
+                        us.improve_german_trade = us.date + timedelta(days=50)
+                        germany.improve_us_trade = germany.date + timedelta(days=50)
+
+                    else:
+                        chance = random.randrange(0, 4)
+                        if chance % 2 == 0:
+                            print("The German government kicked your diplomats out of the Reichstag.\n")
+                            time.sleep(3)
+                            us.political_power -= 300
+                            not_finished = False
+
+                elif globe.tension < 50 and us.german_relations > 60:
+                    """Will be no chance of german government not accepting your offer"""
+                    print("The German government has fully accepted your offer of improving trade for 50 days.\n")
+                    time.sleep(3)
+                    us.improve_german_trade = us.date + timedelta(days=50)
+                    germany.improve_us_trade = germany.date + timedelta(days=50)
+
+            elif choice == 2 and us.political_power > 5:
+                if globe.tension < 50 and us.german_relations < 25:
+                    pass
+
+        elif choice.lower() == "hinder" or choice.lower() == "worsen":
+            for neg in range(0, len(negative) - 1):
+                """looping through negative geopolitical actions"""
+                print(f"\n{positive[neg]}")
+            choice = int(input("Which number do you choose(1 - 9)"))
+
+
 """Main function of manual German version of game"""
 
 def ai_game(germany, globe):
@@ -951,11 +1005,10 @@ class GermanAI:
         """Will also include extensive, required, and volunteer(Weimar Republic)"""
         self.war_deaths = 0
         self.conscripts = round(self.population * round(random.uniform(0.0001, 0.0009), 5), 2)
-
         self.army_size = army_size[year]
         # international variables
         self.alliance = ""
-        self.global_market_share = 0
+        self.us_relations = 35
         """Wont be utilized until other nations are developed"""
         # time variables
         self.conscript_census = self.date + timedelta(days=75)
@@ -963,3 +1016,5 @@ class GermanAI:
         self.economic_change_date = self.date + timedelta(days=60)
         self.current_year = self.date.year
         self.riot_over = None
+        """International time variables"""
+        self.improve_us_trade = self.date
