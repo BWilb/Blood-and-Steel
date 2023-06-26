@@ -890,13 +890,50 @@ def us_relations(us, germany, globe):
 
             elif choice == 2 and us.political_power > 5:
                 if globe.tension < 50 and us.german_relations < 25:
-                    pass
+                    chance = random.randrange(1, 6)
+                    if chance % 4 == 1:
+                        print("The German government has accepted your offer to improve relations.\n")
+                        time.sleep(3)
+                        germany.improve_us_relations = germany.date + timedelta(days=30)
+                        us.improve_german_relations = us.date + timedelta(days=30)
+
+                    else:
+                        is_not_mediated = True
+                        while is_not_mediated:
+                            print("The German government did not accept your offer, however they could be willing to...")
+                            responses = ["Improve trade between your two nations", "Improve relations over period of 15 days",
+                                         ""]
+
+            elif choice == 3:
+                pass
+            elif choice == 4:
+                pass
+            elif choice == 5:
+                pass
 
         elif choice.lower() == "hinder" or choice.lower() == "worsen":
             for neg in range(0, len(negative) - 1):
                 """looping through negative geopolitical actions"""
                 print(f"\n{positive[neg]}")
             choice = int(input("Which number do you choose(1 - 9)"))
+            if choice == 1:
+                pass
+            elif choice == 2:
+                pass
+            elif choice == 3:
+                pass
+            elif choice == 4:
+                pass
+            elif choice == 5:
+                pass
+            elif choice == 6:
+                pass
+            elif choice == 7:
+                pass
+            elif choice == 8:
+                pass
+            elif choice == 9:
+                pass
 
 
 """Main function of manual German version of game"""
@@ -1017,4 +1054,6 @@ class GermanAI:
         self.current_year = self.date.year
         self.riot_over = None
         """International time variables"""
+        # US variables
         self.improve_us_trade = self.date
+        self.improve_us_relations = self.date

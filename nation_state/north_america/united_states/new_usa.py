@@ -354,7 +354,9 @@ class UnitedStates:
         self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
         """international time variables"""
+        # German
         self.improve_german_trade = self.date
+        self.improve_german_relations = self.date
 globe1 = globe.Globe()
 us = UnitedStates("1918")
 manual_game(us, globe1)
