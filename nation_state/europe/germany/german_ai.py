@@ -901,8 +901,90 @@ def us_relations(us, germany, globe):
                         is_not_mediated = True
                         while is_not_mediated:
                             print("The German government did not accept your offer, however they could be willing to...")
-                            responses = ["Improve trade between your two nations", "Improve relations over period of 15 days",
-                                         ""]
+                            responses = ["1. Improve trade between your two nations(improve both economies)",
+                                         "2. Improve relations over period of 15 days(1.5 political power per day)",
+                                         "3. Accept a possible alliance(or accept your entry into an existing alliance)",
+                                         "4. Improve relations over a period of 20 days(1.5 political power per day)",
+                                         "5. Trade students and train each others workers(improve both economies)"]
+                            if responses == 1:
+                                """Improvement of trade"""
+                                chance = random.randrange(0, 7)
+                                if chance % 2 == 0:
+                                    """57% chance of acceptance"""
+                                    print("The German government has agreed to improve trade between our two nations.")
+                                    time.sleep(3)
+                                    germany.improve_us_trade = germany.date + timedelta(days=30)
+                                    us.improve_german_trade = us.date + timedelta(days=30)
+
+                                elif chance % 3 == 1:
+                                    """28.5% chance of refusal to acknowledge"""
+                                    print("The German government has not agreed to our terms\n")
+                                    time.sleep(3)
+
+                                elif chance % 4 == 2:
+                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
+                                    print("Our diplomats have been kicked out of the Reichstag.\n")
+                                    time.sleep(3)
+                                    is_not_mediated = False
+                                    not_finished = False
+
+                            elif responses == 2:
+                                """Response for 15 day period"""
+                                if chance % 2 == 0:
+                                    """57% chance of acceptance"""
+                                    print("The German government has agreed to improve relations over a 15 day period.\n")
+                                    time.sleep(3)
+                                    germany.improve_us_relations = germany.date + timedelta(days=15)
+                                    us.improve_german_relations = us.date + timedelta(days=15)
+
+                                elif chance % 3 == 1:
+                                    """28.5% chance of refusal to acknowledge"""
+                                    print("The German government has not agreed to our terms\n")
+                                    time.sleep(3)
+
+                                elif chance % 4 == 2:
+                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
+                                    print("Our diplomats have been kicked out of the Reichstag.\n")
+                                    time.sleep(3)
+                                    globe.tension += 1.5
+                                    is_not_mediated = False
+                                    not_finished = False
+
+                            elif responses == 3:
+                                if germany.alliance:
+                                    choice = input(f"Germany has invited us to join the {germany.alliance}.\n"
+                                                   f"Do you accept?(y or n): ")
+                                    if choice.lower() == "y" or choice.lower() == "yes":
+                                        print(f"you have successfully entered into the {germany.alliance}.\n")
+                                        time.sleep(3)
+
+                            elif responses == 4:
+                                """Response for 20 day period"""
+
+                                if chance % 2 == 0:
+                                    """57% chance of acceptance"""
+                                    print("The German government has agreed to improve relations over a 20 day period.\n")
+                                    time.sleep(3)
+                                    germany.improve_us_relations = germany.date + timedelta(days=20)
+                                    us.improve_german_relations = us.date + timedelta(days=20)
+
+                                elif chance % 3 == 1:
+                                    """28.5% chance of refusal to acknowledge"""
+                                    print("The German government has not agreed to our terms\n")
+                                    time.sleep(3)
+
+                                elif chance % 4 == 2:
+                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
+                                    print("Our diplomats have been kicked out of the Reichstag.\n")
+                                    time.sleep(3)
+                                    globe.tension += 1.5
+                                    is_not_mediated = False
+                                    not_finished = False
+                            elif responses == 5:
+                                pass
+
+                            for i in responses:
+                                print(f"{responses}\n")
 
             elif choice == 3:
                 pass
