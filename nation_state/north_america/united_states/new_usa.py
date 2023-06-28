@@ -42,11 +42,8 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 """Random function"""
-"""def random_function(us):
-    for i in range(0, len(us.states) - 1):
-        us.states[i].random_events(us.states[i])"""
 def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
+    print(f"Your current happiness level is {round(us.happiness, 2)}%.\n")
     time.sleep(3)
     if us.happiness < 35.45 and not us.improve_happiness:
         choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
@@ -62,7 +59,7 @@ def social_stats(us):
     time.sleep(3)
 
 def political_stats(us):
-    print(f"Your current political stability is {us.stability}%.\n")
+    print(f"Your current political stability is {round(us.stability, 2)}%.\n")
     time.sleep(3)
     print(f"Your current political capital and power is {us.political_power}.\n")
     time.sleep(3)
@@ -72,6 +69,26 @@ def political_stats(us):
         if choice.lower() == "y":
             us.improve_stability = us.date + timedelta(days=30)
     print(f"There are {len(us.states)} states in the Union\n")
+    time.sleep(3)
+    low = 100.00
+    high = 0.00
+    high_nation = ""
+    low_nation = ""
+    for i in range(0, len(us.states) - 1):
+        if i < len(us.states) - 1:
+            if us.states[i].union_favorability < low and us.states[i].union_favorability < us.states[i + 1].union_favorability:
+                low_nation = us.states[i].name
+                low = us.states[i].union_favorability
+
+            elif us.states[i].union_favorability > high and us.states[i].union_favorability > us.states[i + 1].union_favorability:
+                high_nation = us.states[i].name
+                high = us.states[i].union_favorability
+        print(us.states[i].name, us.states[i].union_favorability)
+        time.sleep(1)
+
+    print(f"{low_nation} holds the lowest favorability of staying in the American Union at {round(low, 2)}%.\n")
+    time.sleep(3)
+    print(f"{high_nation} holds the highest favorability of staying in the American Union at {round(high, 2)}%.\n")
     time.sleep(3)
 
 def economic_stats(us):
@@ -111,7 +128,12 @@ def international_stats(us, globe, nations):
                     if nation.lower() == "germany":
                         for i in range(0, len(nations) - 1):
                             if nations[i].name == "Germany":
-                                german_ai.us_relations(us, nations[i], globe)
+                                german_ai.us_manual_relations(us, nations[i], globe)
+
+                    elif nation.lower() == "italy":
+                        for i in range(0, len(nations) - 1):
+                            if nations[i].name == "Italy":
+                                italy_ai.manual_us_relations(us, nations[i], globe)
 
                     elif nation.lower() == "none":
                         done = False
@@ -122,7 +144,6 @@ def international_stats(us, globe, nations):
 def daily_decisions(us, globe, nations):
     done = True
     while done:
-        print("hi")
         choice = input("Would you like to view your political, social, economic, or international stats?(enter quit to quit): ")
         if choice.lower() == "political":
             political_stats(us)

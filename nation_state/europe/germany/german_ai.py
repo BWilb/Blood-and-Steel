@@ -848,7 +848,7 @@ def alternate_options(us, germany, globe):
                      "5. Trade students and train each others workers(improve both economies)"]
 
         for i in responses:
-            print(f"{responses}\n")
+            print(f"{i}\n")
         response_choice = int(input("Which one do you choose(1-5)"))
         chance = random.randrange(0, 7)
         # choice variable utilized for all response choices
@@ -953,7 +953,7 @@ def kill_diplomats(us, germany, globe):
     germany.us_relations -= round(random.uniform(0.25, 24.45), 2)
     us.current_pop -= random.randrange(3, 20)
 
-def us_relations(us, germany, globe):
+def us_manual_relations(us, germany, globe):
     """Function is called from new_usa if user wants to improve relations with Germany(You can also worsen relations)
     - if you worsen relations, you increase global tensions
     """
@@ -972,20 +972,18 @@ def us_relations(us, germany, globe):
     while not_finished:
         choice = input("Would you like to improve or hinder relations with Germany?(enter quit to leave relations with Germany): ")
         if choice.lower() == "improve":
-            for pos in range(0, len(positive) - 1):
+            for pos in range(0, len(positive)):
                 """looping through positive geopolitical actions"""
                 print(f"\n{positive[pos]}")
             choice = int(input("which number do you choose(1 - 5)?: "))
 
             if choice == 1 and us.political_power > 5:
-                print("hi")
                 """Choice that you would like to increase trade"""
-                if globe.tension < 50 and us.german_relations >= 50:
+                if globe.tension < 50 and us.german_relations > 50:
                     """If tensions are low, but US relations with Germany are sour, 50% chance of German government accepting
                     - chance that dialogue occurs or German government kicks your diplomats out of the Reichstag(closes relations all together)
                     """
                     chance = random.randrange(0, 10)
-                    print(chance)
                     if chance % 2 == 0:
                         """50% chance of success"""
                         """Chance that German government accepts your offer of increasing trade"""
@@ -1010,42 +1008,203 @@ def us_relations(us, germany, globe):
                         not_finished = False
 
                     else:
-                        print("The proposal has died in the midst of geopolitics")
-
-            elif choice == 2 and us.political_power > 5:
-                if globe.tension < 50 and us.german_relations >= 25:
-                    chance = random.randrange(0, 7)
-                    print(chance)
-                    if chance % 3 == 1:
-                        """50% chance that German government accepts original proposal"""
-                        print("The German government has accepted your offer to improve relations over 30 days.\n")
+                        print("Our proposal has died in the midst of Geopolitics.\n")
                         time.sleep(3)
-                        germany.improve_us_relations = germany.date + timedelta(days=30)
-                        us.improve_german_relations = us.date + timedelta(days=30)
 
-                    elif chance % 4 == 0:
-                        """28.5% chance that German government rejects proposal but may be open to other ideas"""
+                elif globe.tension < 50 and us.german_relations < 50:
+                    """global tension low, but relations are sour"""
+                    chance = random.randrange(0, 50)
+                    if chance % 3 == 2:
+                        """32% chance that German government accepts proposal"""
+                        print("The German government has fully accepted your offer of improving trade for 50 days.\n")
+                        time.sleep(3)
+                        us.improve_german_trade = us.date + timedelta(days=50)
+                        germany.improve_us_trade = germany.date + timedelta(days=50)
+
+                    elif chance % 2 == 0:
+                        """50% chance that German government doesn't accept proposal, but could be open to dialogue"""
                         alternate_options(us, germany, globe)
 
-                    elif chance % 3 == 0:
-                        """28.5% chance that German government kicks diplomats out of Reichstag"""
+                    elif chance % 4 == 0:
+                        """26% chance that German government kicks out diplomats"""
                         print("The German government has kicked our diplomats out of the Reichstag.\n")
                         time.sleep(3)
                         not_finished = False
 
-                    elif chance == 6:
-                        """14.2% chance that diplomats are killed under accusations of espionage"""
+                    elif chance % 3 == 0:
+                        """34% chance that German government kills our diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the sea of Geopolitics\n")
+                        time.sleep(3)
+
+                elif globe.tension > 50 and us.german_relations < 50:
+                    chance = random.randrange(0, 40)
+                    if chance % 3 == 0:
+                        """32.5% chance that proposal succeeds"""
+                        print("The German government has fully accepted your offer of improving trade for 50 days.\n")
+                        time.sleep(3)
+                        us.improve_german_trade = us.date + timedelta(days=50)
+                        germany.improve_us_trade = germany.date + timedelta(days=50)
+
+                    elif chance % 6 == 0:
+                        """17.5% chance that German government rejects original proposal, but is open to other solutions"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 3 == 2:
+                        """32.5% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        time.sleep(3)
+
+                    elif chance % 2 == 0:
+                        """50% chance that German government kills diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif globe.tension > 50 and us.german_relations > 50:
+                    chance = random.randrange(0, 60)
+                    if chance % 3 == 2:
+                        """33.3% chance that proposal succeeds"""
+                        print("The German government has fully accepted your offer of improving trade for 50 days.\n")
+                        time.sleep(3)
+                        us.improve_german_trade = us.date + timedelta(days=50)
+                        germany.improve_us_trade = germany.date + timedelta(days=50)
+
+                    elif chance % 2 == 0:
+                        """50% chance of alternate options"""
+                        alternate_options(us, globe, globe)
+
+                    elif chance % 4 == 0:
+                        """25% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag")
+                        time.sleep(3)
+
+                    elif chance % 5 == 3:
+                        """20% chance that German Government kills diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+            elif choice == 2 and us.political_power > 5:
+                if globe.tension < 50 and us.german_relations > 50:
+                    chance = random.randrange(0, 10)
+                    if chance % 2 == 0:
+                        """50% chance of success"""
+                        """Chance that German government accepts your offer of increasing trade"""
+                        print("The German government has fully accepted your offer of improving relations for 30 days.\n")
+                        time.sleep(3)
+                        us.improve_german_relations = us.date + timedelta(days=30)
+                        germany.improve_us_relations = germany.date + timedelta(days=30)
+
+                    elif chance % 4 == 0:
+                        """30% chance of German government not being open to proposal, but possibly open to other terms"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 5 == 0:
+                        """30% chance of German government kicking diplomats out"""
+                        print("The German government has kicked our diplomats out of the Reichstag\n")
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 0:
+                        """20% chance of German government accusing diplomats of espionage and killing them"""
                         kill_diplomats(us, germany, globe)
                         not_finished = False
 
                     else:
-                        print("The proposal has died in the midst of geopolitics.\n")
+                        print("Our proposal has died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif globe.tension < 50 and us.german_relations < 50:
+                    """global tension low, but relations are sour"""
+                    chance = random.randrange(0, 50)
+                    if chance % 3 == 2:
+                        """32% chance that German government accepts proposal"""
+                        print("The German government has fully accepted your offer of improving relations for 30 days.\n")
+                        time.sleep(3)
+                        us.improve_german_trade = us.date + timedelta(days=30)
+                        germany.improve_us_trade = germany.date + timedelta(days=30)
+
+                    elif chance % 2 == 0:
+                        """50% chance that German government doesn't accept proposal, but could be open to dialogue"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 4 == 0:
+                        """26% chance that German government kicks out diplomats"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 3 == 0:
+                        """34% chance that German government kills our diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the sea of Geopolitics\n")
+                        time.sleep(3)
+
+                elif globe.tension > 50 and us.german_relations < 50:
+                    chance = random.randrange(0, 40)
+                    if chance % 3 == 0:
+                        """32.5% chance that proposal succeeds"""
+                        print("The German government has fully accepted your offer of improving relations for 30 days.\n")
+                        time.sleep(3)
+                        us.improve_german_relations = us.date + timedelta(days=30)
+                        germany.improve_us_relations = germany.date + timedelta(days=30)
+
+                    elif chance % 6 == 0:
+                        """17.5% chance that German government rejects original proposal, but is open to other solutions"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 3 == 2:
+                        """32.5% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        time.sleep(3)
+
+                    elif chance % 2 == 0:
+                        """50% chance that German government kills diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif globe.tension > 50 and us.german_relations > 50:
+                    chance = random.randrange(0, 60)
+                    if chance % 3 == 2:
+                        """33.3% chance that proposal succeeds"""
+                        print("The German government has fully accepted your offer of improving trade for 30 days.\n")
+                        time.sleep(3)
+                        us.improve_german_relations = us.date + timedelta(days=30)
+                        germany.improve_us_relations = germany.date + timedelta(days=30)
+
+                    elif chance % 2 == 0:
+                        """50% chance of alternate options"""
+                        alternate_options(us, globe, globe)
+
+                    elif chance % 4 == 0:
+                        """25% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag")
+                        time.sleep(3)
+
+                    elif chance % 5 == 3:
+                        """20% chance that German Government kills diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    else:
+                        print("Our proposal has died in the midst of geopolitics.\n")
+                        time.sleep(3)
 
             elif choice == 3:
                 if globe.tension < 50.00 and us.german_relations >= 50.00:
                     """low tensions, with friendly relationship with Germany"""
                     chance = random.randrange(0, 11)
-                    print(chance)
                     if chance % 2 == 0:
                         """54.5% chance of acceptance"""
                         print("The German government has agreed with us to build an American Embassy within Berlin.\n")
@@ -1073,7 +1232,6 @@ def us_relations(us, germany, globe):
             elif choice == 4:
                 """4. Guarantee German Independence(Decreases potential for political power growth, 25 political power)"""
                 chance = random.randrange(0, 20)
-                print(chance)
                 if globe.tension < 50.00 and us.german_relations >= 50.00:
                     if chance % 2 == 0:
                         """55% Chance of German government accepting guarantee"""
@@ -1101,7 +1259,6 @@ def us_relations(us, germany, globe):
             elif choice == 5:
                 """5. Establish An Alliance(join alliance, if Germany is in one already)"""
                 chance = random.randrange(0, 30)
-                print(chance)
                 if chance % 3 == 0:
                     """30% chance that German government accepts alliance deal"""
                     if germany.alliance:

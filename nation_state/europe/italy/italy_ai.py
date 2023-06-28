@@ -688,6 +688,10 @@ def events(italy):
     political_events(italy)
     economic_events(italy)
     social_events(italy)
+
+"""International functions"""
+def manual_us_relations(us, italy, globe):
+    pass
 def ai_game(italy, globe):
     while italy.current_pop > 150000:
         # incrementing of time
