@@ -91,16 +91,17 @@ def economic_stats(us):
 def international_stats(us, globe, nations):
     done = True
     while done:
-        choice = input("Would you like to view European, Asian, or Latin American relations?: ")
+        choice = input("Would you like to view European, Asian, or Latin American relations?(enter no, to quit): ")
         if choice.lower() == "european":
-            print(f"Your relations with Great Britain are {us.english_relations}.\n")
+            print(f"Your relations with Great Britain are at {round(us.english_relations, 2)}%.\n")
             time.sleep(3)
-            print(f"Your relations with Russia are {us.russian_relations}.\n")
+            print(f"Your relations with Russia are at {round(us.russian_relations, 2)}%.\n")
             time.sleep(3)
-            print(f"Your relations with Italy are {us.italian_relations}.\n")
+            print(f"Your relations with Italy are at {round(us.italian_relations, 2)}%.\n")
             time.sleep(3)
-            print(f"Your relations with Germany are {us.german_relations}.\n")
+            print(f"Your relations with Germany are at {round(us.german_relations, 2)}%.\n")
             time.sleep(3)
+
             improvement = input("would you like to improve your international status?(y or n): ")
             if improvement.lower() == "y":
                 done = True
@@ -111,6 +112,12 @@ def international_stats(us, globe, nations):
                         for i in range(0, len(nations) - 1):
                             if nations[i].name == "Germany":
                                 german_ai.us_relations(us, nations[i], globe)
+
+                    elif nation.lower() == "none":
+                        done = False
+
+        elif choice.lower() == "quit":
+            done = False
 
 def daily_decisions(us, globe, nations):
     done = True
@@ -129,6 +136,8 @@ def daily_decisions(us, globe, nations):
             done = False
             us.check_stats = us.date + timedelta(days=3)
 
+# internal functions (changing of internal stats of nation)
+"""Improvements based upon decisions made during daily decisions"""
 def improvements(us):
     if us.date < us.debt_repayment:
         payment = round(us.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
@@ -157,6 +166,70 @@ def population_migrations(us):
             """Amount of people migrating to new specific state"""
 
         us.migrant_change = us.date + timedelta(days=3)
+"""Deals with national stability and happiness"""
+def stability_and_happiness_changes(us):
+    chance = random.randrange(0, 2)
+    if chance == 0:
+        stability_increase = round(random.uniform(0.25, 1.25), 2)
+        if (stability_increase + us.stability) < 99:
+            us.stability += stability_increase
+
+        happiness_increase = round(random.uniform(0.25, 1.25), 2)
+        if (happiness_increase + us.happiness) < 99:
+            us.happiness += happiness_increase
+
+    elif chance == 1:
+        stability_decrease = round(random.uniform(0.25, 1.25), 2)
+        if (stability_decrease - us.stability) > 5:
+            us.stability -= stability_decrease
+
+        happiness_decrease = round(random.uniform(0.25, 1.25), 2)
+        if (happiness_decrease - us.happiness) > 5:
+            us.happiness -= happiness_decrease
+
+"""Deals with popularity of staying in Union for each state"""
+def union_favorability_states(us):
+    """daily changes in each state's opinion towards staying in Federal Union"""
+    for i in range(0, len(us.states) - 1):
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            us.states[i].union_favorability -= round(random.uniform(0.01, 0.25), 2)
+        elif chance == 1:
+            us.states[i].union_favorability += round(random.uniform(0.01, 0.25), 2)
+
+"""1Deals with changing of political capital of USA"""
+def political_power_change(us):
+    us.political_power += us.political_exponent
+
+def international_changes(us):
+    if us.date < us.improve_german_relations:
+        if us.political_power <= 0:
+            us.german_relations += random.randrange(1, 5)
+            us.political_power -= 1.5
+
+        else:
+            print("Your proceedings with improving relations with Germany have been cancelled, due to lack of political capital.\n")
+            time.sleep(3)
+            us.improve_german_relations = us.date
+    else:
+        chance = random.randrange(0, 2)
+        if chance == 0:
+            us.german_relations += round(random.uniform(0.25, 1.25), 2)
+            us.english_relations += round(random.uniform(0.25, 1.25), 2)
+            us.italian_relations += round(random.uniform(0.25, 1.25), 2)
+            us.russian_relations += round(random.uniform(0.25, 1.25), 2)
+        elif chance == 1:
+            us.german_relations -= round(random.uniform(0.25, 1.25), 2)
+            us.english_relations -= round(random.uniform(0.25, 1.25), 2)
+            us.russian_relations -= round(random.uniform(0.25, 1.25), 2)
+            us.italian_relations -= round(random.uniform(0.25, 1.25), 2)
+
+def changes(us):
+    stability_and_happiness_changes(us)
+    political_power_change(us)
+    union_favorability_states(us)
+    international_changes(us)
+
 
 """establishment of states within US(national and regional files will influence each other)"""
 def establish_economy(us):
@@ -303,7 +376,7 @@ def manual_game(us, globe2):
         population_migrations(us)
         if us.date > us.check_stats:
             daily_decisions(us, globe2, foreign_nations)
-        us.political_power += us.political_exponent
+        changes(us)
         us.date += timedelta(days=1)
         italy_ai.ai_game(italy, globe2)
         german_ai.ai_game(germany, globe2)
@@ -326,10 +399,10 @@ class UnitedStates:
         self.political_power = 200
         self.political_exponent = 3.56
         # international variables
-        self.italian_relations = 50
-        self.english_relations = 50
-        self.russian_relations = 50
-        self.german_relations = 50
+        self.italian_relations = 50.00
+        self.english_relations = 50.00
+        self.russian_relations = 50.00
+        self.german_relations = 50.00
         # economic variables
         #self.economic_state = business_cycle[0]
         self.current_gdp = 0
@@ -354,6 +427,7 @@ class UnitedStates:
         self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
         """international time variables"""
+        self.alliance = ""
         # German
         self.improve_german_trade = self.date
         self.improve_german_relations = self.date

@@ -334,3 +334,5 @@ class Alaska:
         self.imports = None
         self.economic_state = "recovery"
         self.debt = 0
+        """Union variables"""
+        self.union_favorability = 89.34

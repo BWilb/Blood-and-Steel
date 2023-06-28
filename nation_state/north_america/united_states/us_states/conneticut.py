@@ -246,3 +246,4 @@ class Conneticut:
         self.imports = None
         self.economic_state = "recovery"
         self.debt = 0
+        self.union_favorability = 90.45

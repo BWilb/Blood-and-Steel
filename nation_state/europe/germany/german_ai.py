@@ -835,6 +835,124 @@ def improvements(germany):
             germany.happiness += increase
 
 """international functions"""
+def alternate_options(us, germany, globe):
+    """passes to this function, if German government doesn't accept original terms, but is open to dialogue"""
+    print("The German government didnt accept our proposal, however they could be open to...")
+    is_not_mediated = True
+    while is_not_mediated:
+        print("The German government did not accept your offer, however they could be willing to...")
+        responses = ["1. Improve trade between your two nations(improve both economies)",
+                     "2. Improve relations over period of 15 days(1.5 political power per day)",
+                     "3. Accept a possible alliance(or accept your entry into an existing alliance)",
+                     "4. Improve relations over a period of 20 days(1.5 political power per day)",
+                     "5. Trade students and train each others workers(improve both economies)"]
+
+        for i in responses:
+            print(f"{responses}\n")
+        response_choice = int(input("Which one do you choose(1-5)"))
+        chance = random.randrange(0, 7)
+        # choice variable utilized for all response choices
+        if response_choice == 1:
+            """Improvement of trade"""
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The German government has agreed to improve trade between our two nations.")
+                time.sleep(3)
+                germany.improve_us_trade = germany.date + timedelta(days=30)
+                us.improve_german_trade = us.date + timedelta(days=30)
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The German government has not agreed to our terms\n")
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Reichstag.\n")
+                time.sleep(3)
+                is_not_mediated = False
+
+        elif response_choice == 2:
+            """Response for 15 day period"""
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The German government has agreed to improve relations over a 15 day period.\n")
+                time.sleep(3)
+                germany.improve_us_relations = germany.date + timedelta(days=15)
+                us.improve_german_relations = us.date + timedelta(days=15)
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The German government has not agreed to our terms\n")
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Reichstag.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+        elif response_choice == 3:
+            if germany.alliance:
+                choice = input(f"Germany has invited us to join the {germany.alliance}.\n"
+                               f"Do you accept?(y or n): ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    print(f"you have successfully entered into the {germany.alliance}.\n")
+                    time.sleep(3)
+
+        elif response_choice == 4:
+            """Response for 20 day period"""
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The German government has agreed to improve relations over a 20 day period.\n")
+                time.sleep(3)
+                germany.improve_us_relations = germany.date + timedelta(days=20)
+                us.improve_german_relations = us.date + timedelta(days=20)
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The German government has not agreed to our terms\n")
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Reichstag.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+        elif response_choice == 5:
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The German government has agreed for us to train each others workers and students.\n")
+                time.sleep(3)
+                germany.improve_us_trade = germany.date + timedelta(days=20)
+                us.improve_german_trade = us.date + timedelta(days=20)
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The German government has not agreed to our terms\n")
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Reichstag.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+def kill_diplomats(us, germany, globe):
+    print("The German government has executed your diplomats on charges of espionage.\n")
+    time.sleep(3)
+    globe.tension -= 1.5
+    us.german_relations -= round(random.uniform(0.25, 24.45), 2)
+    germany.us_relations -= round(random.uniform(0.25, 24.45), 2)
+    us.current_pop -= random.randrange(3, 20)
+
 def us_relations(us, germany, globe):
     """Function is called from new_usa if user wants to improve relations with Germany(You can also worsen relations)
     - if you worsen relations, you increase global tensions
@@ -860,143 +978,163 @@ def us_relations(us, germany, globe):
             choice = int(input("which number do you choose(1 - 5)?: "))
 
             if choice == 1 and us.political_power > 5:
+                print("hi")
                 """Choice that you would like to increase trade"""
-                if globe.tension < 50 and us.german_relations < 25:
+                if globe.tension < 50 and us.german_relations >= 50:
                     """If tensions are low, but US relations with Germany are sour, 50% chance of German government accepting
                     - chance that dialogue occurs or German government kicks your diplomats out of the Reichstag(closes relations all together)
                     """
-                    chance = random.randrange(0, 4)
+                    chance = random.randrange(0, 10)
+                    print(chance)
                     if chance % 2 == 0:
+                        """50% chance of success"""
                         """Chance that German government accepts your offer of increasing trade"""
                         print("The German government has fully accepted your offer of improving trade for 50 days.\n")
                         time.sleep(3)
                         us.improve_german_trade = us.date + timedelta(days=50)
                         germany.improve_us_trade = germany.date + timedelta(days=50)
 
-                    else:
-                        chance = random.randrange(0, 4)
-                        if chance % 2 == 0:
-                            print("The German government kicked your diplomats out of the Reichstag.\n")
-                            time.sleep(3)
-                            us.political_power -= 300
-                            not_finished = False
+                    elif chance % 4 == 0:
+                        """30% chance of German government not being open to proposal, but possibly open to other terms"""
+                        alternate_options(us, germany, globe)
 
-                elif globe.tension < 50 and us.german_relations > 60:
-                    """Will be no chance of german government not accepting your offer"""
-                    print("The German government has fully accepted your offer of improving trade for 50 days.\n")
-                    time.sleep(3)
-                    us.improve_german_trade = us.date + timedelta(days=50)
-                    germany.improve_us_trade = germany.date + timedelta(days=50)
+                    elif chance % 5 == 0:
+                        """30% chance of German government kicking diplomats out"""
+                        print("The German government has kicked our diplomats out of the Reichstag\n")
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 0:
+                        """20% chance of German government accusing diplomats of espionage and killing them"""
+                        kill_diplomats(us, germany, globe)
+                        not_finished = False
+
+                    else:
+                        print("The proposal has died in the midst of geopolitics")
 
             elif choice == 2 and us.political_power > 5:
-                if globe.tension < 50 and us.german_relations < 25:
-                    chance = random.randrange(1, 6)
-                    if chance % 4 == 1:
-                        print("The German government has accepted your offer to improve relations.\n")
+                if globe.tension < 50 and us.german_relations >= 25:
+                    chance = random.randrange(0, 7)
+                    print(chance)
+                    if chance % 3 == 1:
+                        """50% chance that German government accepts original proposal"""
+                        print("The German government has accepted your offer to improve relations over 30 days.\n")
                         time.sleep(3)
                         germany.improve_us_relations = germany.date + timedelta(days=30)
                         us.improve_german_relations = us.date + timedelta(days=30)
 
+                    elif chance % 4 == 0:
+                        """28.5% chance that German government rejects proposal but may be open to other ideas"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 3 == 0:
+                        """28.5% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance == 6:
+                        """14.2% chance that diplomats are killed under accusations of espionage"""
+                        kill_diplomats(us, germany, globe)
+                        not_finished = False
+
                     else:
-                        is_not_mediated = True
-                        while is_not_mediated:
-                            print("The German government did not accept your offer, however they could be willing to...")
-                            responses = ["1. Improve trade between your two nations(improve both economies)",
-                                         "2. Improve relations over period of 15 days(1.5 political power per day)",
-                                         "3. Accept a possible alliance(or accept your entry into an existing alliance)",
-                                         "4. Improve relations over a period of 20 days(1.5 political power per day)",
-                                         "5. Trade students and train each others workers(improve both economies)"]
-                            if responses == 1:
-                                """Improvement of trade"""
-                                chance = random.randrange(0, 7)
-                                if chance % 2 == 0:
-                                    """57% chance of acceptance"""
-                                    print("The German government has agreed to improve trade between our two nations.")
-                                    time.sleep(3)
-                                    germany.improve_us_trade = germany.date + timedelta(days=30)
-                                    us.improve_german_trade = us.date + timedelta(days=30)
-
-                                elif chance % 3 == 1:
-                                    """28.5% chance of refusal to acknowledge"""
-                                    print("The German government has not agreed to our terms\n")
-                                    time.sleep(3)
-
-                                elif chance % 4 == 2:
-                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
-                                    print("Our diplomats have been kicked out of the Reichstag.\n")
-                                    time.sleep(3)
-                                    is_not_mediated = False
-                                    not_finished = False
-
-                            elif responses == 2:
-                                """Response for 15 day period"""
-                                if chance % 2 == 0:
-                                    """57% chance of acceptance"""
-                                    print("The German government has agreed to improve relations over a 15 day period.\n")
-                                    time.sleep(3)
-                                    germany.improve_us_relations = germany.date + timedelta(days=15)
-                                    us.improve_german_relations = us.date + timedelta(days=15)
-
-                                elif chance % 3 == 1:
-                                    """28.5% chance of refusal to acknowledge"""
-                                    print("The German government has not agreed to our terms\n")
-                                    time.sleep(3)
-
-                                elif chance % 4 == 2:
-                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
-                                    print("Our diplomats have been kicked out of the Reichstag.\n")
-                                    time.sleep(3)
-                                    globe.tension += 1.5
-                                    is_not_mediated = False
-                                    not_finished = False
-
-                            elif responses == 3:
-                                if germany.alliance:
-                                    choice = input(f"Germany has invited us to join the {germany.alliance}.\n"
-                                                   f"Do you accept?(y or n): ")
-                                    if choice.lower() == "y" or choice.lower() == "yes":
-                                        print(f"you have successfully entered into the {germany.alliance}.\n")
-                                        time.sleep(3)
-
-                            elif responses == 4:
-                                """Response for 20 day period"""
-
-                                if chance % 2 == 0:
-                                    """57% chance of acceptance"""
-                                    print("The German government has agreed to improve relations over a 20 day period.\n")
-                                    time.sleep(3)
-                                    germany.improve_us_relations = germany.date + timedelta(days=20)
-                                    us.improve_german_relations = us.date + timedelta(days=20)
-
-                                elif chance % 3 == 1:
-                                    """28.5% chance of refusal to acknowledge"""
-                                    print("The German government has not agreed to our terms\n")
-                                    time.sleep(3)
-
-                                elif chance % 4 == 2:
-                                    """28.5% chance of diplomats getting kicked out of Reichstag"""
-                                    print("Our diplomats have been kicked out of the Reichstag.\n")
-                                    time.sleep(3)
-                                    globe.tension += 1.5
-                                    is_not_mediated = False
-                                    not_finished = False
-                            elif responses == 5:
-                                pass
-
-                            for i in responses:
-                                print(f"{responses}\n")
+                        print("The proposal has died in the midst of geopolitics.\n")
 
             elif choice == 3:
-                pass
+                if globe.tension < 50.00 and us.german_relations >= 50.00:
+                    """low tensions, with friendly relationship with Germany"""
+                    chance = random.randrange(0, 11)
+                    print(chance)
+                    if chance % 2 == 0:
+                        """54.5% chance of acceptance"""
+                        print("The German government has agreed with us to build an American Embassy within Berlin.\n")
+                        time.sleep(3)
+                        germany.us_relations += round(random.uniform(0.25, 24.56), 2)
+                        us.german_relations += round(random.uniform(0.25, 24.56), 2)
+
+                    elif chance % 4 == 2:
+                        """27.2% chance of not accepting, but open to different terms"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 5 == 0:
+                        """27.2% chance of German government kicking US diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        not_finished = False
+
+                    elif chance % 10 == 0 and chance != 0:
+                        """9.09% chance that German government labels US diplomats as spies and kills them"""
+                        kill_diplomats(us, germany, globe)
+                        not_finished = False
+
+                    else:
+                        print("The proposal has died in the midst of geopolitics.\n")
+
             elif choice == 4:
-                pass
+                """4. Guarantee German Independence(Decreases potential for political power growth, 25 political power)"""
+                chance = random.randrange(0, 20)
+                print(chance)
+                if globe.tension < 50.00 and us.german_relations >= 50.00:
+                    if chance % 2 == 0:
+                        """55% Chance of German government accepting guarantee"""
+                        print("The German government has fully accepted our guarantee for their full independence.\n")
+                        time.sleep(3)
+                        us.political_power -= 25
+                        us.political_exponent -= 1.5
+
+                    elif chance % 6 == 0:
+                        """20% chance of refusal but open to other diplomatic terms"""
+                        alternate_options(us, germany, globe)
+
+                    elif chance % 3 == 0:
+                        """30% chance that German government kicks diplomats out of Reichstag"""
+                        print("The German government has kicked our diplomats out of the Reichstag.\n")
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 3 == 1:
+                        """35% chance that German government kills diplomats"""
+                        kill_diplomats(us, germany, globe)
+
+                    print("The proposal has died in the midst of geopolitics.\n")
+
             elif choice == 5:
-                pass
+                """5. Establish An Alliance(join alliance, if Germany is in one already)"""
+                chance = random.randrange(0, 30)
+                print(chance)
+                if chance % 3 == 0:
+                    """30% chance that German government accepts alliance deal"""
+                    if germany.alliance:
+                        print(f"The German government has accepted our entry into the {germany.alliance}.\n")
+                        time.sleep(3)
+
+                    else:
+                        print(f"The German government has agreed to create an alliance.\n")
+                        alliance = input("What would you like the alliance to be called?: ")
+                        germany.alliance = alliance
+                        us.alliance = alliance
+
+                elif chance % 2 == 0:
+                    """53.3% chance that Germany doesn't accept our alliance offer and isn't open to other terms"""
+                    print("The Germans have rejected our offer.\n")
+                    time.sleep(3)
+                    not_finished = False
+
+                elif chance % 2 == 1:
+                    """50% that the German government kills our diplomats on terms of espionage"""
+                    print("The German government has killed our diplomats on terms of alleged espionage.\n")
+                    time.sleep(3)
+                    globe.tension += 1.5
+                    us.current_pop -= random.randrange(3, 20)
+
+                else:
+                    print("The proposal has died in the midst of geopolitics.\n")
+
 
         elif choice.lower() == "hinder" or choice.lower() == "worsen":
             for neg in range(0, len(negative) - 1):
                 """looping through negative geopolitical actions"""
-                print(f"\n{positive[neg]}")
+                print(f"\n{negative[neg]}")
             choice = int(input("Which number do you choose(1 - 9)"))
             if choice == 1:
                 pass
@@ -1017,6 +1155,8 @@ def us_relations(us, germany, globe):
             elif choice == 9:
                 pass
 
+        elif choice.lower() == "quit":
+            not_finished = False
 
 """Main function of manual German version of game"""
 
