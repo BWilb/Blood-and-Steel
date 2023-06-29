@@ -83,8 +83,6 @@ def political_stats(us):
             elif us.states[i].union_favorability > high and us.states[i].union_favorability > us.states[i + 1].union_favorability:
                 high_nation = us.states[i].name
                 high = us.states[i].union_favorability
-        print(us.states[i].name, us.states[i].union_favorability)
-        time.sleep(1)
 
     print(f"{low_nation} holds the lowest favorability of staying in the American Union at {round(low, 2)}%.\n")
     time.sleep(3)
@@ -106,6 +104,7 @@ def economic_stats(us):
             us.debt_repayment = us.date + timedelta(days=120)
 
 def international_stats(us, globe, nations):
+    print(f"Global tensions are at {globe.tension}%\n")
     done = True
     while done:
         choice = input("Would you like to view European, Asian, or Latin American relations?(enter no, to quit): ")
@@ -452,6 +451,14 @@ class UnitedStates:
         # German
         self.improve_german_trade = self.date
         self.improve_german_relations = self.date
+        self.german_guarantee = False
+        self.german_embassy = False
+        # Italian
+        self.improve_italian_trade = self.date
+        self.improve_italian_relations = self.date
+        self.italian_embassy = False
+        self.italian_guarantee = False
+
 globe1 = globe.Globe()
 us = UnitedStates("1918")
 manual_game(us, globe1)
