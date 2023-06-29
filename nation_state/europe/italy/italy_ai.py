@@ -1427,6 +1427,8 @@ def manual_us_relations(us, italy, globe):
                         print("Your proposal died in the midst of Geopolitics.\n")
                         time.sleep(3)
 
+        elif choice.lower() == "quit":
+            not_finished = False
 def ai_game(italy, globe):
     while italy.current_pop > 150000:
         # incrementing of time
@@ -1501,6 +1503,7 @@ class Italy:
         # political
         self.us_relations = 45.56
         self.improve_us_relations = self.date
+        self.alliance = ""
         # economic
         self.improve_us_trade = self.date
         """military variables"""

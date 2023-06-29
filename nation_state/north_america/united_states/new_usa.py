@@ -458,6 +458,11 @@ class UnitedStates:
         self.improve_italian_relations = self.date
         self.italian_embassy = False
         self.italian_guarantee = False
+        # British
+        self.improve_british_trade = self.date
+        self.improve_british_relations = self.date
+        self.british_embassy = False
+        self.british_guarantee = False
 
 globe1 = globe.Globe()
 us = UnitedStates("1918")

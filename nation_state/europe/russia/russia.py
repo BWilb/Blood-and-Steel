@@ -922,20 +922,20 @@ def economic_decisions(russia):
         gdp_changes(russia)
         economic_state(russia)
 """Stats functions"""
-def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
+def social_stats(russia):
+    print(f"Your current happiness level is {russia.happiness}%.\n")
     time.sleep(3)
-    if us.happiness < 35.45 and not us.improve_happiness:
-        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+    if russia.happiness < 35.45 and not russia.improve_happiness:
+        choice = input(f"{russia.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
                        f"A low happiness could lead to potential rebellions occurring.\n"
                        f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
         if choice.lower() == "y":
-            us.improve_happiness = us.date + timedelta(days=30)
-    print(f"Your current population {us.current_pop}.\n")
+            russia.improve_happiness = russia.date + timedelta(days=30)
+    print(f"Your current population {russia.current_pop}.\n")
     time.sleep(3)
-    print(f"There have been {us.births} births in {us.date.year}.\n")
+    print(f"There have been {russia.births} births in {russia.date.year}.\n")
     time.sleep(3)
-    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
+    print(f"There have been {russia.deaths} deaths in {russia.date.year}.\n")
     time.sleep(3)
 
 def political_stats(russia):

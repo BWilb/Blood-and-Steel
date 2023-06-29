@@ -724,6 +724,750 @@ def improvements(britain):
         if (increase + britain.happiness) < 100:
             britain.happiness += increase
 
+"""International functions"""
+
+def alternate_options(us, britain, globe):
+    """passes to this function, if German government doesn't accept original terms, but is open to dialogue"""
+    is_not_mediated = True
+    while is_not_mediated:
+        print("The Italian government did not accept your offer, however they could be willing to...")
+        time.sleep(3)
+        responses = ["1. Improve trade between your two nations(improve both economies)",
+                     "2. Improve relations over period of 15 days(1.5 political power per day)",
+                     "3. Accept a possible alliance(or accept your entry into an existing alliance)",
+                     "4. Improve relations over a period of 20 days(1.5 political power per day)",
+                     "5. Trade students and train each others workers(improve both economies)"]
+
+        for i in responses:
+            print(f"{i}\n")
+            time.sleep(1)
+        response_choice = int(input("Which one do you choose(1-5)?: "))
+        chance = random.randrange(0, 7)
+        # choice variable utilized for all response choices
+        if response_choice == 1:
+            """Improvement of trade"""
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The Italian government has agreed to improve trade between our two nations.")
+                time.sleep(3)
+                us.improve_italian_trade = us.date + timedelta(days=30)
+                is_not_mediated = False
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The Italian government has not agreed to our terms\n")
+                is_not_mediated = False
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Italian Parliament.\n")
+                time.sleep(3)
+                is_not_mediated = False
+
+            else:
+                print("Your offer died in the midst of geopolitics.\n")
+                time.sleep(3)
+
+        elif response_choice == 2:
+            """Response for 15 day period"""
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The Italian government has agreed to improve relations over a 15 day period.\n")
+                time.sleep(3)
+                us.improve_italian_relations = us.date + timedelta(days=15)
+                is_not_mediated = False
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The Italian government has not agreed to our terms\n")
+                is_not_mediated = False
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Parliament"""
+                print("Our diplomats have been kicked out of the Italian parliament.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+            else:
+                print("Your offer died in the midst of geopolitics.\n")
+                time.sleep(3)
+
+        elif response_choice == 3:
+            if britain.alliance:
+                choice = input(f"Italy has invited us to join the {britain.alliance}.\n"
+                               f"Do you accept?(y or n): ")
+                if choice.lower() == "y" or choice.lower() == "yes":
+                    print(f"you have successfully entered into the {britain.alliance}.\n")
+                    time.sleep(3)
+
+        elif response_choice == 4:
+            """Response for 20 day period"""
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The Italian government has agreed to improve relations over a 20 day period.\n")
+                time.sleep(3)
+                us.improve_italian_relations = us.date + timedelta(days=20)
+                is_not_mediated = False
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The Italian government has not agreed to our terms\n")
+                is_not_mediated = False
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Italian Parliament.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+            else:
+                print("Your offer died in the midst of geopolitics.\n")
+                time.sleep(3)
+
+        elif response_choice == 5:
+
+            if chance % 2 == 0:
+                """57% chance of acceptance"""
+                print("The Italian government has agreed for us to train each others workers and students.\n")
+                time.sleep(3)
+                britain.improve_us_trade = britain.date + timedelta(days=20)
+                us.improve_german_trade = us.date + timedelta(days=20)
+                is_not_mediated = False
+
+            elif chance % 3 == 1:
+                """28.5% chance of refusal to acknowledge"""
+                print("The Italian government has not agreed to our terms\n")
+                is_not_mediated = False
+                time.sleep(3)
+
+            elif chance % 4 == 2:
+                """28.5% chance of diplomats getting kicked out of Reichstag"""
+                print("Our diplomats have been kicked out of the Italian Parliament.\n")
+                time.sleep(3)
+                globe.tension += 1.5
+                is_not_mediated = False
+
+            else:
+                print("Your offer died in the midst of geopolitics.\n")
+                time.sleep(3)
+
+def kill_diplomats(us, globe):
+    print("The British government has killed our diplomats on claims of espionage.\n")
+    time.sleep(3)
+    deaths = random.randrange(3, 20)
+    us.current_pop -= deaths
+    us.deaths += deaths
+    globe.tension += round(random.uniform(1.0, 3.0), 2)
+
+def manual_us_relations(us, britain, globe):
+    """Function is called from new_usa if user wants to improve relations with Britain(You can also worsen relations)
+        - if you worsen relations, you increase global tensions
+        """
+    positive = ["1. increase trade(5 political power per day, lasts 50 days)",
+                "2. improve relations(1.5 political power per day, lasts 30 days)",
+                "3. establish an embassy",
+                "4. Guarantee British Independence(Decreases potential for political power growth, 25 political power)",
+                "5. Establish An Alliance(join alliance, if Italy is in one already)"]
+
+    negative = ["1. Subvert British government(50 political power)", "2. Embargo Britain(hurts British economy)",
+                "3. Impose tariffs on british goods(hurts both british and US economies)",
+                "4. Expel legal Britain residents within the US(20 political power)",
+                "5. Imprison some legal Britain residents within the US(20 political power)",
+                "6. Kill Britain Nationals(15 political power)",
+                "7. Declare War against Britain(May bring British allies into war)",
+                "8. Dissolve alliance with Britain(10 political power)",
+                "9. Expel British diplomats(10 political power)"]
+
+    not_finished = True
+    while not_finished:
+        choice = input("Would you like to improve or hinder relations with Britain?(Enter quit to leave relations): ")
+
+        if choice.lower() == "improve":
+            for pos in range(0, len(positive)):
+                print(f"{positive[pos]}\n")
+                time.sleep(3)
+
+            choice = int(input("Which number do you choose(1-5)?: "))
+
+            if globe.tension < 50 and us.british_relations > 50:
+                """All choices for when tension is low and relations are great"""
+
+                if choice == 1:
+                    chance = random.randrange(0, 11)
+                    if chance % 2 == 0:
+                        """54.5% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve relations over a period of 50 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_relations = us.date + timedelta(days=50)
+
+                    elif chance % 3 == 0:
+                        """36.3% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """18.1% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 5:
+                        """9.09% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+                        not_finished = False
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 2:
+                    chance = random.randrange(0, 11)
+                    if chance % 2 == 0:
+                        """54.5% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve trade over a period of 30 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_trade = us.date + timedelta(days=30)
+
+                    elif chance % 3 == 0:
+                        """36.3% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """18.1% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 5:
+                        """9.09% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+                        not_finished = False
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 3:
+                    chance = random.randrange(0, 20)
+                    if chance % 2 == 0 and not us.british_embassy:
+                        """54.5% chance that Italian government accepts proposal"""
+                        print("The British government has approved of our building of an embassy in London\n")
+                        time.sleep(3)
+                        us.british_embassy = True
+
+                    elif chance % 3 == 0:
+                        """36.3% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """18.1% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 5:
+                        """9.09% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+                        not_finished = False
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 4:
+                    chance = random.randrange(0, 20)
+                    if chance % 2 == 0:
+                        """54.5% chance that Italian government accepts proposal"""
+                        print("The British government has accepted our guarantee of independence.\n")
+                        time.sleep(3)
+
+                    elif chance % 3 == 0:
+                        """36.3% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """18.1% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 5:
+                        """9.09% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+                        not_finished = False
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 5:
+                    chance = random.randrange(0, 20)
+                    if chance % 2 == 0:
+                        """54.5% chance that Italian government accepts proposal"""
+                        if us.britain.alliance:
+                            print(f"The British government has accepted our entry into the {britain.alliance}.\n")
+                            time.sleep(3)
+
+                        else:
+                            print("The British government has accepted our proposal of creating an alliance.\n")
+                            time.sleep(3)
+                            alliance = input("What would you like your alliance to be called?: ")
+                            britain.alliance = alliance
+                            us.alliance = alliance
+
+                    elif chance % 3 == 0:
+                        """36.3% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """18.1% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+                        not_finished = False
+
+                    elif chance % 9 == 5:
+                        """9.09% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+                        not_finished = False
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+            elif globe.tension < 50 and us.british_relations < 50:
+
+                if choice == 1:
+                    chance = random.randrange(0, 30)
+                    if chance % 3 == 2:
+                        """33% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve relations over a period of 50 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_relations = us.date + timedelta(days=50)
+
+                    elif chance % 2 == 0:
+                        """50% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """16.6% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 7 == 2:
+                        """13.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 2:
+                    chance = random.randrange(0, 30)
+                    if chance % 3 == 2:
+                        """33% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve trade over a period of 30 days.\n")
+                        time.sleep(3)
+
+                        us.improve_britain_trade = us.date + timedelta(days=30)
+
+                    elif chance % 2 == 0:
+                        """50% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """16.6% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 7 == 2:
+                        """13.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 3:
+                    chance = random.randrange(0, 30)
+                    if chance % 3 == 0 and not us.british_embassy:
+                        """33.3% chance that Italian government accepts proposal"""
+                        print("The British government has approved of our building of an embassy in London\n")
+                        time.sleep(3)
+                        us.british_embassy = True
+
+                    elif chance % 2 == 0:
+                        """50% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """16.6% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 7 == 2:
+                        """13.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 4:
+                    chance = random.randrange(0, 30)
+                    if chance % 3 == 0:
+                        """33.3% chance that Italian government accepts proposal"""
+                        print("The British government has accepted our guarantee of independence.\n")
+                        time.sleep(3)
+
+                    elif chance % 2 == 0:
+                        """50% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """16.6% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 7 == 2:
+                        """13.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 5:
+                    chance = random.randrange(0, 30)
+                    if chance % 3 == 0:
+                        """33.3% chance that Italian government accepts proposal"""
+                        if britain.alliance:
+                            print(f"The British government has accepted our entry into the {britain.alliance}.\n")
+                            time.sleep(3)
+
+                        else:
+                            print("The British government has accepted our proposal of creating an alliance.\n")
+                            time.sleep(3)
+                            alliance = input("What would you like your alliance to be called?: ")
+                            britain.alliance = alliance
+                            us.alliance = alliance
+
+                    elif chance % 2 == 0:
+                        """50% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 6 == 2:
+                        """16.6% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 7 == 2:
+                        """13.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+            elif globe.tension > 50 and us.british_relations < 50:
+                if choice == 1:
+                    chance = random.randrange(0, 60)
+                    if chance % 6 == 2:
+                        """16.6% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve relations over a period of 50 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_relations = us.date + timedelta(days=50)
+
+                    elif chance % 5 == 3:
+                        """20% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 4 == 1:
+                        """25% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 2:
+                    chance = random.randrange(0, 60)
+                    if chance % 6 == 2:
+                        """16.6% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve trade over a period of 30 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_trade = us.date + timedelta(days=30)
+
+                    elif chance % 5 == 3:
+                        """20% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 4 == 1:
+                        """25% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 3:
+                    chance = random.randrange(0, 60)
+                    if chance % 6 == 2 and not us.britain.embassy:
+                        """16.6% chance that Italian government accepts proposal"""
+                        print("The British government has approved of our building of an embassy in London\n")
+                        time.sleep(3)
+                        us.british_embassy = True
+
+                    elif chance % 5 == 3:
+                        """20% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 4 == 1:
+                        """25% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 4:
+                    chance = random.randrange(0, 60)
+                    if chance % 6 == 2:
+                        """16.6% chance that Italian government accepts proposal"""
+                        print("The British government has accepted our guarantee of independence.\n")
+                        time.sleep(3)
+
+                    elif chance % 5 == 3:
+                        """20% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 4 == 1:
+                        """25% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 5:
+                    chance = random.randrange(0, 60)
+                    if chance % 6 == 2:
+                        """16.6% chance that Italian government accepts proposal"""
+                        if britain.alliance:
+                            print(f"The British government has accepted our entry into the {britain.alliance}.\n")
+                            time.sleep(3)
+                            us.alliance = britain.alliance
+
+                        else:
+                            print("The Italian government has accepted our proposal of creating an alliance.\n")
+                            time.sleep(3)
+                            alliance = input("What would you like your alliance to be called?: ")
+                            britain.alliance = alliance
+                            us.alliance = alliance
+
+                    elif chance % 5 == 3:
+                        """20% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 4 == 1:
+                        """25% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+            elif globe.tension > 50 and us.british_relations > 50:
+                if choice == 1:
+                    chance = random.randrange(0, 45)
+                    if chance % 4 == 2:
+                        """24.4% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve relations over a period of 50 days.\n")
+                        time.sleep(3)
+
+                        us.improve_british_relations = us.date + timedelta(days=50)
+
+                    elif chance % 2 == 0:
+                        """51.1% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 2 == 1:
+                        """48.89% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 2:
+                    chance = random.randrange(0, 45)
+                    if chance % 4 == 2:
+                        """24.4% chance that Italian government accepts proposal"""
+                        print("The British government has agreed to improve trade over a period of 30 days.\n")
+                        time.sleep(3)
+                        us.improve_british_trade = us.date + timedelta(days=30)
+
+                    elif chance % 2 == 0:
+                        """51.1% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 2 == 1:
+                        """48.89% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 3:
+                    chance = random.randrange(0, 45)
+                    if chance % 4 == 2 and not us.british.embassy:
+                        """24.4% chance that Italian government accepts proposal"""
+                        print("The British government has approved of our building of an embassy in London\n")
+                        time.sleep(3)
+                        us.british_embassy = True
+
+                    elif chance % 2 == 0:
+                        """51.1% chance that British government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 2 == 1:
+                        """48.89% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 4:
+                    chance = random.randrange(0, 45)
+                    if chance % 4 == 2:
+                        """24.4% chance that Italian government accepts proposal"""
+                        print("The British government has accepted our guarantee of independence.\n")
+                        time.sleep(3)
+
+                    elif chance % 2 == 0:
+                        """51.1% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 2 == 1:
+                        """48.89% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+                elif choice == 5:
+                    chance = random.randrange(0, 45)
+                    if chance % 4 == 2:
+                        """24.4% chance that Italian government accepts proposal"""
+                        if britain.alliance:
+                            print(f"The British government has accepted our entry into the {britain.alliance}.\n")
+                            time.sleep(3)
+                            us.alliance = britain.alliance
+
+                        else:
+                            print("The British government has accepted our proposal of creating an alliance.\n")
+                            time.sleep(3)
+                            alliance = input("What would you like your alliance to be called?: ")
+                            britain.alliance = alliance
+                            us.alliance = alliance
+
+                    elif chance % 2 == 0:
+                        """51.1% chance that Italian government doesn't accept proposal, but may accept another proposal"""
+                        alternate_options(us, britain, globe)
+
+                    elif chance % 2 == 1:
+                        """48.89% chance that Italy kicks diplomats out of Italian Parliament"""
+                        print("Our diplomats have been kicked out of the British Parliament.\n")
+                        globe.tension += 1.5
+                        time.sleep(3)
+
+                    elif chance % 3 == 1:
+                        """33.3% chance that Italy kills your diplomats"""
+                        kill_diplomats(us, globe)
+
+                    else:
+                        print("Your proposal died in the midst of Geopolitics.\n")
+                        time.sleep(3)
+
+        elif choice.lower() == "quit":
+            not_finished = False
+
 def ai_game(britain, globe):
     while britain.current_pop > 500000:
         # establishment of check upon game status
