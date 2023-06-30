@@ -3,28 +3,21 @@ import time
 from datetime import datetime, timedelta
 
 dictators = {
-    "1910": "Nicolaus II",
-    "1914": "Nicolaus II",
-    "1918": "Vladimir Lenin",
-    "1932": "Joseph Stalin",
-    "1936": "Joseph Stalin",
-    "1939": "Joseph Stalin"
+    "1910": None,
+    "1914": None,
+    "1918": "Józef Piłsudski",
+    "1932": "Ignacy Mościcki",
+    "1936": "Ignacy Mościcki",
+    "1939": "Ignacy Mościcki"
 }
-alternate_monarchs = ["Olga I", "Peter of Oldenburg", "Nikolai III", "Alexandra I",
-                      "Olga II", "Tatiana", "Maria", "Anastasia", "Alexei"]
-
-lenin_successors = ["Leon Trotsky", "Joseph Stalin", "Vladimir Milyutin", "Nikolai Krylenko",
-                    "Pavel Dybenko", "Alexei Rykov", "Anatoly Lunacharsky"]
-
-stalin_successors = ["Vyacheslav Molotov", "Anastas Mikoyan", "Lavrentiy Beria", "Nikolai Bulganin", "Georgy Malenkov",]
 
 population = {
-    "1910": 126200000,
-    "1914": 130000000,
-    "1918": 136800000,
-    "1932": 126000000,
-    "1936": 104900000,
-    "1939": 109397463
+    "1910": None,
+    "1914": None,
+    "1918": 10128121,
+    "1932": 13962629,
+    "1936": 14620667,
+    "1939": 15128000
 }
 
 """Economic Dictionaries and Variables"""
@@ -921,49 +914,74 @@ def economic_decisions(russia):
     else:
         gdp_changes(russia)
         economic_state(russia)
-
 """Stats functions"""
-def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
+def social_stats(russia):
+    print(f"Your current happiness level is {russia.happiness}%.\n")
     time.sleep(3)
-    if us.happiness < 35.45 and not us.improve_happiness:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            us.improve_happiness = us.date + timedelta(days=30)
-            print("The Russian government has decided to improve its relations with its civilians.\n")
-            time.sleep(2)
-def political_stats(russia):
-    if russia.stability < 45.45 and not russia.improve_stability:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            russia.improve_stability = russia.date + timedelta(days=30)
-            print("The Russian government has decided to improve its political stability over a period of 30 days\n")
-            time.sleep(2)
-def economic_stats(russia):
-    if russia.national_debt > 50000000 and not russia.debt_repayment:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            russia.debt_repayment = russia.date + timedelta(days=120)
-            print("The Russian government has decided to repay some of their national debt over a 120 day period.\n")
-            time.sleep(2)
-def daily_decisions(russia):
-    political_stats(russia)
-    economic_stats(russia)
-    social_stats(russia)
-    russia.check_stats = russia.date + timedelta(days=3)
+    if russia.happiness < 35.45 and not russia.improve_happiness:
+        choice = input(f"{russia.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
+                       f"A low happiness could lead to potential rebellions occurring.\n"
+                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            russia.improve_happiness = russia.date + timedelta(days=30)
+    print(f"Your current population {russia.current_pop}.\n")
+    time.sleep(3)
+    print(f"There have been {russia.births} births in {russia.date.year}.\n")
+    time.sleep(3)
+    print(f"There have been {russia.deaths} deaths in {russia.date.year}.\n")
+    time.sleep(3)
 
+def political_stats(russia):
+    print(f"Your current political stability is {russia.stability}%.\n")
+    time.sleep(3)
+    if russia.stability < 45.45 and not russia.improve_stability:
+        choice = input(f"{russia.stability}% doesnt represent a functional government.\n"
+                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
+        if choice.lower() == "y":
+            russia.improve_stability = russia.date + timedelta(days=30)
+    print(f"{round((russia.pe / russia.current_pop) * 100, 4)}% of your population support your regime.\n")
+    time.sleep(3)
+    print(f"{round((russia.ae / russia.current_pop) * 100, 4)}% of your population are against your regime.\n")
+    time.sleep(3)
+
+def economic_stats(russia):
+    print(f"Your current GDP is ${round(russia.current_gdp, 2)}.\n")
+    time.sleep(3)
+    print((f"Your current yearly gdp growth is {round(((russia.current_gdp - russia.past_gdp) / ((russia.past_gdp + russia.current_gdp) / 2)) * 100, 5)}%\n"))
+    time.sleep(3)
+    print(f"Your current national debt is ${round(russia.national_debt, 2)}.\n")
+    time.sleep(3)
+
+    if russia.national_debt > 1000000000 and not russia.debt_repayment:
+        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
+              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
+        if choice.lower() == "y":
+            russia.debt_repayment = russia.date + timedelta(days=120)
+def daily_decisions(russia):
+    done = True
+    while done:
+        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
+        if choice.lower() == "political":
+            political_stats(russia)
+        elif choice.lower() == "economic":
+            economic_stats(russia)
+        elif choice.lower() == "social":
+            social_stats(russia)
+        elif choice.lower() == "quit":
+            done = False
+            russia.check_stats = russia.date + timedelta(days=3)
 def manual_game(year):
-    russia = Russia(year)
-    while russia.current_pop > 3000000:
-        political_change(russia)
-        economic_decisions(russia)
-        population_change(russia)
-        if russia.date > russia.check_stats:
-            daily_decisions(russia)
-        russia.date += timedelta(days=1)
+    poland = Poland(year)
+    while poland.current_pop > 3000000:
+        political_change(poland)
+        economic_decisions(poland)
+        population_change(poland)
+        if poland.date > poland.check_stats:
+            daily_decisions(poland)
+        poland.date += timedelta(days=1)
         time.sleep(3)
 
-class Russia:
+class Poland:
     def __init__(self, year):
         """Time variables"""
         self.date = datetime(int(year), 1, 1)
@@ -991,9 +1009,6 @@ class Russia:
         self.deportees = 0
         """Political Variables"""
         self.leader = dictators[year]
-        self.pe = self.current_pop * 0.99
-        self.ae = self.current_pop - self.pe
-        self.stability = 85.00
         """Economic Variables"""
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
