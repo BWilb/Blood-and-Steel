@@ -1,6 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
+from ai_pieces import agent, model
 
 """Population Dictionaries"""
 population = {
@@ -1436,3 +1437,6 @@ class GermanAI:
         # US variables
         self.improve_us_trade = self.date
         self.improve_us_relations = self.date
+
+class GermanAgent(agent.Agent()):
+    pass
