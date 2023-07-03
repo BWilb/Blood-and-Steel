@@ -11,12 +11,12 @@ population = {
 
 }
 gdp = {
-    "1910": 1874014,
-    "1914": 1986975,
-    "1918": 1879840,
-    "1932": None,
-    "1936": None,
-    "1939": None,
+    "1910": 1185000,
+    "1914": 1186975,
+    "1918": 1179840,
+    "1932": 1189737,
+    "1936": 1200000,
+    "1939": 1502280,
 }
 
 def recovery(a_l):
@@ -61,6 +61,9 @@ def recession(a_l):
         a_l.imports = round(random.uniform(700, 900), 2)
 
         a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
+                                (a_l.exports - a_l.imports))
+
+        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
                                 (a_l.exports - a_l.imports))
     else:
         a_l.consumer_spending = -round(random.uniform(10, 400), 2)
@@ -109,7 +112,6 @@ def depression(a_l):
         a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
                                 (a_l.exports - a_l.imports))
 
-
 def expansion(a_l):
     if a_l.master.economic_stimulus:
         a_l.consumer_spending = round(random.uniform(200, 3200), 2)
@@ -140,6 +142,7 @@ def expansion(a_l):
         a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
                                 (a_l.exports - a_l.imports))
 
+
 def economic_growth(a_l):
     """function determines which type of economic growth function code takes"""
     if a_l.current_date > a_l.economic_change_date:
@@ -160,8 +163,8 @@ def economic_growth(a_l):
                 a_l.economic_state = "recession"
 
                 choice = input(
-                    "The administrative region of alsace-lorraine is requesting that you pass an economic stimulus.\n"
-                    "The Prussian economy is starting to fail. Will you do this?: ")
+                    "The administrative region of Baden-Wurrtemburg is requesting that you pass an economic stimulus.\n"
+                    "The PBaden-Wurrtemburgian economy is starting to fail. Will you do this?: ")
 
                 if choice.lower() == "yes" or choice.lower() == 'y':
                     a_l.master.economic_stimulus = True
@@ -170,15 +173,15 @@ def economic_growth(a_l):
                     chance = random.randrange(0, 11)
                     if chance % 6 == 0:
                         """27.27% chance that Prussian officials officiate a stimulus anyway"""
-                        print("alsace-lorraine officials decided to go around your back an establish a stimulus anyway.\n")
+                        print("Baden-Wurrtemburgian officials decided to go around your back an establish a stimulus anyway.\n")
                         a_l.master.economic_stimulus = True
 
             elif a_l.economic_state == "recession":
                 a_l.economic_state = "depression"
 
                 choice = input(
-                    "The administrative region of alsace-lorraine is requesting that you pass an economic stimulus.\n"
-                    "The Prussian economy has fallen into a depression. Will you do this?: ")
+                    "The administrative region of Baden-Wurrtemburg is requesting that you pass an economic stimulus.\n"
+                    "The Baden-Wurrtemburgian economy has fallen into a depression. Will you do this?: ")
 
                 if choice.lower() == "yes" or choice.lower() == 'y':
                     a_l.master.economic_stimulus = True
@@ -187,7 +190,7 @@ def economic_growth(a_l):
                     chance = random.randrange(0, 11)
                     if chance % 2 == 0:
                         """54.54% chance that Prussian officials officiate a stimulus anyway"""
-                        print("alsace-lorrainian officials decided to go around your back an establish a stimulus anyway.\n")
+                        print("Baden-Wurrtemburgian officials decided to go around your back an establish a stimulus anyway.\n")
                         a_l.master.economic_stimulus = True
 
             elif a_l.economic_state == "expansion":
@@ -205,7 +208,6 @@ def economic_growth(a_l):
 
         if a_l.economic_state == "expansion":
             expansion(a_l)
-
 
 """Population growth"""
 def population_growth(a_l):
@@ -304,14 +306,14 @@ def population_growth(a_l):
                 """Chance that the births go to the rebels"""
                 a_l.master.rebels += 1
 
-class Alsace_Lorraine:
+class Wurttemburg:
     def __init__(self, year, master_nation):
         self.current_date = datetime(year, 1, 1)
         # administrative variables
-        self.name = "Alsace-Lorraine"
+        self.name = "Wurttemburg"
         # social variables
         self.current_pop = 0
-        self.happiness = 45.56
+        self.happiness = 89.45
         # economic variables
         self.government_spending = 0
         self.investment = 0
@@ -322,5 +324,5 @@ class Alsace_Lorraine:
         self.economic_state = "recovery"
         # political variables
         self.stability = 76
-        self.prussian_tolerance = 50.56
+        self.prussian_tolerance = 87.67
         self.master = master_nation

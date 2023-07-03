@@ -50,12 +50,12 @@ army_size = {
 """Economic dictionaries & Variables"""
 business_cycle = ["recovery", "expansion", "recession", "depression"]
 gdp = {
-    "1910": 237000000,
-    "1914": 237395000,
-    "1918": 235968000,
-    "1932": 237947500,
-    "1936": 240000000,
-    "1939": 300456000
+    "1910": 23700000,
+    "1914": 23739500,
+    "1918": 23596800,
+    "1932": 23794750,
+    "1936": 24000000,
+    "1939": 30045600
 }
 
 tax_rate = {
@@ -339,7 +339,6 @@ def events(germany):
     economic_events(germany)
     political_events(germany)
     international_events(germany)
-    pass
 
 """Economic Functions"""
 def economic_stimulus(germany):
