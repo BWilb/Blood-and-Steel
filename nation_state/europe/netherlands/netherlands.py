@@ -4,34 +4,43 @@ from datetime import datetime, timedelta
 
 """Population Dictionaries"""
 population = {
-    "1910": 14702456,
-    "1914": 14742623,
-    "1918": 14782786,
-    "1932": 17635255,
-    "1936": 18971701,
-    "1939": 19961661
+    "1910": 5893247,
+    "1914": 6274226,
+    "1918": 6687933,
+    "1932": 8052797,
+    "1936": 8441838,
+    "1939": 8788112
 }
 
 """Political Dictionaries"""
 leaders = {
-    "1910": "Porfirio Diaz",
-    "1914": "Victoriano Huerta",
-    "1918": "Venustiano Carranza",
-    "1932": "Abelardo Rodriguez",
-    "1936": "Lázaro Cárdenas",
-    "1939": "Lázaro Cárdenas"
+    "1910": "Theo Heemskerk",
+    "1914": "Pieter Cort van der Linden",
+    "1918": "Pieter Cort van der Linden",
+    "1932": "Charles Ruijs de Beerenbrouck",
+    "1936": "Hendrikus Colijn",
+    "1939": "Hendrikus Colijn"
+}
+
+monarchs = {
+    "1910": "Wilhelmina",
+    "1914": "Wilhelmina",
+    "1918": "Wilhelmina",
+    "1932": "Wilhelmina",
+    "1936": "Wilhelmina",
+    "1939": "Wilhelmina"
 }
 
 gdp = {
-    "1910": 500000000,
-    "1914": 659939450,
-    "1918": 733488730,
-    "1932": 723488730,
-    "1936": 723488730,
-    "1939": 743488730
+    "1910": 865645049,
+    "1914": 1111426098,
+    "1918": 1844390540,
+    "1932": 2118539364,
+    "1936": 3213537630,
+    "1939": 3201339327
 }
 
-class Cuba:
+class Netherlands:
     def __init__(self, year):
         # date variables
         self.date = datetime(int(year), 1, 1)
@@ -111,8 +120,8 @@ class Cuba:
                         time.sleep(3)
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 50)
-                deaths = random.randrange(25, 45)
+                births = random.randrange(20, 40)
+                deaths = random.randrange(11, 30)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -125,8 +134,8 @@ class Cuba:
                 self.deaths += deaths
 
             else:
-                births = random.randrange(15, 35)
-                deaths = random.randrange(20, 30)
+                births = random.randrange(7, 15)
+                deaths = random.randrange(4, 10)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
