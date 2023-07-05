@@ -1,59 +1,47 @@
 import random
 import time
 from datetime import datetime, timedelta
-monarchs = {
-    """Dictionary for english monarchs
-    Leader selection will be in sync with time frame selection
-    Unlike population, leader dictionary will be setup to be as historically accurate as possible"""
 
-    "1910": "Edward VII",
-    "1914": "George V",
-    "1918": "George V",
-    "1932": "George V",
-    "1936": "Edward VIII",
-    "1939": "George VI"
-}
-
-pm = {
-    "1910": "H.H. Asquith",
-    "1914": "H.H. Asquith",
-    "1918": "David Lloyd George",
-    "1932": "Ramsay MacDonald",
-    "1936": "Stanley Baldwin",
-    "1939": "Neville Chamberlain"
-}
-
-spare_pms = ["Duncan Pirie", "Henry Cowan", "Harold Baker", "James Calmont", "Ellis Ellis-Griffith",
-             "Charles Craig", "William Jones", "Alfred Scott", "Sir Charles Hunter"]
-
-spare_1900_1950_monarchs = ["Louis", "Prince Arthur", "Beatrice", "Prince Henry", "Alexander Ramsay", "Alexander Cambridge",
-                            "Albert Victor", "Victoria II", "George VI"]
-
-# population variables and dictionaries
+# Romania
+"""Population Dictionaries"""
 population = {
-    """Dictionary for population
-    Population selection will be in sync with time frame selection
-    Population will then be set up to grow or shrink in random amounts"""
-
-    "1910": 44915900,
-    "1914": 42956900,
-    "1918": 39582000,
-    "1932": 46335000,
-    "1936": 47081300,
-    "1939": 46029200
+    "1910": 7145835,
+    "1914": 7642710,
+    "1918": 7882960,
+    "1932": 18143247,
+    "1936": 18997248,
+    "1939": 19868002
 }
 
-# economic variables and dictionaries
+"""Political Dictionaries"""
+leaders = {
+    "1910": "Ion I. C. Brătianu",
+    "1914": "Ion I. C. Brătianu",
+    "1918": "Ion I. C. Brătianu",
+    "1932": "Nicolae Iorga",
+    "1936": "Gheorghe Tătărescu",
+    "1939": "rmand Călinescu"
+}
+
+monarchs = {
+    "1910": "Carol I",
+    "1914": "Carol I",
+    "1918": "Ferdinand I",
+    "1932": "Carol II",
+    "1936": "Carol II",
+    "1939": "Carol II"
+}
+
 gdp = {
-    "1910": 15783763158,
-    "1914": 17856842105,
-    "1918": 23873207895,
-    "1932": 44371994737,
-    "1936": 53157368421,
-    "1939": 54936947368
+    "1910": 11882323232,
+    "1914": 11982323232,
+    "1918": 12182323232,
+    "1932": 14212323232,
+    "1936": 18882323232,
+    "1939": 19882323232
 }
 
-class Britain:
+class Romania:
     def __init__(self, year):
         # date variables
         self.date = datetime(int(year), 1, 1)

@@ -1,59 +1,41 @@
 import random
 import time
 from datetime import datetime, timedelta
+leaders = {
+    "1910" : "Arvid Lindman",
+    "1914" : "Karl Staaff",
+    "1918" : "Nils Edén",
+    "1932" : "Carl Gustaf Ekman",
+    "1936" : "Per Albin Hansson",
+    "1939" : "Per Albin Hansson"
+}
 monarchs = {
-    """Dictionary for english monarchs
-    Leader selection will be in sync with time frame selection
-    Unlike population, leader dictionary will be setup to be as historically accurate as possible"""
-
-    "1910": "Edward VII",
-    "1914": "George V",
-    "1918": "George V",
-    "1932": "George V",
-    "1936": "Edward VIII",
-    "1939": "George VI"
+    "1910" : "Gustaf V",
+    "1914" : "Gustaf V",
+    "1918" : "Gustaf V",
+    "1932" : "Gustaf V",
+    "1936" : "Gustaf V",
+    "1939" : "Gustaf V"
 }
 
-pm = {
-    "1910": "H.H. Asquith",
-    "1914": "H.H. Asquith",
-    "1918": "David Lloyd George",
-    "1932": "Ramsay MacDonald",
-    "1936": "Stanley Baldwin",
-    "1939": "Neville Chamberlain"
-}
-
-spare_pms = ["Duncan Pirie", "Henry Cowan", "Harold Baker", "James Calmont", "Ellis Ellis-Griffith",
-             "Charles Craig", "William Jones", "Alfred Scott", "Sir Charles Hunter"]
-
-spare_1900_1950_monarchs = ["Louis", "Prince Arthur", "Beatrice", "Prince Henry", "Alexander Ramsay", "Alexander Cambridge",
-                            "Albert Victor", "Victoria II", "George VI"]
-
-# population variables and dictionaries
 population = {
-    """Dictionary for population
-    Population selection will be in sync with time frame selection
-    Population will then be set up to grow or shrink in random amounts"""
-
-    "1910": 44915900,
-    "1914": 42956900,
-    "1918": 39582000,
-    "1932": 46335000,
-    "1936": 47081300,
-    "1939": 46029200
+    "1910": 5493302,
+    "1914": 5619111,
+    "1918": 5746841,
+    "1932": 6172343,
+    "1936": 6259363,
+    "1939": 6335505
 }
-
-# economic variables and dictionaries
 gdp = {
-    "1910": 15783763158,
-    "1914": 17856842105,
-    "1918": 23873207895,
-    "1932": 44371994737,
-    "1936": 53157368421,
-    "1939": 54936947368
+    "1910": 1765677700,
+    "1914": 1035207385,
+    "1918": 2754193594,
+    "1932": 1911933808,
+    "1936": 2344127797,
+    "1939": 2892814865
 }
 
-class Britain:
+class Sweden:
     def __init__(self, year):
         # date variables
         self.date = datetime(int(year), 1, 1)
