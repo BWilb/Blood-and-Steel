@@ -31,7 +31,7 @@ gdp = {
     "1939": 743488730
 }
 
-class Cuba:
+class Mexico:
     def __init__(self, year):
         # date variables
         self.date = datetime(int(year), 1, 1)
