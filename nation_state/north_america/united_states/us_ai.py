@@ -1,23 +1,14 @@
 import random
 import time
 from datetime import datetime, timedelta
-from nation_state.north_america.united_states.us_states import illinois, tennessee, pennsylvania, alaska, idaho, \
-    michigan, maryland, florida, arkansas, indiana, new_jersey, s_d, vermont, south_carolina, montana, minnesota, texas, \
-    missouri, north_carolina, west_virginia, new_york, oregon, nevada, delaware, alabama, conneticut, utah, mississppi, \
-    nebraska, virginia, rhode_island, n_m, georgia, california, arizona, colorado, washington, n_d, wyoming, maine, \
-    ohio, hawaii, iowa, kentucky, ok, louisiana, wisconsin, new_hampshire, kansas
-
-business_cycle = ["recession", "depression", "recovery", "expansion"]
+from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
+                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
+                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
+                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
+                       west_virginia, wisconsin, wyoming)
 import os
-"""Storing files into an array in order to access state functions for population and economic growth"""
-states = [alabama, alaska, arizona, arkansas, california, colorado,
-          conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-          kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
-          n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
-          rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
-          west_virginia, wisconsin, wyoming]
-folder = "us_states"
-"""Political Dictionaries"""
+"""Population Dictionaries"""
 presidents = {
     "1910": "William Howard Taft",
     "1914": "Woodrow Wilson",
@@ -36,316 +27,361 @@ vice_presidents = {
     "1936": "John Garner",
     "1939": "Henry Wallace"
 }
-"""Daily decisions"""
-def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
-    time.sleep(3)
-    if us.happiness < 35.45 and not us.improve_happiness:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            us.improve_happiness = us.date + timedelta(days=30)
-            print("The US government has decided to improve its relationship with its citizens")
-            time.sleep(3)
-def political_stats(us):
-    print(f"Your current political stability is {us.stability}%.\n")
-    if us.stability < 45.45 and not us.improve_stability:
-        choice = random.randrange(0, 2)
-        if choice == 0:
-            us.improve_stability = us.date + timedelta(days=30)
-            print("The US government has decided to improve its stability and political capital over 30 days")
-            time.sleep(3)
 
-def economic_stats(us):
-    if us.national_debt > 1000000000 and not us.debt_repayment:
-        choice = random.randrange(0, 2)
-        if choice == 0:
-            us.debt_repayment = us.date + timedelta(days=120)
-            print("The US government has decide to pay back some of its national debt over a 120 day period")
-def daily_decisions(us):
-    political_stats(us)
-    economic_stats(us)
-    social_stats(us)
-
-"""Economic Functions"""
-def economic_state(us):
-    if us.date >= us.economic_change_date:
-        """comparing current date with possible shift in business cycle, based upon 3 month cycle"""
-        if us.past_gdp > us.current_gdp:
-            """comparing past gdp to current gdp"""
-            if us.economic_state == "expansion" or us.economic_state == "recovery":
-                """current state is expansion or recovery"""
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "recession":
-                        print("The US economy has fallen into a recession\n")
-                        time.sleep(3)
-                        us.economic_state = business_cycle[i]
-                        us.economic_change_date = us.date + timedelta(days=240)
-                        if not us.economic_stimulus:
-                            us.economic_stimulus = True
-                        """increasing amount of time to check up on GDP
-                        Time is average amount(5 months cycle)
-                        """
-
-            elif us.economic_state == "recession":
-                """current state is recession and cycle is switching to depression"""
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "depression":
-                        print("The US economy has fallen into a depression")
-                        time.sleep(3)
-                        us.economic_state = business_cycle[i]
-                        us.economic_change_date = us.date + timedelta(days=210)
-                        if not us.economic_stimulus:
-                            us.economic_stimulus = True
-                        """
-                        Since it takes awhile to escape a depression, amount of time on change date is increased
-                        """
-
-        elif us.past_gdp < us.current_gdp:
-            if us.economic_state == "depression" or us.economic_state == "recession":
-                """current state is expansion or recovery"""
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "recovery":
-                        print("The US economy has quickened into a recovery\n")
-                        time.sleep(3)
-                        us.economic_state = business_cycle[i]
-                        us.economic_change_date = us.date + timedelta(days=360)
-                        """increasing amount of time to check up on GDP
-                        Time is average amount(5 months cycle)
-                        """
-
-            elif us.economic_state == "recovery":
-                """current state is recession and cycle is switching to depression"""
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "expansion":
-                        print("The US economy has entered into an expansionary period\n")
-                        time.sleep(3)
-                        us.economic_state = business_cycle[i]
-                        us.economic_change_date = us.date + timedelta(days=120)
-                        """
-                        Since it takes awhile to escape a depression, amount of time on change date is increased
-                        """
-
-def economic_decisions(us):
-    if us.current_year < us.date.year:
-        us.economic_growth = (us.current_gdp - us.past_gdp / ((us.past_gdp + us.current_gdp) / 2)) * 100
-
-        if us.economic_growth <= 1.5:
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                print("The US congress has decided to enact a stimulus to the US economy.\n")
-                time.sleep(3)
-                us.economic_stimulus = True
-
-        elif us.economic_growth > 7.5 and us.economic_stimulus:
-            chance = random.randrange(0, 2)
-            if chance == 1:
-                print("The US congress has decide to remove their economic stimulus, due to very high growth in last years economy.\n")
-                time.sleep(3)
-                us.economic_stimulus = False
-    else:
-        for i in range(0, len(us.states) - 1):
-            """looping through list of state files to access population and economic growth functions
-            each iteration interacts with each state Object
-            """
-            states[i].economic_growth(us.states[i])
-
-def improvements(us):
-    if us.date < us.debt_repayment:
-        payment = round(us.national_debt * round(random.uniform(0.001, 0.009), 5), 2)
-        us.national_debt -= payment
-        us.current_gdp -= payment
-
-    if us.date < us.improve_stability:
-        increase = round(random.uniform(0.01, 1.25), 2)
-        if (increase + us.stability) < 100:
-            us.stability += increase
-
-    if us.date < us.happiness:
-        increase = round(random.uniform(0.01, 1.25), 2)
-        if (increase + us.happiness) < 100:
-            us.happiness += increase
-
-"""Internal Population migration"""
-def population_migrations(us):
-    migrants = 0
-    if us.date > us.migrant_change:
-        for i in range(0, len(us.states) - 1):
-            migrants += round(us.states[i].population * round(random.uniform(0.001, 0.009), 5), 0)
-            """Amount of people from each state that will be leaving the specific state"""
-        for i in range(0, len(us.states) - 1):
-            us.states[i].population += round(migrants * round(random.uniform(0.001, 0.009), 5), 0)
-            """Amount of people migrating to new specific state"""
-
-        us.migrant_change = us.date + timedelta(days=3)
-
-"""establishment of states within US(national and regional files will influence each other)"""
-def establish_economy(us):
-    for i in range(0, len(us.states) - 1):
-        us.current_gdp += us.states[i].current_gdp
-    us.past_gdp = us.current_gdp
-def establish_population(us):
-    """Incorporating state population into overall population
-    doing in a separate function in order to prevent oversaturation
-    """
-    for i in range(0, len(us.states) - 1):
-        us.current_pop += us.states[i].population
-
-def establish_states(us):
-    """us.states.append(iowa.Iowa(us.date.year, us))
-    us.states.append(alabama.Alabama(us.date.year, us))"""
-    folder = "us_states"
-    for file in os.listdir(folder):
-        """Looping through us states folder, will be refined later on"""
-        if file != '__pycache__':
-            if file.removesuffix(".py") == "alabama":
-                us.states.append(alabama.Alabama(us.date.year, us))
-            if file.removesuffix(".py") == "alaska":
-                us.states.append(alaska.Alaska(us.date.year, us))
-            if file.removesuffix(".py") == "arizona":
-                us.states.append(arizona.Arizona(us.date.year, us))
-            if file.removesuffix(".py") == "arkansas":
-                us.states.append(arkansas.Arkansas(us.date.year, us))
-            if file.removesuffix(".py") == "california":
-                us.states.append(california.California(us.date.year, us))
-            if file.removesuffix(".py") == "colorado":
-                us.states.append(colorado.Colorado(us.date.year, us))
-            if file.removesuffix(".py") == "connecticut":
-                us.states.append(conneticut.Conneticut(us.date.year, us))
-            if file.removesuffix(".py") == "delaware":
-                us.states.append(delaware.Delaware(us.date.year, us))
-            if file.removesuffix(".py") == "florida":
-                us.states.append(florida.Florida(us.date.year, us))
-            if file.removesuffix(".py") == "georgia":
-                us.states.append(georgia.Georgia(us.date.year, us))
-            if file.removesuffix(".py") == "hawaii":
-                us.states.append(hawaii.Hawaii(us.date.year, us))
-            if file.removesuffix(".py") == "idaho":
-                us.states.append(idaho.Idaho(us.date.year, us))
-            if file.removesuffix(".py") == "illinois":
-                us.states.append(illinois.Illinois(us.date.year, us))
-            if file.removesuffix(".py") == "indiana":
-                us.states.append(indiana.Indiana(us.date.year, us))
-            if file.removesuffix(".py") == "iowa":
-                us.states.append(iowa.Iowa(us.date.year, us))
-            if file.removesuffix(".py") == "kansas":
-                us.states.append(kansas.Kansas(us.date.year, us))
-            if file.removesuffix(".py") == "kentucky":
-                us.states.append(kentucky.Kentucky(us.date.year, us))
-            if file.removesuffix(".py") == "louisiana":
-                us.states.append(louisiana.Louisiana(us.date.year, us))
-            if file.removesuffix(".py") == "maine":
-                us.states.append(maine.Maine(us.date.year, us))
-            if file.removesuffix(".py") == "maryland":
-                us.states.append(maryland.Maryland(us.date.year, us))
-            if file.removesuffix(".py") == "michigan":
-                us.states.append(michigan.Michigan(us.date.year, us))
-            if file.removesuffix(".py") == "mississippi":
-                us.states.append(mississppi.Mississippi(us.date.year, us))
-            if file.removesuffix(".py") == "missouri":
-                us.states.append(missouri.Missouri(us.date.year, us))
-            if file.removesuffix(".py") == "montana":
-                us.states.append(montana.Montana(us.date.year, us))
-            if file.removesuffix(".py") == "n_d":
-                us.states.append(n_d.NorthDakota(us.date.year, us))
-            if file.removesuffix(".py") == "n_m":
-                us.states.append(n_m.NewMexico(us.date.year, us))
-            if file.removesuffix(".py") == "nebraska":
-                us.states.append(nebraska.Nebraska(us.date.year, us))
-            if file.removesuffix(".py") == "nebraska":
-                us.states.append(nevada.Nevada(us.date.year, us))
-            if file.removesuffix(".py") == "new_hampshire":
-                us.states.append(new_hampshire.NewHampshire(us.date.year, us))
-            if file.removesuffix(".py") == "new_jersey":
-                us.states.append(new_jersey.NewJersey(us.date.year, us))
-            if file.removesuffix(".py") == "new_york":
-                us.states.append(new_york.NewYork(us.date.year, us))
-            if file.removesuffix(".py") == "north_carolina":
-                us.states.append(north_carolina.NorthCarolina(us.date.year, us))
-            if file.removesuffix(".py") == "ohio":
-                us.states.append(ohio.Ohio(us.date.year, us))
-            if file.removesuffix(".py") == "ok":
-                us.states.append(ok.Oklahoma(us.date.year, us))
-            if file.removesuffix(".py") == "oregon":
-                us.states.append(oregon.Oregon(us.date.year, us))
-            if file.removesuffix(".py") == "pennsylvania":
-                us.states.append(pennsylvania.Pennsylvania(us.date.year, us))
-            if file.removesuffix(".py") == "rhode_island":
-                us.states.append(rhode_island.RhodeIsland(us.date.year, us))
-            if file.removesuffix(".py") == "s_d":
-                us.states.append(s_d.SouthDakota(us.date.year, us))
-            if file.removesuffix(".py") == "south_carolina":
-                us.states.append(south_carolina.SouthCarolina(us.date.year, us))
-            if file.removesuffix(".py") == "tennessee":
-                us.states.append(tennessee.Tennessee(us.date.year, us))
-            if file.removesuffix(".py") == "texas":
-                us.states.append(texas.Texas(us.date.year, us))
-            if file.removesuffix(".py") == "utah":
-                us.states.append(utah.Utah(us.date.year, us))
-            if file.removesuffix(".py") == "vermont":
-                us.states.append(vermont.Vermont(us.date.year, us))
-            if file.removesuffix(".py") == "virginia":
-                us.states.append(virginia.Virginia(us.date.year, us))
-            if file.removesuffix(".py") == "washington":
-                us.states.append(washington.Washington(us.date.year, us))
-            if file.removesuffix(".py") == "west_virginia":
-                us.states.append(west_virginia.WestVirginia(us.date.year, us))
-            if file.removesuffix(".py") == "wisconsin":
-                us.states.append(wisconsin.Wisconsin(us.date.year, us))
-            if file.removesuffix(".py") == "wyoming":
-                us.states.append(wyoming.Wyoming(us.date.year, us))
-    # establishment of national population
-    establish_population(us)
-    establish_economy(us)
-def manual_game(us):
-    establish_states(us)
-    print(us.current_pop)
-    print(us.current_gdp)
-    while us.current_pop > 1000000:
-
-        for i in range(0, len(us.states) - 1):
-            """looping through list of state files to access population and economic growth functions
-            each iteration interacts with each state Object
-            """
-            states[i].economic_growth(us.states[i])
-            states[i].population_growth(us.states[i])
-        population_migrations(us)
-        daily_decisions(us)
-        us.date += timedelta(days=3)
-
-class UnitedStatesAI:
+class UnitedStates:
     def __init__(self, year):
-        # regional variables
-        self.states = []
-        # population variables
-        self.current_pop = 0
+        # date variables
+        self.date = datetime(int(year), 1, 1)
+        self.improve_stability = self.date
+        self.improve_happiness = self.date
+        self.debt_repayment = self.date
+        self.check_stats = self.date + timedelta(days=3)
+        self.economic_change_date = self.date + timedelta(days=60)
+        # amount of days that is given to the economy for it to either shrink or grow before being checked
+        self.current_year = self.date.year
+        # social variables
+        """population"""
+        self.population = 0
         self.births = 0
         self.deaths = 0
-        self.happiness = 96.56
-        # political variables
-        """Leaders of US"""
-        self.president = presidents[year]
-        self.vice_president = vice_presidents[year]
-        """Political parties of US"""
-        self.stability = 95.00
-        # economic variables
-        #self.economic_state = business_cycle[0]
+        self.birth_control = False
+        self.birth_enhancer = False
+        """happiness"""
+        self.happiness = 98.56
+        # political
+        self.leader = presidents[year]
+        """Stability"""
+        self.stability = 95.56
+        self.states = []
+        # economic
+        self.national_debt = 0
         self.current_gdp = 0
         self.past_gdp = 0
-        """holds current year of gdp(used for comparing with future GDP
-        to determine GDP growth)
-        """
-        self.national_debt = 0
+        self.e_s = "recovery"
+        """Components of GDP"""
+        self.consumer_spending = 0
+        self.investment = 0
+        self.government_spending = 0
+        self.exports = 0
+        self.imports = 0
         """Economic Stimulus components"""
         self.economic_stimulus = False
-        # time variables
-        self.date = datetime(int(year), 1, 1)
-        self.economic_change_date = self.date + timedelta(days=60)
-        self.current_year = self.date.year
-        """Internal redistribution of citizens"""
-        self.migrant_change = self.date + timedelta(days=3)
-        """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
-        """Ditto to improve stability"""
-        self.improve_happiness = None
-        """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        # military
+        # other
+        self.is_ai = True
+    # population functions
+    def population_change(self):
+        """instead of having the headache of calling both national objects separately, why not combine them"""
+        if self.current_year < self.date.year:
+            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+
+            if pop_change < 2.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to promote population growth?: ")
+                not_answered = False
+
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_enhancer = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
+            elif pop_change > 12.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to slow your population growth?: ")
+                not_answered = False
+
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_control = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
+        else:
+            if self.birth_enhancer:
+                births = random.randrange(20, 50)
+                deaths = random.randrange(25, 45)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            if self.birth_control:
+                births = random.randrange(10, 30)
+                deaths = random.randrange(25, 35)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            else:
+                births = random.randrange(15, 35)
+                deaths = random.randrange(20, 30)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+    # establishing internal states
+    def establish_states(self):
+        folder = "us_states"
+        for file in os.listdir(folder):
+            """Looping through us states folder, will be refined later on"""
+            if file != '__pycache__':
+                if file.removesuffix(".py") == "alabama":
+                    self.states.append(alabama.Alabama(self.date.year, self))
+                if file.removesuffix(".py") == "alaska":
+                    self.states.append(alaska.Alaska(self.date.year, self))
+                if file.removesuffix(".py") == "arizona":
+                    self.states.append(arizona.Arizona(self.date.year, self))
+                if file.removesuffix(".py") == "arkansas":
+                    self.states.append(arkansas.Arkansas(self.date.year, self))
+                if file.removesuffix(".py") == "california":
+                    self.states.append(california.California(self.date.year, self))
+                if file.removesuffix(".py") == "colorado":
+                    self.states.append(colorado.Colorado(self.date.year, self))
+                if file.removesuffix(".py") == "connecticut":
+                    self.states.append(conneticut.Conneticut(self.date.year, self))
+                if file.removesuffix(".py") == "delaware":
+                    self.states.append(delaware.Delaware(self.date.year, self))
+                if file.removesuffix(".py") == "florida":
+                    self.states.append(florida.Florida(self.date.year, self))
+                if file.removesuffix(".py") == "georgia":
+                    self.states.append(georgia.Georgia(self.date.year, self))
+                if file.removesuffix(".py") == "hawaii":
+                    self.states.append(hawaii.Hawaii(self.date.year, self))
+                if file.removesuffix(".py") == "idaho":
+                    self.states.append(idaho.Idaho(self.date.year, self))
+                if file.removesuffix(".py") == "illinois":
+                    self.states.append(illinois.Illinois(self.date.year, self))
+                if file.removesuffix(".py") == "indiana":
+                    self.states.append(indiana.Indiana(self.date.year, self))
+                if file.removesuffix(".py") == "iowa":
+                    self.states.append(iowa.Iowa(self.date.year, self))
+                if file.removesuffix(".py") == "kansas":
+                    self.states.append(kansas.Kansas(self.date.year, self))
+                if file.removesuffix(".py") == "kentucky":
+                    self.states.append(kentucky.Kentucky(self.date.year, self))
+                if file.removesuffix(".py") == "louisiana":
+                    self.states.append(louisiana.Louisiana(self.date.year, self))
+                if file.removesuffix(".py") == "maine":
+                    self.states.append(maine.Maine(self.date.year, self))
+                if file.removesuffix(".py") == "maryland":
+                    self.states.append(maryland.Maryland(self.date.year, self))
+                if file.removesuffix(".py") == "michigan":
+                    self.states.append(michigan.Michigan(self.date.year, self))
+                if file.removesuffix(".py") == "mississippi":
+                    self.states.append(mississppi.Mississippi(self.date.year, self))
+                if file.removesuffix(".py") == "missouri":
+                    self.states.append(missouri.Missouri(self.date.year, self))
+                if file.removesuffix(".py") == "montana":
+                    self.states.append(montana.Montana(self.date.year, self))
+                if file.removesuffix(".py") == "n_d":
+                    self.states.append(n_d.NorthDakota(self.date.year, self))
+                if file.removesuffix(".py") == "n_m":
+                    self.states.append(n_m.NewMexico(self.date.year, self))
+                if file.removesuffix(".py") == "nebraska":
+                    self.states.append(nebraska.Nebraska(self.date.year, self))
+                if file.removesuffix(".py") == "nebraska":
+                    self.states.append(nevada.Nevada(self.date.year, self))
+                if file.removesuffix(".py") == "new_hampshire":
+                    self.states.append(new_hampshire.NewHampshire(self.date.year, self))
+                if file.removesuffix(".py") == "new_jersey":
+                    self.states.append(new_jersey.NewJersey(self.date.year, self))
+                if file.removesuffix(".py") == "new_york":
+                    self.states.append(new_york.NewYork(self.date.year, self))
+                if file.removesuffix(".py") == "north_carolina":
+                    self.states.append(north_carolina.NorthCarolina(self.date.year, self))
+                if file.removesuffix(".py") == "ohio":
+                    self.states.append(ohio.Ohio(self.date.year, self))
+                if file.removesuffix(".py") == "ok":
+                    self.states.append(ok.Oklahoma(self.date.year, self))
+                if file.removesuffix(".py") == "oregon":
+                    self.states.append(oregon.Oregon(self.date.year, self))
+                if file.removesuffix(".py") == "pennsylvania":
+                    self.states.append(pennsylvania.Pennsylvania(self.date.year, self))
+                if file.removesuffix(".py") == "rhode_island":
+                    self.states.append(rhode_island.RhodeIsland(self.date.year, self))
+                if file.removesuffix(".py") == "s_d":
+                    self.states.append(s_d.SouthDakota(self.date.year, self))
+                if file.removesuffix(".py") == "south_carolina":
+                    self.states.append(south_carolina.SouthCarolina(self.date.year, self))
+                if file.removesuffix(".py") == "tennessee":
+                    self.states.append(tennessee.Tennessee(self.date.year, self))
+                if file.removesuffix(".py") == "texas":
+                    self.states.append(texas.Texas(self.date.year, self))
+                if file.removesuffix(".py") == "utah":
+                    self.states.append(utah.Utah(self.date.year, self))
+                if file.removesuffix(".py") == "vermont":
+                    self.states.append(vermont.Vermont(self.date.year, self))
+                if file.removesuffix(".py") == "virginia":
+                    self.states.append(virginia.Virginia(self.date.year, self))
+                if file.removesuffix(".py") == "washington":
+                    self.states.append(washington.Washington(self.date.year, self))
+                if file.removesuffix(".py") == "west_virginia":
+                    self.states.append(west_virginia.WestVirginia(self.date.year, self))
+                if file.removesuffix(".py") == "wisconsin":
+                    self.states.append(wisconsin.Wisconsin(self.date.year, self))
+                if file.removesuffix(".py") == "wyoming":
+                    self.states.append(wyoming.Wyoming(self.date.year, self))
+
+        self.establish_economy_population()
+    def establish_economy_population(self):
+        population = 0
+        for i in range(0, len(self.states) - 1):
+            self.current_gdp += self.states[i].current_gdp
+            self.population += self.states[i].population
+        #print(population)
+
+
+    # economic functions
+    def check_economic_state(self):
+        """function dealing with primary economic decisions of canadian parliament"""
+        if self.date > self.economic_change_date:
+            """instead of comparing an entire year, break the year up into sections"""
+            if self.current_gdp > self.past_gdp:
+                if self.e_s.lower() == "recovery":
+                    self.e_s = "expansion"
+                    print("Your economy is now in an expansionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                    self.e_s = "recovery"
+                    print("Your economy is now in recovery period.\n")
+                    time.sleep(3)
+
+            elif self.current_gdp < self.past_gdp:
+                if self.e_s.lower() == "recession":
+                    self.e_s = "depression"
+                    print("Your economy is now in a recessionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                    self.e_s = "recession"
+                    print("Your economy is now in a depression period.\n")
+                    time.sleep(3)
+        else:
+            if self.e_s == "recession":
+                self.recession()
+
+            elif self.e_s == "recovery":
+                self.recovery()
+
+            elif self.e_s == "depression":
+                self.depression()
+
+            elif self.e_s == "expansion":
+                self.expansion()
+    def recession(self):
+        if self.economic_stimulus:
+
+            self.consumer_spending = -round(random.uniform(10, 150), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(50, 350), 2)
+            self.exports = round(random.uniform(10, 45), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 700), 2)
+            self.national_debt += round((-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 30), 2)
+            self.imports = round(random.uniform(10, 105), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                    (self.exports - self.imports))
+    def recovery(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 450), 2)
+            self.government_spending = round(random.uniform(100, 200), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 700), 2)
+            self.exports = round(random.uniform(10, 100), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 350), 2)
+            self.government_spending = round(random.uniform(100, 350), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 75), 2)
+            self.imports = round(random.uniform(10, 58), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def expansion(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 2000), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 400), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 350), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def depression(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 15), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 100), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+    # stability functions
+
+def main():
+    us = UnitedStates('1914')
+    us.establish_states()
+    print(f"US population {us.population}, US GDP: {us.current_gdp}")
+
+if __name__ == '__main__':
+    main()

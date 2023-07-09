@@ -35,8 +35,6 @@ class Mississippi:
         self.population = population[str(year)]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
         """happiness"""
         self.happiness = 98.56
         # political
@@ -64,48 +62,18 @@ class Mississippi:
             pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
             if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                pass
             elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                pass
         else:
-            if self.birth_enhancer:
+            if self.master_nation.birth_enhancer:
                 births = random.randrange(20, 50)
                 deaths = random.randrange(25, 45)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
-            if self.birth_control:
+            if self.master_nation.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
                 self.population = (births - deaths)
@@ -145,16 +113,16 @@ class Mississippi:
                     print("Your economy is now in a depression period.\n")
                     time.sleep(3)
         else:
-            if self.e_s == "recession":
+            if self.master_nation.e_s == "recession":
                 self.recession()
 
-            elif self.e_s == "recovery":
+            elif self.master_nation.e_s == "recovery":
                 self.recovery()
 
-            elif self.e_s == "depression":
+            elif self.master_nation.e_s == "depression":
                 self.depression()
 
-            elif self.e_s == "expansion":
+            elif self.master_nation.e_s == "expansion":
                 self.expansion()
     def recession(self):
         if self.economic_stimulus:

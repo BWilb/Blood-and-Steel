@@ -1,5 +1,6 @@
 import random
-from datetime import datetime
+import time
+from datetime import datetime, timedelta
 
 population = {
     "1910": 1224241,
@@ -19,312 +20,241 @@ gdp = {
     "1939": 4506840,
 }
 
-def recovery(a_l):
-    if a_l.master.economic_stimulus:
-        a_l.consumer_spending = round(random.uniform(10, 400), 2)
-        a_l.government_spending = round(random.uniform(500, 2000), 2)
-        a_l.debt += round(
-            (a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = round(random.uniform(1000, 4500), 2)
-        a_l.exports = round(random.uniform(600, 1000), 2)
-        a_l.imports = round(random.uniform(600, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                   (a_l.exports - a_l.imports))
-
-    else:
-        a_l.consumer_spending = round(random.uniform(10, 400), 2)
-        a_l.government_spending = round(random.uniform(3000, 6000), 2)
-        a_l.debt += round(
-            (a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = round(random.uniform(1000, 4000), 2)
-        a_l.exports = round(random.uniform(600, 900), 2)
-        a_l.imports = round(random.uniform(600, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-def recession(a_l):
-    if a_l.master.economic_stimulus:
-        a_l.consumer_spending = -round(random.uniform(10, 200), 2)
-        a_l.government_spending = round(random.uniform(2000, 3500), 2)
-        a_l.debt += round(
-            (-a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = -round(random.uniform(200, 1200), 2)
-        a_l.exports = round(random.uniform(600, 900), 2)
-        a_l.imports = round(random.uniform(700, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                   (a_l.exports - a_l.imports))
-    else:
-        a_l.consumer_spending = -round(random.uniform(10, 400), 2)
-        a_l.government_spending = round(random.uniform(4000, 8000), 2)
-        a_l.debt += round(
-            (-a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = -round(random.uniform(1000, 4000), 2)
-        a_l.exports = round(random.uniform(600, 900), 2)
-        a_l.imports = round(random.uniform(700, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-def depression(a_l):
-    if a_l.master.economic_stimulus:
-
-        a_l.consumer_spending = -round(random.uniform(200, 1200), 2)
-        a_l.government_spending = round(random.uniform(8000, 10000), 2)
-        a_l.debt += round(
-            (-a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = -round(random.uniform(1500, 3500), 2)
-        a_l.exports = round(random.uniform(600, 1500), 2)
-        a_l.imports = round(random.uniform(700, 1800), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-    else:
-        a_l.consumer_spending = -round(random.uniform(200, 1600), 2)
-        a_l.government_spending = round(random.uniform(10000, 12000), 2)
-        a_l.debt += round(
-            (-a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = -round(random.uniform(2000, 4000), 2)
-        a_l.exports = round(random.uniform(600, 900), 2)
-        a_l.imports = round(random.uniform(700, 1800), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-
-def expansion(a_l):
-    if a_l.master.economic_stimulus:
-        a_l.consumer_spending = round(random.uniform(200, 3200), 2)
-        a_l.government_spending = round(random.uniform(2000, 5000), 2)
-        a_l.debt += round(
-            (a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = round(random.uniform(2000, 6000), 2)
-        a_l.exports = round(random.uniform(600, 1200), 2)
-        a_l.imports = round(random.uniform(600, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-    else:
-        a_l.consumer_spending = round(random.uniform(200, 1600), 2)
-        a_l.government_spending = round(random.uniform(5000, 8000), 2)
-        a_l.debt += round(
-            (a_l.consumer_spending + a_l.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-        a_l.investment = round(random.uniform(2000, 4000), 2)
-        a_l.exports = round(random.uniform(600, 1200), 2)
-        a_l.imports = round(random.uniform(600, 900), 2)
-
-        a_l.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-        a_l.master.current_gdp += (a_l.consumer_spending + a_l.investment + a_l.government_spending +
-                                (a_l.exports - a_l.imports))
-
-
-def economic_growth(a_l):
-    """function determines which type of economic growth function code takes"""
-    if a_l.current_date > a_l.economic_change_date:
-        if a_l.current_gdp > a_l.past_gdp:
-
-            if a_l.economic_state == "recovery":
-                a_l.economic_state = "expansion"
-
-            elif a_l.economic_state == "recession":
-                a_l.economic_state = "recovery"
-
-            elif a_l.economic_state == "depression":
-                a_l.economic_state = "recession"
-
-        elif a_l.current_gdp < a_l.past_gdp:
-
-            if a_l.economic_state == "recovery":
-                a_l.economic_state = "recession"
-
-                choice = input(
-                    "The administrative region of Saxony is requesting that you pass an economic stimulus.\n"
-                    "The Saxon economy is starting to fail. Will you do this?: ")
-
-                if choice.lower() == "yes" or choice.lower() == 'y':
-                    a_l.master.economic_stimulus = True
-
-                else:
-                    chance = random.randrange(0, 11)
-                    if chance % 6 == 0:
-                        """27.27% chance that Prussian officials officiate a stimulus anyway"""
-                        print("Saxon officials decided to go around your back an establish a stimulus anyway.\n")
-                        a_l.master.economic_stimulus = True
-
-            elif a_l.economic_state == "recession":
-                a_l.economic_state = "depression"
-
-                choice = input(
-                    "The administrative region of Saxony is requesting that you pass an economic stimulus.\n"
-                    "The Saxon economy has fallen into a depression. Will you do this?: ")
-
-                if choice.lower() == "yes" or choice.lower() == 'y':
-                    a_l.master.economic_stimulus = True
-
-                else:
-                    chance = random.randrange(0, 11)
-                    if chance % 2 == 0:
-                        """54.54% chance that Prussian officials officiate a stimulus anyway"""
-                        print("Saxon officials decided to go around your back an establish a stimulus anyway.\n")
-                        a_l.master.economic_stimulus = True
-
-            elif a_l.economic_state == "expansion":
-                a_l.economic_state = "recovery"
-
-    else:
-        if a_l.economic_state == "recovery":
-            recovery(a_l)
-
-        if a_l.economic_state == "depression":
-            depression(a_l)
-
-        if a_l.economic_state == "recession":
-            recession(a_l)
-
-        if a_l.economic_state == "expansion":
-            expansion(a_l)
-
-
-"""Population growth"""
-def population_growth(a_l):
-    if a_l.master.subsidize_pop_growth:
-        births = random.randrange(3, 10)
-        deaths = random.randrange(5, 8)
-        a_l.current_pop += births
-        a_l.master.current_pop += (births - deaths)
-        a_l.master.births += births
-        a_l.master.deaths += deaths
-        if a_l.master.date.year < 1933:
-
-            for i in range(0, (births - deaths)):
-                """assigning political parties to each birth"""
-                chance = random.randrange(0, 3)
-                if chance == 0:
-                    a_l.master.center_party += 1
-
-                elif chance == 1:
-                    a_l.master.progressives += 1
-
-                elif chance == 2:
-                    a_l.master.free_conservatives += 1
-
-        else:
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                """Chance that the births go to the Nazi party"""
-                a_l.master.national_socialists += 1
-
-            elif chance == 1:
-                """Chance that the births go to the rebels"""
-                a_l.master.rebels += 1
-
-    elif a_l.master.subsidize_pop_slow:
-        births = random.randrange(2, 7)
-        deaths = random.randrange(5, 8)
-        a_l.current_pop += births
-        a_l.master.current_pop += (births - deaths)
-        a_l.master.births += births
-        a_l.master.deaths += deaths
-
-        if a_l.master.date.year < 1933:
-
-            for i in range(0, (births - deaths)):
-                """assigning political parties to each birth"""
-                chance = random.randrange(0, 3)
-                if chance == 0:
-                    a_l.master.center_party += 1
-
-                elif chance == 1:
-                    a_l.master.progressives += 1
-
-                elif chance == 2:
-                    a_l.master.free_conservatives += 1
-
-        else:
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                """Chance that the births go to the Nazi party"""
-                a_l.master.national_socialists += 1
-
-            elif chance == 1:
-                """Chance that the births go to the rebels"""
-                a_l.master.rebels += 1
-
-    else:
-        births = random.randrange(3, 9)
-        deaths = random.randrange(3, 9)
-        a_l.current_pop += births
-        a_l.master.current_pop += (births - deaths)
-        a_l.master.births += births
-        a_l.master.deaths += deaths
-
-        if a_l.master.date.year < 1933:
-
-            for i in range(0, (births - deaths)):
-                """assigning political parties to each birth"""
-                chance = random.randrange(0, 3)
-                if chance == 0:
-                    a_l.master.center_party += 1
-
-                elif chance == 1:
-                    a_l.master.progressives += 1
-
-                elif chance == 2:
-                    a_l.master.free_conservatives += 1
-
-        else:
-            chance = random.randrange(0, 2)
-            if chance == 0:
-                """Chance that the births go to the Nazi party"""
-                a_l.master.national_socialists += 1
-
-            elif chance == 1:
-                """Chance that the births go to the rebels"""
-                a_l.master.rebels += 1
-
 class Saxony:
-    def __init__(self, year, master_nation):
-        self.current_date = datetime(year, 1, 1)
-        # administrative variables
-        self.name = "Saxony"
+    def __init__(self, year, germany):
+        # date variables
+        self.date = datetime(int(year), 1, 1)
+        self.improve_stability = self.date
+        self.improve_happiness = self.date
+        self.debt_repayment = self.date
+        self.check_stats = self.date + timedelta(days=3)
+        self.economic_change_date = self.date + timedelta(days=60)
+        # amount of days that is given to the economy for it to either shrink or grow before being checked
+        self.current_year = self.date.year
         # social variables
-        self.current_pop = 0
+        """population"""
+        self.population = population[str(year)]
+        self.births = 0
+        self.deaths = 0
+        self.birth_control = False
+        self.birth_enhancer = False
+        """happiness"""
         self.happiness = 98.56
-        # economic variables
-        self.government_spending = 0
-        self.investment = 0
+        # political
+        """Stability"""
+        self.stability = 95.56
+        # economic
+        self.national_debt = 0
+        self.current_gdp = gdp[str(year)]
+        self.past_gdp = 0
+        """Components of GDP"""
         self.consumer_spending = 0
+        self.investment = 0
+        self.government_spending = 0
         self.exports = 0
         self.imports = 0
+        """Economic Stimulus components"""
         self.economic_stimulus = False
-        self.economic_state = "recovery"
-        # political variables
-        self.stability = 76
-        self.prussian_tolerance = 87.67
-        self.master = master_nation
+        # military
+        # other
+        self.master_nation = germany
+
+    # population functions
+    def population_change(self):
+        """instead of having the headache of calling both national objects separately, why not combine them"""
+        if self.current_year < self.date.year:
+            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+
+            if pop_change < 2.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to promote population growth?: ")
+                not_answered = False
+
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_enhancer = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
+
+            elif pop_change > 12.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to slow your population growth?: ")
+                not_answered = False
+
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_control = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
+        else:
+            if self.birth_enhancer:
+                births = random.randrange(20, 50)
+                deaths = random.randrange(25, 45)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            if self.birth_control:
+                births = random.randrange(10, 30)
+                deaths = random.randrange(25, 35)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            else:
+                births = random.randrange(15, 35)
+                deaths = random.randrange(20, 30)
+                self.population = (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+    # economic functions
+    def check_economic_state(self):
+        """function dealing with primary economic decisions of canadian parliament"""
+        if self.date > self.economic_change_date:
+            """instead of comparing an entire year, break the year up into sections"""
+            if self.current_gdp > self.past_gdp:
+                if self.e_s.lower() == "recovery":
+                    self.e_s = "expansion"
+                    print("Your economy is now in an expansionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                    self.e_s = "recovery"
+                    print("Your economy is now in recovery period.\n")
+                    time.sleep(3)
+
+            elif self.current_gdp < self.past_gdp:
+                if self.e_s.lower() == "recession":
+                    self.e_s = "depression"
+                    print("Your economy is now in a recessionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                    self.e_s = "recession"
+                    print("Your economy is now in a depression period.\n")
+                    time.sleep(3)
+        else:
+            if self.e_s == "recession":
+                self.recession()
+
+            elif self.e_s == "recovery":
+                self.recovery()
+
+            elif self.e_s == "depression":
+                self.depression()
+
+            elif self.e_s == "expansion":
+                self.expansion()
+
+    def recession(self):
+        if self.economic_stimulus:
+
+            self.consumer_spending = -round(random.uniform(10, 150), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(50, 350), 2)
+            self.exports = round(random.uniform(10, 45), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 700), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 30), 2)
+            self.imports = round(random.uniform(10, 105), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def recovery(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 450), 2)
+            self.government_spending = round(random.uniform(100, 200), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 700), 2)
+            self.exports = round(random.uniform(10, 100), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 350), 2)
+            self.government_spending = round(random.uniform(100, 350), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 75), 2)
+            self.imports = round(random.uniform(10, 58), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def expansion(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 2000), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 400), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 350), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def depression(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 15), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 100), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
