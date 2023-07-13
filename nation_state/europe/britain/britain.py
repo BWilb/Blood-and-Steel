@@ -74,7 +74,7 @@ class Britain:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
+        self.leader = pm[year]
         """Stability"""
         self.stability = 95.56
         # economic
