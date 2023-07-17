@@ -12,7 +12,8 @@ from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        west_virginia, wisconsin, wyoming)
 from nation_state.europe.britain import britain_ai
 from nation_state.north_america.canada import canada_ai
-from relations import brit_relations, canada_relations
+from nation_state.north_america.mexico import mexico_ai
+from relations import brit_relations, canada_relations, mexico_relations
 
 import os
 
@@ -84,10 +85,16 @@ class UnitedStates:
         self.alliance = ""
         self.europe_nations = {}
         # north america
+        """canada"""
         self.canada_relations = 55.65
         self.guarantee_canada = False
         self.embargo_canada = False
-        self.nationals_dealt = False
+        self.canada_nationals_dealt = False
+        """mexico"""
+        self.mexico_relations = 55.65
+        self.guarantee_mexico = False
+        self.embargo_mexico = False
+        self.mexico_nationals_dealt = False
         # europe
         """british"""
         self.brit_relations = 73.45
@@ -326,7 +333,7 @@ class UnitedStates:
 
     # stability functions
     # stats functions
-    def stats(self, british, canada, globe1):
+    def stats(self, british, canada, mexico, globe1):
         # asking user if they would like to see a specific area of their nation's stats
         choice = input("Would you like to view your domestic or foreign relations stats?: ")
         if choice.lower() == "domestic":
@@ -349,7 +356,7 @@ class UnitedStates:
                     print("please answer more carefully.\n")
                     time.sleep(1.25)
         elif choice.lower() == "foreign":
-            self.international_stats(british, canada, globe1)
+            self.international_stats(british, canada, mexico, globe1)
 
     def political_stats(self):
         print(f"Your current president is {self.leader}.\n")
@@ -388,7 +395,7 @@ class UnitedStates:
         print(f"US citizens are {self.happiness}% content with the current system.\n")
         time.sleep(1.5)
 
-    def international_stats(self, british_ai, canada, globe1):
+    def international_stats(self, british_ai, canada, mexico, globe1):
         """Checking of foreign relations"""
         print(f"\nCurrent global tension {globe1.tension}%\n")
         done = True
@@ -431,12 +438,16 @@ class UnitedStates:
             elif region_choice.lower() == "north american":
                 print(f"Canadian relations: {self.canada_relations}.\n")
                 time.sleep(1.25)
+                print(f"Mexican relations: {self.mexico_relations}.\n")
+                time.sleep(1.25)
                 choice = input(
                     "would you like to manipulate your relations with one of those nations?(enter quit to escape):")
                 if choice.lower() == "yes" or choice.lower() == 'y':
                     nation_choice = input("which North American nation would you like to choose?: ")
                     if nation_choice.lower() == "canada":
                         canada_relations.canadian_relations(self, canada, globe1)
+                    elif nation_choice.lower() == "mexico":
+                        mexico_relations.mexican_relations(self, mexico, globe1)
             elif region_choice.lower() == "quit":
                 done = False
             else:
@@ -448,11 +459,12 @@ def main():
     us.establish_states()
     british_ai = britain_ai.Britain("1914")
     canadian_ai = canada_ai.Canada("1914")
+    mexican_ai = mexico_ai.MexicoAI("1914")
     while us.population > 3000000:
         us.check_economic_state()
         us.population_change()
         print(us.births, us.deaths, us.population)
-        us.stats(british_ai, canadian_ai, globe1)
+        us.stats(british_ai, canadian_ai, mexican_ai, globe1)
         time.sleep(3)
 
 if __name__ == '__main__':
