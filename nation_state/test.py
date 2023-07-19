@@ -1,6 +1,8 @@
-sum = 0
-for i in range(0, 45):
-    if i % 2 == 0:
-        sum += 1
-
-print(sum/45)
+import sys
+import time
+def slower(s):
+    for c in s:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.19)
+slower("hello world")

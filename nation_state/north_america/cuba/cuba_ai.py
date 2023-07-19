@@ -4,37 +4,37 @@ from datetime import datetime, timedelta
 
 """Population Dictionaries"""
 population = {
-    "1910": 14702456,
-    "1914": 14742623,
-    "1918": 14782786,
-    "1932": 17635255,
-    "1936": 18971701,
-    "1939": 19961661
+    "1910": 2286981,
+    "1914": 2618301,
+    "1918": 2916220,
+    "1932": 4147085,
+    "1936": 4409675,
+    "1939": 4620766
 }
 
 """Political Dictionaries"""
 leaders = {
-    "1910": "Porfirio Diaz",
-    "1914": "Victoriano Huerta",
-    "1918": "Venustiano Carranza",
-    "1932": "Abelardo Rodriguez",
-    "1936": "Lázaro Cárdenas",
-    "1939": "Lázaro Cárdenas"
+    "1910": "José Miguel Gómez",
+    "1914": "Mario García Menocal",
+    "1918": "Mario García Menocal",
+    "1932": "Gerardo Machado",
+    "1936": "Federico Laredo Brú",
+    "1939": "Federico Laredo Brú"
 }
 
 gdp = {
-    "1910": 500000000,
-    "1914": 659939450,
-    "1918": 733488730,
-    "1932": 723488730,
-    "1936": 723488730,
-    "1939": 743488730
+    "1910": 75000000,
+    "1914": 76346343,
+    "1918": 77648543,
+    "1932": 76573434,
+    "1936": 77346224,
+    "1939": 78347343
 }
 
-class MexicoAI:
+class CubaAI:
     def __init__(self, year):
         self.region = "north america"
-        self.name = "Mexico"
+        self.name = "Cuba"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -71,9 +71,8 @@ class MexicoAI:
         self.economic_stimulus = False
         # military
         # international
-        # north american relations
-        """American"""
-        self.us_relations = 45.45
+        self.alliance = ""
+        self.us_relations = 87.6
         # other
     # population functions
     def population_change(self):
@@ -86,26 +85,29 @@ class MexicoAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Mexican government has initiated a program for increasing births.\n")
+                    print("The Cuban government has installed a plan to increase births.\n")
                     time.sleep(1.25)
+
                     self.birth_enhancer = True
                     if self.birth_control:
                         self.birth_control = False
+
 
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Mexican government has initiated a program for decreasing births.\n")
+                    print("The Cuban government has installed a plan to decrease births.\n")
                     time.sleep(1.25)
+
                     self.birth_control = True
                     if self.birth_enhancer:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 50)
-                deaths = random.randrange(25, 45)
+                births = random.randrange(20, 40)
+                deaths = random.randrange(11, 30)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -118,8 +120,8 @@ class MexicoAI:
                 self.deaths += deaths
 
             else:
-                births = random.randrange(15, 35)
-                deaths = random.randrange(20, 30)
+                births = random.randrange(7, 15)
+                deaths = random.randrange(4, 10)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -131,23 +133,23 @@ class MexicoAI:
             if self.current_gdp > self.past_gdp:
                 if self.e_s.lower() == "recovery":
                     self.e_s = "expansion"
-                    print("The Mexican economy is now in an expansionary period.\n")
+                    print("Your economy is now in an expansionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
                     self.e_s = "recovery"
-                    print("The Mexican economy is now in recovery period.\n")
+                    print("Your economy is now in recovery period.\n")
                     time.sleep(3)
 
             elif self.current_gdp < self.past_gdp:
                 if self.e_s.lower() == "recession":
                     self.e_s = "depression"
-                    print("The Mexican economy is now in a recessionary period.\n")
+                    print("Your economy is now in a recessionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
                     self.e_s = "recession"
-                    print("The Mexican economy is now in a depression period.\n")
+                    print("Your economy is now in a depression period.\n")
                     time.sleep(3)
         else:
             if self.e_s == "recession":

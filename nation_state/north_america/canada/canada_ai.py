@@ -34,6 +34,8 @@ gdp = {
 
 class Canada:
     def __init__(self, year):
+        self.region = "north america"
+        self.name = "Canada"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
