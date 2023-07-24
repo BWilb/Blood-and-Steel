@@ -1,6 +1,10 @@
 import random
+import sys
 import time
 from datetime import datetime, timedelta
+
+import pypyodbc
+
 monarchs = {
     """Dictionary for english monarchs
     Leader selection will be in sync with time frame selection
@@ -56,7 +60,7 @@ gdp = {
 class Britain:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Great Britain"
+        self.name = "GreatBritain"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -76,10 +80,11 @@ class Britain:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.pm = pm[year]
+        self.leader = pm[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -129,21 +134,21 @@ class Britain:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -281,3 +286,14 @@ class Britain:
                                  (self.exports - self.imports))
     # stability functions
     # international functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self):
+        while self.population > 10000000:
+            self.check_economic_state()
+            self.population_change()
+            break

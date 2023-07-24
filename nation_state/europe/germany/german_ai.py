@@ -1,7 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
-from administrative_regions import alsace_lorraine, baden_wurttemburg, bavaria, prussia, saxony
+from regions import (alsace_lorraine, baden_wurttemburg, bavaria, prussia, saxony)
 import os
 chancellors = {
     "1910": "Theobald von Bethmann Hollweg",
@@ -61,6 +61,8 @@ class Germany:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.us_relations = 71.34
         # other
     # population functions
     def population_change(self):
@@ -70,38 +72,30 @@ class Germany:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                if choice == 1:
+                    print("The German government has decided to implement policies to increase growth in births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_enhancer = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_control:
+                        self.birth_control = False
+
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                if choice == 1:
+                    print("The French government has decided to implement policies to control births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_control = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
+
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 50)
@@ -126,29 +120,33 @@ class Germany:
 
     # establishing internal states
     def establish_states(self):
-        folder = "us_states"
+        folder = "regions"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
             if file != '__pycache__':
                 if file.removesuffix(".py") == "alsace_lorraine":
-                    self.states.append(alsace_lorraine.Alsace_Lorraine(str(self.date.year), self))
-                if file.removesuffix(".py") == "baden_wurrtemburg":
-                    self.states.append(baden_wurttemburg.Wurttemburg(str(self.date.year), self))
+                    self.states.append(alsace_lorraine.AlsaceLorraine((self.date.year), self))
+                    print("alsace-lorraine")
+                if file.removesuffix(".py") == "baden_wurttemburg":
+                    self.states.append(baden_wurttemburg.BadenWurttemburg((self.date.year), self))
+                    print("baden_wurttemburg")
                 if file.removesuffix(".py") == "bavaria":
-                    self.states.append(bavaria.Bavaria(str(self.date.year), self))
+                    self.states.append(bavaria.Bavaria((self.date.year), self))
+                    print("bavaria")
                 if file.removesuffix(".py") == "prussia":
-                    self.states.append(prussia.Prussia(str(self.date.year), self))
+                    self.states.append(prussia.Prussia((self.date.year), self))
+                    print("prussia")
                 if file.removesuffix(".py") == "saxony":
-                    self.states.append(saxony.Saxony(str(self.date.year), self))
+                    self.states.append(saxony.Saxony((self.date.year), self))
+                    print("saxony")
 
         self.establish_economy_population()
     def establish_economy_population(self):
-        population = 0
         for i in range(0, len(self.states) - 1):
+            #print(self.states[i].population)
             self.current_gdp += self.states[i].current_gdp
             self.population += self.states[i].population
         #print(population)
-
 
     # economic functions
     def check_economic_state(self):
@@ -174,7 +172,7 @@ class Germany:
 
                 elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
                     self.e_s = "recession"
-                    print("The Germany economy is now in a depression period.\n")
+                    print("The German economy is now in a depression period.\n")
                     time.sleep(3)
         else:
             if self.e_s == "recession":
@@ -284,3 +282,7 @@ class Germany:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+
+germany = Germany('1914')
+#germany.establish_states()
+print(germany.population)

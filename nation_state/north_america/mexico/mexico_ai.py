@@ -58,6 +58,7 @@ class MexicoAI:
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -74,6 +75,7 @@ class MexicoAI:
         # north american relations
         """American"""
         self.us_relations = 45.45
+        self.alliance = ""
         # other
     # population functions
     def population_change(self):
@@ -257,3 +259,14 @@ class MexicoAI:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self):
+        while self.population > 3000000:
+            self.check_economic_state()
+            self.population_change()
+            break

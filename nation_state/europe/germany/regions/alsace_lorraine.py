@@ -2,48 +2,25 @@ import random
 import time
 from datetime import datetime, timedelta
 
-"""Population Dictionaries"""
 population = {
-    "1910": 2713555,
-    "1914": 2905149,
-    "1918": 3122049,
-    "1932": 3600000,
-    "1936": 3720000,
-    "1939": 3810000
-}
+    "1910": 4537574,
+    "1914": 4658473,
+    "1918": 4424252,
+    "1932": 4631225,
+    "1936": 4653498,
+    "1939": 4675366,
 
-"""Political Dictionaries"""
-leaders = {
-    "1910": "Carl Theodor Zahle",
-    "1914": "Carl Theodor Zahle",
-    "1918": "Carl Theodor Zahle",
-    "1932": "Thorvald Stauning",
-    "1936": "Thorvald Stauning",
-    "1939": "Thorvald Stauning"
 }
-
-monarchs = {
-    "1910": "Frederick VIII",
-    "1914": "Christian IX",
-    "1918": "Christian IX",
-    "1932": "Christian IX",
-    "1936": "Christian IX",
-    "1939": "Christian IX"
-}
-
 gdp = {
-    "1910": 75000000,
-    "1914": 76346343,
-    "1918": 77648543,
-    "1932": 76573434,
-    "1936": 77346224,
-    "1939": 78347343
+    "1910": 1874014,
+    "1914": 1986975,
+    "1918": 1879840,
+    "1932": None,
+    "1936": None,
+    "1939": None,
 }
-
-class Denmark:
-    def __init__(self, year):
-        self.region = "europe"
-        self.name = "Denmark"
+class AlsaceLorraine:
+    def __init__(self, year, germany):
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -55,7 +32,7 @@ class Denmark:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(year)]
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -63,14 +40,12 @@ class Denmark:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.monarch = monarchs[year]
         """Stability"""
         self.stability = 95.56
         # economic
         self.national_debt = 0
-        self.current_gdp = gdp[year]
-        self.past_gdp = self.current_gdp
+        self.current_gdp = gdp[str(year)]
+        self.past_gdp = 0
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -81,6 +56,8 @@ class Denmark:
         self.economic_stimulus = False
         # military
         # other
+        self.master_nation = germany
+        print(self.population)
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
@@ -104,6 +81,7 @@ class Denmark:
                     else:
                         print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
                         time.sleep(3)
+
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
                 choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
@@ -123,8 +101,8 @@ class Denmark:
                         time.sleep(3)
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
+                births = random.randrange(20, 50)
+                deaths = random.randrange(25, 45)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -137,8 +115,8 @@ class Denmark:
                 self.deaths += deaths
 
             else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(15, 35)
+                deaths = random.randrange(20, 30)
                 self.population = (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -275,4 +253,3 @@ class Denmark:
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
-    # stability functions

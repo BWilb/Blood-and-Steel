@@ -1,49 +1,44 @@
 import random
 import time
 from datetime import datetime, timedelta
-
-"""Population Dictionaries"""
-population = {
-    "1910": 2713555,
-    "1914": 2905149,
-    "1918": 3122049,
-    "1932": 3600000,
-    "1936": 3720000,
-    "1939": 3810000
-}
-
-"""Political Dictionaries"""
 leaders = {
-    "1910": "Carl Theodor Zahle",
-    "1914": "Carl Theodor Zahle",
-    "1918": "Carl Theodor Zahle",
-    "1932": "Thorvald Stauning",
-    "1936": "Thorvald Stauning",
-    "1939": "Thorvald Stauning"
+    "1910" : "Paul Eyschen",
+    "1914" : "Paul Eyschen",
+    "1918" : "Léon Kauffman",
+    "1932" : "Pierre Dupong",
+    "1936" : "Pierre Dupong",
+    "1939" : "Pierre Dupong"
 }
-
 monarchs = {
-    "1910": "Frederick VIII",
-    "1914": "Christian IX",
-    "1918": "Christian IX",
-    "1932": "Christian IX",
-    "1936": "Christian IX",
-    "1939": "Christian IX"
+    "1910" : "Guillaume IV",
+    "1914" : "Marie-Adélaïde",
+    "1918" : "Marie-Adélaïde",
+    "1932" : "Charlotte",
+    "1936" : "Charlotte",
+    "1939" : "Charlotte"
 }
 
+population = {
+    "1910": 225970,
+    "1914": 246026,
+    "1918": 267135,
+    "1932": 354988,
+    "1936": 387357,
+    "1939": 410366
+}
 gdp = {
-    "1910": 75000000,
-    "1914": 76346343,
-    "1918": 77648543,
-    "1932": 76573434,
-    "1936": 77346224,
-    "1939": 78347343
+    "1910": 4659663720,
+    "1914": 4847024746,
+    "1918": 4953286406,
+    "1932": 5037403509,
+    "1936": 5228000000,
+    "1939": 7037894737
 }
 
-class Denmark:
+class LuxembourgAI:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Denmark"
+        self.name = "Luxembourg"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -64,10 +59,10 @@ class Denmark:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
-        self.monarch = monarchs[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -80,6 +75,9 @@ class Denmark:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
+        self.us_relations = 96.56
         # other
     # population functions
     def population_change(self):
@@ -89,57 +87,48 @@ class Denmark:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Luxembourg government has decided to implement policies to increase growth in births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_enhancer = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_control:
+                        self.birth_control = False
+
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Luxembourg government has decided to implement policies to control births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_control = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -276,3 +265,9 @@ class Denmark:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    # main
+    def main(self):
+        while self.population > 100000:
+            self.check_economic_state()
+            self.population_change()
+            break

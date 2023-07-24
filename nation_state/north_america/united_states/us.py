@@ -1,8 +1,7 @@
-import random
-import sys
-from collections import OrderedDict
+# in-game libraries
+import pypyodbc
+
 import globe
-import time
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
@@ -14,13 +13,31 @@ from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
 from nation_state.europe.britain import britain_ai
 from nation_state.europe.spain import spain_ai
 from nation_state.europe.france import france_ai
+from nation_state.europe.austria import austria_ai
+from nation_state.europe.netherlands import netherlands_ai
+from nation_state.europe.belgium import belgium_ai
+from nation_state.europe.luxembourg import luxembourg_ai
+from nation_state.europe.denmark import denmark_ai
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.switzerland import swiss_ai
+from nation_state.europe.sweden import sweden_ai
+from nation_state.europe.norway import norway_ai
+#from nation_state.europe.germany import german_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
-from relations import brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations, france_relations
-
+from relations import (brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations, france_relations,
+                       belgium_relations)
+from database_management import upload_database
+# helper libraries
 import os
+import time
+import random
+import sys
+from collections import OrderedDict
 
+# function uploading to databas
+    
 """Population Dictionaries"""
 presidents = {
     "1910": "William Howard Taft",
@@ -54,8 +71,10 @@ def slow_print(words):
 
 class UnitedStates:
     def __init__(self, year):
+        self.name = "UnitedStates"
         # date variables
         self.date = datetime(int(year), 1, 1)
+        self.upload_to_database = self.date.month
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -134,11 +153,65 @@ class UnitedStates:
         self.guarantee_france = False
         self.france_embargo = False
         self.france_nationals_dealt = False
+        """belgian"""
+        self.belgium_relations = 81.65
+        self.guarantee_belgium = False
+        self.belgium_embargo = False
+        self.belgium_nationals_dealt = False
+        """austrian"""
+        self.austria_relations = 58.45
+        self.guarantee_austria = False
+        self.austria_embargo = False
+        self.austria_nationals_dealt = False
+        """dutch"""
+        self.netherlands_relations = 74.34
+        self.guarantee_netherlands = False
+        self.netherlands_embargo = False
+        self.netherlands_nationals_dealt = False
+        """luxembourg"""
+        self.luxembourg_relations = 92.34
+        self.guarantee_luxembourg = False
+        self.luxembourg_embargo = False
+        self.luxembourg_nationals_dealt = False
+        """denmark"""
+        self.danish_relations = 72.34
+        self.guarantee_danish = False
+        self.danish_embargo = False
+        self.danish_nationals_dealt = False
+        """italy"""
+        self.italy_relations = 95.74
+        self.guarantee_italy = False
+        self.italy_embargo = False
+        self.italy_nationals_dealt = False
+        """norwegian"""
+        self.norway_relations = 96.44
+        self.guarantee_norway = False
+        self.norway_embargo = False
+        self.norway_nationals_dealt = False
+        """swedish"""
+        self.swedish_relations = 94.34
+        self.guarantee_swedish = False
+        self.swedish_embargo = False
+        self.swedish_nationals_dealt = False
+        """swiss"""
+        self.swiss_relations = 98.74
+        self.guarantee_swiss = False
+        self.swiss_embargo = False
+        self.swiss_nationals_dealt = False
         # ordered dictionary of european nations
         self.european_nations = OrderedDict()
         self.european_nations['Great Britain'] = self.brit_relations
         self.european_nations['Spain'] = self.spain_relations
         self.european_nations['France'] = self.france_relations
+        self.european_nations['Belgium'] = self.belgium_relations
+        self.european_nations['Austria'] = self.austria_relations
+        self.european_nations['Netherlands'] = self.netherlands_relations
+        self.european_nations['Luxembourg'] = self.luxembourg_relations
+        self.european_nations['Denmark'] = self.danish_relations
+        self.european_nations['Italy'] = self.italy_relations
+        self.european_nations['Norway'] = self.norway_relations
+        self.european_nations['Sweden'] = self.swedish_relations
+        self.european_nations['Switzerland'] = self.swiss_relations
         # time limitations on diplomats if you commit horrendous action(you will be temporarily expelled from region for 5 days)
         self.europe_limit = self.date
         self.africa_limit = self.date
@@ -333,7 +406,12 @@ class UnitedStates:
             for i in range(0, len(self.states)):
                 self.states[i].check_economic_state()
 
-    # stability functions
+    # political growth functions
+    """def political_growth(self, globe):
+        self.political_power += self.political_exponent
+
+        if globe.tension < 50:"""
+
     # stats functions
     def stats(self, globe1):
         # asking user if they would like to see a specific area of their nation's stats
@@ -445,9 +523,15 @@ class UnitedStates:
 
                         if nation_choice.lower() == "france":
                             for i in range(0, len(globe1.nations)):
-                                """searching for Spain"""
+                                """searching for france"""
                                 if globe1.nations[i].name == "France":
                                     france_relations.french_relations(self, globe1.nations[i], globe1)
+
+                        if nation_choice.lower() == "belgium":
+                            for i in range(0, len(globe1.nations)):
+                                """searching for Belgium"""
+                                if globe1.nations[i].name == "Belgium":
+                                    belgium_relations.belgian_relations(self, globe1.nations[i], globe1)
 
             elif region_choice.lower() == "asia":
                 pass
@@ -510,21 +594,50 @@ def main():
     globe1 = globe.Globe()
     us = UnitedStates('1914')
     us.establish_states()
+    print(us.date.date())
     # establishing european ais
     british_ai = britain_ai.Britain("1914")
     spanish_ai = spain_ai.SpainAI("1914")
     french_ai = france_ai.FranceAI("1914")
+    austrian_ai = austria_ai.Austria("1914")
+    belgian_ai = belgium_ai.BelgiumAI("1914")
+    dutch_ai = netherlands_ai.Netherlands("1914")
+    italian_ai = italy_ai.ItalyAI("1914")
+    lux_ai = luxembourg_ai.LuxembourgAI("1914")
+    danish_ai = denmark_ai.Denmark("1914")
+    swiss_ia = swiss_ai.SwitzerlandAI("1914")
+    swedish_ai = sweden_ai.SwedenAI("1914")
+    norwegian_ai = norway_ai.NorwayAI("1914")
+    """german ai will establish states, similar to US"""
     # establishing north american AIs
     canadian_ai = canada_ai.Canada("1914")
     mexican_ai = mexico_ai.MexicoAI("1914")
     cuban_ai = cuba_ai.CubaAI("1914")
-    establish_foreign_nations(globe1, british_ai, french_ai, spanish_ai, canadian_ai, mexican_ai, cuban_ai)
+    establish_foreign_nations(globe1, us, british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai,
+                              canadian_ai, mexican_ai, cuban_ai, italian_ai, lux_ai, danish_ai, swedish_ai, swiss_ia,
+                              norwegian_ai)
+
+    # upload_database.initial_upload_to_database(globe1.nations)
+
     while us.population > 3000000:
+        """United States will stay afloat as a nation, as long as 3000000 people are left"""
         us.check_economic_state()
         us.population_change()
-        print(us.births, us.deaths, us.population)
         us.stats(globe1)
-        time.sleep(3)
+        """Looping through changes in US system"""
+
+        for i in range(0, len(globe1.nations)):
+            if not globe1.nations[i].name == "UnitedStates":
+                globe1.nations[i].main()
+                """
+                looping through main function of each foreign nation object
+                main function is connected to object itself, so as to use less memory space
+                """
+
+        upload_database.update_database_info(globe1.nations)
+        time.sleep(1.75)
+        us.date += timedelta(days=1)
+
 
 if __name__ == '__main__':
     main()

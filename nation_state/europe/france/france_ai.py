@@ -58,6 +58,7 @@ class FranceAI:
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -70,6 +71,9 @@ class FranceAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
+        self.us_relations = 86.45
         # other
     # population functions
     def population_change(self):
@@ -92,7 +96,7 @@ class FranceAI:
 
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = choice = random.randrange(0, 2)
+                choice = random.randrange(0, 2)
 
                 if choice == 1:
                     print("The French government has decided to implement policies to control births.\n")
@@ -106,21 +110,21 @@ class FranceAI:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -257,3 +261,14 @@ class FranceAI:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self):
+        while self.population > 15000000:
+            self.check_economic_state()
+            self.population_change()
+            break

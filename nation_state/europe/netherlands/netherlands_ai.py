@@ -4,46 +4,46 @@ from datetime import datetime, timedelta
 
 """Population Dictionaries"""
 population = {
-    "1910": 2713555,
-    "1914": 2905149,
-    "1918": 3122049,
-    "1932": 3600000,
-    "1936": 3720000,
-    "1939": 3810000
+    "1910": 5893247,
+    "1914": 6274226,
+    "1918": 6687933,
+    "1932": 8052797,
+    "1936": 8441838,
+    "1939": 8788112
 }
 
 """Political Dictionaries"""
 leaders = {
-    "1910": "Carl Theodor Zahle",
-    "1914": "Carl Theodor Zahle",
-    "1918": "Carl Theodor Zahle",
-    "1932": "Thorvald Stauning",
-    "1936": "Thorvald Stauning",
-    "1939": "Thorvald Stauning"
+    "1910": "Theo Heemskerk",
+    "1914": "Pieter Cort der Linden",
+    "1918": "Pieter Cort van der Linden",
+    "1932": "Charles Ruijs de Beerenbrouck",
+    "1936": "Hendrikus Colijn",
+    "1939": "Hendrikus Colijn"
 }
 
 monarchs = {
-    "1910": "Frederick VIII",
-    "1914": "Christian IX",
-    "1918": "Christian IX",
-    "1932": "Christian IX",
-    "1936": "Christian IX",
-    "1939": "Christian IX"
+    "1910": "Wilhelmina",
+    "1914": "Wilhelmina",
+    "1918": "Wilhelmina",
+    "1932": "Wilhelmina",
+    "1936": "Wilhelmina",
+    "1939": "Wilhelmina"
 }
 
 gdp = {
-    "1910": 75000000,
-    "1914": 76346343,
-    "1918": 77648543,
-    "1932": 76573434,
-    "1936": 77346224,
-    "1939": 78347343
+    "1910": 865645049,
+    "1914": 1111426098,
+    "1918": 1844390540,
+    "1932": 2118539364,
+    "1936": 3213537630,
+    "1939": 3201339327
 }
 
-class Denmark:
+class Netherlands:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Denmark"
+        self.name = "Netherlands"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -64,10 +64,10 @@ class Denmark:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
-        self.monarch = monarchs[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -80,6 +80,7 @@ class Denmark:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        self.alliance = ""
         # other
     # population functions
     def population_change(self):
@@ -125,21 +126,21 @@ class Denmark:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -276,3 +277,9 @@ class Denmark:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    # main function
+    def main(self):
+        while self.population > 1000000:
+            self.check_economic_state()
+            self.population_change()
+            break

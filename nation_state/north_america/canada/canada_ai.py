@@ -49,15 +49,18 @@ class Canada:
         # social variables
         """population"""
         self.population = population[year]
+        self.birth_enhancer = False
+        self.birth_control = False
         self.births = 0
         self.deaths = 0
         """happiness"""
         self.happiness = 98.56
         # political
-        self.pm = pms[year]
+        self.leader = pms[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -73,6 +76,7 @@ class Canada:
         # military
         # international
         self.us_relations = 56.97
+        self.alliance = ""
         # other
 
     # population functions
@@ -257,3 +261,13 @@ class Canada:
                                  (self.exports - self.imports))
 
     # stability functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+    def main(self):
+        while self.population > 2000000:
+            self.check_economic_state()
+            self.population_change()
+            break

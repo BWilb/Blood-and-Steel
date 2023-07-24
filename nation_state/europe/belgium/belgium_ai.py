@@ -2,25 +2,48 @@ import random
 import time
 from datetime import datetime, timedelta
 
+"""Population Dictionaries"""
 population = {
-    "1910": 4537574,
-    "1914": 4658473,
-    "1918": 4424252,
-    "1932": 4631225,
-    "1936": 4653498,
-    "1939": 4675366,
+    "1910": 7395408,
+    "1914": 7447647,
+    "1918": 7355778,
+    "1932": 8118461,
+    "1936": 8210392,
+    "1939": 8280500
+}
 
+"""Political Dictionaries"""
+leaders = {
+    "1910": "Frans Schollaert",
+    "1914": "Charles de Broqueville",
+    "1918": "Charles de Broqueville",
+    "1932": "Jules Renkin",
+    "1936": "Paul van Zeeland",
+    "1939": "Hubert Pierlot"
 }
+
+monarchs = {
+    "1910": "Albert I",
+    "1914": "Albert I",
+    "1918": "Albert I",
+    "1932": "Albert I",
+    "1936": "Leopold III",
+    "1939": "Leopold III"
+}
+
 gdp = {
-    "1910": 1874014,
-    "1914": 1986975,
-    "1918": 1879840,
-    "1932": None,
-    "1936": None,
-    "1939": None,
+    "1910": 865645049,
+    "1914": 1111426098,
+    "1918": 1844390540,
+    "1932": 2118539364,
+    "1936": 3213537630,
+    "1939": 3201339327
 }
-class AlsaceLorraine:
-    def __init__(self, year, germany):
+
+class BelgiumAI:
+    def __init__(self, year):
+        self.region = "europe"
+        self.name = "Belgium"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -32,7 +55,7 @@ class AlsaceLorraine:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[str(year)]
+        self.population = population[year]
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -40,12 +63,14 @@ class AlsaceLorraine:
         """happiness"""
         self.happiness = 98.56
         # political
+        self.leader = leaders[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
-        self.current_gdp = gdp[str(year)]
-        self.past_gdp = 0
+        self.current_gdp = gdp[year]
+        self.past_gdp = self.current_gdp
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -55,8 +80,10 @@ class AlsaceLorraine:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
+        self.us_relations = 76.56
         # other
-        self.master_nation = germany
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
@@ -65,58 +92,48 @@ class AlsaceLorraine:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Belgian government has decided to implement policies to increase growth in births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_enhancer = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_control:
+                        self.birth_control = False
 
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Belgian government has decided to implement policies to control births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_control = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 50)
-                deaths = random.randrange(25, 45)
-                self.population = (births - deaths)
+                births = random.randrange(20, 40)
+                deaths = random.randrange(11, 30)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(15, 35)
-                deaths = random.randrange(20, 30)
-                self.population = (births - deaths)
+                births = random.randrange(7, 15)
+                deaths = random.randrange(4, 10)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -252,3 +269,15 @@ class AlsaceLorraine:
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
+    # stability functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self):
+        while self.population > 3000000:
+            self.check_economic_state()
+            self.population_change()
+            break
