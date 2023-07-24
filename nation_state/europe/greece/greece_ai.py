@@ -1,44 +1,49 @@
 import random
 import time
 from datetime import datetime, timedelta
-leaders = {
-    "1910" : "Arvid Lindman",
-    "1914" : "Karl Staaff",
-    "1918" : "Nils Edén",
-    "1932" : "Carl Gustaf Ekman",
-    "1936" : "Per Albin Hansson",
-    "1939" : "Per Albin Hansson"
-}
-monarchs = {
-    "1910" : "Gustaf V",
-    "1914" : "Gustaf V",
-    "1918" : "Gustaf V",
-    "1932" : "Gustaf V",
-    "1936" : "Gustaf V",
-    "1939" : "Gustaf V"
-}
 
+"""Population Dictionaries"""
 population = {
-    "1910": 2352192,
-    "1914": 2455604,
-    "1918": 2565700,
-    "1932": 2840000,
-    "1936": 2910000,
-    "1939": 2960000
-}
-gdp = {
-    "1910": 176567770,
-    "1914": 103520738,
-    "1918": 275419359,
-    "1932": 191193380,
-    "1936": 234412779,
-    "1939": 289281486
+    "1910": 4510644,
+    "1914": 4716335,
+    "1918": 5680000,
+    "1932": 6590000,
+    "1936": 6960000,
+    "1939": 7240000
 }
 
-class NorwayAI:
+"""Political Dictionaries"""
+leaders = {
+    "1910": "Stephanos Dragoumis",
+    "1914": "Eleftherios Venizelos",
+    "1918": "Eleftherios Venizelos",
+    "1932": "Eleftherios Venizelos",
+    "1936": "Ioannis Metaxas",
+    "1939": "Ioannis Metaxas"
+}
+
+monarchs = {
+    "1910": "George I",
+    "1914": "Constantine I",
+    "1918": "Alexander",
+    "1932": "Alexandros Zaimis",
+    "1936": "George II",
+    "1939": "George II"
+}
+
+gdp = {
+    "1910": 340698411,
+    "1914": 364431387,
+    "1918": 417467307,
+    "1932": 98539364,
+    "1936": 103462352,
+    "1939": 113434839
+}
+
+class Greece:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Kingdom of Norway"
+        self.name = "Kingdom of Greece"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -75,9 +80,8 @@ class NorwayAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
-        # foreign
+        # international
         self.alliance = ""
-        self.us_relations = 85.24
         # other
     # population functions
     def population_change(self):
@@ -90,7 +94,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to increase growth in births.\n")
+                    print("The Greek government has decided to implement policies to increase growth in births.\n")
                     time.sleep(1.25)
 
                     self.birth_enhancer = True
@@ -103,7 +107,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to control births.\n")
+                    print("The Greek government has decided to implement policies to control births.\n")
                     time.sleep(1.25)
 
                     self.birth_control = True
@@ -267,7 +271,7 @@ class NorwayAI:
     # stability functions
     # main
     def main(self):
-        while self.population > 1100000:
+        while self.population > 2500000:
             self.check_economic_state()
             self.population_change()
             self.date += timedelta(days=1)

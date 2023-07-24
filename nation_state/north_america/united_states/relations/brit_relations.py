@@ -40,7 +40,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 15
                         if chance % 2 == 0:
                             """50.67% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -72,7 +72,7 @@ def british_relations(self, british_ai, globe):
                     if self.political_power >= 10:
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has accepted our guarantee for their independence.\n")
+                            print(f"{british_ai.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
                             self.guarantee_britain = True
                             time.sleep(1.5)
@@ -107,7 +107,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 25
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
                             time.sleep(1.5)
 
 
@@ -140,7 +140,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 13
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -176,7 +176,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.pm} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -212,7 +212,7 @@ def british_relations(self, british_ai, globe):
                                 print(f"{british_ai.pm} has allowed us to enter the {british_ai.alliance}\n")
                                 time.sleep(1.5)
                             else:
-                                print(f"{british_ai.pm} has agreed to forming a military alliance")
+                                print(f"{british_ai.leader} has agreed to forming a military alliance")
                                 time.sleep(1.5)
                                 alliance = input("what would you like to name your alliance?: ")
                                 self.alliance = alliance
@@ -245,7 +245,7 @@ def british_relations(self, british_ai, globe):
                 elif relation_choice == 7:
                     if chance % 2 == 0:
                         """49.1% chance that British parliament accepts proposal"""
-                        print(f"{british_ai.pm} has agreed to establish a student transfer program\n")
+                        print(f"{british_ai.leader} has agreed to establish a student transfer program\n")
                         time.sleep(1.5)
 
                     elif chance % 3 == 1:
@@ -277,7 +277,7 @@ def british_relations(self, british_ai, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -307,7 +307,7 @@ def british_relations(self, british_ai, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has accepted our guarantee for their independence.\n")
+                            print(f"{british_ai.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
                             self.guarantee_britain = True
                             time.sleep(1.5)
@@ -338,7 +338,7 @@ def british_relations(self, british_ai, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -367,7 +367,7 @@ def british_relations(self, british_ai, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -398,7 +398,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.pm} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -428,10 +428,10 @@ def british_relations(self, british_ai, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             if british_ai.alliance:
-                                print(f"{british_ai.pm} has allowed us to enter the {british_ai.alliance}\n")
+                                print(f"{british_ai.leader} has allowed us to enter the {british_ai.alliance}\n")
                                 time.sleep(1.5)
                             else:
-                                print(f"{british_ai.pm} has agreed to forming a military alliance")
+                                print(f"{british_ai.leader} has agreed to forming a military alliance")
                                 time.sleep(1.5)
                                 alliance = input("what would you like to name your alliance?: ")
                                 self.alliance = alliance
@@ -461,7 +461,7 @@ def british_relations(self, british_ai, globe):
                     chance = random.randrange(1, 60)
                     if chance % 2 == 0:
                         """49.1% chance that British parliament accepts proposal"""
-                        print(f"{british_ai.pm} has agreed to establish a student transfer program\n")
+                        print(f"{british_ai.leader} has agreed to establish a student transfer program\n")
                         time.sleep(1.5)
 
                     elif chance % 3 == 1:
@@ -489,7 +489,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 15
                         if chance % 3 == 0:
                             """33.3% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -520,7 +520,7 @@ def british_relations(self, british_ai, globe):
                     if self.political_power >= 10:
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has accepted our guarantee for their independence.\n")
+                            print(f"{british_ai.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
                             self.guarantee_britain = True
                             time.sleep(1.5)
@@ -555,7 +555,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 25
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
                             time.sleep(1.5)
 
 
@@ -589,7 +589,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 13
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -624,7 +624,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.pm} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
                             time.sleep(1.5)
 
                         elif chance % 2 == 0:
@@ -656,10 +656,10 @@ def british_relations(self, british_ai, globe):
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             if british_ai.alliance:
-                                print(f"{british_ai.pm} has allowed us to enter the {british_ai.alliance}\n")
+                                print(f"{british_ai.leader} has allowed us to enter the {british_ai.alliance}\n")
                                 time.sleep(1.5)
                             else:
-                                print(f"{british_ai.pm} has agreed to forming a military alliance")
+                                print(f"{british_ai.leader} has agreed to forming a military alliance")
                                 time.sleep(1.5)
                                 alliance = input("what would you like to name your alliance?: ")
                                 self.alliance = alliance
@@ -692,7 +692,7 @@ def british_relations(self, british_ai, globe):
                 elif relation_choice == 7:
                     if chance % 3 == 0:
                         """49.1% chance that British parliament accepts proposal"""
-                        print(f"{british_ai.pm} has agreed to establish a student transfer program\n")
+                        print(f"{british_ai.leader} has agreed to establish a student transfer program\n")
                         time.sleep(1.5)
 
                     elif chance % 2 == 0:
@@ -725,7 +725,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 15
                         if chance % 5 == 0:
                             """20% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -757,7 +757,7 @@ def british_relations(self, british_ai, globe):
                     if self.political_power >= 10:
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has accepted our guarantee for their independence.\n")
+                            print(f"{british_ai.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
                             self.guarantee_britain = True
                             time.sleep(1.5)
@@ -790,7 +790,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 25
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -822,7 +822,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 13
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.pm} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -856,7 +856,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.pm} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -889,10 +889,10 @@ def british_relations(self, british_ai, globe):
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             if british_ai.alliance:
-                                print(f"{british_ai.pm} has allowed us to enter the {british_ai.alliance}\n")
+                                print(f"{british_ai.leader} has allowed us to enter the {british_ai.alliance}\n")
                                 time.sleep(1.5)
                             else:
-                                print(f"{british_ai.pm} has agreed to forming a military alliance")
+                                print(f"{british_ai.leader} has agreed to forming a military alliance")
                                 time.sleep(1.5)
                                 alliance = input("what would you like to name your alliance?: ")
                                 self.alliance = alliance
@@ -925,7 +925,7 @@ def british_relations(self, british_ai, globe):
                 elif relation_choice == 7:
                     if chance % 5 == 0:
                         """49.1% chance that British parliament accepts proposal"""
-                        print(f"{british_ai.pm} has agreed to establish a student transfer program\n")
+                        print(f"{british_ai.leader} has agreed to establish a student transfer program\n")
                         time.sleep(1.5)
 
                     elif chance % 3 == 1:

@@ -106,23 +106,23 @@ class MexicoAI:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 50)
-                deaths = random.randrange(25, 45)
-                self.population = (births - deaths)
+                births = random.randrange(10, 20)
+                deaths = random.randrange(4, 11)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                births = random.randrange(5, 15)
+                deaths = random.randrange(7, 18)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(15, 35)
-                deaths = random.randrange(20, 30)
-                self.population = (births - deaths)
+                births = random.randrange(7, 15)
+                deaths = random.randrange(4, 12)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -269,4 +269,5 @@ class MexicoAI:
         while self.population > 3000000:
             self.check_economic_state()
             self.population_change()
+            self.date += timedelta(days=1)
             break

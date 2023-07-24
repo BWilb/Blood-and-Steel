@@ -2,43 +2,35 @@ import random
 import time
 from datetime import datetime, timedelta
 leaders = {
-    "1910" : "Arvid Lindman",
-    "1914" : "Karl Staaff",
-    "1918" : "Nils Edén",
-    "1932" : "Carl Gustaf Ekman",
-    "1936" : "Per Albin Hansson",
-    "1939" : "Per Albin Hansson"
-}
-monarchs = {
-    "1910" : "Gustaf V",
-    "1914" : "Gustaf V",
-    "1918" : "Gustaf V",
-    "1932" : "Gustaf V",
-    "1936" : "Gustaf V",
-    "1939" : "Gustaf V"
+    "1910" : None,
+    "1914" : None,
+    "1918" : "Konstantin Päts",
+    "1932" : "Konstantin Päts",
+    "1936" : "Konstantin Päts",
+    "1939" : "Kaarel Eenpalu"
 }
 
 population = {
-    "1910": 2352192,
-    "1914": 2455604,
-    "1918": 2565700,
-    "1932": 2840000,
-    "1936": 2910000,
-    "1939": 2960000
+    "1910": 984000,
+    "1914": 1030000,
+    "1918": 1090000,
+    "1932": 1120000,
+    "1936": 1120000,
+    "1939": 1120000
 }
 gdp = {
-    "1910": 176567770,
-    "1914": 103520738,
-    "1918": 275419359,
-    "1932": 191193380,
-    "1936": 234412779,
-    "1939": 289281486
+    "1910": 4659663,
+    "1914": 4847024,
+    "1918": 4953286,
+    "1932": 5037403,
+    "1936": 5228000,
+    "1939": 7037894
 }
 
-class NorwayAI:
+class EstoniaAI:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Kingdom of Norway"
+        self.name = "Republic of Estonia"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -75,7 +67,7 @@ class NorwayAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
-        # foreign
+        # international
         self.alliance = ""
         self.us_relations = 85.24
         # other
@@ -90,7 +82,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to increase growth in births.\n")
+                    print("The Estonian government has decided to implement policies to increase growth in births.\n")
                     time.sleep(1.25)
 
                     self.birth_enhancer = True
@@ -103,7 +95,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to control births.\n")
+                    print("The Estonian government has decided to implement policies to control births.\n")
                     time.sleep(1.25)
 
                     self.birth_control = True
@@ -112,22 +104,22 @@ class NorwayAI:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(8, 15)
-                deaths = random.randrange(3, 11)
+                births = random.randrange(2, 10)
+                deaths = random.randrange(3, 7)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(3, 10)
-                deaths = random.randrange(6, 15)
+                births = random.randrange(2, 6)
+                deaths = random.randrange(4, 10)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(5, 12)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(3, 9)
+                deaths = random.randrange(2, 8)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -216,7 +208,6 @@ class NorwayAI:
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
-
     def expansion(self):
         if self.economic_stimulus:
             self.consumer_spending = round(random.uniform(10, 2000), 2)
@@ -265,9 +256,9 @@ class NorwayAI:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
-    # main
+    # main function
     def main(self):
-        while self.population > 1100000:
+        while self.population > 250000:
             self.check_economic_state()
             self.population_change()
             self.date += timedelta(days=1)

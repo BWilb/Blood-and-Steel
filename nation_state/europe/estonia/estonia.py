@@ -29,6 +29,8 @@ gdp = {
 
 class Estonia:
     def __init__(self, year):
+        self.region = "europe"
+        self.name = "Republic of Estonia"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date

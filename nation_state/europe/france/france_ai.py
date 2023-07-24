@@ -34,7 +34,7 @@ gdp = {
 class FranceAI:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "France"
+        self.name = "French Republic"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -108,22 +108,22 @@ class FranceAI:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
+                births = random.randrange(15, 35)
+                deaths = random.randrange(11, 32)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
+                births = random.randrange(10, 25)
+                deaths = random.randrange(20, 30)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(12, 25)
+                deaths = random.randrange(12, 23)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -271,4 +271,5 @@ class FranceAI:
         while self.population > 15000000:
             self.check_economic_state()
             self.population_change()
+            self.date += timedelta(days=1)
             break

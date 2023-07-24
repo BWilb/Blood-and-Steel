@@ -2,43 +2,43 @@ import random
 import time
 from datetime import datetime, timedelta
 leaders = {
-    "1910" : "Arvid Lindman",
-    "1914" : "Karl Staaff",
-    "1918" : "Nils Edén",
-    "1932" : "Carl Gustaf Ekman",
-    "1936" : "Per Albin Hansson",
-    "1939" : "Per Albin Hansson"
+    "1910" : "Emperor Xuantong",
+    "1914" : "Yuan Shikai",
+    "1918" : "Xu Shichangi",
+    "1932" : "Lin Sen",
+    "1936" : "Lin Sen",
+    "1939" : "Lin Sen"
 }
 monarchs = {
-    "1910" : "Gustaf V",
-    "1914" : "Gustaf V",
-    "1918" : "Gustaf V",
-    "1932" : "Gustaf V",
-    "1936" : "Gustaf V",
-    "1939" : "Gustaf V"
+    "1910" : "Emperor Xuantong",
+    "1914" : "Emperor Xuantong",
+    "1918" : "Emperor Xuantong",
+    "1932" : "Emperor Xuantong",
+    "1936" : "Emperor Xuantong",
+    "1939" : "Emperor Xuantong"
 }
 
 population = {
-    "1910": 2352192,
-    "1914": 2455604,
-    "1918": 2565700,
-    "1932": 2840000,
-    "1936": 2910000,
-    "1939": 2960000
+    "1910": 422250794,
+    "1914": 438552995,
+    "1918": 457741400,
+    "1932": 494506632,
+    "1936": 506322173,
+    "1939": 514761109
 }
 gdp = {
-    "1910": 176567770,
-    "1914": 103520738,
-    "1918": 275419359,
-    "1932": 191193380,
-    "1936": 234412779,
-    "1939": 289281486
+    "1910": 17340421053,
+    "1914": 19231073684,
+    "1918": 23090862632,
+    "1932": 48070526316,
+    "1936": 60420631579,
+    "1939": 54934157895
 }
 
-class NorwayAI:
+class ChinaAI:
     def __init__(self, year):
-        self.region = "europe"
-        self.name = "Kingdom of Norway"
+        self.region = "asia"
+        self.name = "Republic of China"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -75,9 +75,9 @@ class NorwayAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
-        # foreign
+        # international
         self.alliance = ""
-        self.us_relations = 85.24
+        self.us_relations = 34.56
         # other
     # population functions
     def population_change(self):
@@ -90,7 +90,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to increase growth in births.\n")
+                    print("The Chinese government has decided to implement policies to increase growth in births.\n")
                     time.sleep(1.25)
 
                     self.birth_enhancer = True
@@ -103,7 +103,7 @@ class NorwayAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Norwegian government has decided to implement policies to control births.\n")
+                    print("The Chinese government has decided to implement policies to control births.\n")
                     time.sleep(1.25)
 
                     self.birth_control = True
@@ -112,22 +112,22 @@ class NorwayAI:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(8, 15)
-                deaths = random.randrange(3, 11)
+                births = random.randrange(20, 50)
+                deaths = random.randrange(11, 45)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(3, 10)
-                deaths = random.randrange(6, 15)
+                births = random.randrange(10, 40)
+                deaths = random.randrange(25, 45)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(5, 12)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(20, 45)
+                deaths = random.randrange(15, 40)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -265,9 +265,9 @@ class NorwayAI:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
-    # main
+    # main function
     def main(self):
-        while self.population > 1100000:
+        while self.population > 150000000:
             self.check_economic_state()
             self.population_change()
             self.date += timedelta(days=1)

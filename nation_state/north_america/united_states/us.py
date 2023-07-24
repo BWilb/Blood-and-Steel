@@ -10,6 +10,10 @@ from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        pennsylvania,
                        rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
                        west_virginia, wisconsin, wyoming)
+# importation of Asian files
+from nation_state.asia.se_asia.china import china_ai
+from nation_state.asia.se_asia.japan import japan_ai
+# importation of European files
 from nation_state.europe.britain import britain_ai
 from nation_state.europe.spain import spain_ai
 from nation_state.europe.france import france_ai
@@ -22,7 +26,12 @@ from nation_state.europe.italy import italy_ai
 from nation_state.europe.switzerland import swiss_ai
 from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.norway import norway_ai
+from nation_state.europe.estonia import estonia_ai
+from nation_state.europe.latvia import latvia_ai
+from nation_state.europe.lithuania import lithuania_ai
+from nation_state.europe.greece import greece_ai
 #from nation_state.europe.germany import german_ai
+# importation of NorthAmerican files
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
@@ -134,9 +143,24 @@ class UnitedStates:
         self.cuba_nationals_dealt = False
         # na ordered dictionary
         self.na = OrderedDict()
-        self.na["Canada"] = self.canada_relations
-        self.na["Cuba"] = self.cuba_relations
+        self.na["Dominion of Canada"] = self.canada_relations
+        self.na["Republic of Cuba"] = self.cuba_relations
         self.na["Mexico"] = self.mexico_relations
+        # asia
+        """China"""
+        self.china_relations = 65.45
+        self.guarantee_china = False
+        self.embargo_china = False
+        self.china_nationals_dealt = False
+        """Japan"""
+        self.japan_relations = 76.45
+        self.guarantee_japan = False
+        self.embargo_japan = False
+        self.japan_nationals_dealt = False
+        # asia ordered dictionary
+        self.asia = OrderedDict()
+        self.asia["Republic of China"] = self.china_relations
+        self.asia["Japanese Empire"] = self.japan_relations
         # europe
         """british"""
         self.brit_relations = 73.45
@@ -198,20 +222,44 @@ class UnitedStates:
         self.guarantee_swiss = False
         self.swiss_embargo = False
         self.swiss_nationals_dealt = False
+        """estonian"""
+        self.estonia_relations = 98.74
+        self.guarantee_estonia = False
+        self.estonia_embargo = False
+        self.estonia_nationals_dealt = False
+        """latvian"""
+        self.latvia_relations = 98.74
+        self.guarantee_latvia = False
+        self.latvia_embargo = False
+        self.latvia_nationals_dealt = False
+        """lithuanian"""
+        self.lithuania_relations = 98.74
+        self.guarantee_lithuania = False
+        self.lithuania_embargo = False
+        self.lithuania_nationals_dealt = False
+        """greek"""
+        self.greece_relations = 82.34
+        self.guarantee_greece = False
+        self.greece_embargo = False
+        self.greece_nationals_dealt = False
         # ordered dictionary of european nations
         self.european_nations = OrderedDict()
         self.european_nations['Great Britain'] = self.brit_relations
-        self.european_nations['Spain'] = self.spain_relations
-        self.european_nations['France'] = self.france_relations
-        self.european_nations['Belgium'] = self.belgium_relations
-        self.european_nations['Austria'] = self.austria_relations
-        self.european_nations['Netherlands'] = self.netherlands_relations
-        self.european_nations['Luxembourg'] = self.luxembourg_relations
-        self.european_nations['Denmark'] = self.danish_relations
-        self.european_nations['Italy'] = self.italy_relations
-        self.european_nations['Norway'] = self.norway_relations
-        self.european_nations['Sweden'] = self.swedish_relations
-        self.european_nations['Switzerland'] = self.swiss_relations
+        self.european_nations['Kingdom of Spain'] = self.spain_relations
+        self.european_nations['French Republic'] = self.france_relations
+        self.european_nations['Kingdom of Belgium'] = self.belgium_relations
+        self.european_nations['Austria-Hungary'] = self.austria_relations
+        self.european_nations['Kingdom of Netherlands'] = self.netherlands_relations
+        self.european_nations['Kingdom of Luxembourg'] = self.luxembourg_relations
+        self.european_nations['Kingdom of Denmark'] = self.danish_relations
+        self.european_nations['Kingdom of Italy'] = self.italy_relations
+        self.european_nations['Kingdom of Norway'] = self.norway_relations
+        self.european_nations['Republic of Sweden'] = self.swedish_relations
+        self.european_nations['Republic of Switzerland'] = self.swiss_relations
+        self.european_nations['Republic of Estonia'] = self.estonia_relations
+        self.european_nations['Republic of Latvia'] = self.latvia_relations
+        self.european_nations['Republic of Lithuania'] = self.lithuania_relations
+        self.european_nations['Kingdom of Greece'] = self.greece_relations
         # time limitations on diplomats if you commit horrendous action(you will be temporarily expelled from region for 5 days)
         self.europe_limit = self.date
         self.africa_limit = self.date
@@ -518,23 +566,32 @@ class UnitedStates:
                         if nation_choice.lower() == "spain":
                             for i in range(0, len(globe1.nations)):
                                 """searching for Spain"""
-                                if globe1.nations[i].name == "Spain":
+                                if globe1.nations[i].name == "Kingdom of Spain":
                                     spain_relations.spanish_relations(self, globe1.nations[i], globe1)
 
                         if nation_choice.lower() == "france":
                             for i in range(0, len(globe1.nations)):
                                 """searching for france"""
-                                if globe1.nations[i].name == "France":
+                                if globe1.nations[i].name == "French Republic":
                                     france_relations.french_relations(self, globe1.nations[i], globe1)
 
                         if nation_choice.lower() == "belgium":
                             for i in range(0, len(globe1.nations)):
                                 """searching for Belgium"""
-                                if globe1.nations[i].name == "Belgium":
+                                if globe1.nations[i].name == "Kingdom of Belgium":
                                     belgium_relations.belgian_relations(self, globe1.nations[i], globe1)
 
             elif region_choice.lower() == "asia":
-                pass
+                if self.asia_limit > self.date:
+                    """only go down this path if you decided to harm any european country"""
+                    print(f"Your diplomats have been temporarily banned from any Asian country for "
+                          f"{self.asia_limit.date() - self.date.date()} days.\n")
+                    time.sleep(3)
+
+                else:
+                    for key, value in self.asia.items():
+                        print(f"Relations with {key}: {value}.\n")
+                        time.sleep(1.25)
             elif region_choice.lower() == "south america":
                 pass
             elif region_choice.lower() == "africa":
@@ -595,7 +652,10 @@ def main():
     us = UnitedStates('1914')
     us.establish_states()
     print(us.date.date())
-    # establishing european ais
+    # establishing asian AIs
+    chinese_ai = china_ai.ChinaAI("1914")
+    japanese_ai = japan_ai.Japan("1914")
+    # establishing european AIs
     british_ai = britain_ai.Britain("1914")
     spanish_ai = spain_ai.SpainAI("1914")
     french_ai = france_ai.FranceAI("1914")
@@ -608,14 +668,20 @@ def main():
     swiss_ia = swiss_ai.SwitzerlandAI("1914")
     swedish_ai = sweden_ai.SwedenAI("1914")
     norwegian_ai = norway_ai.NorwayAI("1914")
+    """
+    These 3 nations will be uncommented, once I figure out how to exclude them until 1918
+    estonian_ai = estonia_ai.EstoniaAI('1914')
+    latvian_ai = latvia_ai.LatviaAI("1914")
+    lithuanian_ai = lithuania_ai.Lithuania("1914")"""
+    greek_ai = greece_ai.Greece("1914")
     """german ai will establish states, similar to US"""
     # establishing north american AIs
     canadian_ai = canada_ai.Canada("1914")
     mexican_ai = mexico_ai.MexicoAI("1914")
     cuban_ai = cuba_ai.CubaAI("1914")
-    establish_foreign_nations(globe1, us, british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai,
-                              canadian_ai, mexican_ai, cuban_ai, italian_ai, lux_ai, danish_ai, swedish_ai, swiss_ia,
-                              norwegian_ai)
+    establish_foreign_nations(globe1, us, canadian_ai, mexican_ai, cuban_ai, chinese_ai, japanese_ai,
+                              british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
+                              danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai)
 
     # upload_database.initial_upload_to_database(globe1.nations)
 

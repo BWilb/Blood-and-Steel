@@ -32,9 +32,9 @@ monarchs = {
 }
 
 gdp = {
-    "1910": 3406984117,
-    "1914": 3644313879,
-    "1918": 4174673077,
+    "1910": 340698411,
+    "1914": 364431387,
+    "1918": 417467307,
     "1932": 98539364,
     "1936": 103462352,
     "1939": 113434839
@@ -42,6 +42,8 @@ gdp = {
 
 class Greece:
     def __init__(self, year):
+        self.region = "europe"
+        self.name = "Kingdom of Greece"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -77,6 +79,9 @@ class Greece:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
+        self.us_relations = 85.24
         # other
     # population functions
     def population_change(self):
@@ -86,57 +91,48 @@ class Greece:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Lithuanian government has decided to implement policies to increase growth in births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_enhancer = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_control:
+                        self.birth_control = False
+
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                if choice == 1:
+                    print("The Lithuanian government has decided to implement policies to control births.\n")
+                    time.sleep(1.25)
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                    self.birth_control = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions
@@ -273,3 +269,10 @@ class Greece:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    # main function
+    def main(self):
+        while self.population > 1500000:
+            self.check_economic_state()
+            self.population_change()
+            self.date += timedelta(days=1)
+            break

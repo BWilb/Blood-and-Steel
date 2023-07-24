@@ -43,7 +43,7 @@ gdp = {
 class Austria:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Poland"
+        self.name = "Austria-Hungary"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -95,7 +95,7 @@ class Austria:
                 choice = random.randrange(0, 2)
                 if choice == 0:
                     self.birth_enhancer = True
-                    print("The British government has decided to impose birth enhancer.\n")
+                    print("The Austrian government has decided to impose birth enhancer.\n")
                     time.sleep(3)
                     if self.birth_control:
                         self.birth_control = False
@@ -105,7 +105,7 @@ class Austria:
                 choice = random.randrange(0, 2)
 
                 if choice == 0:
-                    print("The British government has decided to impose birth control.\n")
+                    print("The Austrian government has decided to impose birth control.\n")
                     time.sleep(3)
                     self.birth_control = True
                     if self.birth_enhancer:
@@ -113,22 +113,22 @@ class Austria:
 
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
+                births = random.randrange(2, 10)
+                deaths = random.randrange(3, 7)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
+                births = random.randrange(2, 6)
+                deaths = random.randrange(4, 10)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(3, 9)
+                deaths = random.randrange(2, 8)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -271,4 +271,5 @@ class Austria:
         while self.population > 600000:
             self.check_economic_state()
             self.population_change()
+            self.date += timedelta(days=1)
             break

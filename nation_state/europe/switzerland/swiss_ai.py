@@ -30,7 +30,7 @@ gdp = {
 class SwitzerlandAI:
     def __init__(self, year):
         self.region = "europe"
-        self.name = "Switzerland"
+        self.name = "Republic of Switzerland"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -104,22 +104,22 @@ class SwitzerlandAI:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
+                births = random.randrange(2, 10)
+                deaths = random.randrange(3, 7)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
+                births = random.randrange(2, 6)
+                deaths = random.randrange(4, 10)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
+                births = random.randrange(3, 9)
+                deaths = random.randrange(2, 8)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -262,4 +262,5 @@ class SwitzerlandAI:
         while self.population > 2500000:
             self.check_economic_state()
             self.population_change()
+            self.date += timedelta(days=1)
             break

@@ -76,7 +76,8 @@ def update_database_info(nations):
     for i in range(0, (len(nations))):
         f = 1
         update_query = f"""UPDATE nations.Nation SET NationPopulation={nations[i].population},
-        NationGDP={nations[i].current_gdp}, NationalDebt={nations[i].national_debt} 
+        NationGDP={nations[i].current_gdp}, NationalDebt={nations[i].national_debt}, Births={nations[i].births},
+        Deaths={nations[i].deaths}
         WHERE NationID={(i + 1)}"""
         try:
             cursor.execute(update_query)
@@ -88,4 +89,7 @@ def update_database_info(nations):
             print("unable to update")
 
         #cursor.close()
-        time.sleep(1.5)
+def retrieving_population(nations):
+    pass
+def retreiving_economy(nations):
+    pass
