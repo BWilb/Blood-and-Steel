@@ -36,7 +36,7 @@ from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
 from relations import (brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations, france_relations,
-                       belgium_relations)
+                       belgium_relations, netherlands_relations, luxembourg_relations)
 from database_management import upload_database
 # helper libraries
 import os
@@ -557,7 +557,7 @@ class UnitedStates:
 
                     if choice.lower() == "yes" or choice.lower() == 'y':
                         nation_choice = input("Which European nation would you like to choose?: ")
-                        if nation_choice.lower() == "britain":
+                        if nation_choice.lower() == "britain" or nation_choice.lower() == "great britain":
                             for i in range(0, len(globe1.nations)):
                                 """searching for Great Britain"""
                                 if globe1.nations[i].name == "Great Britain":
@@ -580,6 +580,18 @@ class UnitedStates:
                                 """searching for Belgium"""
                                 if globe1.nations[i].name == "Kingdom of Belgium":
                                     belgium_relations.belgian_relations(self, globe1.nations[i], globe1)
+
+                        if nation_choice.lower() == "netherlands":
+                            for i in range(0, len(globe1.nations)):
+                                """searching for Netherlands"""
+                                if globe1.nations[i].name == "Kingdom of Netherlands":
+                                    netherlands_relations.dutch_relations(self, globe1.nations[i], globe1)
+
+                        if nation_choice.lower() == "luxembourg":
+                            for i in range(0, len(globe1.nations)):
+                                """searching for Netherlands"""
+                                if globe1.nations[i].name == "Kingdom of Luxembourg":
+                                    luxembourg_relations.luxembourger_relations(self, globe1.nations[i], globe1)
 
             elif region_choice.lower() == "asia":
                 if self.asia_limit > self.date:
