@@ -30,12 +30,15 @@ from nation_state.europe.estonia import estonia_ai
 from nation_state.europe.latvia import latvia_ai
 from nation_state.europe.lithuania import lithuania_ai
 from nation_state.europe.greece import greece_ai
-#from nation_state.europe.germany import german_ai
+from nation_state.europe.romania import romania_ai
+from nation_state.europe.serbia import serbia_ai
+# from nation_state.europe.germany import german_ai
 # importation of NorthAmerican files
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
-from relations import (brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations, france_relations,
+from relations import (brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations,
+                       france_relations,
                        belgium_relations, netherlands_relations, luxembourg_relations)
 from database_management import upload_database
 # helper libraries
@@ -46,7 +49,7 @@ import sys
 from collections import OrderedDict
 
 # function uploading to databas
-    
+
 """Population Dictionaries"""
 presidents = {
     "1910": "William Howard Taft",
@@ -67,16 +70,19 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 
+
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
     for i in range(0, len(args)):
         globe.nations.append(args[i])
+
 
 def slow_print(words):
     for c in words:
         sys.stdout.write(c)
         sys.stdout.flush()
         time.sleep(0.19)
+
 
 class UnitedStates:
     def __init__(self, year):
@@ -104,6 +110,8 @@ class UnitedStates:
         # political
         self.leader = presidents[year]
         self.vp = vice_presidents[year]
+        if "self.monarch" in locals():
+            print("ty")
         """Stability"""
         self.stability = 95.56
         self.political_power = 256
@@ -242,6 +250,16 @@ class UnitedStates:
         self.guarantee_greece = False
         self.greece_embargo = False
         self.greece_nationals_dealt = False
+        """romanian"""
+        self.romania_relations = 82.34
+        self.guarantee_romania = False
+        self.romania_embargo = False
+        self.romania_nationals_dealt = False
+        """serbian"""
+        self.serbia_relations = 82.34
+        self.guarantee_serbia = False
+        self.serbia_embargo = False
+        self.serbia_nationals_dealt = False
         # ordered dictionary of european nations
         self.european_nations = OrderedDict()
         self.european_nations['Great Britain'] = self.brit_relations
@@ -260,6 +278,8 @@ class UnitedStates:
         self.european_nations['Republic of Latvia'] = self.latvia_relations
         self.european_nations['Republic of Lithuania'] = self.lithuania_relations
         self.european_nations['Kingdom of Greece'] = self.greece_relations
+        self.european_nations['Kingdom of Romania'] = self.romania_relations
+        self.european_nations['Kingdom of Serbia'] = self.serbia_relations
         # time limitations on diplomats if you commit horrendous action(you will be temporarily expelled from region for 5 days)
         self.europe_limit = self.date
         self.africa_limit = self.date
@@ -505,7 +525,8 @@ class UnitedStates:
     def economic_stats(self):
         print(f"Your current GDP is ${self.current_gdp}.\n")
         time.sleep(1.25)
-        print(f"Your current GDP growth rate is {round(((self.current_gdp - self.past_gdp) / ((self.current_gdp + self.past_gdp) / 2)) * 100, 6)}%.\n")
+        print(
+            f"Your current GDP growth rate is {round(((self.current_gdp - self.past_gdp) / ((self.current_gdp + self.past_gdp) / 2)) * 100, 6)}%.\n")
         time.sleep(1.25)
         print(f"Your current National Debt is ${self.national_debt}.\n")
         time.sleep(1.25)
@@ -659,6 +680,185 @@ class UnitedStates:
             else:
                 print("Please answer carefully!!")
 
+
+    def stability_happiness_change(self, globe):
+        if globe.tension > 25 and globe.tension < 50:
+            """if global tension is between 25 and 50"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.25, 1.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.25, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    happiness_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.50, 1.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.45, 1.65), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.75, 2.76), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 50 and globe.tension < 75:
+            """if global tension is between 50 and 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.10, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.05, 1.05), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.13, 0.96), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.10, 0.76), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.05, 1.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 1.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 75:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+        else:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability + stability_decrease) < 100:
+                        self.stability += stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_decrease) < 100:
+                        self.stability += stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
 def main():
     globe1 = globe.Globe()
     us = UnitedStates('1914')
@@ -686,6 +886,8 @@ def main():
     latvian_ai = latvia_ai.LatviaAI("1914")
     lithuanian_ai = lithuania_ai.Lithuania("1914")"""
     greek_ai = greece_ai.Greece("1914")
+    romanian_ai = romania_ai.RomaniaAI('1914')
+    serbian_ai = serbia_ai.SerbiaAI('1914')
     """german ai will establish states, similar to US"""
     # establishing north american AIs
     canadian_ai = canada_ai.Canada("1914")
@@ -693,7 +895,7 @@ def main():
     cuban_ai = cuba_ai.CubaAI("1914")
     establish_foreign_nations(globe1, us, canadian_ai, mexican_ai, cuban_ai, chinese_ai, japanese_ai,
                               british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
-                              danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai)
+                              danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai, romanian_ai, serbian_ai)
 
     # upload_database.initial_upload_to_database(globe1.nations)
 
@@ -702,11 +904,13 @@ def main():
         us.check_economic_state()
         us.population_change()
         us.stats(globe1)
+        us.stability_happiness_change(globe1)
+        print(us.stability)
         """Looping through changes in US system"""
 
         for i in range(0, len(globe1.nations)):
             if not globe1.nations[i].name == "UnitedStates":
-                globe1.nations[i].main()
+                globe1.nations[i].main(globe1)
                 """
                 looping through main function of each foreign nation object
                 main function is connected to object itself, so as to use less memory space

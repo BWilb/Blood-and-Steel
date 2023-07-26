@@ -3,13 +3,17 @@ import time
 
 import pypyodbc
 
+
 def initial_upload_to_database(nations):
+    """initial upload to database function will upload to each and every database within database management directory"""
     foreign_records = []
     for i in range(0, len(nations)):
-        foreign_records.append([(i + 1), nations[i].date.date(), nations[i].name, nations[i].population,
-                                round(nations[i].current_gdp, 2),
-                                round(nations[i].national_debt, 2), nations[i].leader,
-                                nations[i].stability, nations[i].happiness, nations[i].alliance])
+        foreign_records.append([nations[i].date.date(), nations[i].name, nations[i].stability,
+                                nations[i].leader, nations[i].population, nations[i].births,
+                                nations[i].deaths, nations[i].happiness, nations[i].current_gdp,
+                                nations[i].national_debt,
+                                nations[i].alliance])
+
     DRIVER = "SQL Server"
     SERVER_NAME = "VWNC71429\MSSQLSERVER01"
     DATABASE_NAME = "Capstone"
@@ -19,6 +23,7 @@ def initial_upload_to_database(nations):
                     Database={DATABASE_NAME};
                     Trust_Connection=yes;
     """
+    # inserting
     try:
         conn = pypyodbc.connect(connection)
         print('connection is successful')
@@ -31,7 +36,7 @@ def initial_upload_to_database(nations):
 
     insert_statement = """
     INSERT INTO nations.Nation
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
 
     try:
@@ -39,6 +44,7 @@ def initial_upload_to_database(nations):
         # inserting data from AI nations and user nation
         for foreign_record in foreign_records:
             cursor.execute(insert_statement, foreign_record)
+            print("hi")
 
     except Exception as e:
         cursor.rollback()
@@ -50,7 +56,8 @@ def initial_upload_to_database(nations):
     finally:
         if conn.connected == 1:
             print("connection closed")
-            #conn.close()
+            # conn.close()
+
 
 def update_database_info(nations):
     DRIVER = "SQL Server"
@@ -65,7 +72,7 @@ def update_database_info(nations):
 
     try:
         conn = pypyodbc.connect(connection)
-        #print('connection is successful')
+        # print('connection is successful')
     except Exception as e:
         print(e)
         print("task is terminated")
@@ -77,7 +84,8 @@ def update_database_info(nations):
         f = 1
         update_query = f"""UPDATE nations.Nation SET NationPopulation={nations[i].population},
         NationGDP={nations[i].current_gdp}, NationalDebt={nations[i].national_debt}, Births={nations[i].births},
-        Deaths={nations[i].deaths}
+        Deaths={nations[i].deaths}, NationStability={nations[i].stability},
+        NationHappiness={nations[i].happiness}
         WHERE NationID={(i + 1)}"""
         try:
             cursor.execute(update_query)
@@ -88,8 +96,12 @@ def update_database_info(nations):
             print(e)
             print("unable to update")
 
-        #cursor.close()
+        # cursor.close()
+
+
 def retrieving_population(nations):
     pass
+
+
 def retreiving_economy(nations):
     pass

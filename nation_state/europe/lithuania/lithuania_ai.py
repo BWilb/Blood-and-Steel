@@ -60,6 +60,7 @@ class Lithuania:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
+        self.monarch = monarchs[year]
         """Stability"""
         self.stability = 95.56
         # economic

@@ -1,40 +1,42 @@
 import random
 import time
 from datetime import datetime, timedelta
+import random
+import time
+from datetime import datetime, timedelta
 
-"""Population Dictionaries"""
-population = {
-    "1910": 14702456,
-    "1914": 14742623,
-    "1918": 14782786,
-    "1932": 17635255,
-    "1936": 18971701,
-    "1939": 19961661
-}
-
-"""Political Dictionaries"""
 leaders = {
-    "1910": "Porfirio Diaz",
-    "1914": "Victoriano Huerta",
-    "1918": "Venustiano Carranza",
-    "1932": "Abelardo Rodriguez",
-    "1936": "Lázaro Cárdenas",
-    "1939": "Lázaro Cárdenas"
+    "1910": "Peter I",
+    "1914": "Peter I",
+    "1918": "Peter I",
+    "1932": "Paul",
+    "1936": "Paul",
+    "1939": "Paul"
 }
 
+population = {
+    "1910": 2866333,
+    "1914": 2932233,
+    "1918": 10128121,
+    "1932": 13962629,
+    "1936": 14620667,
+    "1939": 15128000
+}
+
+"""Economic Dictionaries and Variables"""
 gdp = {
-    "1910": 500000000,
-    "1914": 659939450,
-    "1918": 733488730,
-    "1932": 723488730,
-    "1936": 723488730,
-    "1939": 743488730
+    "1910": 12003528421,
+    "1914": 15085307368,
+    "1918": 14723268421,
+    "1932": 39024526316,
+    "1936": 44568947368,
+    "1939": 44428052632
 }
 
-class MexicoAI:
+class SerbiaAI:
     def __init__(self, year):
-        self.region = "north america"
-        self.name = "Mexico"
+        self.region = "europe"
+        self.name = "Kingdom of Serbia"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -72,10 +74,8 @@ class MexicoAI:
         self.economic_stimulus = False
         # military
         # international
-        # north american relations
-        """American"""
-        self.us_relations = 45.45
         self.alliance = ""
+        self.us_relations = 81.06
         # other
     # population functions
     def population_change(self):
@@ -88,9 +88,11 @@ class MexicoAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Mexican government has initiated a program for increasing births.\n")
+                    print("The Serbian government has decided to implement policies to increase growth in births.\n")
                     time.sleep(1.25)
+
                     self.birth_enhancer = True
+
                     if self.birth_control:
                         self.birth_control = False
 
@@ -99,29 +101,31 @@ class MexicoAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Mexican government has initiated a program for decreasing births.\n")
+                    print("The Serbian government has decided to implement policies to control births.\n")
                     time.sleep(1.25)
+
                     self.birth_control = True
+
                     if self.birth_enhancer:
                         self.birth_enhancer = False
         else:
             if self.birth_enhancer:
-                births = random.randrange(10, 20)
-                deaths = random.randrange(4, 11)
+                births = random.randrange(2, 10)
+                deaths = random.randrange(3, 7)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(5, 15)
-                deaths = random.randrange(7, 18)
+                births = random.randrange(2, 6)
+                deaths = random.randrange(4, 10)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 12)
+                births = random.randrange(3, 9)
+                deaths = random.randrange(2, 8)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -133,23 +137,23 @@ class MexicoAI:
             if self.current_gdp > self.past_gdp:
                 if self.e_s.lower() == "recovery":
                     self.e_s = "expansion"
-                    print("The Mexican economy is now in an expansionary period.\n")
+                    print("Your economy is now in an expansionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
                     self.e_s = "recovery"
-                    print("The Mexican economy is now in recovery period.\n")
+                    print("Your economy is now in recovery period.\n")
                     time.sleep(3)
 
             elif self.current_gdp < self.past_gdp:
                 if self.e_s.lower() == "recession":
                     self.e_s = "depression"
-                    print("The Mexican economy is now in a recessionary period.\n")
+                    print("Your economy is now in a recessionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
                     self.e_s = "recession"
-                    print("The Mexican economy is now in a depression period.\n")
+                    print("Your economy is now in a depression period.\n")
                     time.sleep(3)
         else:
             if self.e_s == "recession":
@@ -413,14 +417,9 @@ class MexicoAI:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
-    # main function
-    """
-    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
-    track of the object. I also dont have to individually each file of every nation
-    """
-
+    # main
     def main(self, globe):
-        while self.population > 3000000:
+        while self.population > 100000:
             self.check_economic_state()
             self.population_change()
             self.stability_happiness_change(globe)
