@@ -1,11 +1,10 @@
 # in-game libraries
-import pypyodbc
 
 import globe
 from datetime import datetime, timedelta
 from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
                        conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
+                       kentucky, louisiana, maine, maryland, michigan, mississppi, missouri, montana, n_d,
                        n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon,
                        pennsylvania,
                        rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
@@ -26,9 +25,6 @@ from nation_state.europe.italy import italy_ai
 from nation_state.europe.switzerland import swiss_ai
 from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.norway import norway_ai
-from nation_state.europe.estonia import estonia_ai
-from nation_state.europe.latvia import latvia_ai
-from nation_state.europe.lithuania import lithuania_ai
 from nation_state.europe.greece import greece_ai
 from nation_state.europe.romania import romania_ai
 from nation_state.europe.serbia import serbia_ai
@@ -37,9 +33,10 @@ from nation_state.europe.serbia import serbia_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
-from relations import (brit_relations, canada_relations, mexico_relations, cuba_relations, spain_relations,
-                       france_relations,
-                       belgium_relations, netherlands_relations, luxembourg_relations)
+from nation_state.africa.ethiopia import ethiopia_ai
+from nation_state.international_relations.north_america import mexico_relations, canada_relations
+from nation_state.international_relations.europe import austria_relations, belgium_relations, brit_relations, \
+    cuba_relations, france_relations, luxembourg_relations, netherlands_relations, spain_relations
 from database_management import upload_database
 # helper libraries
 import os
@@ -280,6 +277,14 @@ class UnitedStates:
         self.european_nations['Kingdom of Greece'] = self.greece_relations
         self.european_nations['Kingdom of Romania'] = self.romania_relations
         self.european_nations['Kingdom of Serbia'] = self.serbia_relations
+        # asia
+        """serbian"""
+        self.ethiopia_relations = 72.34
+        self.guarantee_ethiopia = False
+        self.ethiopia_embargo = False
+        self.ethiopia_nationals_dealt = False
+        self.african_nations = OrderedDict()
+        self.african_nations['Ethiopian Empire'] = self.ethiopia_relations
         # time limitations on diplomats if you commit horrendous action(you will be temporarily expelled from region for 5 days)
         self.europe_limit = self.date
         self.africa_limit = self.date
@@ -614,6 +619,12 @@ class UnitedStates:
                                 if globe1.nations[i].name == "Kingdom of Luxembourg":
                                     luxembourg_relations.luxembourger_relations(self, globe1.nations[i], globe1)
 
+                        if nation_choice.lower() == "austria":
+                            for i in range(0, len(globe1.nations)):
+                                """searching for Netherlands"""
+                                if globe1.nations[i].name == "Austria-Hungary" or globe1.nations[i].name == "Republic of Austria":
+                                    austria_relations.austrian_relations(self, globe1.nations[i], globe1)
+
             elif region_choice.lower() == "asia":
                 if self.asia_limit > self.date:
                     """only go down this path if you decided to harm any european country"""
@@ -628,7 +639,17 @@ class UnitedStates:
             elif region_choice.lower() == "south america":
                 pass
             elif region_choice.lower() == "africa":
-                pass
+                if self.africa_limit > self.date:
+                    """only go down this path if you decided to harm any european country"""
+                    print(f"Your diplomats have been temporarily banned from any African country for "
+                          f"{self.africa_limit.date() - self.date.date()} days.\n")
+                    time.sleep(3)
+
+                else:
+                    for key, value in self.african_nations.items():
+                        print(f"Relations with {key}: {value}.\n")
+                        time.sleep(1.25)
+
             elif region_choice.lower() == "north america":
                 """only go down this path if you decided to harm any neighboring country"""
                 if self.na_limit > self.date:

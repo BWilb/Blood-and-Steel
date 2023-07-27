@@ -1,38 +1,35 @@
 import random
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta, datetime
 
-"""Population Dictionaries"""
 population = {
-    "1910": 14702456,
-    "1914": 14742623,
-    "1918": 14782786,
-    "1932": 17635255,
-    "1936": 18971701,
-    "1939": 19961661
+    "1910": 10300000,
+    "1914": 10900000,
+    "1918": 11500000,
+    "1932": 14000000,
+    "1936": 14900000,
+    "1939": 15500000
 }
-
-"""Political Dictionaries"""
 leaders = {
-    "1910": "Porfirio Diaz",
-    "1914": "Victoriano Huerta",
-    "1918": "Venustiano Carranza",
-    "1932": "Abelardo Rodriguez",
-    "1936": "Lázaro Cárdenas",
-    "1939": "Lázaro Cárdenas"
+    "1910": "Habte Giyorgis Dinagde",
+    "1914": "Habte Giyorgis Dinagde",
+    "1918": "Habte Giyorgis Dinagde",
+    "1932": "Tafari Makonnen",
+    "1936": "Tafari Makonnen",
+    "1939": "Tafari Makonnen"
 }
 
-gdp = {
-    "1910": 500000000,
-    "1914": 659939450,
-    "1918": 733488730,
-    "1932": 723488730,
-    "1936": 723488730,
-    "1939": 743488730
+emperors = {
+    "1910": "Menelik II",
+    "1914": "Lij Lyasu",
+    "1918": "Zewditu",
+    "1932": "Halie Selassie I",
+    "1936": "Halie Selassie I",
+    "1939": "Halie Selassie I"
 }
-
-class Mexico:
+class Ethiopia:
     def __init__(self, year):
+        self.region = "africa"
+        self.name = "Ethiopian Empire"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -52,7 +49,8 @@ class Mexico:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
+        self.leader = pm[year]
+        self.monarch = monarchs[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -70,6 +68,11 @@ class Mexico:
         self.economic_stimulus = False
         # military
         # other
+        # international
+        self.alliance = ""
+        """north america"""
+        self.us_relations = 56.56
+        self.us_guarantee = False
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
@@ -78,56 +81,43 @@ class Mexico:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
+                if choice == 0:
+                    self.birth_enhancer = True
+                    print("The British government has decided to impose birth enhancer.\n")
+                    time.sleep(3)
+                    if self.birth_control:
+                        self.birth_control = False
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                if choice == 0:
+                    print("The British government has decided to impose birth control.\n")
+                    time.sleep(3)
+                    self.birth_control = True
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
         else:
             if self.birth_enhancer:
-                births = random.randrange(20, 50)
-                deaths = random.randrange(25, 45)
+                births = random.randrange(10, 20)
+                deaths = random.randrange(4, 11)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
+                births = random.randrange(5, 15)
+                deaths = random.randrange(7, 18)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
-                births = random.randrange(15, 35)
-                deaths = random.randrange(20, 30)
+                births = random.randrange(7, 15)
+                deaths = random.randrange(4, 12)
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -139,23 +129,23 @@ class Mexico:
             if self.current_gdp > self.past_gdp:
                 if self.e_s.lower() == "recovery":
                     self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
+                    print("The British economy is now in an expansionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
                     self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
+                    print("The British economy is now in recovery period.\n")
                     time.sleep(3)
 
             elif self.current_gdp < self.past_gdp:
                 if self.e_s.lower() == "recession":
                     self.e_s = "depression"
-                    print("Your economy is now in a recessionary period.\n")
+                    print("Your economy is now in a depressionary period.\n")
                     time.sleep(3)
 
                 elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
                     self.e_s = "recession"
-                    print("Your economy is now in a depression period.\n")
+                    print("The British economy is now in a recessionary period.\n")
                     time.sleep(3)
         else:
             if self.e_s == "recession":
@@ -400,58 +390,36 @@ class Mexico:
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
         else:
-            """if global tension is above 75"""
-            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
-                if self.improve_stability > self.date:
-                    """if improving of stability has been activated"""
-                    stability_increase = round(random.uniform(0.05, 0.75), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                else:
-                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
-                    if (self.stability + stability_decrease) < 100:
-                        self.stability += stability_decrease
-
-                if self.improve_happiness > self.date:
-                    stability_increase = round(random.uniform(0.05, 0.99), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
-                    if (self.stability + stability_decrease) < 100:
-                        self.stability += stability_decrease
+            if self.improve_stability > self.date:
+                stability_increase = round(random.uniform(1.56, 2.56), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
 
             else:
-                if self.improve_stability > self.date:
-                    stability_increase = round(random.uniform(1.56, 2.56), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
+                stability_increase = round(random.uniform(1.45, 2.34), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
 
-                else:
-                    stability_increase = round(random.uniform(1.45, 2.34), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
+            if self.improve_happiness > self.date:
+                """If policies toward improving happiness have been imposed"""
+                happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+            else:
+                happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+    # international functions
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
 
-                if self.improve_happiness > self.date:
-                    """If policies toward improving happiness have been imposed"""
-                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-                else:
-                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-def main():
-    mexico = Mexico("1914")
-    while mexico.population > 6000000:
-        print(mexico.population)
-        mexico.population_change()
-        print(mexico.population)
-        mexico.check_economic_state()
-        time.sleep(1.25)
-
-        print(mexico.population)
-main()
-
+    def main(self, globe):
+        while self.population > 10000000:
+            self.check_economic_state()
+            self.population_change()
+            self.stability_happiness_change(globe)
+            self.date += timedelta(days=1)
+            break
