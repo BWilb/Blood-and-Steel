@@ -1,6 +1,42 @@
 import random
+import sys
 import time
 from datetime import datetime, timedelta
+
+import globe
+from database_management import upload_database
+from nation_state.asia.se_asia.china import china_ai
+from nation_state.asia.se_asia.japan import japan_ai
+from nation_state.europe.austria import austria_ai
+from nation_state.europe.belgium import belgium_ai
+from nation_state.europe.britain import britain_ai
+from nation_state.europe.denmark import denmark_ai
+from nation_state.europe.france import france_ai
+from nation_state.europe.greece import greece_ai
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.luxembourg import luxembourg_ai
+from nation_state.europe.netherlands import netherlands_ai
+from nation_state.europe.norway import norway_ai
+from nation_state.europe.romania import romania_ai
+from nation_state.europe.serbia import serbia_ai
+from nation_state.europe.spain import spain_ai
+from nation_state.europe.sweden import sweden_ai
+from nation_state.europe.switzerland import swiss_ai
+from nation_state.north_america.canada import canada_ai
+from nation_state.north_america.cuba import cuba_ai
+from nation_state.north_america.united_states import us_ai
+
+def establish_foreign_nations(globe, *args):
+    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
+    for i in range(0, len(args)):
+        globe.nations.append(args[i])
+
+def slow_print(words):
+    # used in international relations function, when dealing out region names
+    for c in words:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.19)
 
 """Population Dictionaries"""
 population = {
@@ -33,6 +69,7 @@ gdp = {
 
 class Mexico:
     def __init__(self, year):
+        self.name = "Mexico"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -442,16 +479,51 @@ class Mexico:
                     happiness_increase = round(random.uniform(0.96, 2.56), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
-
 def main():
+    globe1 = globe.Globe()
+    # player nation
     mexico = Mexico("1914")
-    while mexico.population > 6000000:
-        print(mexico.population)
-        mexico.population_change()
-        print(mexico.population)
-        mexico.check_economic_state()
-        time.sleep(1.25)
+    chinese_ai = china_ai.ChinaAI("1914")
+    japanese_ai = japan_ai.Japan("1914")
+    # establishing european AIs
+    british_ai = britain_ai.Britain("1914")
+    spanish_ai = spain_ai.SpainAI("1914")
+    french_ai = france_ai.FranceAI("1914")
+    austrian_ai = austria_ai.Austria("1914")
+    belgian_ai = belgium_ai.BelgiumAI("1914")
+    dutch_ai = netherlands_ai.Netherlands("1914")
+    italian_ai = italy_ai.ItalyAI("1914")
+    lux_ai = luxembourg_ai.LuxembourgAI("1914")
+    danish_ai = denmark_ai.Denmark("1914")
+    swiss_ia = swiss_ai.SwitzerlandAI("1914")
+    swedish_ai = sweden_ai.SwedenAI("1914")
+    norwegian_ai = norway_ai.NorwayAI("1914")
+    greek_ai = greece_ai.Greece("1914")
+    romanian_ai = romania_ai.RomaniaAI('1914')
+    serbian_ai = serbia_ai.SerbiaAI('1914')
+    # establishing north american AIs
+    american_ai = us_ai.UnitedStates('1914')
+    cuban_ai = cuba_ai.CubaAI("1914")
+    canadian_ai = canada_ai.Canada("1914")
+    establish_foreign_nations(globe1, mexico, canadian_ai, american_ai, cuban_ai, chinese_ai, japanese_ai,
+                              british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
+                              danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai, romanian_ai, serbian_ai)
 
-        print(mexico.population)
+    # upload_database.initial_upload_to_database(globe1.nations)
+    while mexico.population > 6000000:
+        mexico.population_change()
+        mexico.check_economic_state()
+        mexico.stability_happiness_change(globe1)
+        for i in range(0, len(globe1.nations)):
+            if not globe1.nations[i].name == "Mexico":
+                globe1.nations[i].main(globe1)
+                """
+                looping through main function of each foreign nation object
+                main function is connected to object itself, so as to use less memory space
+                """
+        upload_database.update_database_info(globe1.nations)
+        mexico.date += timedelta(days=1)
+        time.sleep(3)
+
 main()
 

@@ -1,7 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
-from nation_state.europe.germany.regions import alsace_lorraine, bavaria, baden_wurttemburg, prussia, saxony
+from nation_state.europe.germany import alsace_lorraine, baden_wurttemburg, bavaria, prussia, saxony
 import os
 chancellors = {
     "1910": "Theobald von Bethmann Hollweg",
@@ -23,6 +23,13 @@ kaisers = {
 
 class Germany:
     def __init__(self, year):
+        self.region = "europe"
+        if int(year) <= 1918:
+            self.name = "German Empire"
+        elif int(year) > 1918 and int(year) < 1932:
+            self.name = "Weimar Germany"
+        else:
+            self.name = "Nazi Germany"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -107,21 +114,21 @@ class Germany:
             if self.birth_enhancer:
                 births = random.randrange(20, 50)
                 deaths = random.randrange(25, 45)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(15, 35)
                 deaths = random.randrange(20, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
@@ -130,7 +137,7 @@ class Germany:
         folder = "administrative_regions"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
-            if file != '__pycache__':
+            if file != '__pycache__' or file != "germany.py" or file != "german_ai.py":
                 if file.removesuffix(".py") == "alsace_lorraine":
                     self.states.append(alsace_lorraine.AlsaceLorraine(str(self.date.year), self))
                     print("alsace-lorraine")

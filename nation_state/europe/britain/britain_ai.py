@@ -2,6 +2,7 @@ import random
 import sys
 import time
 from datetime import datetime, timedelta
+import randomness
 
 import pypyodbc
 
@@ -451,6 +452,7 @@ class Britain:
         while self.population > 10000000:
             self.check_economic_state()
             self.population_change()
+            randomness.random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break

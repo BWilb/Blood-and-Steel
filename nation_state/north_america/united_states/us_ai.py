@@ -1,12 +1,11 @@
 import random
 import time
 from datetime import datetime, timedelta
-from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana, maine, maryland, michigan, minnesota, mississppi, missouri, montana, n_d,
-                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon, pennsylvania,
-                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
-                       west_virginia, wisconsin, wyoming)
+from nation_state.north_america.united_states import alabama, alaska, arizona, arkansas, california, colorado, \
+    conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, maine, \
+    maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, \
+    north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, virginia, \
+    vermont, west_virginia, washington, wisconsin, wyoming
 import os
 """Population Dictionaries"""
 presidents = {
@@ -30,6 +29,8 @@ vice_presidents = {
 
 class UnitedStates:
     def __init__(self, year):
+        self.region = "North America"
+        self.name = "United States"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -77,38 +78,25 @@ class UnitedStates:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                if choice == 1:
+                    print("The American government has initiated a program for increasing births.\n")
+                    time.sleep(1.25)
+                    self.birth_enhancer = True
+                    if self.birth_control:
+                        self.birth_control = False
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                if choice == 1:
+                    print("The American government has initiated a program for decreasing births.\n")
+                    time.sleep(1.25)
+                    self.birth_control = True
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 50)
@@ -133,10 +121,10 @@ class UnitedStates:
 
     # establishing internal states
     def establish_states(self):
-        folder = "us_states"
+        folder = "united_states"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
-            if file != '__pycache__':
+            if file != '__pycache__' or file != "us.py" or file != "us_ai.py":
                 if file.removesuffix(".py") == "alabama":
                     self.states.append(alabama.Alabama(self.date.year, self))
                 if file.removesuffix(".py") == "alaska":
@@ -377,11 +365,186 @@ class UnitedStates:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
     # stability functions
+    def stability_happiness_change(self, globe):
+        if globe.tension > 25 and globe.tension < 50:
+            """if global tension is between 25 and 50"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.25, 1.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.25, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
 
-def main():
-    us = UnitedStates('1914')
-    us.establish_states()
-    print(f"US population {us.population}, US GDP: {us.current_gdp}")
+                if self.improve_happiness > self.date:
+                    happiness_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
 
-if __name__ == '__main__':
-    main()
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.50, 1.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.45, 1.65), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.75, 2.76), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 50 and globe.tension < 75:
+            """if global tension is between 50 and 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.10, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.05, 1.05), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.13, 0.96), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.10, 0.76), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.05, 1.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 1.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 75:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+        else:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability + stability_decrease) < 100:
+                        self.stability += stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_decrease) < 100:
+                        self.stability += stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+    def main(self, globe):
+        while self.population > 3000000:
+            self.stability_happiness_change(globe)
+            self.population_change()
+            self.check_economic_state()
+            break

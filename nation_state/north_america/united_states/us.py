@@ -2,13 +2,11 @@
 
 import globe
 from datetime import datetime, timedelta
-from us_states import (alabama, alaska, arizona, arkansas, california, colorado,
-                       conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas,
-                       kentucky, louisiana, maine, maryland, michigan, mississppi, missouri, montana, n_d,
-                       n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, north_carolina, ok, oregon,
-                       pennsylvania,
-                       rhode_island, ohio, s_d, south_carolina, tennessee, texas, utah, vermont, virginia, washington,
-                       west_virginia, wisconsin, wyoming)
+from us_states import alabama, alaska, arizona, arkansas, california, colorado, \
+    conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, maine, \
+    maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, \
+    north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, virginia, \
+    vermont, west_virginia, washington, wisconsin, wyoming
 # importation of Asian files
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.se_asia.japan import japan_ai
@@ -33,11 +31,11 @@ from nation_state.europe.serbia import serbia_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
-from nation_state.africa.ethiopia import ethiopia_ai
 from nation_state.international_relations.north_america import mexico_relations, canada_relations
 from nation_state.international_relations.europe import austria_relations, belgium_relations, brit_relations, \
     cuba_relations, france_relations, luxembourg_relations, netherlands_relations, spain_relations
 from database_management import upload_database
+from randomness import random_functions
 # helper libraries
 import os
 import time
@@ -67,19 +65,16 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 
-
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
     for i in range(0, len(args)):
         globe.nations.append(args[i])
-
 
 def slow_print(words):
     for c in words:
         sys.stdout.write(c)
         sys.stdout.flush()
         time.sleep(0.19)
-
 
 class UnitedStates:
     def __init__(self, year):
@@ -182,6 +177,11 @@ class UnitedStates:
         self.guarantee_france = False
         self.france_embargo = False
         self.france_nationals_dealt = False
+        """german"""
+        """self.germany_relations = 76.45
+        self.guarantee_germany = False
+        self.germany_embargo = False
+        self.germany_nationals_dealt = False"""
         """belgian"""
         self.belgium_relations = 81.65
         self.guarantee_belgium = False
@@ -264,6 +264,7 @@ class UnitedStates:
         self.european_nations['French Republic'] = self.france_relations
         self.european_nations['Kingdom of Belgium'] = self.belgium_relations
         self.european_nations['Austria-Hungary'] = self.austria_relations
+        #self.european_nations['German Empire'] = self.germany_relations
         self.european_nations['Kingdom of Netherlands'] = self.netherlands_relations
         self.european_nations['Kingdom of Luxembourg'] = self.luxembourg_relations
         self.european_nations['Kingdom of Denmark'] = self.danish_relations
@@ -271,9 +272,10 @@ class UnitedStates:
         self.european_nations['Kingdom of Norway'] = self.norway_relations
         self.european_nations['Republic of Sweden'] = self.swedish_relations
         self.european_nations['Republic of Switzerland'] = self.swiss_relations
-        self.european_nations['Republic of Estonia'] = self.estonia_relations
+        """self.european_nations['Republic of Estonia'] = self.estonia_relations
         self.european_nations['Republic of Latvia'] = self.latvia_relations
-        self.european_nations['Republic of Lithuania'] = self.lithuania_relations
+        self.european_nations['Republic of Lithuania'] = self.lithuania_relations"""
+        # will be added in later, when I figure out how to set time constraints upon these 3 nations
         self.european_nations['Kingdom of Greece'] = self.greece_relations
         self.european_nations['Kingdom of Romania'] = self.romania_relations
         self.european_nations['Kingdom of Serbia'] = self.serbia_relations
@@ -342,7 +344,7 @@ class UnitedStates:
         folder = "us_states"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
-            if file != '__pycache__':
+            if file != '__pycache__' or file != "us.py" or file != "us_ai.py":
                 if file.removesuffix(".py") == "alabama":
                     self.states.append(alabama.Alabama(self.date.year, self))
                 if file.removesuffix(".py") == "alaska":
@@ -701,7 +703,6 @@ class UnitedStates:
             else:
                 print("Please answer carefully!!")
 
-
     def stability_happiness_change(self, globe):
         if globe.tension > 25 and globe.tension < 50:
             """if global tension is between 25 and 50"""
@@ -893,6 +894,8 @@ def main():
     spanish_ai = spain_ai.SpainAI("1914")
     french_ai = france_ai.FranceAI("1914")
     austrian_ai = austria_ai.Austria("1914")
+    # germany_ai = german_ai.Germany("1914")
+    """german ai will establish states, similar to US"""
     belgian_ai = belgium_ai.BelgiumAI("1914")
     dutch_ai = netherlands_ai.Netherlands("1914")
     italian_ai = italy_ai.ItalyAI("1914")
@@ -909,7 +912,6 @@ def main():
     greek_ai = greece_ai.Greece("1914")
     romanian_ai = romania_ai.RomaniaAI('1914')
     serbian_ai = serbia_ai.SerbiaAI('1914')
-    """german ai will establish states, similar to US"""
     # establishing north american AIs
     canadian_ai = canada_ai.Canada("1914")
     mexican_ai = mexico_ai.MexicoAI("1914")
@@ -918,7 +920,7 @@ def main():
                               british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
                               danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai, romanian_ai, serbian_ai)
 
-    # upload_database.initial_upload_to_database(globe1.nations)
+    upload_database.initial_upload_to_database(globe1.nations)
 
     while us.population > 3000000:
         """United States will stay afloat as a nation, as long as 3000000 people are left"""
@@ -926,7 +928,8 @@ def main():
         us.population_change()
         us.stats(globe1)
         us.stability_happiness_change(globe1)
-        print(us.stability)
+        random_functions.random_functions(us, globe1)
+
         """Looping through changes in US system"""
 
         for i in range(0, len(globe1.nations)):

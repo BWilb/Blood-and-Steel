@@ -14,12 +14,9 @@ GO
 USE Capstone
 IF OBJECT_ID('nations.Nation', 'U') IS NOT NULL
 	DROP TABLE nations.Nation
-USE Capstone
-IF OBJECT_ID('nations.Nation', 'U') IS NOT NULL
-	DROP TABLE nations.Nation
 
 CREATE TABLE nations.Nation
-(NationID int primary key NOT NULL,
+(NationID int primary key IDENTITY(1, 1) NOT NULL,
 CurrentDate date NOT NULL,
 NationName varchar(35) NOT NULL,
 NationStability FLOAT NOT NULL,
@@ -30,6 +27,5 @@ Deaths INT NOT NULL,
 NationHappiness FLOAT NOT NULL,
 NationGDP float NOT NULL,
 NationalDebt float NOT NULL,
-NationLeader varchar(35) NOT NULL,
 NationalAlliance varchar(20) NOT NULL
 )

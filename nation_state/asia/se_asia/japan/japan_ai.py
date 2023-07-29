@@ -1,6 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
+import randomness
 leaders = {
     "1910" : "Katsura Tarō",
     "1914" : "Ōkuma Shigenobu",
@@ -425,6 +426,7 @@ class Japan:
         while self.population > 2500000:
             self.check_economic_state()
             self.population_change()
+            randomness.random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
