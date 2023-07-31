@@ -5,6 +5,9 @@ from pygame.constants import VIDEORESIZE
 import button
 
 region = ""
+region_chosen = ""
+time_chosen = ""
+nation_chosen = ""
 
 pygame.init()
 
@@ -31,6 +34,8 @@ options_img = pygame.image.load("buttons/options_butt.jpg").convert_alpha()
 quit_img = pygame.image.load("buttons/quit_butt.jpg").convert_alpha()
 back_img = pygame.image.load("buttons/back_button.jpg").convert_alpha()
 secondary_quit = pygame.image.load("buttons/quit_button.jpg").convert_alpha()
+yes_img = pygame.image.load("buttons/yes_button.jpg").convert_alpha()
+no_img = pygame.image.load("buttons/no_button.jpg").convert_alpha()
 """time button images"""
 img_1910 = pygame.image.load("buttons/time/1910_butt.jpg").convert_alpha()
 img_1914 = pygame.image.load("buttons/time/1914_butt.jpg").convert_alpha()
@@ -58,7 +63,26 @@ img_france = pygame.image.load("buttons/region/europe/france_button.jpg").conver
 img_spain = pygame.image.load("buttons/region/europe/spain_button.jpg").convert_alpha()
 img_austria = pygame.image.load("buttons/region/europe/austria_button.jpg").convert_alpha()
 img_bulgaria = pygame.image.load("buttons/region/europe/bulgaria_button.jpg").convert_alpha()
-
+img_germany = pygame.image.load("buttons/region/europe/germany_button.jpg").convert_alpha()
+img_lux = pygame.image.load("buttons/region/europe/luxembourg_button.jpg").convert_alpha()
+img_belgian = pygame.image.load("buttons/region/europe/belgium_button.jpg").convert_alpha()
+img_albania = pygame.image.load("buttons/region/europe/albania_button.jpg").convert_alpha()
+img_denmark = pygame.image.load("buttons/region/europe/denmark_button.jpg").convert_alpha()
+img_greece = pygame.image.load("buttons/region/europe/greece_button.jpg").convert_alpha()
+img_montenegro = pygame.image.load("buttons/region/europe/montenegro_button.jpg").convert_alpha()
+img_netherlands = pygame.image.load("buttons/region/europe/netherlands_button.jpg").convert_alpha()
+img_norway = pygame.image.load("buttons/region/europe/norway_button.jpg").convert_alpha()
+img_romania = pygame.image.load("buttons/region/europe/romania_button.jpg").convert_alpha()
+img_russia = pygame.image.load("buttons/region/europe/russia_button.jpg").convert_alpha()
+img_sweden = pygame.image.load("buttons/region/europe/sweden_button.jpg").convert_alpha()
+img_swiss = pygame.image.load("buttons/region/europe/swiss_button.jpg").convert_alpha()
+# asia
+img_japan = pygame.image.load("buttons/region/asia/japan_button.jpg").convert_alpha()
+img_china = pygame.image.load("buttons/region/asia/china_button.jpg").convert_alpha()
+img_afghanistan = pygame.image.load("buttons/region/asia/afghanistan_button.jpg").convert_alpha()
+img_turkey = pygame.image.load("buttons/region/asia/turkey_button.jpg").convert_alpha()
+img_iran = pygame.image.load("buttons/region/asia/iran_button.jpg").convert_alpha()
+img_iraq = pygame.image.load("buttons/region/asia/iraq_button.jpg").convert_alpha()
 # buttons
 """basic buttons"""
 start_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.25, start_img, 0.25)
@@ -66,6 +90,8 @@ options_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.5, options
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.75, quit_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.38, 900, back_img, 0.10)
 secondary_quit_button = button.Button(SCREEN_WIDTH * 0.58, 900, secondary_quit, 0.10)
+yes_button = button.Button(SCREEN_WIDTH * 0.365, 800, yes_img, 0.15)
+no_button = button.Button(SCREEN_WIDTH * 0.57, 800, no_img, 0.15)
 """time buttons"""
 button_1910 = button.Button(SCREEN_WIDTH * 0.20, 300, img_1910, 0.25)
 button_1914 = button.Button(SCREEN_WIDTH * 0.20, 500, img_1914, 0.25)
@@ -88,16 +114,35 @@ cuba_button = button.Button(SCREEN_WIDTH * 0.625, 550, img_cuba, 0.25)
 # africa
 ethiopia_button = button.Button(SCREEN_WIDTH * 0.45, SCREEN_HEIGHT * 0.45, img_ethiopia, 0.25)
 # europe
-britain_button = button.Button(SCREEN_WIDTH * 0.20, SCREEN_WIDTH * 0.20, img_britain, 0.15)
-france_button = button.Button(SCREEN_WIDTH * 0.20, SCREEN_WIDTH * 0.25, img_france, 0.15)
-spain_button = button.Button(SCREEN_WIDTH * 0.20, SCREEN_WIDTH * 0.30, img_spain, 0.15)
-austria_button = button.Button(SCREEN_WIDTH * 0.20, SCREEN_WIDTH * 0.35, img_austria, 0.15)
-bulgaria_button = button.Button(SCREEN_WIDTH * 0.20, SCREEN_WIDTH * 0.40, img_bulgaria, 0.15)
+britain_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.20, img_britain, 0.15)
+france_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.30, img_france, 0.15)
+spain_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.40, img_spain, 0.15)
+austria_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.50, img_austria, 0.15)
+bulgaria_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.60, img_bulgaria, 0.15)
+germany_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.70, img_germany, 0.15)
+luxembourg_button = button.Button(SCREEN_WIDTH * 0.15, SCREEN_HEIGHT * 0.80, img_lux, 0.15)
+belgium_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.20, img_belgian, 0.15)
+albania_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.30, img_albania, 0.15)
+denmark_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.40, img_denmark, 0.15)
+greece_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.50, img_greece, 0.15)
+montenegro_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.60, img_montenegro, 0.15)
+dutch_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.70, img_netherlands, 0.15)
+norway_button = button.Button(SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.80, img_norway, 0.15)
+romania_button = button.Button(SCREEN_WIDTH * 0.55, SCREEN_HEIGHT * 0.20, img_romania, 0.15)
+russia_button = button.Button(SCREEN_WIDTH * 0.55, SCREEN_HEIGHT * 0.30, img_russia, 0.15)
+sweden_button = button.Button(SCREEN_WIDTH * 0.55, SCREEN_HEIGHT * 0.40, img_sweden, 0.15)
+swiss_button = button.Button(SCREEN_WIDTH * 0.55, SCREEN_HEIGHT * 0.50, img_swiss, 0.15)
+# asia
+afghan_button = button.Button(SCREEN_WIDTH * 0.205, SCREEN_HEIGHT * 0.20, img_afghanistan, 0.25)
+china_button = button.Button(SCREEN_WIDTH * 0.205, SCREEN_HEIGHT * 0.40, img_china, 0.25)
+iran_button = button.Button(SCREEN_WIDTH * 0.205, SCREEN_HEIGHT * 0.60, img_iran, 0.25)
+iraq_button = button.Button(SCREEN_WIDTH * 0.625, SCREEN_HEIGHT * 0.60, img_iraq, 0.25)
+japan_button = button.Button(SCREEN_WIDTH * 0.625, SCREEN_HEIGHT * 0.20, img_japan, 0.25)
+turkey_button = button.Button(SCREEN_WIDTH * 0.625, SCREEN_HEIGHT * 0.40, img_turkey, 0.25)
 def draw_text(text, font, text_col, x, y):
     # draws the text on screen
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
-
 
 """host = socket.gethostname()
 print(host)"""
@@ -120,19 +165,27 @@ while run:
             """changing menu to allow user to select time placement they want"""
             draw_text("Choose your timeframe!", font, text_col, SCREEN_WIDTH * 0.375, 100)
             if button_1910.draw(screen):
+                time_chosen = "1910"
                 menu_state = "region"
             if button_1914.draw(screen):
+                time_chosen = "1914"
                 menu_state = "region"
             if button_1918.draw(screen):
+                time_chosen = "1918"
                 menu_state = "region"
             if button_1932.draw(screen):
+                time_chosen = "1932"
                 menu_state = "region"
             if button_1936.draw(screen):
+                time_chosen = "1936"
                 menu_state = "region"
             if button_1939.draw(screen):
+                time_chosen = "1939"
                 menu_state = "region"
             if back_button.draw(screen):
                 menu_state = "main"
+            if secondary_quit_button.draw(screen):
+                pygame.quit()
 
         if menu_state == "region":
             """changing menu to allow user to select region they want
@@ -161,18 +214,23 @@ while run:
                 menu_state = "nation"
             if back_button.draw(screen):
                 menu_state = "time"
+            if secondary_quit_button.draw(screen):
+                pygame.quit()
 
         if menu_state == "nation":
             if region == "na":
                 draw_text("Choose your nation!", font, text_col, SCREEN_WIDTH * 0.375, 100)
                 if us_button.draw(screen):
-                    pass
+                    nation_chosen = "united states"
                 if canada_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "canada"
                 if cuba_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "cuba"
                 if mexico_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "mexico"
                 if back_button.draw(screen):
                     menu_state = "region"
                 if secondary_quit_button.draw(screen):
@@ -181,18 +239,106 @@ while run:
             elif region == "africa":
                 if ethiopia_button.draw(screen):
                     pass
+                if back_button.draw(screen):
+                    menu_state = "region"
+                if secondary_quit_button.draw(screen):
+                    pygame.quit()
 
             elif region == "europe":
+                draw_text("Choose your nation!", font, text_col, SCREEN_WIDTH * 0.375, 50)
                 if britain_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "great britain"
                 if france_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "france"
                 if spain_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "spain"
                 if austria_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "austria"
                 if bulgaria_button.draw(screen):
-                    pass
+                    menu_state = "chosen"
+                    nation_chosen = "bulgaria"
+                if germany_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "germany"
+                if luxembourg_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "luxembourg"
+                if belgium_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "belgium"
+                if albania_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "albania"
+                if denmark_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "denmark"
+                if greece_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "greece"
+                if montenegro_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "montenegro"
+                if dutch_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "netherlands"
+                if norway_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "norway"
+                if romania_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "romania"
+                if russia_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "russia"
+                if sweden_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "sweden"
+                if swiss_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "switzerland"
+
+                if back_button.draw(screen):
+                    menu_state = "region"
+                if secondary_quit_button.draw(screen):
+                    pygame.quit()
+
+            elif region == "asia":
+                draw_text("Choose your nation!", font, text_col, SCREEN_WIDTH * 0.375, 50)
+                if afghan_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "afghanistan"
+                if china_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "china"
+                if iran_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "iran"
+                if iraq_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "iraq"
+                if japan_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "japan"
+                if turkey_button.draw(screen):
+                    menu_state = "chosen"
+                    nation_chosen = "turkey"
+                if back_button.draw(screen):
+                    menu_state = "region"
+                if secondary_quit_button.draw(screen):
+                    pygame.quit()
+        if menu_state == "chosen":
+            draw_text(f"You have chosen {nation_chosen}", font, text_col, SCREEN_WIDTH * 0.375 - len(nation_chosen), 50)
+            draw_text(f"In the year {time_chosen}", font, text_col, SCREEN_WIDTH * 0.425 - len(time_chosen), 100)
+            draw_text(f"Do you wish to proceed with your choice?", font, text_col, SCREEN_WIDTH * 0.275, 700)
+            if yes_button.draw(screen):
+                pass
+            if no_button.draw(screen):
+                pass
+
 
     else:
         draw_text("Press Space to pause", font, text_col, SCREEN_WIDTH * 0.40, SCREEN_HEIGHT * 0.5)
