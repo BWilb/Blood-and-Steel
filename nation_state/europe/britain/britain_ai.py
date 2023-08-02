@@ -102,9 +102,15 @@ class Britain:
         # other
         # international
         self.alliance = ""
-        """north america"""
-        self.us_relations = 56.56
+        """North america"""
+        # us
+        self.us_relations = 56.97
         self.us_guarantee = False
+        self.us_embargo = False
+        # mexico
+        self.mexico_relations = 89.97
+        self.mexico_guarantee = False
+        self.mexico_embargo = False
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

@@ -77,9 +77,17 @@ class NorwayAI:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
-        # foreign
+        # international
         self.alliance = ""
-        self.us_relations = 85.24
+        """North america"""
+        # us
+        self.us_relations = 56.97
+        self.us_guarantee = False
+        self.us_embargo = False
+        # mexico
+        self.mexico_relations = 89.97
+        self.mexico_guarantee = False
+        self.mexico_embargo = False
         # other
     # population functions
     def population_change(self):

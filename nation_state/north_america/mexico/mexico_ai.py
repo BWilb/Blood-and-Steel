@@ -74,9 +74,15 @@ class MexicoAI:
         # military
         # international
         # north american relations
+        self.alliance = ""
         """American"""
         self.us_relations = 45.45
-        self.alliance = ""
+        self.us_guarantee = False
+        self.us_embargo = False
+        """Canada"""
+        self.canada_relations = 89.97
+        self.canada_guarantee = False
+        self.canada_embargo = False
         # other
     # population functions
     def population_change(self):

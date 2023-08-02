@@ -31,9 +31,9 @@ from nation_state.europe.serbia import serbia_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.cuba import cuba_ai
-from nation_state.international_relations.north_america import mexico_relations, canada_relations
+from nation_state.international_relations.north_america import mexico_relations, canada_relations, cuba_relations
 from nation_state.international_relations.europe import austria_relations, belgium_relations, brit_relations, \
-    cuba_relations, france_relations, luxembourg_relations, netherlands_relations, spain_relations
+    france_relations, luxembourg_relations, netherlands_relations, spain_relations
 from database_management import upload_database
 from randomness import random_functions
 # helper libraries
@@ -128,18 +128,12 @@ class UnitedStates:
         # north america
         """canada"""
         self.canada_relations = 55.65
-        self.guarantee_canada = False
-        self.embargo_canada = False
         self.canada_nationals_dealt = False
         """mexico"""
         self.mexico_relations = 55.65
-        self.guarantee_mexico = False
-        self.embargo_mexico = False
         self.mexico_nationals_dealt = False
         """cuba"""
         self.cuba_relations = 86.56
-        self.guarantee_cuba = False
-        self.embargo_cuba = False
         self.cuba_nationals_dealt = False
         # na ordered dictionary
         self.na = OrderedDict()
@@ -149,13 +143,9 @@ class UnitedStates:
         # asia
         """China"""
         self.china_relations = 65.45
-        self.guarantee_china = False
-        self.embargo_china = False
         self.china_nationals_dealt = False
         """Japan"""
         self.japan_relations = 76.45
-        self.guarantee_japan = False
-        self.embargo_japan = False
         self.japan_nationals_dealt = False
         # asia ordered dictionary
         self.asia = OrderedDict()
@@ -164,18 +154,12 @@ class UnitedStates:
         # europe
         """british"""
         self.brit_relations = 73.45
-        self.guarantee_britain = False
-        self.britain_embargo = False
         self.british_nationals_dealt = False
         """spanish"""
         self.spain_relations = 70.34
-        self.guarantee_spain = False
-        self.spain_embargo = False
         self.spain_nationals_dealt = False
         """french"""
         self.france_relations = 80.76
-        self.guarantee_france = False
-        self.france_embargo = False
         self.france_nationals_dealt = False
         """german"""
         """self.germany_relations = 76.45
@@ -184,78 +168,48 @@ class UnitedStates:
         self.germany_nationals_dealt = False"""
         """belgian"""
         self.belgium_relations = 81.65
-        self.guarantee_belgium = False
-        self.belgium_embargo = False
         self.belgium_nationals_dealt = False
         """austrian"""
         self.austria_relations = 58.45
-        self.guarantee_austria = False
-        self.austria_embargo = False
         self.austria_nationals_dealt = False
         """dutch"""
         self.netherlands_relations = 74.34
-        self.guarantee_netherlands = False
-        self.netherlands_embargo = False
         self.netherlands_nationals_dealt = False
         """luxembourg"""
         self.luxembourg_relations = 92.34
-        self.guarantee_luxembourg = False
-        self.luxembourg_embargo = False
         self.luxembourg_nationals_dealt = False
         """denmark"""
         self.danish_relations = 72.34
-        self.guarantee_danish = False
-        self.danish_embargo = False
         self.danish_nationals_dealt = False
         """italy"""
         self.italy_relations = 95.74
-        self.guarantee_italy = False
-        self.italy_embargo = False
         self.italy_nationals_dealt = False
         """norwegian"""
         self.norway_relations = 96.44
-        self.guarantee_norway = False
-        self.norway_embargo = False
         self.norway_nationals_dealt = False
         """swedish"""
         self.swedish_relations = 94.34
-        self.guarantee_swedish = False
-        self.swedish_embargo = False
         self.swedish_nationals_dealt = False
         """swiss"""
         self.swiss_relations = 98.74
-        self.guarantee_swiss = False
-        self.swiss_embargo = False
         self.swiss_nationals_dealt = False
         """estonian"""
         self.estonia_relations = 98.74
-        self.guarantee_estonia = False
-        self.estonia_embargo = False
         self.estonia_nationals_dealt = False
         """latvian"""
         self.latvia_relations = 98.74
-        self.guarantee_latvia = False
-        self.latvia_embargo = False
         self.latvia_nationals_dealt = False
         """lithuanian"""
         self.lithuania_relations = 98.74
-        self.guarantee_lithuania = False
-        self.lithuania_embargo = False
         self.lithuania_nationals_dealt = False
         """greek"""
-        self.greece_relations = 82.34
-        self.guarantee_greece = False
-        self.greece_embargo = False
+        self.greece_relations = 63.34
         self.greece_nationals_dealt = False
         """romanian"""
-        self.romania_relations = 82.34
-        self.guarantee_romania = False
-        self.romania_embargo = False
+        self.romania_relations = 83.34
         self.romania_nationals_dealt = False
         """serbian"""
         self.serbia_relations = 82.34
-        self.guarantee_serbia = False
-        self.serbia_embargo = False
         self.serbia_nationals_dealt = False
         # ordered dictionary of european nations
         self.european_nations = OrderedDict()
@@ -282,8 +236,6 @@ class UnitedStates:
         # asia
         """serbian"""
         self.ethiopia_relations = 72.34
-        self.guarantee_ethiopia = False
-        self.ethiopia_embargo = False
         self.ethiopia_nationals_dealt = False
         self.african_nations = OrderedDict()
         self.african_nations['Ethiopian Empire'] = self.ethiopia_relations
@@ -881,29 +833,29 @@ class UnitedStates:
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
 
-def main():
+def main(time):
     globe1 = globe.Globe()
-    us = UnitedStates('1914')
+    us = UnitedStates(time)
     us.establish_states()
     print(us.date.date())
     # establishing asian AIs
-    chinese_ai = china_ai.ChinaAI("1914")
-    japanese_ai = japan_ai.Japan("1914")
+    chinese_ai = china_ai.ChinaAI(time)
+    japanese_ai = japan_ai.Japan(time)
     # establishing european AIs
-    british_ai = britain_ai.Britain("1914")
-    spanish_ai = spain_ai.SpainAI("1914")
-    french_ai = france_ai.FranceAI("1914")
-    austrian_ai = austria_ai.Austria("1914")
+    british_ai = britain_ai.Britain(time)
+    spanish_ai = spain_ai.SpainAI(time)
+    french_ai = france_ai.FranceAI(time)
+    austrian_ai = austria_ai.Austria(time)
     # germany_ai = german_ai.Germany("1914")
     """german ai will establish states, similar to US"""
-    belgian_ai = belgium_ai.BelgiumAI("1914")
-    dutch_ai = netherlands_ai.Netherlands("1914")
-    italian_ai = italy_ai.ItalyAI("1914")
-    lux_ai = luxembourg_ai.LuxembourgAI("1914")
-    danish_ai = denmark_ai.Denmark("1914")
-    swiss_ia = swiss_ai.SwitzerlandAI("1914")
-    swedish_ai = sweden_ai.SwedenAI("1914")
-    norwegian_ai = norway_ai.NorwayAI("1914")
+    belgian_ai = belgium_ai.BelgiumAI(time)
+    dutch_ai = netherlands_ai.Netherlands(time)
+    italian_ai = italy_ai.ItalyAI(time)
+    lux_ai = luxembourg_ai.LuxembourgAI(time)
+    danish_ai = denmark_ai.Denmark(time)
+    swiss_ia = swiss_ai.SwitzerlandAI(time)
+    swedish_ai = sweden_ai.SwedenAI(time)
+    norwegian_ai = norway_ai.NorwayAI(time)
     """
     These 3 nations will be uncommented, once I figure out how to exclude them until 1918
     estonian_ai = estonia_ai.EstoniaAI('1914')

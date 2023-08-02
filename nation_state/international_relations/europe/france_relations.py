@@ -14,7 +14,7 @@ def french_relations(self, france, globe):
     positive = ["\n1. improve relations for 60 days(15 political power, decrease pp exponent by 0.2 points)",
                 "2. guarantee France independence(10 initial political power, decrease pp exponent by 0.5 points",
                 "3. increase exports to France for 60 days(25 political power, improves US economy)",
-                "4. establish a US embassy within Madrid(13 political power cost, decrease 0.1 pp exponent while its installed",
+                f"4. establish a {self.name} embassy within Madrid(13 political power cost, decrease 0.1 pp exponent while its installed",
                 "5. establish an economic treaty with France(15 political power, improves both economies)",
                 "6. establish a military alliance with France(10 political power)",
                 "7. Establish student transfer student program(improve economy for 120 days)"]
@@ -45,7 +45,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 15
                         if chance % 2 == 0:
                             """50.67% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{france.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -54,7 +54,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -62,7 +61,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -73,13 +71,13 @@ def french_relations(self, france, globe):
                         print(f"You do not have enough political capital to carry through with this task!!.\n")
                         time.sleep(1.25)
 
-                elif relation_choice == 2 and not self.guarantee_spain:
+                elif relation_choice == 2 and not self.guarantee_france:
                     if self.political_power >= 10:
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(f"{france.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
-                            self.guarantee_britain = True
+                            self.guarantee_france = True
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -87,7 +85,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -96,7 +93,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -112,7 +108,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 25
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to buy more American goods.\n")
+                            print(f"{france.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -120,7 +116,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -129,7 +124,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
                         else:
                             print("Your offer died in the sea of geopolitics.\n")
@@ -144,7 +138,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 13
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to install an US embassy within Paris.\n")
+                            print(f"{france.leader} has agreed to install a(n) {self.name} embassy within Paris.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -154,7 +148,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -163,7 +156,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -180,7 +172,7 @@ def french_relations(self, france, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{france.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{france.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -188,7 +180,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -196,7 +187,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -227,7 +217,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -235,7 +224,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
+
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -257,7 +246,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been kicked out of the the French Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        france.us_relations -= round(random.uniform(1, 2), 2)
                         self.france_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 4 == 2:
@@ -265,7 +253,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        france.us_relations -= round(random.uniform(1, 6), 2)
                         self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -281,7 +268,7 @@ def french_relations(self, france, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{france.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -290,7 +277,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -298,7 +284,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -321,7 +306,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -329,7 +313,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -342,7 +325,7 @@ def french_relations(self, france, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to buy more American goods.\n")
+                            print(f"{france.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -350,7 +333,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -358,7 +340,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -371,7 +352,7 @@ def french_relations(self, france, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to install an US embassy within Paris.\n")
+                            print(f"{france.leader} has agreed to install a(n) {self.name} embassy within Paris.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -380,7 +361,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -388,7 +368,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -402,7 +381,7 @@ def french_relations(self, france, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{france.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{france.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -410,7 +389,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -418,7 +396,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -446,7 +423,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -454,7 +430,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -473,7 +448,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been kicked out of the the French Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        france.us_relations -= round(random.uniform(1, 2), 2)
                         self.france_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 4 == 3:
@@ -481,7 +455,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        france.us_relations -= round(random.uniform(1, 6), 2)
                         self.france_relations -= round(random.uniform(1, 6), 2)
 
             elif globe.tension > 50 and self.france_relations > 50:
@@ -502,7 +475,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -510,7 +482,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -526,7 +497,7 @@ def french_relations(self, france, globe):
                             """49.1% chance that British parliament accepts proposal"""
                             print(f"{france.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
-                            self.guarantee_britain = True
+                            self.guarantee_france = True
                             time.sleep(1.5)
 
                         elif chance % 2 == 0:
@@ -534,7 +505,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -543,7 +513,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -559,7 +528,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 25
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to buy more American goods.\n")
+                            print(f"{france.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
 
@@ -568,7 +537,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -577,7 +545,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -593,7 +560,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 13
                         if chance % 3 == 0:
                             """49.1% cuba that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to install an US embassy within Paris.\n")
+                            print(f"{france.leader} has agreed to install a(n) {self.name} embassy within Paris.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -603,7 +570,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -612,7 +578,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -628,7 +593,7 @@ def french_relations(self, france, globe):
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{france.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{france.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 2 == 0:
@@ -636,7 +601,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -644,7 +608,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -674,7 +637,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
+
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -682,7 +645,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
+
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -704,7 +667,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been kicked out of the the French Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        france.us_relations -= round(random.uniform(1, 2), 2)
                         self.france_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 5 == 2:
@@ -712,7 +674,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        france.us_relations -= round(random.uniform(1, 6), 2)
                         self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -729,7 +690,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 15
                         if chance % 5 == 0:
                             """20% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{france.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -738,7 +699,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -746,7 +706,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -763,7 +722,7 @@ def french_relations(self, france, globe):
                             """49.1% chance that British parliament accepts proposal"""
                             print(f"{france.leader} has accepted our guarantee for their independence.\n")
                             self.political_exponent -= 0.5
-                            self.guarantee_britain = True
+                            self.guarantee_france = True
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -771,7 +730,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -779,7 +737,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -794,7 +751,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 25
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to buy more American goods.\n")
+                            print(f"{france.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -802,7 +759,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -810,7 +766,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -826,7 +781,7 @@ def french_relations(self, france, globe):
                         self.political_power -= 13
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{france.leader} has agreed to install an US embassy within Paris.\n")
+                            print(f"{france.leader} has agreed to install a(n) {self.name} embassy within Paris.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -835,7 +790,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -843,7 +797,6 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -860,7 +813,7 @@ def french_relations(self, france, globe):
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{france.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{france.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -868,7 +821,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
+
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -876,7 +829,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
+
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -907,7 +860,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been kicked out of the the French Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            france.us_relations -= round(random.uniform(1, 2), 2)
+
                             self.france_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -915,7 +868,7 @@ def french_relations(self, france, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            france.us_relations -= round(random.uniform(1, 6), 2)
+
                             self.france_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -937,7 +890,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been kicked out of the the French Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        france.us_relations -= round(random.uniform(1, 2), 2)
                         self.france_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 2 == 0:
@@ -945,7 +897,6 @@ def french_relations(self, france, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        france.us_relations -= round(random.uniform(1, 6), 2)
                         self.france_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -972,13 +923,10 @@ def french_relations(self, france, globe):
                         """checking if player has enough political power"""
                         self.political_power -= 15
                         """expelling british nationals"""
-                        nationals = random.randrange(3000, 1000000)
+                        nationals = random.randrange(3000, 10000)
                         print(f"We have expelled {nationals} French nationals from our lands.\n")
                         time.sleep(1.25)
                         self.population -= nationals
-                        for i in range(0, len(self.states)):
-                            self.states[i].population -= round(random.uniform(0, nationals * random.uniform(0.25, 0.33)), 0)
-                            """portion of each state's population being taken away"""
                         france.population += nationals
                         self.france_relations -= self.france_relations * 0.25
                         globe.tension += round(random.uniform(3.45, 5.56), 2)
@@ -993,14 +941,14 @@ def french_relations(self, france, globe):
                         print("You do not have enough political power to commence this action.\n")
                         time.sleep(1.25)
                 else:
-                    print("You have already dealt with the French Nationals within US territory.\n")
+                    print(f"You have already dealt with the French Nationals within {self.name} territory.\n")
                     time.sleep(1.25)
 
             elif relations_choice == 2:
                 if not self.france_nationals_dealt:
                     if self.political_power >= 25:
                         self.political_power -= 25
-                        nationals = random.randrange(3000, 1000000)
+                        nationals = random.randrange(3000, 10000)
                         print(f"We have jailed {nationals} French nationals.\n")
                         time.sleep(1.25)
                         self.france_relations -= self.france_relations * 0.0125
@@ -1015,7 +963,7 @@ def french_relations(self, france, globe):
                         print("You do not have enough political power to commence this action.\n")
                         time.sleep(1.25)
                 else:
-                    print("You have already dealt with the French Nationals within US territory.\n")
+                    print(f"You have already dealt with the French Nationals within {self.name} territory.\n")
                     time.sleep(1.25)
 
             elif relations_choice == 3:
@@ -1026,14 +974,10 @@ def french_relations(self, france, globe):
                         """checking if player has enough political power"""
                         self.political_power -= 15
                         """expelling british nationals"""
-                        nationals = random.randrange(3000, 1000000)
+                        nationals = random.randrange(3000, 10000)
                         print(f"We have killed {nationals} French on claims of espionage.\n")
                         time.sleep(1.25)
                         self.population -= nationals
-                        for i in range(0, len(self.states)):
-                            self.states[i].population -= round(
-                                random.uniform(0, nationals * random.uniform(0.25, 0.33)), 0)
-                            """portion of each state's population being taken away"""
                         self.spfrance_relations -= self.france_relations * 0.5
                         globe.tension += round(random.uniform(6.45, 12.56), 2)
 
@@ -1047,7 +991,7 @@ def french_relations(self, france, globe):
                         print("You do not have enough political power to commence this action.\n")
                         time.sleep(1.25)
                 else:
-                    print("You have already dealt with the French Nationals within US territory.\n")
+                    print(f"You have already dealt with the French Nationals within {self.name} territory.\n")
                     time.sleep(1.25)
 
             elif relations_choice == 4:
@@ -1056,13 +1000,10 @@ def french_relations(self, france, globe):
                     us_loss = (self.current_gdp * 0.03)
                     spain_loss = (france.current_gdp * 0.10)
                     print(f"We have embargoed France's economy.\n"
-                          f"This however, has created a loss of ${us_loss} in GDP for the United States.\n")
+                          f"This however, has created a loss of ${us_loss} in GDP for the {self.name}.\n")
                     time.sleep(1.25)
                     self.current_gdp -= us_loss
                     france.current_gdp -= spain_loss
-                    for i in range(0, len(self.states)):
-                        self.states[i].population -= round(random.uniform(0, us_loss * random.uniform(0.25, 0.33)), 0)
-                        """portion of each state's population being taken away"""
                     self.france_relations -= self.france_relations * 0.25
                     globe.tension += round(random.uniform(3.45, 5.56), 2)
                 else:

@@ -1,8 +1,24 @@
+import threading
+from nation_state.north_america.mexico import mexico
+from nation_state.north_america.canada import canada
 import pygame
 import pyautogui
 import socket
 from pygame.constants import VIDEORESIZE
 import button
+def accept_nation(nation, time):
+    if nation == "mexico":
+        mexico.main(time)
+    elif nation == "canada":
+        mexico.main(time)
+def play_music(mp3):
+    pygame.mixer.init()
+    pygame.mixer.music.load(mp3)
+    pygame.mixer.music.play()
+music_thread = threading.Thread(target=play_music, args=())
+def wait():
+    input()
+    pygame.mixer.music.stop()
 
 region = ""
 region_chosen = ""
@@ -221,6 +237,7 @@ while run:
             if region == "na":
                 draw_text("Choose your nation!", font, text_col, SCREEN_WIDTH * 0.375, 100)
                 if us_button.draw(screen):
+                    menu_state = "chosen"
                     nation_chosen = "united states"
                 if canada_button.draw(screen):
                     menu_state = "chosen"
@@ -335,9 +352,10 @@ while run:
             draw_text(f"In the year {time_chosen}", font, text_col, SCREEN_WIDTH * 0.425 - len(time_chosen), 100)
             draw_text(f"Do you wish to proceed with your choice?", font, text_col, SCREEN_WIDTH * 0.275, 700)
             if yes_button.draw(screen):
-                pass
+                pygame.quit()
+                accept_nation(nation_chosen, time_chosen)
             if no_button.draw(screen):
-                pass
+                menu_state = "region"
 
 
     else:

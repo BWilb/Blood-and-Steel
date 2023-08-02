@@ -89,8 +89,17 @@ class Canada:
         self.economic_stimulus = False
         # military
         # international
-        self.us_relations = 56.97
         self.alliance = ""
+        """North america"""
+        # us
+        self.us_relations = 56.97
+        self.us_guarantee = False
+        self.us_embargo = False
+        # mexico
+        self.mexico_relations = 89.97
+        self.mexico_guarantee = False
+        self.mexico_embargo = False
+
         # other
 
     # population functions

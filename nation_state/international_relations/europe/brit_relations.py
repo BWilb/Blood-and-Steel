@@ -7,7 +7,7 @@ def british_relations(self, british_ai, globe):
     positive = ["\n1. improve relations for 60 days(15 political power, decrease pp exponent by 0.2 points)",
                 "2. guarantee british independence(10 initial political power, decrease pp exponent by 0.5 points",
                 "3. increase exports to britain for 60 days(25 political power, improves US economy)",
-                "4. establish a US embassy within London(13 political power cost, decrease 0.1 pp exponent while its installed",
+                f"4. establish a {self.name} embassy within London(13 political power cost, decrease 0.1 pp exponent while its installed",
                 "5. establish an economic treaty with Britain(15 political power, improves both economies)",
                 "6. establish a military alliance with Britain(10 political power)",
                 "7. Establish student transfer student program(improve economy for 120 days)"]
@@ -49,7 +49,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -57,7 +56,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -82,7 +80,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -91,7 +88,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -116,7 +112,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -125,7 +120,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
                         else:
                             print("Your offer died in the sea of geopolitics.\n")
@@ -150,7 +144,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -159,7 +152,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -184,7 +176,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -192,7 +183,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -209,7 +199,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             if british_ai.alliance:
-                                print(f"{british_ai.pm} has allowed us to enter the {british_ai.alliance}\n")
+                                print(f"{british_ai.leader} has allowed us to enter the {british_ai.alliance}\n")
                                 time.sleep(1.5)
                             else:
                                 print(f"{british_ai.leader} has agreed to forming a military alliance")
@@ -223,7 +213,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 2:
@@ -231,7 +220,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -253,7 +241,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been kicked out of Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 2), 2)
                         self.brit_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 4 == 2:
@@ -261,7 +248,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 6), 2)
                         self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -277,7 +263,7 @@ def british_relations(self, british_ai, globe):
                         chance = random.randrange(1, 60)
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -286,7 +272,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -294,7 +279,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -317,7 +301,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -325,7 +308,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -346,7 +328,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -354,7 +335,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -376,7 +356,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -384,7 +363,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -398,7 +376,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 2 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -406,7 +384,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -414,7 +391,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -442,7 +418,7 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
+
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 4 == 3:
@@ -450,7 +426,7 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
+
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -469,7 +445,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been kicked out of Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 2), 2)
                         self.brit_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 4 == 3:
@@ -477,7 +452,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 6), 2)
                         self.brit_relations -= round(random.uniform(1, 6), 2)
 
             elif globe.tension > 50 and self.brit_relations > 50:
@@ -489,7 +463,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 15
                         if chance % 3 == 0:
                             """33.3% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -498,7 +472,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -506,7 +479,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -530,7 +502,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -539,7 +510,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -555,7 +525,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 25
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
 
@@ -564,7 +534,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -573,7 +542,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -589,7 +557,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 13
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install a(n) {self.name} embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -599,7 +567,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
 
@@ -608,7 +575,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -624,7 +590,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 3 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 2 == 0:
@@ -632,7 +598,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -640,7 +605,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -670,7 +634,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 5 == 2:
@@ -678,7 +641,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -700,7 +662,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been kicked out of Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 2), 2)
                         self.brit_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 5 == 2:
@@ -708,7 +669,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 6), 2)
                         self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -725,7 +685,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 15
                         if chance % 5 == 0:
                             """20% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to improve relations with the United States.\n")
+                            print(f"{british_ai.leader} has agreed to improve relations with {self.name}.\n")
                             self.political_exponent -= 0.2
                             time.sleep(1.5)
 
@@ -734,7 +694,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -742,7 +701,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -767,7 +725,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -775,7 +732,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -790,7 +746,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 25
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to buy more American goods.\n")
+                            print(f"{british_ai.leader} has agreed to buy more {self.name} goods.\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -798,7 +754,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -806,7 +761,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -822,7 +776,7 @@ def british_relations(self, british_ai, globe):
                         self.political_power -= 13
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
-                            print(f"{british_ai.leader} has agreed to install an US embassy within London.\n")
+                            print(f"{british_ai.leader} has agreed to install a(n) {self.name} embassy within London.\n")
                             self.political_exponent -= 0.1
                             time.sleep(1.5)
 
@@ -831,7 +785,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -839,7 +792,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -856,7 +808,7 @@ def british_relations(self, british_ai, globe):
                         if chance % 5 == 0:
                             """49.1% chance that British parliament accepts proposal"""
                             print(
-                                f"{british_ai.leader} has agreed to establish an economic treaty with the United States\n")
+                                f"{british_ai.leader} has agreed to establish an economic treaty with {self.name}\n")
                             time.sleep(1.5)
 
                         elif chance % 3 == 1:
@@ -864,7 +816,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -872,7 +823,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -903,7 +853,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been kicked out of Parliament.\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 2), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 2), 2)
                             self.brit_relations -= round(random.uniform(1, 2), 2)
 
                         elif chance % 2 == 0:
@@ -911,7 +860,6 @@ def british_relations(self, british_ai, globe):
                             print("Your diplomats have been called out for espionage and have been killed\n")
                             time.sleep(1.5)
                             globe.tension += round(random.uniform(0.5, 5), 2)
-                            british_ai.us_relations -= round(random.uniform(1, 6), 2)
                             self.brit_relations -= round(random.uniform(1, 6), 2)
 
                         else:
@@ -933,7 +881,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been kicked out of Parliament.\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 2), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 2), 2)
                         self.brit_relations -= round(random.uniform(1, 2), 2)
 
                     elif chance % 2 == 0:
@@ -941,7 +888,6 @@ def british_relations(self, british_ai, globe):
                         print("Your diplomats have been called out for espionage and have been killed\n")
                         time.sleep(1.5)
                         globe.tension += round(random.uniform(0.5, 5), 2)
-                        british_ai.us_relations -= round(random.uniform(1, 6), 2)
                         self.brit_relations -= round(random.uniform(1, 6), 2)
 
                     else:
@@ -962,31 +908,25 @@ def british_relations(self, british_ai, globe):
             relations_choice = int(input("Choose an option(1-7; enter 0 to escape)"))
             if relations_choice == 1:
                 """expelling british nationals"""
-                nationals = random.randrange(3000, 100000)
+                nationals = random.randrange(3000, 10000)
                 print(f"We have expelled {nationals} British nationals from our lands.\n")
                 time.sleep(1.25)
                 self.population -= nationals
-                for i in range(0, len(self.states)):
-                    self.states[i].population -= round(random.uniform(0, nationals * random.uniform(0.25, 0.33)), 0)
-                    """portion of each state's population being taken away"""
                 self.brit_relations -= self.brit_relations * 0.25
                 globe.tension += round(random.uniform(3.45, 5.56), 2)
 
             elif relations_choice == 2:
-                nationals = random.randrange(3000, 100000)
+                nationals = random.randrange(3000, 10000)
                 print(f"We have jailed {nationals} British nationals.\n")
                 time.sleep(1.25)
                 self.brit_relations -= self.brit_relations * 0.0125
                 globe.tension += round(random.uniform(1.45, 3.56), 2)
 
             elif relations_choice == 3:
-                nationals = random.randrange(3000, 100000)
+                nationals = random.randrange(3000, 10000)
                 print(f"We have killed {nationals} British nationals on claims of espionage.\n")
                 time.sleep(1.25)
                 self.population -= nationals
-                for i in range(0, len(self.states)):
-                    self.states[i].population -= round(random.uniform(0, nationals * random.uniform(0.25, 0.33)), 0)
-                    """portion of each state's population being taken away"""
                 self.brit_relations -= self.brit_relations * 0.5
                 globe.tension += round(random.uniform(6.45, 12.56), 2)
 
@@ -996,7 +936,7 @@ def british_relations(self, british_ai, globe):
                     us_loss = (self.current_gdp * 0.10)
                     britain_loss = (british_ai.current_gdp * 0.10)
                     print(f"We have embargoed Britain's economy.\n"
-                          f"This however, has created a loss of ${us_loss} in GDP for the United States.\n")
+                          f"This however, has created a loss of ${us_loss} in GDP for {self.name}.\n")
                     time.sleep(1.25)
                     self.current_gdp -= us_loss
                     british_ai.current_gdp -= britain_loss
@@ -1008,6 +948,7 @@ def british_relations(self, british_ai, globe):
                 else:
                     print("You currently have Britain under an embargo!!.")
                     time.sleep(1.25)
+
             elif relations_choice == 5:
                 if self.alliance.lower() == british_ai.alliance.lower():
                     print(f"You have decided to leave the {self.alliance}.\n")
