@@ -145,12 +145,18 @@ class Mexico:
         """british"""
         self.brit_relations = 73.45
         self.british_nationals_dealt = False
+        self.britain_guarantee = False
+        self.britain_embargo = False
         """spanish"""
         self.spain_relations = 70.34
         self.spain_nationals_dealt = False
+        self.spain_guarantee = False
+        self.spain_embargo = False
         """french"""
         self.france_relations = 80.76
         self.france_nationals_dealt = False
+        self.france_guarantee = False
+        self.france_embargo = False
         """german"""
         """self.germany_relations = 76.45
         self.guarantee_germany = False
@@ -159,30 +165,48 @@ class Mexico:
         """belgian"""
         self.belgium_relations = 81.65
         self.belgium_nationals_dealt = False
+        self.belgium_guarantee = False
+        self.belgium_embargo = False
         """austrian"""
         self.austria_relations = 58.45
         self.austria_nationals_dealt = False
+        self.austria_guarantee = False
+        self.austria_embargo = False
         """dutch"""
         self.netherlands_relations = 74.34
         self.netherlands_nationals_dealt = False
+        self.dutch_guarantee = False
+        self.dutch_embargo = False
         """luxembourg"""
         self.luxembourg_relations = 92.34
         self.luxembourg_nationals_dealt = False
+        self.luxembourg_guarantee = False
+        self.luxembourg_embargo = False
         """denmark"""
         self.danish_relations = 72.34
         self.danish_nationals_dealt = False
+        self.denmark_guarantee = False
+        self.denmark_embargo = False
         """italy"""
         self.italy_relations = 95.74
         self.italy_nationals_dealt = False
+        self.italy_guarantee = False
+        self.italy_embargo = False
         """norwegian"""
         self.norway_relations = 96.44
         self.norway_nationals_dealt = False
+        self.norway_guarantee = False
+        self.norway_embargo = False
         """swedish"""
         self.swedish_relations = 94.34
         self.swedish_nationals_dealt = False
+        self.swedish_guarantee = False
+        self.swedish_embargo = False
         """swiss"""
         self.swiss_relations = 98.74
         self.swiss_nationals_dealt = False
+        self.britain_guarantee = False
+        self.britain_embargo = False
         """estonian"""
         self.estonia_relations = 98.74
         self.estonia_nationals_dealt = False
@@ -195,12 +219,18 @@ class Mexico:
         """greek"""
         self.greece_relations = 82.34
         self.greece_nationals_dealt = False
+        self.greece_guarantee = False
+        self.greece_embargo = False
         """romanian"""
         self.romania_relations = 82.34
         self.romania_nationals_dealt = False
+        self.romania_guarantee = False
+        self.romania_embargo = False
         """serbian"""
         self.serbia_relations = 82.34
         self.serbia_nationals_dealt = False
+        self.serbia_guarantee = False
+        self.serbia_embargo = False
         # ordered dictionary of european nations
         self.european_nations = OrderedDict()
         self.european_nations['Great Britain'] = self.brit_relations
@@ -256,8 +286,9 @@ class Mexico:
                 else:
                     print("please answer more carefully.\n")
                     time.sleep(1.25)
-        """elif choice.lower() == "foreign":
-            self.international_stats(globe1)"""
+
+        elif choice.lower() == "foreign":
+            self.international_stats(globe1)
 
     def political_stats(self):
         print(f"Your current president is {self.leader}.\n")
@@ -318,52 +349,54 @@ class Mexico:
                     time.sleep(3)
 
                 else:
+                    i = 1
                     for key, value in self.european_nations.items():
-                        print(f"Relations with {key}: {value}.\n")
+                        print(f"{i}. Relations with {key}: {value}.\n")
                         time.sleep(1.25)
                         """looping through european relations"""
+                        i+=1
                     choice = input(
                         "Would you like to manipulate your relations with one of those nations?(enter quit to escape):")
 
                     if choice.lower() == "yes" or choice.lower() == 'y':
-                        nation_choice = input("Which European nation would you like to choose?: ")
-                        if nation_choice.lower() == "britain" or nation_choice.lower() == "great britain":
+                        nation_choice = int(input("Which European nation would you like to choose, based off its number?(enter 0 to quit): "))
+                        if nation_choice == 1:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Great Britain"""
                                 if globe1.nations[i].name == "Great Britain":
                                     brit_relations.british_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "spain":
+                        if nation_choice == 2:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Spain"""
                                 if globe1.nations[i].name == "Kingdom of Spain":
                                     spain_relations.spanish_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "france":
+                        if nation_choice == 3:
                             for i in range(0, len(globe1.nations)):
                                 """searching for france"""
                                 if globe1.nations[i].name == "French Republic":
                                     france_relations.french_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "belgium":
+                        if nation_choice == 4:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Belgium"""
                                 if globe1.nations[i].name == "Kingdom of Belgium":
                                     belgium_relations.belgian_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "netherlands":
+                        if nation_choice == 5:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Netherlands"""
                                 if globe1.nations[i].name == "Kingdom of Netherlands":
                                     netherlands_relations.dutch_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "luxembourg":
+                        if nation_choice == 6:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Netherlands"""
                                 if globe1.nations[i].name == "Kingdom of Luxembourg":
                                     luxembourg_relations.luxembourger_relations(self, globe1.nations[i], globe1)
 
-                        if nation_choice.lower() == "austria":
+                        if nation_choice == 7:
                             for i in range(0, len(globe1.nations)):
                                 """searching for Netherlands"""
                                 if globe1.nations[i].name == "Austria-Hungary" or globe1.nations[
@@ -407,29 +440,28 @@ class Mexico:
                         print(f"relations with {key}: {value}.\n")
                         time.sleep(1.25)
 
-                    choice = input(
+                    """choice = input(
                         "Would you like to manipulate your relations with one of those nations?(enter quit to escape):")
                     if choice.lower() == "yes" or choice.lower() == 'y':
 
                         nation_choice = input("Which North American nation would you like to choose?: ")
                         if nation_choice.lower() == "canada":
                             for i in range(0, len(globe1.nations)):
-                                """Looping until canada is found
+                                Looping until canada is found
                                 reason why globe variable is used for nation is to funnel down required amount of variables 
                                 for proper use.
-                                """
                                 if globe1.nations[i].name == "Canada":
                                     canada_relations.canadian_relations(self, globe1.nations[i], globe1)
 
                         elif nation_choice.lower() == "cuba":
 
                             for i in range(0, len(globe1.nations)):
-                                """Looping until Mexico is found
+                                Looping until cuba is found
                                 reason why globe variable is used for nation is to funnel down required amount of variables 
                                 for proper use.
-                                """
+                                
                                 if globe1.nations[i].name == "Cuba":
-                                    cuba_relations.cuban_relations(self, globe1.nations[i], globe1)
+                                    cuba_relations.cuban_relations(self, globe1.nations[i], globe1)"""
 
             elif region_choice.lower() == "quit":
                 done = False

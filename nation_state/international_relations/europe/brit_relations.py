@@ -940,9 +940,6 @@ def british_relations(self, british_ai, globe):
                     time.sleep(1.25)
                     self.current_gdp -= us_loss
                     british_ai.current_gdp -= britain_loss
-                    for i in range(0, len(self.states)):
-                        self.states[i].population -= round(random.uniform(0, us_loss * random.uniform(0.25, 0.33)), 0)
-                        """portion of each state's population being taken away"""
                     self.brit_relations -= self.brit_relations * 0.25
                     globe.tension += round(random.uniform(3.45, 5.56), 2)
                 else:
