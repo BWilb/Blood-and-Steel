@@ -1,11 +1,6 @@
 import random
 import time
 from datetime import datetime, timedelta
-"""from nation_state.north_america.united_states import alabama, alaska, arizona, arkansas, california, colorado, \
-    conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, maine, \
-    maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, \
-    north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, virginia, \
-    vermont, west_virginia, washington, wisconsin, wyoming"""
 import os
 """Population Dictionaries"""
 presidents = {
@@ -121,6 +116,15 @@ class UnitedStates:
 
     # establishing internal states
     def establish_states(self):
+        from nation_state.north_america.united_states.us_states import alabama, alaska, arizona, arkansas, california, \
+            colorado, \
+            conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, \
+            maine, \
+            maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, \
+            new_york, \
+            north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, \
+            virginia, \
+            vermont, west_virginia, washington, wisconsin, wyoming
         folder = "united_states"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""

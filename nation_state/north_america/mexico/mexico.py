@@ -28,7 +28,7 @@ from nation_state.international_relations.europe import brit_relations, spain_re
 from nation_state.international_relations.north_america import canada_relations, cuba_relations
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
-
+from nation_state.north_america.united_states import us_ai
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
@@ -76,6 +76,7 @@ gdp = {
 
 class Mexico:
     def __init__(self, year):
+        self.is_intact = True
         self.name = "Mexico"
         # date variables
         self.date = datetime(int(year), 1, 1)
@@ -870,7 +871,7 @@ def main(time1):
     romanian_ai = romania_ai.RomaniaAI(time1)
     serbian_ai = serbia_ai.SerbiaAI(time1)
     # establishing north american AIs
-    # american_ai = us_ai.UnitedStates(time)
+    #american_ai = us_ai.UnitedStates(time)
     cuban_ai = cuba_ai.CubaAI(time1)
     canadian_ai = canada_ai.Canada(time1)
     establish_foreign_nations(globe1, mexico, canadian_ai, cuban_ai, chinese_ai, japanese_ai,
@@ -893,7 +894,7 @@ def main(time1):
                 """
         upload_database.update_database_info(globe1.nations)
         mexico.stats(globe1)
-        mexico.date += timedelta(days=1)
+        mexico.date += timedelta(1)
         time.sleep(3)
 
 
