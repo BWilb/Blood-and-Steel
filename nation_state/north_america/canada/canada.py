@@ -66,6 +66,7 @@ gdp = {
 
 class Canada:
     def __init__(self, year):
+        self.is_intact = True
         self.name = "Canada"
         # date variables
         self.date = datetime(int(year), 1, 1)
@@ -80,12 +81,14 @@ class Canada:
         # social variables
         """population"""
         self.population = population[year]
+        self.birth_enhancer = False
+        self.birth_control = False
         self.births = 0
         self.deaths = 0
         """happiness"""
         self.happiness = 98.56
         # political
-        self.pm = pms[year]
+        self.leader = pms[year]
         """Stability"""
         self.stability = 95.56
         # economic

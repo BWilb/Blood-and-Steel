@@ -1,5 +1,6 @@
 import threading
 import time
+from datetime import datetime, timedelta
 
 from nation_state.north_america.mexico import mexico
 from nation_state.north_america.canada import canada
@@ -10,11 +11,6 @@ from pygame.constants import VIDEORESIZE
 import button
 
 pygame.init()
-
-def draw_text(text, font, text_col, x, y):
-    # draws the text on screen
-    img = font.render(text, True, text_col)
-    screen.blit(img, (x, y))
 paused = True
 
 SCREEN_WIDTH = pyautogui.size().width
@@ -69,10 +65,46 @@ quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.75, quit_img,
     pygame.display.update()
 
 pygame.quit()"""
+
+def draw_text(text, font, text_col, x, y):
+    # draws the text on screen
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
+
 def country_sprite(nation, globe):
+    duration = timedelta(days=1)
+    screen.fill((52, 78, 91))
     while nation.is_intact:
-        print("hi")
-        time.sleep(1.25)
+        for day in range(duration.days):
+            time.sleep(1.25)
+            """Due to the fact that the date variable within the Nation object isn't an integer value,
+            other variables have to be utilized in order to display time.
+            In inner for loop, hours are incremented (1 - 5 random events will occur throughout the day)
+            """
+            # drawing of nation name
+            draw_text(f"{nation.name}", font, text_col, (SCREEN_WIDTH - ((SCREEN_WIDTH * 0.5) + len(nation.name))), 100)
+            # drawing of nation's information
+
+            draw_text(f"{nation.name}'s internal stats", font, text_col, SCREEN_WIDTH * 0.10, 100)
+            draw_text(f"{nation.name}'s population: {nation.population}", font, text_col, SCREEN_WIDTH * 0.05, 200)
+            draw_text(f"{nation.name}'s happiness: {round(nation.happiness, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 300)
+            draw_text(f"{nation.name}'s GDP: {round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 400)
+            # drawing of global tension
+            draw_text(f"Global tension", font, text_col, SCREEN_WIDTH * 0.715, 200)
+            draw_text(f"{globe.tension}%", font, text_col, SCREEN_WIDTH * 0.785, 300)
+
+            for hour in range(0, 24):
+                actual_day = nation.date + timedelta(hours=hour)
+                draw_text(f"{actual_day}", font, text_col, SCREEN_WIDTH * 0.685, 100)
+
+            # nation object's internal changes
+            nation.stability_happiness_change(globe)
+            nation.check_economic_state()
+            nation.population_change()
+
+            nation.date += timedelta(days=1)
+            """In outer loop, nation object's date days are incremented"""
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 # pushing of space key
