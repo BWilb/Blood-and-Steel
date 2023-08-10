@@ -1,3 +1,4 @@
+import sys
 import threading
 import time
 
@@ -9,25 +10,21 @@ import pyautogui
 import socket
 from pygame.constants import VIDEORESIZE
 import button
-"""def accept_nation(nation, time):
-    if nation == "mexico":
-        mexico.main(time)
-    elif nation == "canada":
-        mexico.main(time)"""
+
 def accept_nation(nation, time):
     import globe
-    from sprite_version import country_sprite
+    import sprite_version
     globe1 = globe.Globe()
     if nation.lower() == "mexico":
         mexican = mexico.Mexico(time)
-        country_sprite(mexican, globe1)
+        sprite_version.country_sprite(mexican, globe1)
     if nation.lower() == "canada":
         canadian = canada.Canada(time)
-        country_sprite(canadian, globe1)
+        sprite_version.country_sprite(canadian, globe1)
 
     if nation.lower() == "cuba":
         cuban = cuba.Cuba(time)
-        country_sprite(cuban, globe1)
+        sprite_version.country_sprite(cuban, globe1)
 
 def play_music(mp3):
     pygame.mixer.init()
@@ -188,7 +185,6 @@ while not answered:
 
         run = True
         while run:
-
             screen.fill((52, 78, 91))
             # check if game is paused
             if game_paused == True:
@@ -406,6 +402,7 @@ while not answered:
 
                 if event.type == pygame.QUIT:
                     run = False
+                    sys.exit()
             """event handlers"""
 
             pygame.display.update()

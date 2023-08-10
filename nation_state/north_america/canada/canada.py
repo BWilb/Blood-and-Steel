@@ -25,7 +25,7 @@ from nation_state.europe.switzerland import swiss_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
 from nation_state.north_america.mexico import mexico_ai
-from randomness import random_functions
+import randomness
 
 
 def establish_foreign_nations(globe, *args):
@@ -647,7 +647,7 @@ def main(time):
         canada.population_change()
         #canada.stats(globe1)
         canada.stability_happiness_change(globe1)
-        random_functions.random_functions(canada, globe1)
+        randomness.random_functions(canada, globe1)
 
         """Looping through changes in US system"""
 

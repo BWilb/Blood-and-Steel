@@ -2,8 +2,6 @@ import random
 import time
 from datetime import datetime, timedelta
 
-import randomness.random_functions
-
 """Population Dictionaries"""
 population = {
     "1910": 49438166,
