@@ -33,19 +33,23 @@ econ_img = pygame.image.load("buttons/game_buttons/economy_buttion.jpg").convert
 foreign_img = pygame.image.load("buttons/game_buttons/foreign_button.jpg").convert_alpha()
 social_img = pygame.image.load("buttons/game_buttons/social_button.jpg").convert_alpha()
 """paused imgs"""
-quit_img = pygame.image.load("buttons/quit_butt.jpg").convert_alpha()
+quit_img = pygame.image.load("buttons/sprite_quit.jpg").convert_alpha()
 cont_img = pygame.image.load("buttons/continue_button.jpg").convert_alpha()
-main_menu_img = pygame.image.load("buttons/continue_button.jpg").convert_alpha()
+back_img = pygame.image.load("buttons/sprite_back.jpg").convert_alpha()
 # buttons
 """stats buttons"""
-govt_button = button.Button(SCREEN_WIDTH * 0.25, SCREEN_HEIGHT * 0.25, govt_img, 0.15)
-econ_button = button.Button(SCREEN_WIDTH * 0.45, SCREEN_HEIGHT * 0.25, econ_img, 0.15)
-foreign_button = button.Button(SCREEN_WIDTH * 0.65, SCREEN_HEIGHT * 0.25, foreign_img, 0.15)
-social_button = button.Button(SCREEN_WIDTH * 0.85, SCREEN_HEIGHT * 0.25, social_img, 0.15)
+govt_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.15, govt_img, 0.16)
+econ_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.35, econ_img, 0.16)
+foreign_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.55, foreign_img, 0.16)
+social_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.75, social_img, 0.16)
 """paused buttons"""
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img, 0.25)
-cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.30, cont_img, 0.25)
-main_menu_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, main_menu_img, 0.25)
+cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
+back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
+
+"""national images"""
+mexico_img = pygame.image.load("flags/mexico/1920px-Bandera_de_México_(1880-1914).svg.png").convert_alpha()
+mexico_flag = pygame.transform.scale(mexico_img, (250, 150))
 
 
 def draw_text(text, font, text_col, x, y):
@@ -56,47 +60,73 @@ def draw_text(text, font, text_col, x, y):
 def country_sprite(nation, globe):
     game_state = "game"
     run = True
+    game_paused = False
+    """three primary constraints on game"""
     actual_day = nation.date
-    game_paused = True
-    """two primary constraints on game"""
     while run:
-        if game_paused:
+        if not game_paused:
             if game_state == "game":
+                screen.fill((52, 78, 91))
                 if govt_button.draw(screen):
-                    pass
+                    game_state = "view government"
                 if econ_button.draw(screen):
-                    pass
+                    game_state = "view economy"
                 if foreign_button.draw(screen):
                     pass
                 if social_button.draw(screen):
-                    pass
-                screen.fill((52, 78, 91))
-                draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.685, 100)
-                actual_day += timedelta(days=1)
-                draw_text(f"{nation.name}", font, text_col, SCREEN_WIDTH * 0.15, 100)
+                    game_state = "view society"
 
-                draw_text(f"Population: {nation.population}", font, text_col, SCREEN_WIDTH * 0.05, 200)
-                draw_text(f"Happiness: {round(nation.happiness, 2)}", font, text_col, SCREEN_WIDTH * 0.05,
-                          300)
-                draw_text(f"GDP: {round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 400)
-                draw_text(f"National Debt: {round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 500)
-                draw_text(f"Stability: {round(nation.stability, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 600)
+                draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.785, 50)
+                draw_text(f"{nation.name}", font, text_col, SCREEN_WIDTH * 0.45, 50)
+                screen.blit(mexico_flag, (SCREEN_WIDTH * 0.45, 100))
                 time.sleep(1.25)
                 nation.check_economic_state()
                 nation.population_change()
                 nation.stability_happiness_change(globe)
-        else:
-            if cont_button.draw(screen):
-                pass
-            if quit_button.draw(screen):
-                pass
+
+                actual_day += timedelta(days=1)
+                time.sleep(1)
+                
+            elif game_state == "view government":
+                """sub section of user nation that displays political information regarding nation"""
+                screen.fill((52, 78, 91))
+                draw_text(f"Political stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
+                draw_text(f"Current Leader: {nation.leader}", font, text_col, (SCREEN_WIDTH * 0.355) - len(nation.leader), 200)
+                draw_text(f"Stability: {round(nation.stability, 2)}%", font, text_col, SCREEN_WIDTH * 0.45, 300)
+                if back_button.draw(screen):
+                    game_state = "game"
+
+            elif game_state == "view economy":
+                """sub section of user nation that displays economic information regarding nation"""
+                screen.fill((52, 78, 91))
+                draw_text(f"Economic stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
+                draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 200)
+                draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 300)
+                if back_button.draw(screen):
+                    game_state = "game"
+
+            elif game_state == "view society":
+                """sub section of user nation that displays social information regarding nation"""
+                screen.fill((52, 78, 91))
+                draw_text(f"Social stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
+                draw_text(f"Population: {nation.population}", font, text_col, SCREEN_WIDTH * 0.405, 200)
+                draw_text(f"Happiness: {round(nation.happiness, 2)}%", font, text_col, SCREEN_WIDTH * 0.405,
+                          300)
+                if back_button.draw(screen):
+                    game_state = "game"
+            elif game_state == "paused":
+                screen.fill((52, 78, 91))
+                if cont_button.draw(screen):
+                    pass
+                if quit_button.draw(screen):
+                    pass
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if pygame.key == pygame.K_SPACE:
+                if pygame.key == pygame.K_ESCAPE:
                     if game_paused == False:
                         game_paused = True
                     if game_paused == True:

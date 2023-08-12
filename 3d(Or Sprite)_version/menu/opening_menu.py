@@ -223,6 +223,7 @@ while not answered:
                     if secondary_quit_button.draw(screen):
                         pygame.quit()
 
+
                 if menu_state == "region":
                     """changing menu to allow user to select region they want
                     region variable will store selected region to display nations of that region

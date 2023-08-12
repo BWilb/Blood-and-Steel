@@ -103,6 +103,8 @@ class Mexico:
         self.political_exponent = 1.25
         """Stability"""
         self.stability = 95.56
+        """for sprite version only"""
+        #self.flag = {}
         # economic
         self.e_s = "recovery"
         self.national_debt = 0
