@@ -3,7 +3,8 @@ import sys
 import time
 from collections import OrderedDict
 from datetime import datetime, timedelta
-
+"""from other_images.flags import mexico"""
+import pygame.image
 import globe
 from database_management import upload_database
 from nation_state.asia.se_asia.china import china_ai
@@ -28,7 +29,7 @@ from nation_state.international_relations.europe import brit_relations, spain_re
 from nation_state.international_relations.north_america import canada_relations, cuba_relations
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
-from nation_state.north_america.united_states import us_ai
+from random_functions import random_functions
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
@@ -103,13 +104,12 @@ class Mexico:
         self.political_exponent = 1.25
         """Stability"""
         self.stability = 95.56
-        """for sprite version only"""
-        #self.flag = {}
         # economic
         self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
+        self.tax_rate = 10.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -887,6 +887,8 @@ def main(time1):
         mexico.population_change()
         mexico.check_economic_state()
         mexico.stability_happiness_change(globe1)
+        random_functions.random_functions(mexico, globe1)
+
         for i in range(0, len(globe1.nations)):
             if not globe1.nations[i].name == "Mexico":
                 globe1.nations[i].main(globe1)

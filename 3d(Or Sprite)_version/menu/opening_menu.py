@@ -3,28 +3,72 @@ import threading
 import time
 
 from nation_state.north_america.mexico import mexico
+from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.canada import canada
+from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba
+from nation_state.north_america.cuba import cuba_ai
+from nation_state.europe.britain import britain_ai
+from nation_state.europe.britain import britain
+from nation_state.europe.italy import italy_ai
+from nation_state.europe.italy import italy
 import pygame
 import pyautogui
 import socket
 from pygame.constants import VIDEORESIZE
 import button
-
+def establish_foreign_nations(globe, *args):
+    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
+    for i in range(0, len(args)):
+        globe.nations.append(args[i])
 def accept_nation(nation, time):
     import globe
     import sprite_version
     globe1 = globe.Globe()
     if nation.lower() == "mexico":
         mexican = mexico.Mexico(time)
+        cuban = cuba_ai.CubaAI(time)
+        canadian = canada_ai.Canada(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        establish_foreign_nations(globe1, italian, british, mexican, cuban, canadian)
         sprite_version.country_sprite(mexican, globe1)
+
     if nation.lower() == "canada":
         canadian = canada.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        establish_foreign_nations(globe1,italian, british, canadian, cuban, mexican)
         sprite_version.country_sprite(canadian, globe1)
 
     if nation.lower() == "cuba":
         cuban = cuba.Cuba(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        establish_foreign_nations(globe1, italian, cuban, british, mexican, canadian)
         sprite_version.country_sprite(cuban, globe1)
+
+    if nation.lower() == "great britain":
+        british = britain.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        establish_foreign_nations(globe1, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(british, globe1)
+
+    if nation.lower() == "italy":
+        italian = italy.Italy(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        establish_foreign_nations(globe1, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(british, globe1)
 
 def play_music(mp3):
     pygame.mixer.init()
@@ -65,13 +109,13 @@ while not answered:
         text_col = (255, 255, 255)
         # img files
         """basic button images"""
-        start_img = pygame.image.load("buttons/start_butt.jpg").convert_alpha()
-        options_img = pygame.image.load("buttons/options_butt.jpg").convert_alpha()
-        quit_img = pygame.image.load("buttons/quit_butt.jpg").convert_alpha()
-        back_img = pygame.image.load("buttons/back_button.jpg").convert_alpha()
-        secondary_quit = pygame.image.load("buttons/quit_button.jpg").convert_alpha()
-        yes_img = pygame.image.load("buttons/yes_button.jpg").convert_alpha()
-        no_img = pygame.image.load("buttons/no_button.jpg").convert_alpha()
+        start_img = pygame.image.load("buttons/opening_menu_buttons/start_butt.jpg").convert_alpha()
+        options_img = pygame.image.load("buttons/opening_menu_buttons/options_butt.jpg").convert_alpha()
+        quit_img = pygame.image.load("buttons/opening_menu_buttons/quit_butt.jpg").convert_alpha()
+        back_img = pygame.image.load("buttons/opening_menu_buttons/back_button.jpg").convert_alpha()
+        secondary_quit = pygame.image.load("buttons/opening_menu_buttons/quit_button.jpg").convert_alpha()
+        yes_img = pygame.image.load("buttons/opening_menu_buttons/yes_button.jpg").convert_alpha()
+        no_img = pygame.image.load("buttons/opening_menu_buttons/no_button.jpg").convert_alpha()
         """time button images"""
         img_1910 = pygame.image.load("buttons/time/1910_butt.jpg").convert_alpha()
         img_1914 = pygame.image.load("buttons/time/1914_butt.jpg").convert_alpha()

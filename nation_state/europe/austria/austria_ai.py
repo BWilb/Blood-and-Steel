@@ -2,6 +2,8 @@ import random
 import time
 from datetime import datetime, timedelta
 
+from random_functions import random_functions
+
 """Population Dictionaries"""
 population = {
     "1910": 49438166,
@@ -438,6 +440,6 @@ class Austria:
             self.check_economic_state()
             self.population_change()
             self.stability_happiness_change(globe)
-            randomness.random_functions.random_functions(self, globe)
+            random_functions.random_functions(self, globe)
             self.date += timedelta(days=1)
             break

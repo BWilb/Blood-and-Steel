@@ -1,5 +1,8 @@
 import random
+import time
 from datetime import timedelta, datetime
+
+from random_functions import random_functions
 
 population = {
     "1910": 10300000,
@@ -49,8 +52,8 @@ class Ethiopia:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = pm[year]
-        self.monarch = monarchs[year]
+        self.leader = leaders[year]
+        self.monarch = emperors[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -421,5 +424,6 @@ class Ethiopia:
             self.check_economic_state()
             self.population_change()
             self.stability_happiness_change(globe)
+            random_functions.random_functions(self, globe)
             self.date += timedelta(days=1)
             break

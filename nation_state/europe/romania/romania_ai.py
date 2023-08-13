@@ -3,6 +3,8 @@ import time
 from datetime import datetime, timedelta
 import randomness
 
+from random_functions import random_functions
+
 # Romania
 """Population Dictionaries"""
 population = {
@@ -440,7 +442,7 @@ class RomaniaAI:
         while self.population > 4500000:
             self.population_change()
             self.check_economic_state()
-            randomness.random_functions.random_functions(self, globe)
+            random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break

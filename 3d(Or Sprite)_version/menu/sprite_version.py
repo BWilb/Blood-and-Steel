@@ -1,7 +1,8 @@
+import random
 import sys
 import time
 from datetime import datetime, timedelta
-
+from database_management import upload_database
 """import arcade
 import threading
 from nation_state.north_america.mexico import mexico
@@ -33,9 +34,11 @@ econ_img = pygame.image.load("buttons/game_buttons/economy_buttion.jpg").convert
 foreign_img = pygame.image.load("buttons/game_buttons/foreign_button.jpg").convert_alpha()
 social_img = pygame.image.load("buttons/game_buttons/social_button.jpg").convert_alpha()
 """paused imgs"""
-quit_img = pygame.image.load("buttons/sprite_quit.jpg").convert_alpha()
-cont_img = pygame.image.load("buttons/continue_button.jpg").convert_alpha()
-back_img = pygame.image.load("buttons/sprite_back.jpg").convert_alpha()
+quit_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_quit.jpg").convert_alpha()
+cont_img = pygame.image.load("buttons/game_buttons/functionality_buttons/continue_button.jpg").convert_alpha()
+back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
+increment_img = pygame.image.load("buttons/game_buttons/functionality_buttons/increment_sing.jpg").convert_alpha()
+decrement_img = pygame.image.load("buttons/game_buttons/functionality_buttons/decrement_sign.jpg").convert_alpha()
 # buttons
 """stats buttons"""
 govt_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.15, govt_img, 0.16)
@@ -46,24 +49,42 @@ social_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.75, social_
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img, 0.25)
 cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
-
-"""national images"""
-mexico_img = pygame.image.load("flags/mexico/1920px-Bandera_de_México_(1880-1914).svg.png").convert_alpha()
-mexico_flag = pygame.transform.scale(mexico_img, (250, 150))
-
+"""incrementing and decrementing buttons"""
+tax_inc_button = button.Button(SCREEN_WIDTH * 0.80, 250, increment_img, 0.10)
+tax_dec_button = button.Button(SCREEN_WIDTH * 0.88, 250, decrement_img, 0.10)
+# draw_text(f"Tax Rate: ${nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.85, 200)
 
 def draw_text(text, font, text_col, x, y):
     # draws the text on screen
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
+def check_flag(nation):
+    if nation.name == "Mexico":
+        print("hi")
+        flag = pygame.image.load("mexico/150px-Bandera_de_México_(1880-1914).jpg").convert_alpha()
+        print(flag)
+        return flag
+
+def check_leader(nation):
+    if nation.name == "Mexico":
+        leader = pygame.image.load("mexico/Porfirio_Diaz_en_1867.jpg").convert_alpha()
+        leader_resize = pygame.transform.scale(leader, (350, 400))
+        return leader_resize
 def country_sprite(nation, globe):
     game_state = "game"
     run = True
     game_paused = False
     """three primary constraints on game"""
+    upload_database.initial_upload_to_database(globe.nations)
+    flag = check_flag(nation)
+    leader = check_leader(nation)
     actual_day = nation.date
+
     while run:
+        for i in range(0, len(globe.nations)):
+            if globe.nations[i].name != nation.name:
+                globe.nations[i].main(globe)
         if not game_paused:
             if game_state == "game":
                 screen.fill((52, 78, 91))
@@ -78,13 +99,15 @@ def country_sprite(nation, globe):
 
                 draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.785, 50)
                 draw_text(f"{nation.name}", font, text_col, SCREEN_WIDTH * 0.45, 50)
-                screen.blit(mexico_flag, (SCREEN_WIDTH * 0.45, 100))
+                screen.blit(flag, (SCREEN_WIDTH * 0.45, 150))
+                screen.blit(leader, (SCREEN_WIDTH * 0.405, 300))
                 time.sleep(1.25)
                 nation.check_economic_state()
                 nation.population_change()
                 nation.stability_happiness_change(globe)
 
                 actual_day += timedelta(days=1)
+                upload_database.update_database_info(globe.nations)
                 time.sleep(1)
                 
             elif game_state == "view government":
@@ -100,8 +123,21 @@ def country_sprite(nation, globe):
                 """sub section of user nation that displays economic information regarding nation"""
                 screen.fill((52, 78, 91))
                 draw_text(f"Economic stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
-                draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 200)
-                draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 300)
+                draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 200)
+                draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.385, 200)
+                draw_text(f"Tax Rate: {nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.80, 200)
+                if tax_inc_button.draw(screen):
+                    """if taxes are increased overall national happiness decreases"""
+                    nation.tax_rate += 1.5
+                    decrement = round(random.uniform(1.0, 3.0), 2)
+                    if nation.happiness - decrement > 5:
+                        nation.happiness -= decrement
+                if tax_dec_button.draw(screen):
+                    """if taxes are increased overall national happiness increases"""
+                    nation.tax_rate -= 1.5
+                    increment = round(random.uniform(1.0, 3.0), 2)
+                    if nation.happiness + increment < 100:
+                        nation.happiness += increment
                 if back_button.draw(screen):
                     game_state = "game"
 

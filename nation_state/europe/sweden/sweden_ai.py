@@ -2,6 +2,9 @@ import random
 import time
 import randomness
 from datetime import datetime, timedelta
+
+from random_functions import random_functions
+
 leaders = {
     "1910" : "Arvid Lindman",
     "1914" : "Karl Staaff",
@@ -435,7 +438,7 @@ class SwedenAI:
         while self.population > 2500000:
             self.check_economic_state()
             self.population_change()
-            randomness.random_functions.random_functions(self, globe)
+            random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
