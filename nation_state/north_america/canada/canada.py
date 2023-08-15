@@ -63,6 +63,21 @@ gdp = {
     "1939": 74348873
 }
 
+flags = {"1910": "../flags/canada/canada_flag_1920.jpg",
+         "1914": "../flags/canada/canada_flag_1920.jpg",
+         "1918": "../flags/canada/canada_flag_1920.jpg",
+         "1932": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
+         "1936": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
+         "1939": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg"}
+
+leader_images = {
+    "1910": "../leaders/canada/wilfred_laurier_1910.jpeg",
+    "1914": "../leaders/canada/robert_borden_1914-1920.jpeg",
+    "1918": "../leaders/canada/robert_borden_1914-1920.jpeg",
+    "1932": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
+    "1936": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
+    "1939": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg"
+}
 
 class Canada:
     def __init__(self, year):
@@ -89,8 +104,10 @@ class Canada:
         self.happiness = 98.56
         # political
         self.leader = pms[year]
+        self.leader_image = leader_images[year]
         """Stability"""
         self.stability = 95.56
+        self.flag = flags[year]
         # economic
         self.national_debt = 0
         self.current_gdp = gdp[year]
@@ -647,7 +664,6 @@ def main(time):
         canada.population_change()
         #canada.stats(globe1)
         canada.stability_happiness_change(globe1)
-        randomness.random_functions(canada, globe1)
 
         """Looping through changes in US system"""
 

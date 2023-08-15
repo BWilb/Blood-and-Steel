@@ -3,6 +3,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 from database_management import upload_database
+
 """import arcade
 import threading
 from nation_state.north_america.mexico import mexico
@@ -49,9 +50,11 @@ social_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.75, social_
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img, 0.25)
 cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
-"""incrementing and decrementing buttons"""
-tax_inc_button = button.Button(SCREEN_WIDTH * 0.80, 250, increment_img, 0.10)
-tax_dec_button = button.Button(SCREEN_WIDTH * 0.88, 250, decrement_img, 0.10)
+"""tax buttons"""
+tax_inc_button = button.Button(SCREEN_WIDTH * 0.60, 400, increment_img, 0.05)
+tax_dec_button = button.Button(SCREEN_WIDTH * 0.60, 450, decrement_img, 0.05)
+
+
 # draw_text(f"Tax Rate: ${nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.85, 200)
 
 def draw_text(text, font, text_col, x, y):
@@ -59,19 +62,16 @@ def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
+
 def check_flag(nation):
-    if nation.name == "Mexico":
-        print("hi")
-        flag = pygame.image.load("mexico/150px-Bandera_de_México_(1880-1914).jpg").convert_alpha()
-        print(flag)
-        return flag
+    return pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 150))
 
 def check_leader(nation):
-    if nation.name == "Mexico":
-        leader = pygame.image.load("mexico/Porfirio_Diaz_en_1867.jpg").convert_alpha()
-        leader_resize = pygame.transform.scale(leader, (350, 400))
-        return leader_resize
+    return pygame.transform.scale(pygame.image.load(nation.leader_image).convert_alpha(), (350, 400))
+
+
 def country_sprite(nation, globe):
+    """incrementing and decrementing buttons"""
     game_state = "game"
     run = True
     game_paused = False
@@ -82,9 +82,6 @@ def country_sprite(nation, globe):
     actual_day = nation.date
 
     while run:
-        for i in range(0, len(globe.nations)):
-            if globe.nations[i].name != nation.name:
-                globe.nations[i].main(globe)
         if not game_paused:
             if game_state == "game":
                 screen.fill((52, 78, 91))
@@ -109,12 +106,13 @@ def country_sprite(nation, globe):
                 actual_day += timedelta(days=1)
                 upload_database.update_database_info(globe.nations)
                 time.sleep(1)
-                
+
             elif game_state == "view government":
                 """sub section of user nation that displays political information regarding nation"""
                 screen.fill((52, 78, 91))
                 draw_text(f"Political stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
-                draw_text(f"Current Leader: {nation.leader}", font, text_col, (SCREEN_WIDTH * 0.355) - len(nation.leader), 200)
+                draw_text(f"Current Leader: {nation.leader}", font, text_col,
+                          (SCREEN_WIDTH * 0.355) - len(nation.leader), 200)
                 draw_text(f"Stability: {round(nation.stability, 2)}%", font, text_col, SCREEN_WIDTH * 0.45, 300)
                 if back_button.draw(screen):
                     game_state = "game"
@@ -123,9 +121,10 @@ def country_sprite(nation, globe):
                 """sub section of user nation that displays economic information regarding nation"""
                 screen.fill((52, 78, 91))
                 draw_text(f"Economic stats", font, text_col, SCREEN_WIDTH * 0.45, 100)
-                draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.05, 200)
-                draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.385, 200)
-                draw_text(f"Tax Rate: {nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.80, 200)
+                draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 200)
+                draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.405,
+                          300)
+                draw_text(f"Tax Rate: {nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.405, 400)
                 if tax_inc_button.draw(screen):
                     """if taxes are increased overall national happiness decreases"""
                     nation.tax_rate += 1.5

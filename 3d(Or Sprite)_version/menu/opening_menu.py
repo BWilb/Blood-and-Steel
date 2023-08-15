@@ -40,7 +40,7 @@ def accept_nation(nation, time):
         mexican = mexico_ai.MexicoAI(time)
         british = britain_ai.Britain(time)
         italian = italy_ai.ItalyAI(time)
-        establish_foreign_nations(globe1,italian, british, canadian, cuban, mexican)
+        establish_foreign_nations(globe1, italian, british, canadian, cuban, mexican)
         sprite_version.country_sprite(canadian, globe1)
 
     if nation.lower() == "cuba":
