@@ -113,6 +113,7 @@ class Canada:
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
         self.e_s = "recovery"
+        self.tax_rate = 10.0
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0

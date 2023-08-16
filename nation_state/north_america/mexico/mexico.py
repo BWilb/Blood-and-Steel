@@ -87,7 +87,8 @@ leader_images = {"1910": "../leaders/mexico/Porfirio_Diaz_en_1867.jpg",
                  "1918": "../leaders/mexico/s20_15_venustiano-768x1024_1918.jpg",
                  "1932": "../leaders/mexico/OIP_1932.jpeg",
                  "1936": "../leaders/mexico/lazaro_1936_1939.jpeg",
-                 "1939": "../leaders/mexico/lazaro_1936_1939.jpeg"}
+                 "1939": "../leaders/mexico/lazaro_1936_1939.jpeg"
+                 }
 class Mexico:
     def __init__(self, year):
         self.is_intact = True

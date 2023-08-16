@@ -53,6 +53,23 @@ gdp = {
     "1939": 54936947368
 }
 
+flags = {
+    "1910": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1914": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1918": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1932": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1936": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1939": "../flags/britain/United-Kingdom-Flag.jpg"
+}
+
+leader_images = {"1910": "../leaders/britain/330px-Herbert_Henry_Asquith_till_1916.jpg",
+                 "1914": "../leaders/britain/330px-Herbert_Henry_Asquith_till_1916.jpg",
+                 "1918": "../leaders/britain/330px-David_Lloyd_George_1916-1922.jpg",
+                 "1932": "../leaders/britain/J._Ramsay_MacDonald_LCCN2014715885_(cropped)_till_1935.jpg",
+                 "1936": "../leaders/britain/Stanley_Baldwin_ggbain.35233_1935_1937.jpg",
+                 "1939": "../leaders/britain/chamberlain_1937-1939.jpeg"
+                 }
+
 class Britain:
     def __init__(self, year):
         self.is_intact = True
@@ -77,6 +94,8 @@ class Britain:
         self.happiness = 98.56
         # political
         self.leader = pm[year]
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -84,6 +103,7 @@ class Britain:
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
         self.e_s = "recovery"
+        self.tax_rate = 25.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0

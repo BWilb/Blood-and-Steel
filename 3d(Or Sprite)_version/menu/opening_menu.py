@@ -12,6 +12,14 @@ from nation_state.europe.britain import britain_ai
 from nation_state.europe.britain import britain
 from nation_state.europe.italy import italy_ai
 from nation_state.europe.italy import italy
+from nation_state.europe.france import france_ai
+from nation_state.europe.france import france
+from nation_state.europe.belgium import belgium
+from nation_state.europe.belgium import belgium_ai
+from nation_state.europe.denmark import denmark
+from nation_state.europe.denmark import denmark_ai
+from nation_state.europe.spain import spain
+from nation_state.europe.spain import spain_ai
 import pygame
 import pyautogui
 import socket
@@ -61,14 +69,60 @@ def accept_nation(nation, time):
         establish_foreign_nations(globe1, italian, british, cuban, mexican, canadian)
         sprite_version.country_sprite(british, globe1)
 
-    if nation.lower() == "italy":
+    """if nation.lower() == "italy":
         italian = italy.Italy(time)
         mexican = mexico_ai.MexicoAI(time)
         canadian = canada_ai.Canada(time)
         cuban = cuba_ai.CubaAI(time)
         british = britain_ai.Britain(time)
         establish_foreign_nations(globe1, italian, british, cuban, mexican, canadian)
-        sprite_version.country_sprite(british, globe1)
+        sprite_version.country_sprite(british, globe1)"""
+
+    if nation.lower() == "france":
+        french = france.France(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        establish_foreign_nations(globe1, french, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(french, globe1)
+
+    if nation.lower() == "belgium":
+        belgian = belgium.Belgium(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        establish_foreign_nations(globe1, belgian, french, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(belgian, globe1)
+
+    if nation.lower() == "denmark":
+        danish = denmark.Denmark(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        establish_foreign_nations(globe1, danish, belgian, french, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(danish, globe1)
+
+    if nation.lower() == "spain":
+        spanish = spain.Spain(time)
+        danish = denmark_ai.Denmark(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        establish_foreign_nations(globe1, spanish, danish, belgian, french, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(spanish, globe1)
 
 def play_music(mp3):
     pygame.mixer.init()

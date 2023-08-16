@@ -44,6 +44,22 @@ tax_rate = {
     "1939": 12.00
 }
 
+flags = {
+    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
+}
+leader_images = {"1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
+                 "1914": "../leaders/italy/giolitti_1914.jpg",
+                 "1918": "../leaders/italy/Vittorio_Emanuele_Orlando_1918.jpeg",
+                 "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+                 "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+                 "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
+                 }
+
 business_cycle = ["recovery", "expansion", "recession", "depression"]
 
 """Population variables and dictionaries"""

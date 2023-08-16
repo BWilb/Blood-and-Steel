@@ -31,6 +31,22 @@ gdp = {
     "1939": 11957073084
 }
 
+flags = {"1910": "../flags/france/Flag_of_France.jpg",
+         "1914": "../flags/france/Flag_of_France.jpg",
+         "1918": "../flags/france/Flag_of_France.jpg",
+         "1932": "../flags/france/Flag_of_France.jpg",
+         "1936": "../flags/france/Flag_of_France.jpg",
+         "1939": "../flags/france/Flag_of_France.jpg"}
+
+leader_images = {
+    "1910": "../leaders/france/Armand_Fallières_Paris_till_1913.jpg",
+    "1914": "../leaders/france/330px-Raymond_Poincaré_officiel_(cropped)_1913-1920.jpg",
+    "1918": "../leaders/france/330px-Raymond_Poincaré_officiel_(cropped)_1913-1920.jpg",
+    "1932": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg",
+    "1936": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg",
+    "1939": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg"
+}
+
 class France:
     def __init__(self, year):
         self.name = "French Republic"
@@ -54,6 +70,8 @@ class France:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -61,6 +79,7 @@ class France:
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
+        self.tax_rate = 30.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -70,6 +89,8 @@ class France:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
         # other
         self.is_sprite = False
     # population functions

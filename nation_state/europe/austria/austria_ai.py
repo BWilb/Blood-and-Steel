@@ -44,6 +44,7 @@ gdp = {
 
 class Austria:
     def __init__(self, year):
+        self.is_sprite = False
         self.region = "europe"
         if int(year) <= 1918:
             self.name = "Austria-Hungary"
@@ -440,6 +441,7 @@ class Austria:
             self.check_economic_state()
             self.population_change()
             self.stability_happiness_change(globe)
-            random_functions.random_functions(self, globe)
+            if self.is_sprite == False:
+                random_functions.random_functions(self, globe)
             self.date += timedelta(days=1)
             break

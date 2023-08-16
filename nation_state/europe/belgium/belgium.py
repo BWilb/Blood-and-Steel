@@ -40,6 +40,22 @@ gdp = {
     "1939": 3201339327
 }
 
+flags = {"1910": "../flags/belgium/belgian_flag.jpg",
+         "1914": "../flags/belgium/belgian_flag.jpg",
+         "1918": "../flags/belgium/belgian_flag.jpg",
+         "1932": "../flags/belgium/belgian_flag.jpg",
+         "1936": "../flags/belgium/belgian_flag.jpg",
+         "1939": "../flags/belgium/belgian_flag.jpg"}
+
+leader_images = {
+    "1910": "../leaders/belgium/Schollaert_1910.jpg",
+    "1914": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
+    "1918": "../leaders/belgium/3800px-Comte_de_Broqueville_1914-1918.jpg",
+    "1932": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
+    "1936": "../leaders/belgium/Paul_van_Zeeland,_1936.jpg",
+    "1939": "../leaders/belgium/375px-Hubert_Pierlot_1939.jpg"
+}
+
 class Belgium:
     def __init__(self, year):
         self.name = "Kingdom of Belgium"
@@ -63,6 +79,8 @@ class Belgium:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -70,6 +88,7 @@ class Belgium:
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
+        self.tax_rate = 15.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -79,6 +98,8 @@ class Belgium:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
         # other
     # population functions
     def population_change(self):

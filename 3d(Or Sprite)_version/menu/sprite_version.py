@@ -95,13 +95,18 @@ def country_sprite(nation, globe):
                     game_state = "view society"
 
                 draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.785, 50)
-                draw_text(f"{nation.name}", font, text_col, SCREEN_WIDTH * 0.45, 50)
-                screen.blit(flag, (SCREEN_WIDTH * 0.45, 150))
-                screen.blit(leader, (SCREEN_WIDTH * 0.405, 300))
+                draw_text(f"{nation.name}", font, text_col, (SCREEN_WIDTH * 0.45) - len(nation.name), 50)
+                screen.blit(flag, (SCREEN_WIDTH * 0.485, 150))
+                screen.blit(leader, (SCREEN_WIDTH * 0.445, 300))
                 time.sleep(1.25)
                 nation.check_economic_state()
                 nation.population_change()
                 nation.stability_happiness_change(globe)
+
+                """for i in range(len(globe.nations)):
+                # will be re-introduced, once figure out how to deal with other nations than one currently playing as
+                    if globe.nations[i].name != nation.name:
+                        globe.nations[i].main(globe)"""
 
                 actual_day += timedelta(days=1)
                 upload_database.update_database_info(globe.nations)
@@ -127,13 +132,13 @@ def country_sprite(nation, globe):
                 draw_text(f"Tax Rate: {nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.405, 400)
                 if tax_inc_button.draw(screen):
                     """if taxes are increased overall national happiness decreases"""
-                    nation.tax_rate += 1.5
+                    nation.tax_rate += 0.5
                     decrement = round(random.uniform(1.0, 3.0), 2)
                     if nation.happiness - decrement > 5:
                         nation.happiness -= decrement
                 if tax_dec_button.draw(screen):
                     """if taxes are increased overall national happiness increases"""
-                    nation.tax_rate -= 1.5
+                    nation.tax_rate -= 0.5
                     increment = round(random.uniform(1.0, 3.0), 2)
                     if nation.happiness + increment < 100:
                         nation.happiness += increment

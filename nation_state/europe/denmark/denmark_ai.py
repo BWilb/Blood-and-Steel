@@ -48,6 +48,7 @@ gdp = {
 
 class Denmark:
     def __init__(self, year):
+        self.is_sprite = False
         self.region = "europe"
         self.name = "Kingdom of Denmark"
         # date variables
@@ -444,7 +445,8 @@ class Denmark:
         while self.population > 1500000:
             self.check_economic_state()
             self.population_change()
-            random_functions.random_functions(self, globe)
+            if self.is_sprite == False:
+                random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break

@@ -46,6 +46,7 @@ gdp = {
 
 class RomaniaAI:
     def __init__(self, year):
+        self.is_sprite = False
         self.region = "europe"
         self.name = "Kingdom of Romania"
         # date variables
@@ -442,7 +443,8 @@ class RomaniaAI:
         while self.population > 4500000:
             self.population_change()
             self.check_economic_state()
-            random_functions.random_functions(self, globe)
+            if self.is_sprite == False:
+                random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
