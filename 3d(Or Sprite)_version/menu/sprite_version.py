@@ -103,10 +103,10 @@ def country_sprite(nation, globe):
                 nation.population_change()
                 nation.stability_happiness_change(globe)
 
-                """for i in range(len(globe.nations)):
+                for i in range(len(globe.nations)):
                 # will be re-introduced, once figure out how to deal with other nations than one currently playing as
                     if globe.nations[i].name != nation.name:
-                        globe.nations[i].main(globe)"""
+                        globe.nations[i].main(globe)
 
                 actual_day += timedelta(days=1)
                 upload_database.update_database_info(globe.nations)

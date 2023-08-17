@@ -435,7 +435,7 @@ class CubaAI:
         while self.population > 650000:
             self.check_economic_state()
             self.population_change()
-            if self.is_sprite == False:
+            if self.is_sprite != False:
                 random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)

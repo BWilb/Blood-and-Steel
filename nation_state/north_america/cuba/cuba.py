@@ -31,6 +31,22 @@ gdp = {
     "1939": 78347343
 }
 
+flags = {
+    "1910": "../flags/cuba/cuba.jpeg",
+    "1914": "../flags/cuba/cuba.jpeg",
+    "1918": "../flags/cuba/cuba.jpeg",
+    "1932": "../flags/cuba/cuba.jpeg",
+    "1936": "../flags/cuba/cuba.jpeg",
+    "1939": "../flags/cuba/cuba.jpeg"
+}
+leader_images = {"1910": "../leaders/cuba/Gral_de_División_José_Miguel_Gomez_Gomez_1910.jpeg",
+                 "1914": "../leaders/cuba/mario-garca-menocal-1866-1941-granger_1914-1918.jpg",
+                 "1918": "../leaders/cuba/mario-garca-menocal-1866-1941-granger_1914-1918.jpg",
+                 "1932": "../leaders/cuba/330px-Gmachado_1932.jpg",
+                 "1936": "../leaders/cuba/1936.png",
+                 "1939": "../leaders/cuba/1939.jpeg"
+                 }
+
 class Cuba:
     def __init__(self, year):
         self.is_intact = True
@@ -55,9 +71,12 @@ class Cuba:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         # economic
+        self.tax_rate = 16.00
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
@@ -118,21 +137,21 @@ class Cuba:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions

@@ -443,7 +443,7 @@ class RomaniaAI:
         while self.population > 4500000:
             self.population_change()
             self.check_economic_state()
-            if self.is_sprite == False:
+            if self.is_sprite != False:
                 random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)

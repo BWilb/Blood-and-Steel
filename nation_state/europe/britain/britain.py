@@ -105,11 +105,11 @@ class Britain:
         self.e_s = "recovery"
         self.tax_rate = 25.00
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
+        self.consumer_spending = 500
+        self.investment = 400
+        self.government_spending = 1200
+        self.exports = 10000
+        self.imports = 9500
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
@@ -217,96 +217,56 @@ class Britain:
                 self.expansion()
     def recession(self):
         if self.economic_stimulus:
-
-            self.consumer_spending = -round(random.uniform(10, 150), 2)
-            self.government_spending = round(random.uniform(100, 600), 2)
             self.national_debt += round(
                 (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(50, 350), 2)
-            self.exports = round(random.uniform(10, 45), 2)
-            self.imports = round(random.uniform(10, 75), 2)
 
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+            self.current_gdp += (-self.consumer_spending + -self.investment + self.government_spending +
                                  (self.exports - self.imports))
 
         else:
-            self.consumer_spending = -round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 700), 2)
             self.national_debt += round((-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 500), 2)
-            self.exports = round(random.uniform(10, 30), 2)
-            self.imports = round(random.uniform(10, 105), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                     (self.exports - self.imports))
     def recovery(self):
         if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 450), 2)
-            self.government_spending = round(random.uniform(100, 200), 2)
             self.national_debt += round(
                 (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 700), 2)
-            self.exports = round(random.uniform(10, 100), 2)
-            self.imports = round(random.uniform(10, 75), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
         else:
-            self.consumer_spending = round(random.uniform(10, 350), 2)
-            self.government_spending = round(random.uniform(100, 350), 2)
             self.national_debt += round(
                 (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 500), 2)
-            self.exports = round(random.uniform(10, 75), 2)
-            self.imports = round(random.uniform(10, 58), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
 
     def expansion(self):
         if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 2000), 2)
-            self.government_spending = round(random.uniform(100, 600), 2)
             self.national_debt += round(
                 (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 500), 2)
             self.imports = round(random.uniform(10, 400), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
         else:
-            self.consumer_spending = round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 500), 2)
             self.national_debt += round(
                 (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 500), 2)
-            self.imports = round(random.uniform(10, 350), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
 
     def depression(self):
         if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 15), 2)
-            self.government_spending = round(random.uniform(100, 500), 2)
             self.national_debt += round(
                 (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 50), 2)
-            self.imports = round(random.uniform(10, 20), 2)
 
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+            self.current_gdp += (-self.consumer_spending + -self.investment + self.government_spending +
                                  (self.exports - self.imports))
         else:
-            self.consumer_spending = -round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 100), 2)
             self.national_debt += round(
                 (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 50), 2)
-            self.imports = round(random.uniform(10, 20), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
