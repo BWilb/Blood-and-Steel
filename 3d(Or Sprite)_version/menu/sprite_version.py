@@ -40,6 +40,12 @@ cont_img = pygame.image.load("buttons/game_buttons/functionality_buttons/continu
 back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
 increment_img = pygame.image.load("buttons/game_buttons/functionality_buttons/increment_sing.jpg").convert_alpha()
 decrement_img = pygame.image.load("buttons/game_buttons/functionality_buttons/decrement_sign.jpg").convert_alpha()
+"""speed imgs"""
+faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
+fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
+regular_img = pygame.image.load("buttons/game_buttons/functionality_buttons/regular_speed.jpg").convert_alpha()
+slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
+slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
 # buttons
 """stats buttons"""
 govt_button = button.Button(100, 0, govt_img, 0.16)
@@ -50,12 +56,17 @@ social_button = button.Button(1600, 0, social_img, 0.16)
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img, 0.25)
 cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
+"""speed buttons"""
+faster_button = button.Button(1750, 150, faster_img, 0.035)
+fast_button = button.Button(1710, 150, fast_img, 0.035)
+regular_button = button.Button(1670, 150, regular_img, 0.035)
+slow_button = button.Button(1630, 150, slow_img, 0.035)
+slower_button = button.Button(1590, 150, slower_img, 0.035)
 """tax buttons"""
 cor_tax_inc_button = button.Button(SCREEN_WIDTH * 0.505, 450, increment_img, 0.05)
 cor_tax_dec_button = button.Button(SCREEN_WIDTH * 0.555, 450, decrement_img, 0.05)
 inc_tax_inc_button = button.Button(SCREEN_WIDTH * 0.505, 550, increment_img, 0.05)
 inc_tax_dec_button = button.Button(SCREEN_WIDTH * 0.555, 550, decrement_img, 0.05)
-
 
 # draw_text(f"Tax Rate: ${nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.85, 200)
 
@@ -64,15 +75,14 @@ def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
-
 def check_flag(nation):
     return pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 125))
 
 def check_leader(nation):
     return pygame.transform.scale(pygame.image.load(nation.leader_image).convert_alpha(), (350, 500))
 
-
 def country_sprite(nation, globe):
+    speed = 1.25
     """incrementing and decrementing buttons"""
     game_state = "game"
     run = True
@@ -102,6 +112,16 @@ def country_sprite(nation, globe):
 
 
                 draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.80, 100)
+                if slower_button.draw(screen):
+                    pass
+                if slow_button.draw(screen):
+                    pass
+                if regular_button.draw(screen):
+                    pass
+                if fast_button.draw(screen):
+                    pass
+                if faster_button.draw(screen):
+                    pass
                 screen.blit(flag, (SCREEN_WIDTH * 0.05, 150))
                 screen.blit(leader, (SCREEN_WIDTH * 0.015, 300))
                 time.sleep(1.25)
@@ -116,7 +136,7 @@ def country_sprite(nation, globe):
 
                 actual_day += timedelta(days=1)
                 upload_database.update_database_info(globe.nations)
-                time.sleep(1)
+                time.sleep(speed)
 
             elif game_state == "view government":
                 """sub section of user nation that displays political information regarding nation"""

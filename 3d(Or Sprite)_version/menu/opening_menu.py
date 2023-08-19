@@ -571,9 +571,85 @@ while not answered:
 
         pygame.quit()
 
-    elif user_choice.lower() == "text adventure game" or user_choice.lower() == "text adventure":
-        answered = True
-        pass
+    elif user_choice.lower() == "text adventure game" or user_choice.lower() == "text adventure"\
+            or user_choice.lower() == "text":
+        """Piece of game where user selects text adventure"""
+        time_not_answered = True
+        region_not_answered = True
+        nation_not_answered = True
+        # first three are loop constraints
+        time_selected = 0
+        region_selected = ""
+        nation_chosen = ""
+        # next three are storing user input(it makes it easier for now, the code will become less heavy later)
+        while time_not_answered:
+            times = ["1. 1910", "2. 1914", "3. 1918", "4. 1932", "5. 1936", "6. 1939"]
+
+            for i in times:
+                print(i, end='\n')
+                time.sleep(1.25)
+
+            time_chosen = int(input(f"{socket.gethostname()} choose either 1-6 (enter 0 to view again; -1 to quit): "))
+            if time_chosen == 1:
+                time_selected = 1910
+                time_not_answered = False
+
+            elif time_chosen == 2:
+                time_selected = 1914
+                time_not_answered = False
+
+            elif time_chosen == 3:
+                time_selected = 1918
+                time_not_answered = False
+
+            elif time_chosen == 4:
+                time_selected = 1932
+                time_not_answered = False
+
+            elif time_chosen == 5:
+                time_selected = 1936
+                time_not_answered = False
+
+            elif time_chosen == 6:
+                time_selected = 1939
+                time_not_answered = False
+
+            elif time_chosen == -1:
+                sys.exit()
+
+        while region_not_answered:
+            regions = ["1. North America", "2. South America", "3. Europe", "4. Africa", "5. Asia", "6. Australasia"]
+            region_chosen = int(input(f"{socket.gethostname()} choose either 1-6 (enter 0 to view again; -1 to quit): "))
+            if region_chosen == 1:
+                time_selected = "north america"
+                region_not_answered = False
+
+            elif region_chosen == 2:
+                time_selected = "south america"
+                region_not_answered = False
+
+            elif region_chosen == 3:
+                time_selected = "europe"
+                region_not_answered = False
+
+            elif region_chosen == 4:
+                time_selected = "africa"
+                region_not_answered = False
+
+            elif region_chosen == 5:
+                time_selected = "asia"
+                region_not_answered = False
+
+            elif region_chosen == 6:
+                time_selected = "australasia"
+                region_not_answered = False
+
+            elif region_chosen == -1:
+                sys.exit()
+
+        while nation_not_answered:
+            pass
+
     else:
         print(f"\nUser {socket.gethostname()}, enter either text or sprite!!!!\n")
         time.sleep(1.5)

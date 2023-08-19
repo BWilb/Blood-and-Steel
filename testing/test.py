@@ -1,2 +1,2 @@
-c = 10
-print(len(c))
+import socket
+print(socket.gethostname())

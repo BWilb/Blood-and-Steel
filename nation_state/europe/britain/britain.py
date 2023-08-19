@@ -1,4 +1,5 @@
 import random
+import socket
 import sys
 import time
 from datetime import datetime, timedelta
@@ -144,6 +145,7 @@ class Britain:
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
+        self.economic_stimulus = False
         self.e_s = "recovery"
         self.income_tax_rate = 25.00
         self.corporate_tax_rate = 35.00
@@ -383,6 +385,64 @@ class Britain:
                 self.births += births
                 self.deaths += deaths
 
+    def stimulate_economy(self):
+        """function will be called if economy falls into recession or depression (will affect components of GDP if implemented)"""
+        not_answered = True
+        while not_answered:
+            """while loop controlling user input for primary question"""
+            user_question = input(
+                f"{socket.gethostname()} would you like to implement an economic stimulus to mitigate the effects\n"
+                f"of your economic downturn?: ")
+
+            if user_question.lower() == "yes":
+                self.economic_stimulus = True
+                not_answered = True
+                while not_answered:
+                    """While loop controlling user input for secondary question"""
+                    solvent_question = input(f"{socket.gethostname()} would you like to increase corporate or income taxes,"
+                                             f"increase government spending,\n or take a 1.5% portion of your GDP "
+                                             f"and distribute it to your populace?: ")
+
+                    if solvent_question.lower() == "increase corporate taxes":
+                        self.corporate_tax_rate += 1.5
+                        self.government_spending += (self.government_spending * 0.025)
+                        self.investment -= 150
+                        decrease = round(random.uniform(0.25, 1.25), 2)
+                        if (self.stability - decrease) > 5:
+                            self.stability -= decrease
+
+                    elif solvent_question.lower() == "increase income taxes":
+                        self.income_tax_rate += 1.5
+                        self.government_spending += (self.government_spending * 0.025)
+                        self.consumer_spending -= 150
+                        decrease = round(random.uniform(0.25, 1.25), 2)
+                        if (self.happiness - decrease) > 5:
+                            self.happiness -= decrease
+
+                    elif solvent_question.lower() == "increase government spending":
+                        self.government_spending += (self.government_spending * 0.05)
+                        self.investment -= (self.investment * 0.05)
+                        self.income_tax_rate += (self.income_tax_rate * 0.05)
+                        self.corporate_tax_rate += (self.corporate_tax_rate * 0.05)
+                        decrease = round(random.uniform(0.25, 1.25), 2)
+                        if (self.happiness - decrease) > 5:
+                            self.happiness -= decrease
+
+                        if (self.stability - decrease) > 5:
+                            self.stability -= decrease
+
+                    elif solvent_question.lower() == "1.5% portion of gdp":
+                        spared = (self.current_gdp * 0.025)
+                        self.current_gdp -= spared
+                        self.consumer_spending += spared
+                    else:
+                        print(f"{socket.gethostname()}, I did not understand your answer, please try again.\n")
+
+            elif user_question.lower() == "no":
+                not_answered = False
+            else:
+                print(f"{socket.gethostname()}, I did not understand your answer, please try again.\n")
+                time.sleep(1.25)
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
@@ -418,6 +478,7 @@ class Britain:
                     self.imports = 1000
                     print("Your economy is now in a recessionary period.\n")
                     time.sleep(3)
+                    self.stimulate_economy()
 
                 elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
                     self.e_s = "depression"
@@ -427,6 +488,7 @@ class Britain:
                     self.imports += 100
                     print("Your economy is now in a depression period.\n")
                     time.sleep(3)
+                    self.stimulate_economy()
         else:
             if self.e_s == "recession":
                 self.recession()
