@@ -79,7 +79,8 @@ class Spain:
         """Stability"""
         self.stability = 95.56
         # economic
-        self.tax_rate = 12.00
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]

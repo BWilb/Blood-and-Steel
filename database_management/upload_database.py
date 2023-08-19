@@ -120,7 +120,6 @@ def update_database_info(nations):
         Deaths={nations[i].deaths}, NationStability={nations[i].stability},
         NationHappiness={nations[i].happiness}
         WHERE NationID={(i + 1)}"""
-        print(nations[i].population)
         try:
             cursor.execute(update_query)
             cursor.commit()

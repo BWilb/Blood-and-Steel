@@ -90,7 +90,8 @@ class Denmark:
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
-        self.tax_rate = 13.00
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0

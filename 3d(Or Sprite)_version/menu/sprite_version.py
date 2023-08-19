@@ -42,17 +42,19 @@ increment_img = pygame.image.load("buttons/game_buttons/functionality_buttons/in
 decrement_img = pygame.image.load("buttons/game_buttons/functionality_buttons/decrement_sign.jpg").convert_alpha()
 # buttons
 """stats buttons"""
-govt_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.15, govt_img, 0.16)
-econ_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.35, econ_img, 0.16)
-foreign_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.55, foreign_img, 0.16)
-social_button = button.Button(SCREEN_WIDTH * 0.05, SCREEN_HEIGHT * 0.75, social_img, 0.16)
+govt_button = button.Button(100, 0, govt_img, 0.16)
+econ_button = button.Button(600, 0, econ_img, 0.16)
+foreign_button = button.Button(1100, 0, foreign_img, 0.16)
+social_button = button.Button(1600, 0, social_img, 0.16)
 """paused buttons"""
 quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img, 0.25)
 cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
 """tax buttons"""
-tax_inc_button = button.Button(SCREEN_WIDTH * 0.60, 400, increment_img, 0.05)
-tax_dec_button = button.Button(SCREEN_WIDTH * 0.60, 450, decrement_img, 0.05)
+cor_tax_inc_button = button.Button(SCREEN_WIDTH * 0.505, 450, increment_img, 0.05)
+cor_tax_dec_button = button.Button(SCREEN_WIDTH * 0.555, 450, decrement_img, 0.05)
+inc_tax_inc_button = button.Button(SCREEN_WIDTH * 0.505, 550, increment_img, 0.05)
+inc_tax_dec_button = button.Button(SCREEN_WIDTH * 0.555, 550, decrement_img, 0.05)
 
 
 # draw_text(f"Tax Rate: ${nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.85, 200)
@@ -64,10 +66,10 @@ def draw_text(text, font, text_col, x, y):
 
 
 def check_flag(nation):
-    return pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 150))
+    return pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 125))
 
 def check_leader(nation):
-    return pygame.transform.scale(pygame.image.load(nation.leader_image).convert_alpha(), (350, 400))
+    return pygame.transform.scale(pygame.image.load(nation.leader_image).convert_alpha(), (350, 500))
 
 
 def country_sprite(nation, globe):
@@ -85,6 +87,10 @@ def country_sprite(nation, globe):
         if not game_paused:
             if game_state == "game":
                 screen.fill((52, 78, 91))
+
+                pygame.draw.rect(screen, (211, 211, 211), (0, 0, SCREEN_WIDTH, 100))
+                pygame.draw.rect(screen, (0, 0, 0), (SCREEN_WIDTH * 0.04, 140, flag.get_width() + 35, flag.get_height() + 25))
+
                 if govt_button.draw(screen):
                     game_state = "view government"
                 if econ_button.draw(screen):
@@ -94,10 +100,10 @@ def country_sprite(nation, globe):
                 if social_button.draw(screen):
                     game_state = "view society"
 
-                draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.785, 50)
-                draw_text(f"{nation.name}", font, text_col, (SCREEN_WIDTH * 0.45) - len(nation.name), 50)
-                screen.blit(flag, (SCREEN_WIDTH * 0.485, 150))
-                screen.blit(leader, (SCREEN_WIDTH * 0.445, 300))
+
+                draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.80, 100)
+                screen.blit(flag, (SCREEN_WIDTH * 0.05, 150))
+                screen.blit(leader, (SCREEN_WIDTH * 0.015, 300))
                 time.sleep(1.25)
                 nation.check_economic_state()
                 nation.population_change()
@@ -129,19 +135,16 @@ def country_sprite(nation, globe):
                 draw_text(f"GDP: ${round(nation.current_gdp, 2)}", font, text_col, SCREEN_WIDTH * 0.405, 200)
                 draw_text(f"National Debt: ${round(nation.national_debt, 2)}", font, text_col, SCREEN_WIDTH * 0.405,
                           300)
-                draw_text(f"Tax Rate: {nation.tax_rate}%", font, text_col, SCREEN_WIDTH * 0.405, 400)
-                if tax_inc_button.draw(screen):
-                    """if taxes are increased overall national happiness decreases"""
-                    nation.tax_rate += 0.5
-                    decrement = round(random.uniform(1.0, 3.0), 2)
-                    if nation.happiness - decrement > 5:
-                        nation.happiness -= decrement
-                if tax_dec_button.draw(screen):
-                    """if taxes are increased overall national happiness increases"""
-                    nation.tax_rate -= 0.5
-                    increment = round(random.uniform(1.0, 3.0), 2)
-                    if nation.happiness + increment < 100:
-                        nation.happiness += increment
+                draw_text(f"Current Corporate Tax Rate: {nation.corporate_tax_rate}%", font, text_col, SCREEN_WIDTH * 0.325, 400)
+                draw_text(f"Current Income Tax Rate: {nation.income_tax_rate}%", font, text_col, SCREEN_WIDTH * 0.345, 500)
+                if cor_tax_inc_button.draw(screen):
+                    pass
+                if cor_tax_dec_button.draw(screen):
+                    pass
+                if inc_tax_inc_button.draw(screen):
+                    pass
+                if inc_tax_dec_button.draw(screen):
+                    pass
                 if back_button.draw(screen):
                     game_state = "game"
 

@@ -88,7 +88,8 @@ class Austria:
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
         """Components of GDP"""
-        self.tax_rate = 10.00
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         self.consumer_spending = 0
         self.investment = 0
         self.government_spending = 0

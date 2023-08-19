@@ -81,7 +81,8 @@ class Luxembourg:
         self.stability = 95.56
         # economic
         self.e_s = "recovery"
-        self.tax_rate = 10.00
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
