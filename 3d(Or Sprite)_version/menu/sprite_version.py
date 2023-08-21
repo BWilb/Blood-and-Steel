@@ -57,11 +57,11 @@ quit_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.15, quit_img,
 cont_button = button.Button(SCREEN_WIDTH * 0.48, SCREEN_HEIGHT * 0.45, cont_img, 0.25)
 back_button = button.Button(SCREEN_WIDTH * 0.465, SCREEN_HEIGHT * 0.75, back_img, 0.25)
 """speed buttons"""
-faster_button = button.Button(1750, 150, faster_img, 0.035)
-fast_button = button.Button(1710, 150, fast_img, 0.035)
-regular_button = button.Button(1670, 150, regular_img, 0.035)
-slow_button = button.Button(1630, 150, slow_img, 0.035)
-slower_button = button.Button(1590, 150, slower_img, 0.035)
+faster_button = button.Button(1720, 150, faster_img, 0.035)
+fast_button = button.Button(1680, 150, fast_img, 0.035)
+regular_button = button.Button(1640, 150, regular_img, 0.035)
+slow_button = button.Button(1600, 150, slow_img, 0.035)
+slower_button = button.Button(1560, 150, slower_img, 0.035)
 """tax buttons"""
 cor_tax_inc_button = button.Button(SCREEN_WIDTH * 0.505, 450, increment_img, 0.05)
 cor_tax_dec_button = button.Button(SCREEN_WIDTH * 0.555, 450, decrement_img, 0.05)
@@ -76,10 +76,17 @@ def draw_text(text, font, text_col, x, y):
     screen.blit(img, (x, y))
 
 def check_flag(nation):
+    # retrieving flag from nation flag variable and resizing flag
     return pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 125))
 
 def check_leader(nation):
+    # retrieving leader from nation flag variable and resizing leader
     return pygame.transform.scale(pygame.image.load(nation.leader_image).convert_alpha(), (350, 500))
+def economic_events(nation):
+    pass
+
+def social_events(nation):
+    pass
 
 def country_sprite(nation, globe):
     speed = 1.25

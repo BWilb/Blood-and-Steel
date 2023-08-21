@@ -239,49 +239,50 @@ class Canada:
         self.na_limit = self.date
         self.asia_limit = self.date
         # other
-        self.is_ai = False
+        self.sprite = False
 
-        # population functions
-
+    # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.sprite:
+            """condition if sprite version of game wasn't selected"""
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to promote population growth?: ")
+                    not_answered = False
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_enhancer = True
+                            not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to slow your population growth?: ")
+                    not_answered = False
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_control = True
+                            not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
         else:
             if self.birth_enhancer:
                 births = random.randrange(8, 15)

@@ -35,6 +35,23 @@ gdp = {
     "1939": 2892814865
 }
 
+leader_images = {
+    "1910": "../leaders/sweden/330px-Arvid_Lindman_1910.jpg",
+    "1914": "../leaders/sweden/Karl_Staaff_1914.jpg",
+    "1918": "../leaders/sweden/Nils_Eden_1918.jpg",
+    "1932": "../leaders/sweden/330px-Carl_Gustaf_Ekman_1932.jpg",
+    "1936": "../leaders/sweden/330px-Per_Albin_Hansson_-_Sveriges_styresmän_1936-1939.jpg",
+    "1939": "../leaders/sweden/330px-Per_Albin_Hansson_-_Sveriges_styresmän_1936-1939.jpg"
+}
+flags = {
+    "1910": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1914": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1918": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1932": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1936": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1939": "../flags/sweden/Flag_of_Sweden.jpg"
+}
+
 class Sweden:
     def __init__(self, year):
         # date variables
@@ -57,6 +74,8 @@ class Sweden:
         self.happiness = 98.56
         # political
         self.leader = leaders[year]
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -75,65 +94,68 @@ class Sweden:
         self.economic_stimulus = False
         # military
         # other
+        self.sprite = False
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.sprite:
+            """condition if sprite version of game wasn't selected"""
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to promote population growth?: ")
+                    not_answered = False
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_enhancer = True
+                            not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to slow your population growth?: ")
+                    not_answered = False
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_control = True
+                            not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
                 deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
                 births = random.randrange(10, 30)
                 deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             else:
                 births = random.randrange(7, 15)
                 deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
+                self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
     # economic functions

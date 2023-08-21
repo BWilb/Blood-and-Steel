@@ -2,12 +2,9 @@
 import random
 from datetime import datetime, timedelta
 import time
-from nation_state.north_america.united_states import us_ai
-from nation_state.europe.italy import italy_ai
-from nation_state.europe.britain import britain_ai
-from nation_state.north_america.united_states import us_ai
-from nation_state.europe.germany import german_ai
-from nation_state.europe.britain import britain_ai
+import randomness
+
+from random_functions import random_functions
 
 prime_ministers = {
     "1910": "Luigi Luzzatti",
@@ -35,32 +32,6 @@ gdp = {
     "1936": 15920315789,
     "1939": 19837894737
 }
-tax_rate = {
-    "1910": 18.00,
-    "1914": 18.00,
-    "1918": 36.00,
-    "1932": 10.00,
-    "1936": 8.00,
-    "1939": 12.00
-}
-
-flags = {
-    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
-}
-leader_images = {"1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
-                 "1914": "../leaders/italy/giolitti_1914.jpg",
-                 "1918": "../leaders/italy/Vittorio_Emanuele_Orlando_1918.jpeg",
-                 "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
-                 "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
-                 "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
-                 }
-
-business_cycle = ["recovery", "expansion", "recession", "depression"]
 
 """Population variables and dictionaries"""
 population = {
@@ -71,766 +42,453 @@ population = {
     "1936": 42400000,
     "1939": 43500000
 }
-"""Military variables and dictionaries"""
-
-army_size = {
-    "1910": 252169,
-    "1914": 497219,
-    "1918": 2700000,
-    "1932": 354169,
-    "1936": 381336,
-    "1939": 645000
+leader_images = {
+    "1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
+    "1914": "../leaders/italy/giolitti_1914.jpg",
+    "1918": "../leaders/italy/Flag_of_Greece.jpg",
+    "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
 }
-"""Stability and happiness functions"""
-def stability_happiness(italy):
-    chance = random.randrange(0, 2)
+flags = {
+    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
+}
 
-    if chance == 0:
-        increase_happiness = round(random.uniform(0.001, 0.09), 3)
-        increase_stability = round(random.uniform(0.001, 0.009), 3)
 
-        if (italy.happiness + increase_happiness) < 98:
-            italy.happiness += increase_happiness
-        if (italy.stability + increase_stability) < 98:
-            italy.stability += increase_stability
-
-    elif chance == 1:
-        decrease_happiness = round(random.uniform(0.001, 0.09), 3)
-        decrease_stability = round(random.uniform(0.001, 0.009), 3)
-
-        if (italy.happiness - decrease_happiness) > 5:
-            italy.happiness -= decrease_happiness
-        if (italy.stability - decrease_stability) > 5:
-            italy.stability -= decrease_stability
-
-
-def retire_soldiers(italy):
-    """function for retiring old, wounded, or stupid soldiers"""
-    italy.army -= random.randrange(2, 100)
-def increase_army(italy):
-    increase = round(italy.conscripts * round(random.uniform(0.0001, 0.0005), 6), 0)
-    italy.army += increase
-    italy.conscripts -= increase
-def increase_conscripts(italy):
-    if italy.conscription_status == "volunteer":
-        if italy.date == italy.conscript_census:
-            """Amount of population that is eligible under volunteering draft"""
-            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.0009), 5), 0)
-            italy.conscript_census = italy.date + timedelta(days=15)
-
-    elif italy.conscription_status == "limited":
-        if italy.date == italy.conscript_census:
-            """Amount of population that is eligible under limited draft"""
-            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.002), 5), 0)
-            italy.conscript_census = italy.date + timedelta(days=20)
-
-    elif italy.conscript_status == "extensive":
-        if italy.date == italy.conscript_census:
-            """Amount of population that is eligible under extensive draft"""
-            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.005), 5), 0)
-            italy.conscript_census = italy.date + timedelta(days=25)
-
-    elif italy.conscript_status == "required":
-        if italy.date == italy.conscript_census:
-            """Amount of population that is eligible under required drafting"""
-            italy.conscripts = round(italy.current_pop * round(random.uniform(0.0001, 0.02), 5), 0)
-            italy.conscript_census = italy.date + timedelta(days=30)
-def military_functions(italy):
-    increase_conscripts(italy)
-    increase_army(italy)
-    retire_soldiers(italy)
-
-"""population functions"""
-def population_change(italy):
-    if italy.past_year < italy.date.year:
-        italy.population_change = (italy.current_pop - italy.past_pop / (
-                    (italy.current_pop + italy.current_pop) / 2)) * 100
-        italy.past_pop = italy.current_pop
-
-        if italy.population_change <= 2.1:
-            """possible implementation of viagra with somewhat moderate growth, due to low population"""
-            print(f"Your population growth for {italy.past_year} was {italy.population_change}%.\n")
-
-            choice = input("Would you like to subsidize viagra for your population?: ")
-            if choice.lower() == "yes" or choice.lower() == "y":
-                italy.viagra_subsidy = True
-
-                if italy.condom_subsidy:
-                    """Checking to see if condom subsidies exist"""
-                    italy.condom_subsidy = False
-
-        elif italy.population_change >= 12.5:
-            print(f"Your population growth for {italy.past_year} was {italy.population_change}%.\n")
-            choice = input("Would you like to subsidize condoms?: ")
-            if choice.lower() == 'y' or choice.lower() == "yes":
-                italy.condom_subsidy = True
-
-                if italy.viagra_subsidy:
-                    italy.viagra_subsidy = False
-    else:
-        if italy.viagra_subsidy:
-            births = random.randrange(50, 600)
-            italy.births += births
-            italy.current_pop += births
-
-            for i in range(0, births):
-                """Looping through births to assign to political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party += 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party += 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party += 1
-
-                elif chance == 3:
-                    italy.italian_republican_party += 1
-
-            deaths = random.randrange(25, 150)
-            italy.deaths += deaths
-            italy.current_pop -= deaths
-
-            for i in range(0, births):
-                """Looping through deaths to un-assign political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party -= 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party -= 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party -= 1
-
-                elif chance == 3:
-                    italy.italian_republican_party -= 1
-
-        elif italy.condom_subsidy:
-            births = random.randrange(50, 200)
-            italy.births += births
-            italy.current_pop += births
-
-            for i in range(0, births):
-                """Looping through births to assign to political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party += 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party += 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party += 1
-
-                elif chance == 3:
-                    italy.italian_republican_party += 1
-
-            deaths = random.randrange(25, 150)
-            italy.deaths += deaths
-            italy.current_pop -= deaths
-
-            for i in range(0, deaths):
-                """Looping through deaths to un-assign political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party -= 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party -= 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party -= 1
-
-                elif chance == 3:
-                    italy.italian_republican_party -= 1
-
-        else:
-            births = random.randrange(50, 300)
-            italy.births += births
-            italy.current_pop += births
-            for i in range(0, births):
-                """Looping through births to assign to political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party += 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party += 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party += 1
-
-                elif chance == 3:
-                    italy.italian_republican_party += 1
-
-            deaths = random.randrange(25, 150)
-            italy.deaths += deaths
-            italy.current_pop -= deaths
-
-            for i in range(0, deaths):
-                """Looping through deaths to un-assign political parties"""
-                chance = random.randrange(0, 4)
-                # chance of chance variable being 0 - 3
-                if chance == 0:
-                    italy.italian_socialist_party -= 1
-
-                elif chance == 1:
-                    italy.italian_liberal_party -= 1
-
-                elif chance == 2:
-                    italy.italian_peoples_party -= 1
-
-                elif chance == 3:
-                    italy.italian_republican_party -= 1
-
-"""Economic Functions"""
-def economic_state(italy):
-    if italy.date >= italy.economic_change_date:
-        """Comparing current date to when Italy's economic state could change"""
-        chance = random.randrange(0, 2000)
-        if chance % 37 == 10:
-            """Making potential for economic disaster really low"""
-            if italy.current_gdp < italy.past_gdp:
-                """Comparison of current gdp to past gdp"""
-                if italy.economic_state == "expansion" or italy.economic_state == "recovery":
-                    for i in range(0, len(business_cycle) - 1):
-                        if business_cycle[i] == "recession":
-                            print("Your economy has entered into a recession after 6 months of decayed growth.\n")
-                            time.sleep(3)
-                            italy.economic_state = business_cycle[i]
-                            italy.economic_change_date = italy.date + timedelta(days=240)
-                            economic_stimulus(italy)
-                            """increasing amount of time to check up on GDP
-                            Time is average amount(6 months cycle)
-                            """
-                elif italy.economic_state == "recession":
-                    for i in range(0, len(business_cycle) - 1):
-                        if business_cycle[i] == "depression":
-                            print("Your economy has entered into a depression "
-                                  "after exceeding 6 months of decayed growth.\n")
-                            time.sleep(3)
-                            italy.economic_state = business_cycle[i]
-                            italy.economic_change_date = italy.date + timedelta(days=270)
-                            economic_stimulus(italy)
-                            """
-                            Since it takes awhile to escape a depression, amount of time on change date is increased
-                            """
-
-        if chance % 40 == 37:
-            """making potential for economic expansion or recovery very low"""
-            if italy.economic_state == "depression" or italy.economic_state == "recession":
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "recovery":
-                        print("Your economy hs finally entered its recovery period\n")
-                        time.sleep(3)
-                        italy.economic_state = business_cycle[i]
-                        italy.economic_change_date = italy.date + timedelta(days=240)
-                        """increasing amount of time to check up on GDP
-                        Time is average amount(6 months cycle)
-                        """
-
-            elif italy.economic_state == "recovery":
-                for i in range(0, len(business_cycle) - 1):
-                    if business_cycle[i] == "expansion":
-                        print("Your economy has blasted into an expansionary period. Woo!\n")
-                        time.sleep(3)
-                        italy.economic_state = business_cycle[i]
-                        italy.economic_change_date = italy.date + timedelta(days=270)
-                        """
-                        Since it takes awhile to escape a depression, amount of time on change date is increased
-                        """
-def economic_stimulus(italy):
-    italy.economic_stimulus = True
-
-    if italy.economic_state == "recession":
-        choice = input("Do you want to increase the tax rate in order to support increased spending?\n"
-                       "(Remember this will apply to the entire population): ")
-
-        if choice.lower() == "yes" or choice.lower() == "y":
-            valid_choice = False
-
-            while valid_choice:
-
-                tax_hike = float(input("By how much do you to increase taxes(max cap is 10)?: "))
-                if tax_hike <= 10 and tax_hike >= 1.0:
-                    italy.tax_rate += tax_hike
-                    print(f"{italy.tax_rate}% is your new tax rate.\n")
-                    time.sleep(3)
-                    decrease = round(random.uniform(0.25, 1.45), 2)
-
-                    if (italy.happiness - decrease) < 5:
-                        italy.happiness -= decrease
-
-                    valid_choice = True
-
-                elif tax_hike <= 0 or tax_hike > 10:
-                    print(f"New tax hike of {tax_hike}% is improper.\n"
-                          f"Try again.")
-                    time.sleep(3)
-
-                else:
-                    print("Not a valid tax rate")
-                    time.sleep(3)
-
-    elif italy.economic_state == "depression":
-        tax_hike = round(random.uniform(0.5, 10), 2)
-        if (italy.tax_rate + tax_hike) <= 68.00:
-            if italy.date.year <= 1922 or italy.date.year >= 1946:
-                print(f"Parliament has enacted a tax hike of {tax_hike}%\n")
-
-            if italy.date.year > 1922 and italy.date.year < 1946:
-                print(f"Il Duce has enacted a tax hike of {tax_hike}%\n")
-            time.sleep(3)
-def recession(italy):
-    """Recession simulation based upon stimulus and tax rate"""
-    if italy.economic_stimulus:
-        """Recession with economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-
-            italy.consumer_spending = -round(random.uniform(100, 1000), 2)
-            italy.investment = -round(random.uniform(100, 2000), 2)
-            italy.government_spending = round(random.uniform(1000, 3000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 750000), 2)
-            italy.imports = round(random.uniform(120000, 1100000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 4000), 2)
-            italy.investment = -round(random.uniform(1000, 3000), 2)
-            italy.government_spending = round(random.uniform(1000, 9000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 560000), 2)
-            italy.imports = round(random.uniform(120000, 1100000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-    else:
-        """Recession without economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 2500), 2)
-            italy.investment = -round(random.uniform(1000, 4000), 2)
-            italy.government_spending = round(random.uniform(1000, 5000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 560000), 2)
-            italy.imports = round(random.uniform(120000, 1100000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 6000), 2)
-            italy.investment = -round(random.uniform(1000, 6000), 2)
-            italy.government_spending = round(random.uniform(1000, 12000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.01, 0.09), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 460000), 2)
-            italy.imports = round(random.uniform(120000, 1100000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-
-def depression(italy):
-    """Recession simulation based upon stimulus and tax rate"""
-    if italy.economic_stimulus:
-        """Depression with economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-
-            italy.consumer_spending = -round(random.uniform(1000, 3000), 2)
-            italy.investment = -round(random.uniform(1000, 4000), 2)
-            italy.government_spending = round(random.uniform(1000, 16000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.15), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment)
-
-            italy.exports = round(random.uniform(120000, 690000), 2)
-            italy.imports = round(random.uniform(120000, 1400000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 6000), 2)
-            italy.investment = -round(random.uniform(1000, 8000), 2)
-            italy.government_spending = round(random.uniform(1000, 19000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment)
-
-
-            italy.exports = round(random.uniform(120000, 590000), 2)
-            italy.imports = round(random.uniform(120000, 1400000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-    else:
-        """Depression without economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 2500), 2)
-            italy.investment = -round(random.uniform(1000, 4000), 2)
-            italy.government_spending = round(random.uniform(1000, 25000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment)
-
-            italy.exports = round(random.uniform(120000, 750000), 2)
-            italy.imports = round(random.uniform(120000, 1400000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = -round(random.uniform(1000, 10000), 2)
-            italy.investment = -round(random.uniform(1000, 16000), 2)
-            italy.government_spending = round(random.uniform(1000, 35000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.21), 2), 2) +
-                                    round(-italy.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 590000), 2)
-            italy.imports = round(random.uniform(120000, 1400000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-def recovery(italy):
-    """Recession simulation based upon stimulus and tax rate"""
-    if italy.economic_stimulus:
-        """Depression with economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-
-            italy.consumer_spending = round(random.uniform(100, 2000), 2)
-            italy.investment = round(random.uniform(100, 2500), 2)
-            italy.government_spending = round(random.uniform(1000, 16000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.001, 0.055), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 690000), 2)
-            italy.imports = round(random.uniform(120000, 660000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = round(random.uniform(100, 1000), 2)
-            italy.investment = round(random.uniform(1000, 2000), 2)
-            italy.government_spending = round(random.uniform(1000, 19000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 590000), 2)
-            italy.imports = round(random.uniform(120000, 560000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-    else:
-        """Recovery without economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-            italy.consumer_spending = round(random.uniform(100, 1500), 2)
-            italy.investment = round(random.uniform(100, 2000), 2)
-            italy.government_spending = round(random.uniform(1000, 25000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.0011, 0.05), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 590000), 2)
-            italy.imports = round(random.uniform(120000, 560000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = round(random.uniform(100, 1000), 2)
-            italy.investment = round(random.uniform(100, 1500), 2)
-            italy.government_spending = round(random.uniform(1000, 35000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.001, 0.05), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.001, 0.05), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 450000), 2)
-            italy.imports = round(random.uniform(120000, 420000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-def expansion(italy):
-    """Recession simulation based upon stimulus and tax rate"""
-    if italy.economic_stimulus:
-        """Expansion with economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-
-            italy.consumer_spending = round(random.uniform(100, 4000), 2)
-            italy.investment = round(random.uniform(100, 6500), 2)
-            italy.government_spending = round(random.uniform(1000, 20000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.01, 0.095), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 1000000), 2)
-            italy.imports = round(random.uniform(120000, 750000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = round(random.uniform(100, 2500), 2)
-            italy.investment = round(random.uniform(100, 4500), 2)
-            italy.government_spending = round(random.uniform(1000, 30000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.09), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.01, 0.095), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 750000), 2)
-            italy.imports = round(random.uniform(120000, 650000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-    else:
-        """Expansion without economic stimulus in place alongside tax rate
-        * severity of losses depend upon tax rate
-        """
-        if italy.tax_rate < 25.00:
-            italy.consumer_spending = round(random.uniform(100, 6000), 2)
-            italy.investment = round(random.uniform(100, 8000), 2)
-            italy.government_spending = round(random.uniform(1000, 30000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.11), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.01, 0.095), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 750000), 2)
-            italy.imports = round(random.uniform(120000, 650000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-        elif italy.tax_rate > 25.00:
-            italy.consumer_spending = round(random.uniform(100, 4500), 2)
-            italy.investment = round(random.uniform(100, 3500), 2)
-            italy.government_spending = round(random.uniform(1000, 55000), 2)
-            italy.national_debt += (round(italy.government_spending * round(random.uniform(0.01, 0.21), 2), 2) +
-                                    round(italy.consumer_spending * round(random.uniform(0.001, 0.009), 2), 2))
-
-            italy.exports = round(random.uniform(120000, 560000), 2)
-            italy.imports = round(random.uniform(120000, 340000), 2)
-
-            italy.current_gdp += (italy.consumer_spending + italy.government_spending + italy.investment +
-                                  (italy.exports - italy.imports))
-def gdp_changes(italy):
-    if italy.economic_state == "recovery":
-        recovery(italy)
-    elif italy.economic_state == "expansion":
-        expansion(italy)
-    elif italy.economic_state == "recession":
-        recession(italy)
-    elif italy.economic_state == "depression":
-        depression(italy)
-def economic_decisions(italy):
-    if italy.past_year < italy.date.year:
-
-        italy.economic_growth = (italy.current_gdp - italy.past_gdp / ((italy.past_gdp + italy.current_gdp) / 2)) * 100
-        """Calculation of yearly economic growth"""
-        if italy.economic_growth <= 1.5:
-            if not italy.economic_stimulus:
-                choice = input(f"Your GDP grew {italy.economic_growth}% last year.\n"
-                               f"Would you like to apply a stimulus?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    economic_stimulus(italy)
-
-        elif italy.economic_growth >= 10.5:
-            if italy.economic_stimulus:
-                italy.economic_stimulus = False
-    else:
-        gdp_changes(italy)
-        economic_state(italy)
-
-"""stats functions"""
-def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
-    time.sleep(3)
-    if us.happiness < 35.45 and not us.improve_happiness:
-        choice = input(f"{us.happiness}% doesnt represent a healthy civilian relationship with the government.\n"
-                       f"A low happiness could lead to potential rebellions occurring.\n"
-                       f"Would you like to improve your citizens' happiness over a course of 30 days?(y or n): ")
-        if choice.lower() == "y":
-            us.improve_happiness = us.date + timedelta(days=30)
-    print(f"Your current population {us.current_pop}.\n")
-    time.sleep(3)
-    print(f"There have been {us.births} births in {us.date.year}.\n")
-    time.sleep(3)
-    print(f"There have been {us.deaths} deaths in {us.date.year}.\n")
-    time.sleep(3)
-
-def political_stats(us):
-    print(f"Your current political stability is {us.stability}%.\n")
-    time.sleep(3)
-    if us.stability < 45.45 and not us.improve_stability:
-        choice = input(f"{us.stability}% doesnt represent a functional government.\n"
-                       f"Would you like to improve your government's stability for a course of 30 days?(y or n): ")
-        if choice.lower() == "y":
-            us.improve_stability = us.date + timedelta(days=30)
-    time.sleep(3)
-
-def economic_stats(us):
-    print(f"Your current GDP is ${round(us.current_gdp, 2)}.\n")
-    time.sleep(3)
-    print(f"Your current yearly gdp growth is {round(((us.current_gdp - us.past_gdp) / ((us.past_gdp + us.current_gdp) / 2)) * 100, 5)}%\n")
-    time.sleep(3)
-    print(f"Your current national debt is ${round(us.national_debt, 2)}.\n")
-    time.sleep(3)
-
-    if us.national_debt > 1000000000 and not us.debt_repayment:
-        choice = input(f"You are going to want to pay back some of your debt before it outpaces your assets.\n"
-              f"Would you like to pay back some of your debt for 120 days?(y or n): ")
-        if choice.lower() == "y":
-            us.debt_repayment = us.date + timedelta(days=120)
-def daily_decisions(us):
-    done = True
-    while done:
-        choice = input("Would you like to view your political, social, or economic stats?(enter quit to quit): ")
-        if choice.lower() == "political":
-            political_stats(us)
-        elif choice.lower() == "economic":
-            economic_stats(us)
-        elif choice.lower() == "social":
-            social_stats(us)
-        elif choice.lower() == "quit":
-            done = False
-            us.check_stats = us.date + timedelta(days=3)
-def social_events(italy):
-    if italy.date.year > 1945 and italy.date == datetime(italy.year, 4, 25):
-        print("Today is the day that we wrestled our futures from Mussolini's tyranny.\n")
-        italy.happiness += round(random.uniform(0.25, 1.25), 2)
-        time.sleep(3)
-def economic_events(italy):
-    if italy.date > datetime(1922, 10, 24) and italy.date < datetime(1929, 10, 24):
-        increment = round(random.uniform(1000, 10000), 2)
-        italy.curent_gdp += increment
-        italy.national_debt += round(increment * round(random.uniform(0.001, 0.009), 2), 2)
-
-    if italy.date == datetime(1929, 10, 24):
-        print("The Italian economy has fallen into a Depression.\n"
-              "It is being reported that our economy has been slashed by a factor of 5\n"
-              "Other nations across the globe are experiencing similar issues.\n")
-        time.sleep(3)
-        italy.current_gdp /= 5
-        italy.government_spending = round(random.uniform(100000, 5000000), 2)
-        italy.national_debt = round(italy.government_spending * round(random.uniform(0.001, 0.05), 2), 2)
-def political_events(italy):
-    if italy.date == datetime(1922, 10, 27):
-        print(f"Benito Mussolini has stormed Rome, forcing {italy.monarch} to elect as PM.\n")
-        time.sleep(3)
-        italy.pm = "Benito Mussolini"
-
-    elif italy.date == datetime(1940, 10, 28):
-        print("Italy has entered world war 2 alongside Hitler, bonding them together.\n")
-        italy.alliance = "Axis"
-        time.sleep(3)
-def events(italy):
-    political_events(italy)
-    economic_events(italy)
-    social_events(italy)
-
-def manual_game(italy):
-    germany = german_ai.GermanAI(italy.date.year)
-    britain = britain_ai.BritainAI(italy.date.year)
-    us = us_ai.UnitedStatesAI(italy.date.year)
-    while italy.current_pop > 150000:
-        print(f"Date: {italy.date}")
-        # incrementing of time
-        stability_happiness(italy)
-        events(italy)
-        population_change(italy)
-        economic_decisions(italy)
-        military_functions(italy)
-        if italy.date > italy.check_stats:
-            daily_decisions(italy)
-        german_ai.ai_game(germany)
-        us_ai.manual_game(us)
-        britain_ai.ai_game(britain)
-        italy.date += timedelta(days=1)
-        time.sleep(3)
 class Italy:
     def __init__(self, year):
-        """Time variables"""
+        self.is_sprite = False
+        self.region = "europe"
+        self.name = "Kingdom of Italy"
+        # date variables
         self.date = datetime(int(year), 1, 1)
-
-        self.past_year = self.date.year
-        """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
-        """Ditto to improve stability"""
-        self.improve_happiness = None
-        """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        self.improve_stability = self.date
+        self.improve_happiness = self.date
+        self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
-        """Population variables"""
-        self.current_pop = population[year]
-        self.population_change = 0
-        self.past_pop = self.current_pop
+        self.economic_change_date = self.date + timedelta(days=60)
+        # amount of days that is given to the economy for it to either shrink or grow before being checked
+        self.current_year = self.date.year
+        # social variables
+        """population"""
+        self.population = population[year]
         self.births = 0
         self.deaths = 0
-        self.happiness = 95.56
-        # population controller if birth rate gets out of hand
-        self.condom_subsidy = False
-        # population controller if birth rate flops
-
-        self.viagra_subsidy = False
-        """Political variables"""
-        self.pm = prime_ministers[year]
+        self.birth_control = False
+        self.birth_enhancer = False
+        """happiness"""
+        self.happiness = 98.56
+        # political
+        self.leader = prime_ministers[year]
         self.monarch = monarchs[year]
-        self.stability = 90.00
-        self.anti_establishment = 0
-        # political parties based upon time frame
-        if self.date < datetime(1922, 10, 27):
-            self.italian_socialist_party = round(self.current_pop * round(random.uniform(0.1, 0.25), 2), 0)
-
-            self.italian_republican_party = round((self.current_pop - self.italian_socialist_party) *
-                                                  round(random.uniform(0.1, 0.25), 2), 0)
-
-
-            self.italian_peoples_party = round((self.current_pop - self.italian_socialist_party -
-                                                self.italian_republican_party) *
-                                                round(random.uniform(0.1, 0.25), 2), 0)
-
-            self.italian_liberal_party = round((self.current_pop - self.italian_socialist_party -
-                                                self.italian_republican_party - self.italian_peoples_party))
-
-        """Economic_variables"""
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
+        """Stability"""
+        self.stability = 95.56
+        # economic
+        self.e_s = "recovery"
+        self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
-        self.economic_state = "recovery"
-        self.tax_rate = tax_rate[year]
-        self.economic_stimulus = False
-        self.economic_growth = 0
-        self.economic_change_date = self.date + timedelta(days=60)
-        # gdp components
+        self.corporate_tax_rate = 25.00
+        self.income_tax_rate = 24.00
+        """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
+        self.government_spending = 0
         self.exports = 0
         self.imports = 0
-        # political economic variables
-        self.government_spending = 0
-        self.national_debt = 10000000
-        """international variables"""
-        self.alliance = None
-        """military variables"""
-        self.army = army_size[year]
-        self.conscripts = round(self.current_pop * round(random.uniform(0.001, 0.009), 5), 0)
-        self.conscription_status = "limited"
-        self.conscript_census = self.date + timedelta(days=15)
-        self.war_deaths = 0
+        """Economic Stimulus components"""
+        self.economic_stimulus = False
+        # military
+        # international
+        self.alliance = ""
+        """North america"""
+        # us
+        self.us_relations = 56.97
+        self.us_guarantee = False
+        self.us_embargo = False
+        # mexico
+        self.mexico_relations = 89.97
+        self.mexico_guarantee = False
+        self.mexico_embargo = False
+        # other
+        self.sprite = False
+
+    # population functions
+    def population_change(self):
+        """instead of having the headache of calling both national objects separately, why not combine them"""
+        if not self.sprite:
+            """condition if sprite version of game wasn't selected"""
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to promote population growth?: ")
+                    not_answered = False
+
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_enhancer = True
+                            not_answered = True
+
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
+
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                                   f"Would you like to slow your population growth?: ")
+                    not_answered = False
+
+                    while not_answered:
+                        if choice.lower() == "y" or choice.lower() == "yes":
+                            self.birth_control = True
+                            not_answered = True
+
+                        elif choice.lower() == "n" or choice.lower() == "no":
+                            not_answered = True
+
+                        else:
+                            print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                            time.sleep(3)
+            else:
+                if self.birth_enhancer:
+                    births = random.randrange(15, 35)
+                    deaths = random.randrange(11, 32)
+                    self.population += (births - deaths)
+                    self.births += births
+                    self.deaths += deaths
+
+                if self.birth_control:
+                    births = random.randrange(10, 25)
+                    deaths = random.randrange(20, 30)
+                    self.population += (births - deaths)
+                    self.births += births
+                    self.deaths += deaths
+
+                else:
+                    births = random.randrange(12, 25)
+                    deaths = random.randrange(12, 23)
+                    self.population += (births - deaths)
+                    self.births += births
+                    self.deaths += deaths
+
+    # economic functions
+    def check_economic_state(self):
+        """function dealing with primary economic decisions of canadian parliament"""
+        if self.date > self.economic_change_date:
+            """instead of comparing an entire year, break the year up into sections"""
+            if self.current_gdp > self.past_gdp:
+                if self.e_s.lower() == "recovery":
+                    self.e_s = "expansion"
+                    print("The French economy is now in an expansionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                    self.e_s = "recovery"
+                    print("The French economy is now in recovery period.\n")
+                    time.sleep(3)
+
+            elif self.current_gdp < self.past_gdp:
+                if self.e_s.lower() == "recession":
+                    self.e_s = "depression"
+                    print("The French economy is now in a recessionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                    self.e_s = "recession"
+                    print("The French economy is now in a depression period.\n")
+                    time.sleep(3)
+        else:
+            if self.e_s == "recession":
+                self.recession()
+
+            elif self.e_s == "recovery":
+                self.recovery()
+
+            elif self.e_s == "depression":
+                self.depression()
+
+            elif self.e_s == "expansion":
+                self.expansion()
+
+    def recession(self):
+        if self.economic_stimulus:
+
+            self.consumer_spending = -round(random.uniform(10, 150), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(50, 350), 2)
+            self.exports = round(random.uniform(10, 45), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 700), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 30), 2)
+            self.imports = round(random.uniform(10, 105), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def recovery(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 450), 2)
+            self.government_spending = round(random.uniform(100, 200), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 700), 2)
+            self.exports = round(random.uniform(10, 100), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 350), 2)
+            self.government_spending = round(random.uniform(100, 350), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 75), 2)
+            self.imports = round(random.uniform(10, 58), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def expansion(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 2000), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 400), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 350), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def depression(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 15), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 100), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    # stability functions
+    def stability_happiness_change(self, globe):
+        if globe.tension > 25 and globe.tension < 50:
+            """if global tension is between 25 and 50"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.25, 1.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.25, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    happiness_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.50, 1.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.45, 1.65), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.75, 2.76), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 50 and globe.tension < 75:
+            """if global tension is between 50 and 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.10, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.05, 1.05), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.13, 0.96), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.10, 0.76), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.05, 1.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 1.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 75:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+        else:
+            if self.improve_stability > self.date:
+                stability_increase = round(random.uniform(1.56, 2.56), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
+
+            else:
+                stability_increase = round(random.uniform(1.45, 2.34), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
+
+            if self.improve_happiness > self.date:
+                """If policies toward improving happiness have been imposed"""
+                happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+            else:
+                happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self, globe):
+        while self.population > 15000000:
+            self.check_economic_state()
+            self.population_change()
+            """if self.is_sprite != False:
+                random_functions.random_functions(self, globe)"""
+            self.stability_happiness_change(globe)
+            self.date += timedelta(days=1)
+            break

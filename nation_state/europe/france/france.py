@@ -47,6 +47,7 @@ leader_images = {
     "1939": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg"
 }
 
+
 class France:
     def __init__(self, year):
         self.name = "French Republic"
@@ -93,16 +94,18 @@ class France:
         # international
         self.alliance = ""
         # other
-        self.is_sprite = False
+        self.sprite = False
+
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.sprite:
+            """condition if sprite version of game wasn't selected"""
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                if self.is_sprite == False:
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
                     choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
                                    f"Would you like to promote population growth?: ")
                     not_answered = False
@@ -118,9 +121,8 @@ class France:
                         else:
                             print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
                             time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                if self.is_sprite == False:
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
                     choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
                                    f"Would you like to slow your population growth?: ")
                     not_answered = False
@@ -136,27 +138,29 @@ class France:
                         else:
                             print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
                             time.sleep(3)
-        else:
-            if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
 
-            if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
+                else:
+                    if self.birth_enhancer:
+                        births = random.randrange(20, 40)
+                        deaths = random.randrange(11, 30)
+                        self.population += (births - deaths)
+                        self.births += births
+                        self.deaths += deaths
 
-            else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
+                    if self.birth_control:
+                        births = random.randrange(10, 30)
+                        deaths = random.randrange(25, 35)
+                        self.population += (births - deaths)
+                        self.births += births
+                        self.deaths += deaths
+
+                    else:
+                        births = random.randrange(7, 15)
+                        deaths = random.randrange(4, 10)
+                        self.population += (births - deaths)
+                        self.births += births
+                        self.deaths += deaths
+
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
@@ -195,6 +199,8 @@ class France:
 
             elif self.e_s == "expansion":
                 self.expansion()
+
+
     def recession(self):
         if self.economic_stimulus:
 
@@ -212,13 +218,16 @@ class France:
         else:
             self.consumer_spending = -round(random.uniform(10, 200), 2)
             self.government_spending = round(random.uniform(100, 700), 2)
-            self.national_debt += round((-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
             self.investment = -round(random.uniform(100, 500), 2)
             self.exports = round(random.uniform(10, 30), 2)
             self.imports = round(random.uniform(10, 105), 2)
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                    (self.exports - self.imports))
+                                 (self.exports - self.imports))
+
+
     def recovery(self):
         if self.economic_stimulus:
             self.consumer_spending = round(random.uniform(10, 450), 2)
@@ -242,6 +251,7 @@ class France:
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
+
 
     def expansion(self):
         if self.economic_stimulus:
@@ -267,6 +277,7 @@ class France:
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
 
+
     def depression(self):
         if self.economic_stimulus:
             self.consumer_spending = round(random.uniform(10, 15), 2)
@@ -290,6 +301,8 @@ class France:
 
             self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                                  (self.exports - self.imports))
+
+
     # stability functions
     def stability_happiness_change(self, globe):
         if globe.tension > 25 and globe.tension < 50:
