@@ -54,6 +54,7 @@ flags = {
 
 class Sweden:
     def __init__(self, year):
+        self.name = "Kingdom of Sweden"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -98,7 +99,7 @@ class Sweden:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if not self.sprite:
+        if self.sprite:
             """condition if sprite version of game wasn't selected"""
             if self.current_year < self.date.year:
                 pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
