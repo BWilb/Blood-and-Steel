@@ -138,7 +138,9 @@ def country_sprite(nation, globe):
 
                 for i in range(len(globe.nations)):
                 # will be re-introduced, once figure out how to deal with other nations than one currently playing as
-                    if globe.nations[i].name != nation.name:
+                    if globe.nations[i].name == nation.name:
+                        pass
+                    else:
                         globe.nations[i].main(globe)
 
                 actual_day += timedelta(days=1)

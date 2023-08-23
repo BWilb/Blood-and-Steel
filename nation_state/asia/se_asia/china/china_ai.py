@@ -429,7 +429,7 @@ class ChinaAI:
         while self.population > 150000000:
             self.check_economic_state()
             self.population_change()
-            random_functions.random_functions(self, globe)
+            #random_functions.random_functions(self, globe)
             self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
