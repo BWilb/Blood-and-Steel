@@ -35,7 +35,6 @@ from nation_state.international_relations.north_america import mexico_relations,
 from nation_state.international_relations.europe import austria_relations, belgium_relations, brit_relations, \
     france_relations, luxembourg_relations, netherlands_relations, spain_relations
 from database_management import upload_database
-from randomness import random_functions
 # helper libraries
 import os
 import time

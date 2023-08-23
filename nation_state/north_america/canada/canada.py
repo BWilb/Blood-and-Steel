@@ -25,7 +25,6 @@ from nation_state.europe.switzerland import swiss_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
 from nation_state.north_america.mexico import mexico_ai
-import randomness
 
 
 def establish_foreign_nations(globe, *args):

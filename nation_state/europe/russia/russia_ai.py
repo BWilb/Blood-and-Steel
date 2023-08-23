@@ -37,978 +37,411 @@ gdp = {
     "1939": 44428052632
 }
 
-business_cycle = ["recession", "recovery", "expansion", "depression"]
-
-"""Political Functions"""
-def political_change(russia):
-    """function for redrawing political lines"""
-    if russia.date > russia.political_census:
-        """If date exceeds census"""
-        chance = random.randrange(0, 2)
-        if chance == 0:
-            loss = round(russia.pe * round(random.uniform(0.001, 0.009), 5), 0)
-            russia.pe -= loss
-            russia.ae += loss
-        else:
-            loss = round(russia.ae * round(random.uniform(0.001, 0.009), 5), 0)
-            russia.ae -= loss
-            russia.pe += loss
-
-        russia.political_census = russia.date + timedelta(days=3)
-
-    if round((russia.ae / russia.current_pop) * 100, 2) > 10.00:
-        """Checking if anti-establishment parties have grown to powerful/influential"""
-        if russia.date < datetime(1917, 3, 1):
-            choice = input("Anti-Tsarist parties are flourishing, should we do something about it?(y or n): ")
-
-            if choice.lower() == "yes" or choice.lower() == "y":
-                options = random.randrange(0, 3)
-                # choice of death, internment in Siberia, or deportation
-                if options == 0:
-                    """if options = 0, a small amount of people are sent to siberia"""
-                    people = round(russia.ae * round(random.uniform(0.001, 0.009), 5), 0)
-                    print(f"{people} anti-tsarists were sent to Siberia\n")
-                    time.sleep(3)
-                    russia.siberians += people
-
-                elif options == 1:
-                    """if options = 1, a small amount of people are killed"""
-                    people = round(russia.ae * round(random.uniform(0.001, 0.009), 5), 0)
-                    print(f"{people} anti-tsarists were killed for treason.\n")
-                    time.sleep(3)
-                    russia.deaths += people
-                    russia.current_pop -= people
-                    russia.ae -= people
-
-                elif options == 2:
-                    """if options = 2, a small amount of people are deported"""
-                    people = round(russia.ae * round(random.uniform(0.001, 0.02), 5), 0)
-                    print(f"{people} anti-tsarists were deported for treason.\n")
-                    time.sleep(3)
-                    russia.current_pop -= people
-                    russia.deportees += people
-
-"""population functions"""
-def population_change(russia):
-    if russia.past_year < russia.date.year:
-        russia.pop_change = (russia.current_pop - russia.past_pop / (
-                (russia.current_pop + russia.past_pop) / 2)) * 100
-
-        russia.past_pop = russia.current_pop
-
-        if russia.pop_change <= 5.50:
-            """possible implementation of viagra with somewhat moderate growth, due to low population"""
-            print(f"Your population growth for {russia.past_year} was {russia.population_change}%.\n")
-
-            choice = input("Would you like to subsidize viagra for your population?: ")
-            if choice.lower() == "yes" or choice.lower() == "y":
-                russia.viagra_subsidy = True
-
-                if russia.condom_subsidy:
-                    """Checking to see if condom subsidies exist"""
-                    russia.condom_subsidy = False
-
-        elif russia.pop_change >= 15.50:
-            print(f"Your population growth for {russia.past_year} was {russia.population_change}%.\n")
-            choice = input("Would you like to subsidize condoms?: ")
-            if choice.lower() == 'y' or choice.lower() == "yes":
-                russia.condom_subsidy = True
-
-                if russia.viagra_subsidy:
-                    russia.viagra_subsidy = False
-    else:
-        if russia.date < datetime(1914, 7, 28):
-            births = random.randrange(100, 1000)
-            deaths = random.randrange(100, 850)
-
-            for i in range(0, births):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe += 1
-                else:
-                    russia.ae += 1
-
-            russia.current_pop += births
-            russia.births += births
-
-            russia.current_pop -= deaths
-            russia.deaths += deaths
-
-            for i in range(0, deaths):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe -= 1
-                else:
-                    russia.ae -= 1
-
-        elif russia.date > datetime(1914, 7, 28) and russia.date < datetime(1923, 6, 16):
-            births = random.randrange(100, 800)
-            deaths = random.randrange(100, 650)
-
-            russia.current_pop += births
-            russia.births += births
-
-            for i in range(0, births):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe += 1
-                else:
-                    russia.ae += 1
-
-            russia.current_pop -= deaths
-            russia.deaths += deaths
-            for i in range(0, deaths):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe -= 1
-                else:
-                    russia.ae -= 1
-
-        elif russia.date > datetime(1923, 6, 16) and russia.date < datetime(1941, 6, 22):
-            births = random.randrange(100, 500)
-            deaths = random.randrange(100, 350)
-
-            russia.current_pop += births
-            russia.births += births
-
-            for i in range(0, births):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe += 1
-                else:
-                    russia.ae += 1
-
-            russia.current_pop -= deaths
-            russia.deaths += deaths
-
-            for i in range(0, deaths):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe -= 1
-                else:
-                    russia.ae -= 1
-
-        elif russia.date > datetime(1941, 6, 22) and russia.date < datetime(1945, 5, 8):
-            births = random.randrange(100, 1300)
-            deaths = random.randrange(100, 1150)
-
-            russia.current_pop += births
-            russia.births += births
-
-            for i in range(0, births):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe += 1
-                else:
-                    russia.ae += 1
-
-            russia.current_pop -= deaths
-            russia.deaths += deaths
-
-            for i in range(0, deaths):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe -= 1
-                else:
-                    russia.ae -= 1
-
-        elif russia.date > datetime(1945, 5, 8):
-            births = random.randrange(100, 600)
-            deaths = random.randrange(100, 450)
-
-            russia.current_pop += births
-            russia.births += births
-
-            for i in range(0, births):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe += 1
-                else:
-                    russia.ae += 1
-
-            russia.current_pop -= deaths
-            russia.deaths += deaths
-
-            for i in range(0, deaths):
-                chance = random.randrange(0, 2)
-                if chance == 0:
-                    russia.pe -= 1
-                else:
-                    russia.ae -= 1
-def recession(russia):
-    """changes based upon whether an economic stimulus is in place and what year plan is in place
-    extremity of losses or gains, based upon stimulus and year plans
-    """
-    if russia.economic_stimulus:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = -round(random.uniform(100, 90000), 2)
-            russia.investment = -round(random.uniform(100, 500000), 2)
-            russia.government_spending = round(random.uniform(1000, 500000), 2)
-
-            russia.exports = round(random.uniform(10000, 400000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.009), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.009), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = -round(random.uniform(100, 80000), 2)
-            russia.investment = -round(random.uniform(100, 350000), 2)
-            russia.government_spending = round(random.uniform(1000, 600000), 2)
-
-            russia.exports = round(random.uniform(10000, 500000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.009), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.009), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = -round(random.uniform(100, 70000), 2)
-            russia.investment = -round(random.uniform(100, 300000), 2)
-            russia.government_spending = round(random.uniform(1000, 700000), 2)
-
-            russia.exports = round(random.uniform(10000, 550000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-
-            russia.consumer_spending = -round(random.uniform(100, 50000), 2)
-            russia.investment = -round(random.uniform(100, 200000), 2)
-            russia.government_spending = round(random.uniform(1000, 750000), 2)
-
-            russia.exports = round(random.uniform(10000, 750000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-
-            russia.consumer_spending = -round(random.uniform(100, 30000), 2)
-            russia.investment = -round(random.uniform(100, 100000), 2)
-            russia.government_spending = round(random.uniform(1000, 850000), 2)
-
-            russia.exports = round(random.uniform(10000, 900000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-    else:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = -round(random.uniform(100, 70000), 2)
-            russia.investment = -round(random.uniform(100, 100000), 2)
-            russia.government_spending = round(random.uniform(1000, 750000), 2)
-
-            russia.exports = round(random.uniform(10000, 550000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = -round(random.uniform(100, 60000), 2)
-            russia.investment = -round(random.uniform(100, 90000), 2)
-            russia.government_spending = round(random.uniform(1000, 850000), 2)
-
-            russia.exports = round(random.uniform(10000, 600000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = -round(random.uniform(100, 50000), 2)
-            russia.investment = -round(random.uniform(100, 190000), 2)
-            russia.government_spending = round(random.uniform(1000, 900000), 2)
-
-            russia.exports = round(random.uniform(10000, 650000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-
-            russia.consumer_spending = -round(random.uniform(100, 40000), 2)
-            russia.investment = -round(random.uniform(100, 90000), 2)
-            russia.government_spending = round(random.uniform(1000, 950000), 2)
-
-            russia.exports = round(random.uniform(10000, 700000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-
-            russia.consumer_spending = -round(random.uniform(100, 30000), 2)
-            russia.investment = -round(random.uniform(100, 80000), 2)
-            russia.government_spending = round(random.uniform(1000, 1000000), 2)
-
-            russia.exports = round(random.uniform(10000, 800000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-
-def depression(russia):
-    if russia.economic_stimulus:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = -round(random.uniform(100, 500000), 2)
-            russia.investment = -round(random.uniform(100, 500000), 2)
-            russia.government_spending = round(random.uniform(1000, 650000), 2)
-
-            russia.exports = round(random.uniform(10000, 550000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = -round(random.uniform(100, 400000), 2)
-            russia.investment = -round(random.uniform(100, 400000), 2)
-            russia.government_spending = round(random.uniform(1000, 750000), 2)
-
-            russia.exports = round(random.uniform(10000, 650000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = -round(random.uniform(100, 300000), 2)
-            russia.investment = -round(random.uniform(100, 300000), 2)
-            russia.government_spending = round(random.uniform(1000, 850000), 2)
-
-            russia.exports = round(random.uniform(10000, 750000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-
-            russia.consumer_spending = -round(random.uniform(100, 200000), 2)
-            russia.investment = -round(random.uniform(100, 200000), 2)
-            russia.government_spending = round(random.uniform(1000, 950000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-
-            russia.consumer_spending = -round(random.uniform(100, 100000), 2)
-            russia.investment = -round(random.uniform(100, 100000), 2)
-            russia.government_spending = round(random.uniform(1000, 1050000), 2)
-
-            russia.exports = round(random.uniform(10000, 900000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-    else:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = -round(random.uniform(100, 700000), 2)
-            russia.investment = -round(random.uniform(100, 700000), 2)
-            russia.government_spending = round(random.uniform(1000, 650000), 2)
-
-            russia.exports = round(random.uniform(10000, 550000), 2)
-            russia.imports = round(random.uniform(10000, 1050000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = -round(random.uniform(100, 600000), 2)
-            russia.investment = -round(random.uniform(100, 600000), 2)
-            russia.government_spending = round(random.uniform(1000, 750000), 2)
-
-            russia.exports = round(random.uniform(10000, 750000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = -round(random.uniform(100, 500000), 2)
-            russia.investment = -round(random.uniform(100, 500000), 2)
-            russia.government_spending = round(random.uniform(1000, 850000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 850000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-
-            russia.consumer_spending = -round(random.uniform(100, 400000), 2)
-            russia.investment = -round(random.uniform(100, 400000), 2)
-            russia.government_spending = round(random.uniform(1000, 950000), 2)
-
-            russia.exports = round(random.uniform(10000, 950000), 2)
-            russia.imports = round(random.uniform(10000, 750000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-            russia.consumer_spending = -round(random.uniform(100, 300000), 2)
-            russia.investment = -round(random.uniform(100, 300000), 2)
-            russia.government_spending = round(random.uniform(1000, 1050000), 2)
-
-            russia.exports = round(random.uniform(10000, 1100000), 2)
-            russia.imports = round(random.uniform(10000, 650000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (-russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-def recovery(russia):
-    if russia.economic_stimulus:
-        if russia.year_plans == 0:
-            russia.consumer_spending = round(random.uniform(100, 10000), 2)
-            russia.investment = round(random.uniform(100, 5000), 2)
-            russia.government_spending = round(random.uniform(1000, 50000), 2)
-
-            russia.exports = round(random.uniform(10000, 500000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-        elif russia.year_plans == 1:
-            russia.consumer_spending = round(random.uniform(100, 20000), 2)
-            russia.investment = round(random.uniform(100, 10000), 2)
-            russia.government_spending = round(random.uniform(1000, 60000), 2)
-
-            russia.exports = round(random.uniform(10000, 650000), 2)
-            russia.imports = round(random.uniform(10000, 750000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-            russia.consumer_spending = round(random.uniform(100, 45000), 2)
-            russia.investment = round(random.uniform(100, 20000), 2)
-            russia.government_spending = round(random.uniform(1000, 55000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 450000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-            russia.consumer_spending = round(random.uniform(100, 65000), 2)
-            russia.investment = round(random.uniform(100, 30000), 2)
-            russia.government_spending = round(random.uniform(1000, 225000), 2)
-
-            russia.exports = round(random.uniform(10000, 1000000), 2)
-            russia.imports = round(random.uniform(10000, 350000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-            russia.consumer_spending = round(random.uniform(100, 80000), 2)
-            russia.investment = round(random.uniform(100, 50000), 2)
-            russia.government_spending = round(random.uniform(1000, 455000), 2)
-
-            russia.exports = round(random.uniform(10000, 1200000), 2)
-            russia.imports = round(random.uniform(10000, 325000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-    else:
-        if russia.year_plans == 0:
-            russia.consumer_spending = round(random.uniform(100, 5000), 2)
-            russia.investment = round(random.uniform(100, 2500), 2)
-            russia.government_spending = round(random.uniform(1000, 350000), 2)
-
-            russia.exports = round(random.uniform(10000, 450000), 2)
-            russia.imports = round(random.uniform(10000, 1500000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-        elif russia.year_plans == 1:
-            russia.consumer_spending = round(random.uniform(100, 10000), 2)
-            russia.investment = round(random.uniform(100, 5500), 2)
-            russia.government_spending = round(random.uniform(1000, 500000), 2)
-
-            russia.exports = round(random.uniform(10000, 650000), 2)
-            russia.imports = round(random.uniform(10000, 1250000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-            russia.consumer_spending = round(random.uniform(100, 35000), 2)
-            russia.investment = round(random.uniform(100, 15000), 2)
-            russia.government_spending = round(random.uniform(1000, 650000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 1000000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-            russia.consumer_spending = round(random.uniform(100, 65000), 2)
-            russia.investment = round(random.uniform(100, 30000), 2)
-            russia.government_spending = round(random.uniform(1000, 755000), 2)
-
-            russia.exports = round(random.uniform(10000, 1000000), 2)
-            russia.imports = round(random.uniform(10000, 900000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-            russia.consumer_spending = round(random.uniform(100, 80000), 2)
-            russia.investment = round(random.uniform(100, 50000), 2)
-            russia.government_spending = round(random.uniform(1000, 1000000), 2)
-
-            russia.exports = round(random.uniform(10000, 1200000), 2)
-            russia.imports = round(random.uniform(10000, 850000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-def expansion(russia):
-    if russia.economic_stimulus:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = round(random.uniform(100, 100000), 2)
-            russia.investment = round(random.uniform(100, 100000), 2)
-            russia.government_spending = round(random.uniform(100, 300000), 2)
-
-            russia.exports = round(random.uniform(10000, 700000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = round(random.uniform(100, 200000), 2)
-            russia.investment = round(random.uniform(100, 200000), 2)
-            russia.government_spending = round(random.uniform(100, 400000), 2)
-
-            russia.exports = round(random.uniform(10000, 800000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = round(random.uniform(100, 200000), 2)
-            russia.investment = round(random.uniform(100, 200000), 2)
-            russia.government_spending = round(random.uniform(1000, 450000), 2)
-
-            russia.exports = round(random.uniform(10000, 750000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-
-            russia.consumer_spending = round(random.uniform(100, 300000), 2)
-            russia.investment = round(random.uniform(100, 300000), 2)
-            russia.government_spending = round(random.uniform(1000, 500000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 4:
-            russia.consumer_spending = round(random.uniform(100, 400000), 2)
-            russia.investment = round(random.uniform(100, 400000), 2)
-            russia.government_spending = round(random.uniform(1000, 600000), 2)
-
-            russia.exports = round(random.uniform(10000, 1500000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-    else:
-        if russia.year_plans == 0:
-
-            russia.consumer_spending = round(random.uniform(100, 100000), 2)
-            russia.investment = round(random.uniform(100, 100000), 2)
-            russia.government_spending = round(random.uniform(100, 300000), 2)
-
-            russia.exports = round(random.uniform(10000, 700000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 1:
-
-            russia.consumer_spending = round(random.uniform(100, 150000), 2)
-            russia.investment = round(random.uniform(100, 150000), 2)
-            russia.government_spending = round(random.uniform(100, 325000), 2)
-
-            russia.exports = round(random.uniform(10000, 750000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 2:
-
-            russia.consumer_spending = round(random.uniform(100, 250000), 2)
-            russia.investment = round(random.uniform(100, 250000), 2)
-            russia.government_spending = round(random.uniform(100, 425000), 2)
-
-            russia.exports = round(random.uniform(10000, 770000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-        elif russia.year_plans == 3:
-            russia.consumer_spending = round(random.uniform(100, 150000), 2)
-            russia.investment = round(random.uniform(100, 150000), 2)
-            russia.government_spending = round(random.uniform(100, 625000), 2)
-
-            russia.exports = round(random.uniform(10000, 850000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-        elif russia.year_plans == 4:
-            russia.consumer_spending = round(random.uniform(100, 250000), 2)
-            russia.investment = round(random.uniform(100, 250000), 2)
-            russia.government_spending = round(random.uniform(100, 725000), 2)
-
-            russia.exports = round(random.uniform(10000, 1050000), 2)
-            russia.imports = round(random.uniform(10000, 950000), 2)
-
-            russia.current_gdp += (russia.consumer_spending + russia.investment + russia.government_spending
-                                   + (russia.exports - russia.imports))
-
-            russia.national_debt += round((russia.government_spending * round(random.uniform(0.001, 0.005), 5)) +
-                                          (russia.consumer_spending * round(random.uniform(0.001, 0.005), 5)), 2)
-
-def economic_stimulus(russia):
-    pass
-
-def gdp_changes(russia):
-    if russia.economic_state == "recovery":
-        recovery(russia)
-    elif russia.economic_state == "recession":
-        recession(russia)
-    elif russia.economic_state == "depression":
-        depression(russia)
-    elif russia.economic_state == "expansion":
-        expansion(russia)
-
-def economic_state(russia):
-    if russia.date >= russia.economic_change_date:
-        if russia.date >= russia.economic_change_date:
-            """Comparing current date to when Italy's economic state could change"""
-            chance = random.randrange(0, 2000)
-            if chance % 37 == 10:
-                """Making potential for economic disaster really low"""
-                if russia.current_gdp < russia.past_gdp:
-                    """Comparison of current gdp to past gdp"""
-                    if russia.economic_state == "expansion" or russia.economic_state == "recovery":
-                        for i in range(0, len(business_cycle) - 1):
-                            if business_cycle[i] == "recession":
-                                print("Your economy has entered into a recession after 6 months of decayed growth.\n")
-                                time.sleep(3)
-                                russia.economic_state = business_cycle[i]
-                                russia.economic_change_date = russia.date + timedelta(days=240)
-                                economic_stimulus(russia)
-                                """increasing amount of time to check up on GDP
-                                Time is average amount(6 months cycle)
-                                """
-                    elif russia.economic_state == "recession":
-                        for i in range(0, len(business_cycle) - 1):
-                            if business_cycle[i] == "depression":
-                                print("Your economy has entered into a depression "
-                                      "after exceeding 6 months of decayed growth.\n")
-                                time.sleep(3)
-                                russia.economic_state = business_cycle[i]
-                                russia.economic_change_date = russia.date + timedelta(days=270)
-                                economic_stimulus(russia)
-                                """
-                                Since it takes awhile to escape a depression, amount of time on change date is increased
-                                """
-
-            if chance % 40 == 37:
-                """making potential for economic expansion or recovery very low"""
-                if russia.economic_state == "depression" or russia.economic_state == "recession":
-                    for i in range(0, len(business_cycle) - 1):
-                        if business_cycle[i] == "recovery":
-                            print("Your economy hs finally entered its recovery period\n")
-                            time.sleep(3)
-                            russia.economic_state = business_cycle[i]
-                            russia.economic_change_date = russia.date + timedelta(days=240)
-                            """increasing amount of time to check up on GDP
-                            Time is average amount(6 months cycle)
-                            """
-
-                elif russia.economic_state == "recovery":
-                    for i in range(0, len(business_cycle) - 1):
-                        if business_cycle[i] == "expansion":
-                            print("Your economy has blasted into an expansionary period. Woo!\n")
-                            time.sleep(3)
-                            russia.economic_state = business_cycle[i]
-                            russia.economic_change_date = russia.date + timedelta(days=270)
-                            """
-                            Since it takes awhile to escape a depression, amount of time on change date is increased
-                            """
-def economic_decisions(russia):
-    if russia.past_year < russia.date.year:
-        russia.economic_growth = (russia.current_gdp - russia.past_gdp /
-                                  ((russia.past_gdp + russia.current_gdp) / 2)) * 100
-
-        """Calculation of yearly economic growth"""
-        if russia.economic_growth <= 3.35:
-            if not russia.economic_stimulus:
-                choice = input(f"Your GDP grew {russia.economic_growth}% last year.\n"
-                               f"Would you like to apply a stimulus?: ")
-                if choice.lower() == "y" or choice.lower() == "yes":
-                    economic_stimulus(russia)
-
-        elif russia.economic_growth >= 9.56:
-            if russia.economic_stimulus:
-                russia.economic_stimulus = False
-    else:
-        gdp_changes(russia)
-        economic_state(russia)
-
-"""Stats functions"""
-def social_stats(us):
-    print(f"Your current happiness level is {us.happiness}%.\n")
-    time.sleep(3)
-    if us.happiness < 35.45 and not us.improve_happiness:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            us.improve_happiness = us.date + timedelta(days=30)
-            print("The Russian government has decided to improve its relations with its civilians.\n")
-            time.sleep(2)
-def political_stats(russia):
-    if russia.stability < 45.45 and not russia.improve_stability:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            russia.improve_stability = russia.date + timedelta(days=30)
-            print("The Russian government has decided to improve its political stability over a period of 30 days\n")
-            time.sleep(2)
-def economic_stats(russia):
-    if russia.national_debt > 50000000 and not russia.debt_repayment:
-        choice = random.randrange(0, 2)
-        if choice == 1:
-            russia.debt_repayment = russia.date + timedelta(days=120)
-            print("The Russian government has decided to repay some of their national debt over a 120 day period.\n")
-            time.sleep(2)
-def daily_decisions(russia):
-    political_stats(russia)
-    economic_stats(russia)
-    social_stats(russia)
-    russia.check_stats = russia.date + timedelta(days=3)
-
-def manual_game(year):
-    russia = Russia(year)
-    while russia.current_pop > 3000000:
-        political_change(russia)
-        economic_decisions(russia)
-        population_change(russia)
-        if russia.date > russia.check_stats:
-            daily_decisions(russia)
-        russia.date += timedelta(days=1)
-        time.sleep(3)
-
-class Russia:
+class RussiaAI:
     def __init__(self, year):
-        """Time variables"""
+        self.is_sprite = False
+        self.region = "europe"
+        self.name = "Russia"
+        # date variables
         self.date = datetime(int(year), 1, 1)
-        self.past_year = self.date.year
-        self.economic_change_date = self.date + timedelta(days=60)
-        self.political_census = self.date + timedelta(days=3)
-        self.year_plan_date = None
-        """Variable for improving stability of nation over given time"""
-        self.improve_stability = None
-        """Ditto to improve stability"""
-        self.improve_happiness = None
-        """variable for repaying debt over given time"""
-        self.debt_repayment = None
+        self.improve_stability = self.date
+        self.improve_happiness = self.date
+        self.debt_repayment = self.date
         self.check_stats = self.date + timedelta(days=3)
-        """Population Variables"""
-        self.current_pop = population[year]
-        self.past_pop = self.current_pop
-        self.deaths = 0
+        self.economic_change_date = self.date + timedelta(days=60)
+        # amount of days that is given to the economy for it to either shrink or grow before being checked
+        self.current_year = self.date.year
+        # social variables
+        """population"""
+        self.population = population[year]
         self.births = 0
-        self.happiness = 85.56
-        self.pop_change = None
-        self.condom_subsidy = None
-        self.viagra_subsidy = None
-        self.siberians = 0
-        self.deportees = 0
-        """Political Variables"""
+        self.deaths = 0
+        self.birth_control = False
+        self.birth_enhancer = False
+        """happiness"""
+        self.happiness = 98.56
+        # political
         self.leader = dictators[year]
-        self.pe = self.current_pop * 0.99
-        self.ae = self.current_pop - self.pe
-        self.stability = 85.00
-        """Economic Variables"""
+        """Stability"""
+        self.stability = 95.56
+        # economic
+        self.e_s = "recovery"
+        self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
-        self.economic_state = "recovery"
-        self.economic_growth = None
-        # political economic variables
-        self.national_debt = 0
+        """Components of GDP"""
+        self.consumer_spending = 0
+        self.investment = 0
         self.government_spending = 0
-        self.economic_stimulus = None
-        if self.date < datetime(1923, 6, 16):
-            self.year_plans = 0
+        self.exports = 0
+        self.imports = 0
+        """Economic Stimulus components"""
+        self.economic_stimulus = False
+        # military
+        # international
+        self.alliance = ""
+        """North america"""
+        # us
+        self.us_relations = 56.97
+        self.us_guarantee = False
+        self.us_embargo = False
+        # mexico
+        self.mexico_relations = 89.97
+        self.mexico_guarantee = False
+        self.mexico_embargo = False
+        # other
+    # population functions
+    def population_change(self):
+        """instead of having the headache of calling both national objects separately, why not combine them"""
+        if self.current_year < self.date.year:
+            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+
+            if pop_change < 2.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = random.randrange(0, 2)
+
+                if choice == 1:
+                    print("The Belgian government has decided to implement policies to increase growth in births.\n")
+                    time.sleep(1.25)
+
+                    self.birth_enhancer = True
+
+                    if self.birth_control:
+                        self.birth_control = False
+
+            elif pop_change > 12.56:
+                """incorporation of what happens when Mexican birth rate becomes too low"""
+                choice = random.randrange(0, 2)
+
+                if choice == 1:
+                    print("The Belgian government has decided to implement policies to control births.\n")
+                    time.sleep(1.25)
+
+                    self.birth_control = True
+
+                    if self.birth_enhancer:
+                        self.birth_enhancer = False
         else:
-            self.year_plans = 1
-        # GDP components
-        self.consumer_spending = None
-        self.investment = None
-        self.exports = None
-        self.imports = None
+            if self.birth_enhancer:
+                births = random.randrange(8, 15)
+                deaths = random.randrange(3, 11)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            if self.birth_control:
+                births = random.randrange(3, 10)
+                deaths = random.randrange(6, 15)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
+
+            else:
+                births = random.randrange(5, 12)
+                deaths = random.randrange(4, 10)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
+    # economic functions
+    def check_economic_state(self):
+        """function dealing with primary economic decisions of canadian parliament"""
+        if self.date > self.economic_change_date:
+            """instead of comparing an entire year, break the year up into sections"""
+            if self.current_gdp > self.past_gdp:
+                if self.e_s.lower() == "recovery":
+                    self.e_s = "expansion"
+                    print("Your economy is now in an expansionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                    self.e_s = "recovery"
+                    print("Your economy is now in recovery period.\n")
+                    time.sleep(3)
+
+            elif self.current_gdp < self.past_gdp:
+                if self.e_s.lower() == "recession":
+                    self.e_s = "depression"
+                    print("Your economy is now in a recessionary period.\n")
+                    time.sleep(3)
+
+                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                    self.e_s = "recession"
+                    print("Your economy is now in a depression period.\n")
+                    time.sleep(3)
+        else:
+            if self.e_s == "recession":
+                self.recession()
+
+            elif self.e_s == "recovery":
+                self.recovery()
+
+            elif self.e_s == "depression":
+                self.depression()
+
+            elif self.e_s == "expansion":
+                self.expansion()
+    def recession(self):
+        if self.economic_stimulus:
+
+            self.consumer_spending = -round(random.uniform(10, 150), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(50, 350), 2)
+            self.exports = round(random.uniform(10, 45), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 700), 2)
+            self.national_debt += round((-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 30), 2)
+            self.imports = round(random.uniform(10, 105), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                    (self.exports - self.imports))
+    def recovery(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 450), 2)
+            self.government_spending = round(random.uniform(100, 200), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 700), 2)
+            self.exports = round(random.uniform(10, 100), 2)
+            self.imports = round(random.uniform(10, 75), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 350), 2)
+            self.government_spending = round(random.uniform(100, 350), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 500), 2)
+            self.exports = round(random.uniform(10, 75), 2)
+            self.imports = round(random.uniform(10, 58), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def expansion(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 2000), 2)
+            self.government_spending = round(random.uniform(100, 600), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 400), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 500), 2)
+            self.imports = round(random.uniform(10, 350), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+
+    def depression(self):
+        if self.economic_stimulus:
+            self.consumer_spending = round(random.uniform(10, 15), 2)
+            self.government_spending = round(random.uniform(100, 500), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+        else:
+            self.consumer_spending = -round(random.uniform(10, 200), 2)
+            self.government_spending = round(random.uniform(100, 100), 2)
+            self.national_debt += round(
+                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
+            self.investment = -round(random.uniform(100, 300), 2)
+            self.exports = round(random.uniform(10, 50), 2)
+            self.imports = round(random.uniform(10, 20), 2)
+
+            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
+                                 (self.exports - self.imports))
+    # stability functions
+    def stability_happiness_change(self, globe):
+        if globe.tension > 25 and globe.tension < 50:
+            """if global tension is between 25 and 50"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.25, 1.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.25, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    happiness_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.50, 1.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.45, 1.65), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.75, 2.76), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 50 and globe.tension < 75:
+            """if global tension is between 50 and 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.10, 1.25), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.05, 1.05), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(0.13, 0.96), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_increase = round(random.uniform(0.10, 0.76), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """if improving of happiness has been activated
+                    improved happiness improves stability
+                    """
+                    happiness_increase = round(random.uniform(1.05, 1.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 1.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+
+        elif globe.tension > 75:
+            """if global tension is above 75"""
+            if self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                if self.improve_stability > self.date:
+                    """if improving of stability has been activated"""
+                    stability_increase = round(random.uniform(0.05, 0.75), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+                if self.improve_happiness > self.date:
+                    stability_increase = round(random.uniform(0.05, 0.99), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+                else:
+                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability - stability_decrease) > 5:
+                        self.stability -= stability_decrease
+
+            else:
+                if self.improve_stability > self.date:
+                    stability_increase = round(random.uniform(1.56, 2.56), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                else:
+                    stability_increase = round(random.uniform(1.45, 2.34), 2)
+                    if (self.stability + stability_increase) < 100:
+                        self.stability += stability_increase
+
+                if self.improve_happiness > self.date:
+                    """If policies toward improving happiness have been imposed"""
+                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+                else:
+                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                    if (self.happiness + happiness_increase) < 100:
+                        self.happiness += happiness_increase
+        else:
+            if self.improve_stability > self.date:
+                stability_increase = round(random.uniform(1.56, 2.56), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
+
+            else:
+                stability_increase = round(random.uniform(1.45, 2.34), 2)
+                if (self.stability + stability_increase) < 100:
+                    self.stability += stability_increase
+
+            if self.improve_happiness > self.date:
+                """If policies toward improving happiness have been imposed"""
+                happiness_increase = round(random.uniform(1.05, 2.96), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+            else:
+                happiness_increase = round(random.uniform(0.96, 2.56), 2)
+                if (self.happiness + happiness_increase) < 100:
+                    self.happiness += happiness_increase
+    # main function
+    """
+    main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
+    track of the object. I also dont have to individually each file of every nation
+    """
+
+    def main(self, globe):
+        while self.population > 3000000:
+            self.check_economic_state()
+            self.population_change()
+            """if self.is_sprite != False:
+                random_functions.random_functions(self, globe)"""
+            self.stability_happiness_change(globe)
+            self.date += timedelta(days=1)
+            break
