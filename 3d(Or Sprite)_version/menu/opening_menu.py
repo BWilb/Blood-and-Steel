@@ -44,6 +44,12 @@ from nation_state.asia.se_asia.china import china
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.middle_east.iran import iran
 from nation_state.asia.middle_east.iran import iran_ai
+from nation_state.asia.middle_east.turkey import turkey
+from nation_state.asia.middle_east.turkey import turkey_ai
+from nation_state.asia.middle_east.afghanistan import afghanistan
+from nation_state.asia.middle_east.afghanistan import afghanistan_ai
+from nation_state.asia.middle_east.iraq import iraq
+from nation_state.asia.middle_east.iraq import iraq_ai
 
 import pygame
 import pyautogui
@@ -488,6 +494,91 @@ def accept_nation(nation, time):
         establish_foreign_nations(globe1, iranian, chinese, japanese, polish, austrian, norwegian, romanian, swedish, greek, dutch, luxembourger,
                                   spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
         sprite_version.country_sprite(iranian, globe1)
+
+    if nation.lower() == "turkey":
+        turkish = turkey.Turkey(time)
+        iranian = iran_ai.Iran(time)
+        chinese = china_ai.ChinaAI(time)
+        japanese = japan_ai.Japan(time)
+        polish = poland_ai.PolandAI(time)
+        russian = russia_ai.RussiaAI(time)
+        austrian = austria_ai.Austria(time)
+        norwegian = norway_ai.NorwayAI(time)
+        romanian = romania_ai.RomaniaAI(time)
+        swedish = sweden_ai.SwedenAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        danish = denmark_ai.Denmark(time)
+        spanish = spain_ai.SpainAI(time)
+        greek = greece_ai.Greece(time)
+        dutch = netherlands_ai.Netherlands(time)
+        luxembourger = luxembourg_ai.LuxembourgAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        establish_foreign_nations(globe1, turkish, iranian, chinese, japanese, polish, austrian, norwegian, romanian, swedish, greek, dutch, luxembourger,
+                                  spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(turkish, globe1)
+
+    if nation.lower() == "afghanistan":
+        afghan = afghanistan.Afghanistan(time)
+        turkish = turkey_ai.TurkeyAI(time)
+        iranian = iran_ai.Iran(time)
+        chinese = china_ai.ChinaAI(time)
+        japanese = japan_ai.Japan(time)
+        polish = poland_ai.PolandAI(time)
+        russian = russia_ai.RussiaAI(time)
+        austrian = austria_ai.Austria(time)
+        norwegian = norway_ai.NorwayAI(time)
+        romanian = romania_ai.RomaniaAI(time)
+        swedish = sweden_ai.SwedenAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        danish = denmark_ai.Denmark(time)
+        spanish = spain_ai.SpainAI(time)
+        greek = greece_ai.Greece(time)
+        dutch = netherlands_ai.Netherlands(time)
+        luxembourger = luxembourg_ai.LuxembourgAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        establish_foreign_nations(globe1, afghan, turkish, iranian, chinese, japanese, polish, austrian, norwegian, romanian, swedish, greek, dutch, luxembourger,
+                                  spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(afghan, globe1)
+
+    if nation.lower() == "iraq":
+        iraqi = iraq.Iraq(time)
+        afghan = afghanistan_ai.AfghanistanAI(time)
+        turkish = turkey_ai.TurkeyAI(time)
+        iranian = iran_ai.Iran(time)
+        chinese = china_ai.ChinaAI(time)
+        japanese = japan_ai.Japan(time)
+        polish = poland_ai.PolandAI(time)
+        russian = russia_ai.RussiaAI(time)
+        austrian = austria_ai.Austria(time)
+        norwegian = norway_ai.NorwayAI(time)
+        romanian = romania_ai.RomaniaAI(time)
+        swedish = sweden_ai.SwedenAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        danish = denmark_ai.Denmark(time)
+        spanish = spain_ai.SpainAI(time)
+        greek = greece_ai.Greece(time)
+        dutch = netherlands_ai.Netherlands(time)
+        luxembourger = luxembourg_ai.LuxembourgAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        establish_foreign_nations(globe1, iraqi, afghan, turkish, iranian, chinese, japanese, polish, austrian,
+                                  norwegian, romanian, swedish, greek, dutch, luxembourger,
+                                  spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
+        sprite_version.country_sprite(iraqi, globe1)
 
 def play_music(mp3):
     pygame.mixer.init()

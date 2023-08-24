@@ -3,22 +3,22 @@ import time
 from datetime import datetime, timedelta
 
 leaders = {
-    "1910": "Ahmad Shah Qajar",
-    "1914": "Ahmad Shah Qajar",
-    "1918": "Ahmad Shah Qajar",
-    "1932": "Reza shah",
-    "1936": "Reza shah",
-    "1939": "Reza shah"
+    "1910": "Habibullah",
+    "1914": "Habibullah",
+    "1918": "Habibullah",
+    "1932": "Nadir Khan",
+    "1936": "Zahir Shah",
+    "1939": "Zahir Shah"
 }
 
 
 population = {
-    "1910": 10970000,
-    "1914": 10320000,
+    "1910": 5500000,
+    "1914": 7120000,
     "1918": 9530000,
-    "1932": 13270000,
-    "1936": 14230000,
-    "1939": 14970000
+    "1932": 6410000,
+    "1936": 6410000,
+    "1939": 6430000
 }
 
 """Economic Dictionaries and Variables"""
@@ -31,26 +31,26 @@ gdp = {
     "1939": 44428052632
 }
 
-flags = {"1910": "../flags/iran/1920px-State_flag_of_Persia_(1907–1933).jpg",
-         "1914": "../flags/iran/1920px-State_flag_of_Persia_(1907–1933).jpg",
-         "1918": "../flags/iran/1920px-State_flag_of_Persia_(1907–1933).jpg",
-         "1932": "../flags/iran/1920px-State_flag_of_Persia_(1907–1933).jpg",
-         "1936": "../flags/iran/1920px-State_flag_of_Iran_(1933–1964).jpg",
-         "1939": "../flags/iran/1920px-State_flag_of_Iran_(1933–1964).jpg"
+flags = {"1910": "../flags/afghanistan/Flag_of_Afghanistan_(1919–1921).jpg",
+         "1914": "../flags/afghanistan/Flag_of_Afghanistan_(1919–1921).jpg",
+         "1918": "../flags/afghanistan/Flag_of_Afghanistan_(1919–1921).jpg",
+         "1932": "../flags/afghanistan/Flag_of_Afghanistan_(1931–1973).jpg",
+         "1936": "../flags/afghanistan/Flag_of_Afghanistan_(1931–1973).jpg",
+         "1939": "../flags/afghanistan/Flag_of_Afghanistan_(1931–1973).jpg"
          }
 
 leader_images = {
-    "1910": "../leaders/iran/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1914": "../leaders/iran/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1918": "../leaders/iran/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1932": "../leaders/iran/Reza_shah_uniform-1932-1939.jpg",
-    "1936": "../leaders/iran/Reza_shah_uniform-1932-1939.jpg",
-    "1939": "../leaders/iran/Reza_shah_uniform-1932-1939.jpg"
+    "1910": "../leaders/afghanistan/Habibullah-1910-1918.jpg",
+    "1914": "../leaders/afghanistan/Habibullah-1910-1918.jpg",
+    "1918": "../leaders/afghanistan/Habibullah-1910-1918.jpg",
+    "1932": "../leaders/afghanistan/330px-Nadir_Khan_of_Afghanistan-1932.jpg",
+    "1936": "../leaders/afghanistan/King_Zahir_Shah_of_Afghanistan_in_1963-1936-1939.jpg",
+    "1939": "../leaders/afghanistan/King_Zahir_Shah_of_Afghanistan_in_1963-1936-1939.jpg"
 }
 
-class Iran:
+class Afghanistan:
     def __init__(self, year):
-        self.name = "iran"
+        self.name = "Afghanistan"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -104,24 +104,38 @@ class Iran:
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
-                if choice == 0:
-                    self.birth_enhancer = True
-                    print("The Austrian government has decided to impose birth enhancer.\n")
-                    time.sleep(3)
-                    if self.birth_control:
-                        self.birth_control = False
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to promote population growth?: ")
+                not_answered = False
 
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_enhancer = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to slow your population growth?: ")
+                not_answered = False
 
-                if choice == 0:
-                    print("The Austrian government has decided to impose birth control.\n")
-                    time.sleep(3)
-                    self.birth_control = True
-                    if self.birth_enhancer:
-                        self.birth_enhancer = False
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_control = True
+                        not_answered = True
+
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
+
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
         else:
             if self.birth_enhancer:
                 births = random.randrange(20, 40)
@@ -590,13 +604,3 @@ class Iran:
                     happiness_increase = round(random.uniform(0.96, 2.56), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
-
-    def main(self, globe):
-        while self.population > 600000:
-            self.check_economic_state()
-            self.population_change()
-            self.stability_happiness_change(globe)
-            """if self.is_sprite == False:
-                random_functions.random_functions(self, globe)"""
-            self.date += timedelta(days=1)
-            break

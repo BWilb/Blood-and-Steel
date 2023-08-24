@@ -48,9 +48,9 @@ leader_images = {
     "1939": "../leaders/iran/Reza_shah_uniform-1932-1939.jpg"
 }
 
-class Iran:
+class AfghanistanAI:
     def __init__(self, year):
-        self.name = "iran"
+        self.name = "Afghanistan"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
