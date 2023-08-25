@@ -25,6 +25,7 @@ from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.switzerland import swiss_ai
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
+from nation_state.north_america.united_states import us_ai
 from random_functions import random_functions
 
 monarchs = {
@@ -720,6 +721,7 @@ class Britain:
                     self.happiness += happiness_increase
 
 def main(time1):
+    print(time1)
     uk = Britain(time1)
     globe1 = globe.Globe()
     # player nation
@@ -741,10 +743,10 @@ def main(time1):
     romanian_ai = romania_ai.RomaniaAI(time1)
     serbian_ai = serbia_ai.SerbiaAI(time1)
     # establishing north american AIs
-    # american_ai = us_ai.UnitedStates(time)
+    american_ai = us_ai.UnitedStates(time1)
     cuban_ai = cuba_ai.CubaAI(time1)
     canadian_ai = canada_ai.Canada(time1)
-    establish_foreign_nations(globe1, uk, canadian_ai, cuban_ai, chinese_ai, japanese_ai,
+    establish_foreign_nations(globe1, american_ai, uk, canadian_ai, cuban_ai, chinese_ai, japanese_ai,
                               austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
                               danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai, romanian_ai, serbian_ai)
 
@@ -769,4 +771,4 @@ def main(time1):
         uk.date += timedelta(1)
         time.sleep(3)
 
-#main("1914")
+main("1914")

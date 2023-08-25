@@ -879,7 +879,7 @@ def main(time):
         us.population_change()
         us.stats(globe1)
         us.stability_happiness_change(globe1)
-        random_functions.random_functions(us, globe1)
+
 
         """Looping through changes in US system"""
 

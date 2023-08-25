@@ -63,6 +63,8 @@ class UnitedStates:
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
+        # international
+        self.alliance = ""
         # other
         self.is_ai = True
     # population functions
@@ -125,10 +127,11 @@ class UnitedStates:
             north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, \
             virginia, \
             vermont, west_virginia, washington, wisconsin, wyoming
-        folder = "united_states"
+        folder = "../../north_america/united_states/us_states"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
-            if file != '__pycache__' or file != "us.py" or file != "us_ai.py":
+            print("hi")
+            if file != '__pycache__':
                 if file.removesuffix(".py") == "alabama":
                     self.states.append(alabama.Alabama(self.date.year, self))
                 if file.removesuffix(".py") == "alaska":
@@ -232,7 +235,7 @@ class UnitedStates:
         for i in range(0, len(self.states) - 1):
             self.current_gdp += self.states[i].current_gdp
             self.population += self.states[i].population
-        #print(population)
+        print(self.population)
 
 
     # economic functions
@@ -547,6 +550,7 @@ class UnitedStates:
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
     def main(self, globe):
+        self.establish_states()
         while self.population > 3000000:
             self.stability_happiness_change(globe)
             self.population_change()
