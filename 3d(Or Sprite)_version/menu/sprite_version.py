@@ -11,7 +11,7 @@ from nation_state.north_america.canada import canada
 import socket
 from pygame.constants import VIDEORESIZE"""
 # import opening_menu
-import button
+from buttons import button
 # from tkinter import *
 # from tkinter.ttk import *
 import pygame
@@ -89,7 +89,7 @@ def social_events(nation):
     pass
 
 def country_sprite(nation, globe):
-    speed = 1.25
+    speed = 1.50
     """incrementing and decrementing buttons"""
     game_state = "game"
     run = True
@@ -117,21 +117,19 @@ def country_sprite(nation, globe):
                 if social_button.draw(screen):
                     game_state = "view society"
 
-
                 draw_text(f"{actual_day.date()}", font, text_col, SCREEN_WIDTH * 0.80, 100)
                 if slower_button.draw(screen):
-                    pass
+                    speed = 2.75
                 if slow_button.draw(screen):
-                    pass
+                    speed = 2.25
                 if regular_button.draw(screen):
-                    pass
+                    speed = 1.75
                 if fast_button.draw(screen):
-                    pass
+                    speed = 1.25
                 if faster_button.draw(screen):
-                    pass
+                    speed = 0.75
                 screen.blit(flag, (SCREEN_WIDTH * 0.05, 150))
                 screen.blit(leader, (SCREEN_WIDTH * 0.015, 300))
-                time.sleep(1.25)
                 nation.check_economic_state()
                 nation.population_change()
                 nation.stability_happiness_change(globe)

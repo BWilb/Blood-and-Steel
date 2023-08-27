@@ -50,7 +50,7 @@ flags = {"1910": "../flags/belgium/belgian_flag.jpg",
 leader_images = {
     "1910": "../leaders/belgium/Schollaert_1910.jpg",
     "1914": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
-    "1918": "../leaders/belgium/3800px-Comte_de_Broqueville_1914-1918.jpg",
+    "1918": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
     "1932": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
     "1936": "../leaders/belgium/Paul_van_Zeeland,_1936.jpg",
     "1939": "../leaders/belgium/375px-Hubert_Pierlot_1939.jpg"
