@@ -4,7 +4,6 @@ import threading
 import keyboard
 
 def play_music(mp3):
-    pygame.mixer.init()
     pygame.mixer.music.load(mp3)
     pygame.mixer.music.play()
     if keyboard.read_key() == "space":
@@ -12,6 +11,8 @@ def play_music(mp3):
 
 
 def music_play(nation, time):
+    pygame.mixer.init()
+    global music_thread
     if nation == "great britain":
         music_thread = threading.Thread(target=play_music, args=(
                 "music/europe/British National Anthem -God Save The Queen (EN).mp3",))
@@ -38,7 +39,7 @@ def music_play(nation, time):
             music_thread = threading.Thread(target=play_music, args=(
                 "music/europe/_Боже, Царя храни!_ - National Anthem of The Russian Empire [1833-1917].mp3",))
 
-        if time <= 1932:
+        if time >= 1932:
             music_thread = threading.Thread(target=play_music, args=(
                 "music/europe/Russia National anthem Russian & English lyrics.mp3",))
 

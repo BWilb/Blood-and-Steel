@@ -3,7 +3,6 @@ import pyautogui
 import socket
 from pygame.constants import VIDEORESIZE
 from buttons import button
-#import music_player
 import accept_nation
 import sys
 import time
@@ -18,6 +17,9 @@ class OpeningMenu:
         self.WIDTH = pyautogui.size().width
         # initial width and height will be 90% size of computer screen
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        #pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 125))
+        self.flare_background = \
+            pygame.transform.scale(pygame.image.load("background_image_files/artillery_flares.jpg").convert_alpha(), (self.WIDTH, self.HEIGHT))
         # define fonts
         self.font = pygame.font.SysFont("arialblack", 40)
         # define colour
@@ -328,6 +330,34 @@ class OpeningMenu:
         if secondary_quit_button.draw(self.screen):
             pygame.quit()
 
+    def sa_menu(self):
+        back_img = pygame.image.load("buttons/opening_menu_buttons/back_button.jpg").convert_alpha()
+        secondary_quit = pygame.image.load("buttons/opening_menu_buttons/quit_button.jpg").convert_alpha()
+        back_button = button.Button(self.WIDTH * 0.38, 900, back_img, 0.10)
+        secondary_quit_button = button.Button(self.WIDTH * 0.58, 900, secondary_quit, 0.10)
+        # south american button images
+        img_brazil = pygame.image.load("buttons/region/s_a/brazil_button.jpg").convert_alpha()
+        img_argentina = pygame.image.load("buttons/region/s_a/argentina_button.jpg").convert_alpha()
+
+        # south american buttons
+        brazil_button = button.Button(self.WIDTH * 0.15, self.HEIGHT * 0.20, img_brazil, 0.15)
+        argentine_button = button.Button(self.WIDTH * 0.15, self.HEIGHT * 0.30, img_argentina, 0.15)
+
+
+        self.draw_text("Choose your nation!", self.font, self.text_col, self.WIDTH * 0.375, 50)
+        if brazil_button.draw(self.screen):
+            self.menu_state = "chosen"
+            self.nation_chosen = "brazil"
+
+        if argentine_button.draw(self.screen):
+            self.menu_state = "chosen"
+            self.nation_chosen = "argentina"
+
+        if back_button.draw(self.screen):
+            self.menu_state = "region"
+        if secondary_quit_button.draw(self.screen):
+            pygame.quit()
+
     def chosen(self):
         yes_img = pygame.image.load("buttons/opening_menu_buttons/yes_button.jpg").convert_alpha()
         no_img = pygame.image.load("buttons/opening_menu_buttons/no_button.jpg").convert_alpha()
@@ -340,19 +370,28 @@ class OpeningMenu:
         self.draw_text(f"Do you wish to proceed with your choice?", self.font, self.text_col, self.WIDTH * 0.275, 700)
 
         if yes_button.draw(self.screen):
-            #yes_selection(nation_chosen, time_chosen)
-            answered = True
+            #self.yes_selection(self.nation_chosen, self.time_chosen)
             pygame.quit()
             accept_nation.accept_nation(self.nation_chosen, self.time_chosen)
         if no_button.draw(self.screen):
             self.menu_state = "region"
 
+    def yes_selection(self, nation, time_chosen):
+        from music_player import music_play
+        music_play(nation, int(time_chosen))
+
+    def background_music(self):
+        if not pygame.mixer.init():
+            pass
     def main_menu(self):
         """main menu that controls user process of navigating main menu"""
+        pygame.mixer.init()
+        pygame.mixer.music.load("background_music/[Hoi 4] The Great War Main theme.mp3")
+        pygame.mixer.music.play(-1)
+        print("hi")
         self.is_running = True
         while self.is_running:
             if not self.game_paused:
-
                 opening = threading.Thread(target=self.primary_menu, args=())
                 timing = threading.Thread(target=self.time_menu, args=())
                 regional = threading.Thread(target=self.region_menu, args=())
@@ -361,7 +400,10 @@ class OpeningMenu:
                 european = threading.Thread(target=self.europe_menu, args=())
                 chose = threading.Thread(target=self.chosen, args=())
 
-                self.screen.fill((52, 78, 91))
+                self.screen.fill((0, 0, 0))
+                self.screen.blit(self.flare_background, (0, 0))
+                # sets background image
+                self.background_music()
 
                 if self.menu_state == "main":
                     self.primary_menu()
@@ -380,6 +422,9 @@ class OpeningMenu:
 
                 elif self.menu_state == "asia":
                     self.asia_menu()
+
+                elif self.menu_state == "sa":
+                    self.sa_menu()
 
                 elif self.menu_state == "chosen":
                     self.chosen()
