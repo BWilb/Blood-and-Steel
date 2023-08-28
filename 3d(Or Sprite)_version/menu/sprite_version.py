@@ -16,6 +16,19 @@ from buttons import button
 # from tkinter.ttk import *
 import pygame
 import pyautogui
+import os
+
+def play_music():
+    pygame.mixer.init()
+    folder = "background_music/in_game/after_1918"
+    for file in os.listdir(folder):
+        pygame.mixer.music.queue(f"background_music/in_game/after_1918/{file}")
+        print("hi", file)
+        if file != "__pycache__":
+            if not pygame.mixer.Channel(0).get_busy():
+                pygame.mixer.music.load(f"background_music/in_game/after_1918/{file}")
+                print(pygame.mixer.music.get_busy())
+                pygame.mixer.music.play()
 
 SCREEN_WIDTH = pyautogui.size().width
 SCREEN_HEIGHT = pyautogui.size().height * 0.9
@@ -99,15 +112,18 @@ def country_sprite(nation, globe):
     flag = check_flag(nation)
     leader = check_leader(nation)
     actual_day = nation.date
-
+    play_music()
     while run:
         if not game_paused:
             if game_state == "game":
-                screen.fill((52, 78, 91))
-
+                screen.fill((0,0,0))
+                sprite_background = \
+                    pygame.transform.scale(
+                        pygame.image.load("background_image_files/Untitled.jpg").convert_alpha(),
+                        (SCREEN_WIDTH, SCREEN_HEIGHT))
+                screen.blit(sprite_background, (0, 0))
                 pygame.draw.rect(screen, (211, 211, 211), (0, 0, SCREEN_WIDTH, 100))
                 pygame.draw.rect(screen, (0, 0, 0), (SCREEN_WIDTH * 0.04, 140, flag.get_width() + 35, flag.get_height() + 25))
-
                 if govt_button.draw(screen):
                     game_state = "view government"
                 if econ_button.draw(screen):

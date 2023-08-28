@@ -17,13 +17,13 @@ class OpeningMenu:
         self.WIDTH = pyautogui.size().width
         # initial width and height will be 90% size of computer screen
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        #pygame.transform.scale(pygame.image.load(nation.flag).convert_alpha(), (200, 125))
         self.flare_background = \
-            pygame.transform.scale(pygame.image.load("background_image_files/artillery_flares.jpg").convert_alpha(), (self.WIDTH, self.HEIGHT))
+            pygame.transform.scale(pygame.image.load("background_image_files/artillery_flares.jpg").convert_alpha(),
+                                   (self.WIDTH, self.HEIGHT))
         # define fonts
         self.font = pygame.font.SysFont("arialblack", 40)
         # define colour
-        self.text_col = (255, 255, 255)
+        self.text_col = (0, 0, 0)
         pygame.display.set_caption("Main Menu")
         self.is_running = True
         self.game_paused = False
@@ -392,19 +392,11 @@ class OpeningMenu:
         self.is_running = True
         while self.is_running:
             if not self.game_paused:
-                opening = threading.Thread(target=self.primary_menu, args=())
-                timing = threading.Thread(target=self.time_menu, args=())
-                regional = threading.Thread(target=self.region_menu, args=())
-                american = threading.Thread(target=self.na_menu, args=())
-                asian = threading.Thread(target=self.asia_menu, args=())
-                european = threading.Thread(target=self.europe_menu, args=())
-                chose = threading.Thread(target=self.chosen, args=())
 
                 self.screen.fill((0, 0, 0))
                 self.screen.blit(self.flare_background, (0, 0))
                 # sets background image
                 self.background_music()
-
                 if self.menu_state == "main":
                     self.primary_menu()
 
