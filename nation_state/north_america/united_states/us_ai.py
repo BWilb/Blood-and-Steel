@@ -24,10 +24,10 @@ vice_presidents = {
 
 class UnitedStates:
     def __init__(self, year):
-        self.region = "North America"
         self.name = "United States"
         # date variables
         self.date = datetime(int(year), 1, 1)
+        self.upload_to_database = self.date.month
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -38,6 +38,7 @@ class UnitedStates:
         # social variables
         """population"""
         self.population = 0
+        self.past_population = 0
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -46,14 +47,21 @@ class UnitedStates:
         self.happiness = 98.56
         # political
         self.leader = presidents[year]
+        self.vp = vice_presidents[year]
+        """self.leader_image = leader_images[year]
+        self.flag = flags[year]"""
         """Stability"""
         self.stability = 95.56
+        self.political_power = 256
+        self.political_exponent = 2.56
         self.states = []
         # economic
         self.national_debt = 0
         self.current_gdp = 0
         self.past_gdp = 0
         self.e_s = "recovery"
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -65,8 +73,6 @@ class UnitedStates:
         # military
         # international
         self.alliance = ""
-        # other
-        self.is_ai = True
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

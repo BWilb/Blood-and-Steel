@@ -2,11 +2,6 @@
 
 import globe
 from datetime import datetime, timedelta
-from us_states import alabama, alaska, arizona, arkansas, california, colorado, \
-    conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, maine, \
-    maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, new_york, \
-    north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, virginia, \
-    vermont, west_virginia, washington, wisconsin, wyoming
 # importation of Asian files
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.se_asia.japan import japan_ai
@@ -64,6 +59,23 @@ vice_presidents = {
     "1939": "Henry Wallace"
 }
 
+flags = {
+    "1910": "../flags/united_states/Flag_of_the_United_States_(1908–1912).jpg",
+    "1914": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
+    "1918": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
+    "1932": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
+    "1936": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
+    "1939": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg"
+}
+leader_images = {"1910": "../leaders/united_states/taft-1913.jpeg",
+                 "1914": "../leaders/united_states/wilson-1914-1918.jpg",
+                 "1918": "../leaders/united_states/wilson-1914-1918.jpg",
+                 "1932": "../leaders/united_states/President_Hoover_portrait-1932.jpg",
+                 "1936": "../leaders/united_states/fdr-1936-1939.jpg",
+                 "1939": "../leaders/united_states/fdr-1936-1939.jpg"
+                 }
+
+
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
     for i in range(0, len(args)):
@@ -77,7 +89,7 @@ def slow_print(words):
 
 class UnitedStates:
     def __init__(self, year):
-        self.name = "UnitedStates"
+        self.name = "United States"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.upload_to_database = self.date.month
@@ -101,8 +113,8 @@ class UnitedStates:
         # political
         self.leader = presidents[year]
         self.vp = vice_presidents[year]
-        if "self.monarch" in locals():
-            print("ty")
+        self.leader_image = leader_images[year]
+        self.flag = flags[year]
         """Stability"""
         self.stability = 95.56
         self.political_power = 256
@@ -113,6 +125,8 @@ class UnitedStates:
         self.current_gdp = 0
         self.past_gdp = 0
         self.e_s = "recovery"
+        self.income_tax_rate = 25.00
+        self.corporate_tax_rate = 35.00
         """Components of GDP"""
         self.consumer_spending = 0
         self.investment = 0
@@ -292,6 +306,14 @@ class UnitedStates:
 
     # establishing internal states
     def establish_states(self):
+        from us_states import alabama, alaska, arizona, arkansas, california, colorado, \
+            conneticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, \
+            maine, \
+            maryland, michigan, mississppi, missouri, montana, n_d, n_m, nebraska, nevada, new_hampshire, new_jersey, \
+            new_york, \
+            north_carolina, ohio, ok, oregon, pennsylvania, rhode_island, s_d, south_carolina, tennessee, texas, utah, \
+            virginia, \
+            vermont, west_virginia, washington, wisconsin, wyoming
         folder = "us_states"
         for file in os.listdir(folder):
             """Looping through us states folder, will be refined later on"""
@@ -401,6 +423,7 @@ class UnitedStates:
             self.population += self.states[i].population
         self.past_gdp = self.current_gdp
         self.past_population = self.population
+        print(self.past_population)
 
     # economic functions
     def check_economic_state(self):
@@ -832,11 +855,11 @@ class UnitedStates:
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
 
-def main(time):
-    globe1 = globe.Globe()
-    us = UnitedStates(time)
+def main(time1, globe1):
+    #globe1 = globe.Globe()
+    us = UnitedStates(time1)
     us.establish_states()
-    print(us.date.date())
+    """print(us.date.date())
     # establishing asian AIs
     chinese_ai = china_ai.ChinaAI(time)
     japanese_ai = japan_ai.Japan(time)
@@ -845,21 +868,21 @@ def main(time):
     spanish_ai = spain_ai.SpainAI(time)
     french_ai = france_ai.FranceAI(time)
     austrian_ai = austria_ai.Austria(time)
-    # germany_ai = german_ai.Germany("1914")
+    # germany_ai = german_ai.Germany("1914")"""
     """german ai will establish states, similar to US"""
-    belgian_ai = belgium_ai.BelgiumAI(time)
+    """belgian_ai = belgium_ai.BelgiumAI(time)
     dutch_ai = netherlands_ai.Netherlands(time)
     italian_ai = italy_ai.ItalyAI(time)
     lux_ai = luxembourg_ai.LuxembourgAI(time)
     danish_ai = denmark_ai.Denmark(time)
     swiss_ia = swiss_ai.SwitzerlandAI(time)
     swedish_ai = sweden_ai.SwedenAI(time)
-    norwegian_ai = norway_ai.NorwayAI(time)
+    norwegian_ai = norway_ai.NorwayAI(time)"""
     """
     These 3 nations will be uncommented, once I figure out how to exclude them until 1918
     estonian_ai = estonia_ai.EstoniaAI('1914')
     latvian_ai = latvia_ai.LatviaAI("1914")
-    lithuanian_ai = lithuania_ai.Lithuania("1914")"""
+    lithuanian_ai = lithuania_ai.Lithuania("1914")""""""
     greek_ai = greece_ai.Greece("1914")
     romanian_ai = romania_ai.RomaniaAI('1914')
     serbian_ai = serbia_ai.SerbiaAI('1914')
@@ -871,30 +894,31 @@ def main(time):
                               british_ai, austrian_ai, belgian_ai, dutch_ai, french_ai, spanish_ai, italian_ai, lux_ai,
                               danish_ai, swedish_ai, swiss_ia, norwegian_ai, greek_ai, romanian_ai, serbian_ai)
 
+    upload_database.initial_upload_to_database(globe1.nations)"""
+    globe1.nations.append(us)
     upload_database.initial_upload_to_database(globe1.nations)
-
     while us.population > 3000000:
         """United States will stay afloat as a nation, as long as 3000000 people are left"""
         us.check_economic_state()
         us.population_change()
-        us.stats(globe1)
+        #us.stats(globe1)
         us.stability_happiness_change(globe1)
 
 
         """Looping through changes in US system"""
 
-        for i in range(0, len(globe1.nations)):
+        """for i in range(0, len(globe1.nations)):
             if not globe1.nations[i].name == "UnitedStates":
-                globe1.nations[i].main(globe1)
-                """
-                looping through main function of each foreign nation object
-                main function is connected to object itself, so as to use less memory space
-                """
+                globe1.nations[i].main(globe1)"""
+
+                #"""looping through main function of each foreign nation object
+                #main function is connected to object itself, so as to use less memory space"""
 
         upload_database.update_database_info(globe1.nations)
         time.sleep(1.75)
         us.date += timedelta(days=1)
+        print(f"us population : {us.population}")
+        print(us.current_gdp)
 
-
-if __name__ == '__main__':
-    main()
+globe1 = globe.Globe()
+main("1918", globe1)

@@ -381,22 +381,19 @@ class OpeningMenu:
         music_play(nation, int(time_chosen))
 
     def background_music(self):
-        if not pygame.mixer.init():
-            pass
-    def main_menu(self):
-        """main menu that controls user process of navigating main menu"""
         pygame.mixer.init()
         pygame.mixer.music.load("background_music/[Hoi 4] The Great War Main theme.mp3")
         pygame.mixer.music.play(-1)
-        print("hi")
+    def main_menu(self):
+        """main menu that controls user process of navigating main menu"""
+        self.background_music()
         self.is_running = True
         while self.is_running:
             if not self.game_paused:
-
                 self.screen.fill((0, 0, 0))
                 self.screen.blit(self.flare_background, (0, 0))
                 # sets background image
-                self.background_music()
+                #self.background_music()
                 if self.menu_state == "main":
                     self.primary_menu()
 
