@@ -62,7 +62,7 @@ class SpriteGame:
 
     def load_music(self):
         # loads background music into game's playlist
-        if self.nation.date.year < 1918:
+        if self.nation.date.year <= 1918:
             folder = "background_music/in_game/pre_1918"
             for song in os.listdir(folder):
                 self.music_playlist.append(f"background_music/in_game/pre_1918/{song}")
@@ -132,13 +132,34 @@ class SpriteGame:
         self.draw_text(f"Current Income Tax Rate: {self.nation.income_tax_rate}%", self.font, self.text_col,
                        self.WIDTH * 0.345, 500)
         if cor_tax_inc_button.draw(self.screen):
-            pass
+            self.nation.corporate_tax_rate += 0.5
+            time.sleep(0.5)
+            """
+            these effects will be brought in once the economic structure of every nation has been changed
+            self.nation.investment -= 20
+            self.nation.government_spending += 35"""
+
         if cor_tax_dec_button.draw(self.screen):
-            pass
+            self.nation.corporate_tax_rate -= 0.5
+            time.sleep(0.5)
+            """
+            these effects will be brought in once the economic structure of every nation has been changed
+            self.nation.investment += 10
+            self.nation.government_spending -= 10"""
+
         if inc_tax_inc_button.draw(self.screen):
-            pass
+            self.nation.income_tax_rate += 0.5
+            time.sleep(0.5)
+
+            """self.nation.consumer_spending -= 10
+            self.nation.government_spending += 10"""
+
         if inc_tax_dec_button.draw(self.screen):
-            pass
+            self.nation.income_tax_rate -= 0.5
+            time.sleep(0.5)
+
+            """self.nation.consumer_spending += 10
+                self.nation.government_spending -= 10"""
         if back_button.draw(self.screen):
             self.game_state = "main game"
 
@@ -200,7 +221,7 @@ class SpriteGame:
         self.screen.fill((0, 0, 0))
         sprite_background = \
             pygame.transform.scale(
-                pygame.image.load("background_image_files/Untitled.jpg").convert_alpha(),
+                pygame.image.load("background_image_files/darkblue.jpg").convert_alpha(),
                 (self.WIDTH, self.HEIGHT))
         self.screen.blit(sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (211, 211, 211), (0, 0, self.WIDTH, 100))
@@ -236,6 +257,7 @@ class SpriteGame:
 
     def main_game(self):
         self.load_music()
+        self.nation.sprite = True
         while self.is_running:
             if not self.game_paused:
                 if self.game_state == "main game":

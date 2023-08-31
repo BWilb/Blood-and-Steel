@@ -107,25 +107,26 @@ class Canada:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.is_sprite:
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
-                if choice == 1:
-                    print("The Canadian Parliament has voted in favor of expanding their population growth.\n")
-                    time.sleep(1.25)
-                    self.birth_enhancer = True
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
+                    if choice == 1:
+                        print("The Canadian Parliament has voted in favor of expanding their population growth.\n")
+                        time.sleep(1.25)
+                        self.birth_enhancer = True
 
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                if choice == 1:
-                    print("The Canadian Parliament has voted in favor of controlling their population growth.\n")
-                    time.sleep(1.25)
-                    self.birth_control = True
+                    if choice == 1:
+                        print("The Canadian Parliament has voted in favor of controlling their population growth.\n")
+                        time.sleep(1.25)
+                        self.birth_control = True
         else:
             if self.birth_enhancer:
                 births = random.randrange(8, 15)
@@ -441,11 +442,13 @@ class Canada:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
+
     # main function
     """
     main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
     track of the object. I also dont have to individually each file of every nation
     """
+
     def main(self, globe):
         while self.population > 2000000:
             self.check_economic_state()

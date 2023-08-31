@@ -99,43 +99,35 @@ class Netherlands:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.is_sprite:
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
+                    if choice == 1:
+                        print("The Dutch government has decided to implement policies to increase growth in births.\n")
+                        time.sleep(1.25)
+
                         self.birth_enhancer = True
-                        not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
+                        if self.birth_control:
+                            self.birth_control = False
 
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
+                    if choice == 1:
+                        print("The Dutch government has decided to implement policies to control births.\n")
+                        time.sleep(1.25)
+
                         self.birth_control = True
-                        not_answered = True
 
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
+                        if self.birth_enhancer:
+                            self.birth_enhancer = False
         else:
             if self.birth_enhancer:
                 births = random.randrange(8, 15)

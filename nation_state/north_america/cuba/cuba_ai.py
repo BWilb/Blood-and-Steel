@@ -97,22 +97,19 @@ class CubaAI:
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Cuban government has installed a plan to increase births.\n")
+                    print("The Cuban government has initiated a program for increasing births.\n")
                     time.sleep(1.25)
-
                     self.birth_enhancer = True
                     if self.birth_control:
                         self.birth_control = False
-
 
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
                 choice = random.randrange(0, 2)
 
                 if choice == 1:
-                    print("The Cuban government has installed a plan to decrease births.\n")
+                    print("The Cuban government has initiated a program for decreasing births.\n")
                     time.sleep(1.25)
-
                     self.birth_control = True
                     if self.birth_enhancer:
                         self.birth_enhancer = False

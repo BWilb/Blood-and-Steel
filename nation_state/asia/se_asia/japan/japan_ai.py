@@ -82,37 +82,39 @@ class Japan:
         self.alliance = ""
         self.us_relations = 85.24
         # other
+        self.is_sprite = False
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.is_sprite:
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                if choice == 1:
-                    print("The Japanese government has decided to implement policies to increase growth in births.\n")
-                    time.sleep(1.25)
+                    if choice == 1:
+                        print("The Japanese government has decided to implement policies to increase growth in births.\n")
+                        time.sleep(1.25)
 
-                    self.birth_enhancer = True
+                        self.birth_enhancer = True
 
-                    if self.birth_control:
-                        self.birth_control = False
+                        if self.birth_control:
+                            self.birth_control = False
 
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                if choice == 1:
-                    print("The Japanese government has decided to implement policies to control births.\n")
-                    time.sleep(1.25)
+                    if choice == 1:
+                        print("The Japanese government has decided to implement policies to control births.\n")
+                        time.sleep(1.25)
 
-                    self.birth_control = True
+                        self.birth_control = True
 
-                    if self.birth_enhancer:
-                        self.birth_enhancer = False
+                        if self.birth_enhancer:
+                            self.birth_enhancer = False
         else:
             if self.birth_enhancer:
                 births = random.randrange(15, 25)

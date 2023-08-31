@@ -2,6 +2,13 @@ import random
 import time
 from datetime import datetime, timedelta
 
+import globe
+
+def establish_foreign_nations(globe, *args):
+    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
+    for i in range(0, len(args)):
+        globe.nations.append(args[i])
+
 # Romania
 """Population Dictionaries"""
 population = {
@@ -109,7 +116,7 @@ class Romania:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.sprite:
+        if not self.sprite:
             """condition if sprite version of game wasn't selected"""
             if self.current_year < self.date.year:
                 pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
@@ -172,29 +179,30 @@ class Romania:
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
-        if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections"""
-            if self.current_gdp > self.past_gdp:
-                if self.e_s.lower() == "recovery":
-                    self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
-                    time.sleep(3)
+        if not self.sprite:
+            if self.date > self.economic_change_date:
+                """instead of comparing an entire year, break the year up into sections"""
+                if self.current_gdp > self.past_gdp:
+                    if self.e_s.lower() == "recovery":
+                        self.e_s = "expansion"
+                        print("Your economy is now in an expansionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
-                    self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                        self.e_s = "recovery"
+                        print("Your economy is now in recovery period.\n")
+                        time.sleep(3)
 
-            elif self.current_gdp < self.past_gdp:
-                if self.e_s.lower() == "recession":
-                    self.e_s = "depression"
-                    print("Your economy is now in a recessionary period.\n")
-                    time.sleep(3)
+                elif self.current_gdp < self.past_gdp:
+                    if self.e_s.lower() == "recession":
+                        self.e_s = "depression"
+                        print("Your economy is now in a recessionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
-                    self.e_s = "recession"
-                    print("Your economy is now in a depression period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                        self.e_s = "recession"
+                        print("Your economy is now in a depression period.\n")
+                        time.sleep(3)
         else:
             if self.e_s == "recession":
                 self.recession()
@@ -457,3 +465,26 @@ class Romania:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
+def main(time1):
+    romanian = Romania(time1)
+    if not romanian.sprite:
+        globe1 = globe.Globe()
+
+        #upload_database.initial_upload_to_database(globe1.nations)
+        while romanian.population > 6000000:
+            print(f"Current Date: {romanian.date}\n")
+            time.sleep(1.5)
+            romanian.population_change()
+            romanian.check_economic_state()
+            romanian.stability_happiness_change(globe1)
+
+            for i in range(0, len(globe1.nations)):
+                if not globe1.nations[i].name == "Great Britain":
+                    globe1.nations[i].main(globe1)
+                    """
+                    looping through main function of each foreign nation object
+                    main function is connected to object itself, so as to use less memory space
+                    """
+            #upload_database.update_database_info(globe1.nations)
+            romanian.date += timedelta(1)
+            time.sleep(3)

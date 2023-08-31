@@ -117,29 +117,30 @@ class Britain:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        if not self.is_sprite:
+            if self.current_year < self.date.year:
+                pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
-                if choice == 0:
-                    self.birth_enhancer = True
-                    print("The British government has decided to impose birth enhancer.\n")
-                    time.sleep(3)
-                    if self.birth_control:
-                        self.birth_control = False
+                if pop_change < 2.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
+                    if choice == 0:
+                        self.birth_enhancer = True
+                        print("The British government has decided to impose birth enhancer.\n")
+                        time.sleep(3)
+                        if self.birth_control:
+                            self.birth_control = False
 
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                elif pop_change > 12.56:
+                    """incorporation of what happens when Mexican birth rate becomes too low"""
+                    choice = random.randrange(0, 2)
 
-                if choice == 0:
-                    print("The British government has decided to impose birth control.\n")
-                    time.sleep(3)
-                    self.birth_control = True
-                    if self.birth_enhancer:
-                        self.birth_enhancer = False
+                    if choice == 0:
+                        print("The British government has decided to impose birth control.\n")
+                        time.sleep(3)
+                        self.birth_control = True
+                        if self.birth_enhancer:
+                            self.birth_enhancer = False
 
         else:
             if self.birth_enhancer:

@@ -3,7 +3,21 @@ import random
 from datetime import datetime, timedelta
 import time
 
+import globe
+from database_management import upload_database
+from nation_state.asia.se_asia.china import china_ai
+from nation_state.asia.se_asia.japan import japan_ai
+from nation_state.europe.austria import austria_ai
+from nation_state.europe.britain import britain_ai
+from nation_state.europe.luxembourg import luxembourg_ai
+from nation_state.europe.netherlands import netherlands_ai
+from nation_state.europe.spain import spain_ai
 from random_functions import random_functions
+
+def establish_foreign_nations(globe, *args):
+    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
+    for i in range(0, len(args)):
+        globe.nations.append(args[i])
 
 prime_ministers = {
     "1910": "Luigi Luzzatti",
@@ -122,7 +136,7 @@ class Italy:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.sprite:
+        if not self.sprite:
             """condition if sprite version of game wasn't selected"""
             if self.current_year < self.date.year:
                 pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
@@ -186,29 +200,30 @@ class Italy:
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
-        if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections"""
-            if self.current_gdp > self.past_gdp:
-                if self.e_s.lower() == "recovery":
-                    self.e_s = "expansion"
-                    print("The French economy is now in an expansionary period.\n")
-                    time.sleep(3)
+        if not self.sprite:
+            if self.date > self.economic_change_date:
+                """instead of comparing an entire year, break the year up into sections"""
+                if self.current_gdp > self.past_gdp:
+                    if self.e_s.lower() == "recovery":
+                        self.e_s = "expansion"
+                        print("Your economy is now in an expansionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
-                    self.e_s = "recovery"
-                    print("The French economy is now in recovery period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                        self.e_s = "recovery"
+                        print("Your economy is now in recovery period.\n")
+                        time.sleep(3)
 
-            elif self.current_gdp < self.past_gdp:
-                if self.e_s.lower() == "recession":
-                    self.e_s = "depression"
-                    print("The French economy is now in a recessionary period.\n")
-                    time.sleep(3)
+                elif self.current_gdp < self.past_gdp:
+                    if self.e_s.lower() == "recession":
+                        self.e_s = "depression"
+                        print("Your economy is now in a recessionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
-                    self.e_s = "recession"
-                    print("The French economy is now in a depression period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                        self.e_s = "recession"
+                        print("Your economy is now in a depression period.\n")
+                        time.sleep(3)
         else:
             if self.e_s == "recession":
                 self.recession()
@@ -481,13 +496,26 @@ class Italy:
     main function is connected to AI object itself, so as to reduce the amount of storage space needed to keep 
     track of the object. I also dont have to individually each file of every nation
     """
+def main(time1):
+    italian = Italy(time1)
+    if not italian.sprite:
+        globe1 = globe.Globe()
 
-    def main(self, globe):
-        while self.population > 15000000:
-            self.check_economic_state()
-            self.population_change()
-            """if self.is_sprite != False:
-                random_functions.random_functions(self, globe)"""
-            self.stability_happiness_change(globe)
-            self.date += timedelta(days=1)
-            break
+        #upload_database.initial_upload_to_database(globe1.nations)
+        while italian.population > 6000000:
+            print(f"Current Date: {italian.date}\n")
+            time.sleep(1.5)
+            italian.population_change()
+            italian.check_economic_state()
+            italian.stability_happiness_change(globe1)
+
+            for i in range(0, len(globe1.nations)):
+                if not globe1.nations[i].name == "Great Britain":
+                    globe1.nations[i].main(globe1)
+                    """
+                    looping through main function of each foreign nation object
+                    main function is connected to object itself, so as to use less memory space
+                    """
+            #upload_database.update_database_info(globe1.nations)
+            italian.date += timedelta(1)
+            time.sleep(3)

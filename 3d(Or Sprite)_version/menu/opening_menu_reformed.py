@@ -370,20 +370,16 @@ class OpeningMenu:
         self.draw_text(f"Do you wish to proceed with your choice?", self.font, self.text_col, self.WIDTH * 0.275, 700)
 
         if yes_button.draw(self.screen):
-            #self.yes_selection(self.nation_chosen, self.time_chosen)
             pygame.quit()
             accept_nation.accept_nation(self.nation_chosen, self.time_chosen)
         if no_button.draw(self.screen):
             self.menu_state = "region"
 
-    def yes_selection(self, nation, time_chosen):
-        from music_player import music_play
-        music_play(nation, int(time_chosen))
-
     def background_music(self):
         pygame.mixer.init()
         pygame.mixer.music.load("background_music/[Hoi 4] The Great War Main theme.mp3")
         pygame.mixer.music.play(-1)
+        
     def main_menu(self):
         """main menu that controls user process of navigating main menu"""
         self.background_music()

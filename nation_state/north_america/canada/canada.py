@@ -243,7 +243,7 @@ class Canada:
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.sprite:
+        if not self.sprite:
             """condition if sprite version of game wasn't selected"""
             if self.current_year < self.date.year:
                 pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
@@ -307,29 +307,30 @@ class Canada:
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
-        if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections"""
-            if self.current_gdp > self.past_gdp:
-                if self.e_s.lower() == "recovery":
-                    self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
-                    time.sleep(3)
+        if not self.sprite:
+            if self.date > self.economic_change_date:
+                """instead of comparing an entire year, break the year up into sections"""
+                if self.current_gdp > self.past_gdp:
+                    if self.e_s.lower() == "recovery":
+                        self.e_s = "expansion"
+                        print("Your economy is now in an expansionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
-                    self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
+                        self.e_s = "recovery"
+                        print("Your economy is now in recovery period.\n")
+                        time.sleep(3)
 
-            elif self.current_gdp < self.past_gdp:
-                if self.e_s.lower() == "recession":
-                    self.e_s = "depression"
-                    print("Your economy is now in a recessionary period.\n")
-                    time.sleep(3)
+                elif self.current_gdp < self.past_gdp:
+                    if self.e_s.lower() == "recession":
+                        self.e_s = "depression"
+                        print("Your economy is now in a recessionary period.\n")
+                        time.sleep(3)
 
-                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
-                    self.e_s = "recession"
-                    print("Your economy is now in a depression period.\n")
-                    time.sleep(3)
+                    elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
+                        self.e_s = "recession"
+                        print("Your economy is now in a depression period.\n")
+                        time.sleep(3)
         else:
             if self.e_s == "recession":
                 self.recession()
