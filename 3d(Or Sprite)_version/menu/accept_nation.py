@@ -50,11 +50,13 @@ from nation_state.asia.middle_east.iraq import iraq
 from nation_state.asia.middle_east.iraq import iraq_ai
 from nation_state.south_america.brazil import brazil
 from nation_state.south_america.brazil import brazil_ai
+from nation_state.south_america.argentina import argentina
+#from nation_state.south_america.argentina import argentina_ai
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
     for i in range(0, len(args)):
-        if args[i].population != 0:
+        if args[i].population != 0 or args[i].current_gdp != 0:
             globe.nations.append(args[i])
 def accept_nation(nation, time):
     print(time)
@@ -476,7 +478,7 @@ def accept_nation(nation, time):
     if nation.lower() == "china":
         chinese = china.China(time)
         japanese = japan_ai.Japan(time)
-        polish = poland_ai.PolandAI(time)
+        #polish = poland_ai.PolandAI(time)
         russian = russia_ai.RussiaAI(time)
         austrian = austria_ai.Austria(time)
         norwegian = norway_ai.NorwayAI(time)
@@ -494,7 +496,7 @@ def accept_nation(nation, time):
         dutch = netherlands_ai.Netherlands(time)
         luxembourger = luxembourg_ai.LuxembourgAI(time)
         belgian = belgium_ai.BelgiumAI(time)
-        establish_foreign_nations(globe1, chinese, japanese, polish, austrian, norwegian, romanian, swedish, greek, dutch, luxembourger,
+        establish_foreign_nations(globe1, chinese, japanese, austrian, norwegian, romanian, swedish, greek, dutch, luxembourger,
                                   spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
         game = SpriteGame(chinese, globe1)
         game.main_game()
@@ -644,4 +646,37 @@ def accept_nation(nation, time):
                                   norwegian, romanian, swedish, greek, dutch, luxembourger,
                                   spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
         game = SpriteGame(brazilian, globe1)
+        game.main_game()
+
+    if nation.lower() == "argentina":
+        argentine = argentina.Argentina(time)
+        #brazilian = brazil.Brazil(time)
+        iraqi = iraq_ai.Iraq(time)
+        afghan = afghanistan_ai.AfghanistanAI(time)
+        turkish = turkey_ai.TurkeyAI(time)
+        iranian = iran_ai.Iran(time)
+        chinese = china_ai.ChinaAI(time)
+        japanese = japan_ai.Japan(time)
+        polish = poland_ai.PolandAI(time)
+        russian = russia_ai.RussiaAI(time)
+        austrian = austria_ai.Austria(time)
+        norwegian = norway_ai.NorwayAI(time)
+        romanian = romania_ai.RomaniaAI(time)
+        swedish = sweden_ai.SwedenAI(time)
+        mexican = mexico_ai.MexicoAI(time)
+        canadian = canada_ai.Canada(time)
+        cuban = cuba_ai.CubaAI(time)
+        british = britain_ai.Britain(time)
+        italian = italy_ai.ItalyAI(time)
+        french = france_ai.FranceAI(time)
+        danish = denmark_ai.Denmark(time)
+        spanish = spain_ai.SpainAI(time)
+        greek = greece_ai.Greece(time)
+        dutch = netherlands_ai.Netherlands(time)
+        luxembourger = luxembourg_ai.LuxembourgAI(time)
+        belgian = belgium_ai.BelgiumAI(time)
+        establish_foreign_nations(globe1, argentine, iraqi, afghan, turkish, iranian, chinese, japanese, polish, austrian,
+                                  norwegian, romanian, swedish, greek, dutch, luxembourger,
+                                  spanish, danish, belgian, french, russian, italian, british, cuban, mexican, canadian)
+        game = SpriteGame(argentine, globe1)
         game.main_game()

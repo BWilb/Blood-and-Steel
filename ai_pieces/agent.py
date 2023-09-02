@@ -9,10 +9,13 @@ LR = 0.001
 
 class Agent:
     def __init__(self):
-        # setting up number of rounds of diplomacy, national agent
-        self.diplomatic_rounds = 0
-        self.epsilon = 0 # randomness of agent
-        self.gamma = None
-        self.memory = deque(maxlen=MAX_MEMORY)
+        self.attempts = 0
+        # agent will be based off of economic, social, and (soon to be) political attempts
+        self.epsilon = 0  # control randomness
+        self.gamma = 0.9  # discount rate
+        self.memory = deque(maxlen=MAX_MEMORY)  # automatically remove from left side if run out of room
+        """self.model = Linear_QNet(11, 256, 3)
+        # 11 states and 3 outputs
+        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)"""
         # self.model
         # self.trainer

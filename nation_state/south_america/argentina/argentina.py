@@ -45,6 +45,7 @@ leader_images = {
 
 class Argentina:
     def __init__(self, year):
+        self.name = "argentina"
         # date variables
         self.date = datetime(int(year), 1, 1)
         self.improve_stability = self.date
@@ -70,6 +71,7 @@ class Argentina:
         """Stability"""
         self.stability = 95.56
         # economic
+        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
