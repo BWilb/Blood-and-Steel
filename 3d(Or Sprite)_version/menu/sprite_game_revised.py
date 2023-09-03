@@ -217,18 +217,6 @@ class SpriteGame:
 
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.sprite_background, (0, 0))
-        """pygame.draw.rect(self.screen, (211, 211, 211), (0, 0, self.WIDTH, 100))
-        pygame.draw.rect(self.screen, (0, 0, 0),
-                         (self.WIDTH * 0.04, 140, flag.get_width() + 35, flag.get_height() + 25))"""
-        """if govt_button.draw(self.screen):
-            self.game_state = "view government"
-        if econ_button.draw(self.screen):
-            self.game_state = "view economy"
-        if foreign_button.draw(self.screen):
-            pass
-        if social_button.draw(self.screen):
-            self.game_state = "view society"
-"""
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
             self.speed = 2.75
@@ -248,7 +236,7 @@ class SpriteGame:
         self.nation_changes()
         self.globe_changes()
         self.actual_day += timedelta(days=1)
-        time.sleep(1.25)
+        time.sleep(self.speed)
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -256,14 +244,15 @@ class SpriteGame:
         foreign_img = pygame.image.load("buttons/game_buttons/foreign_button.jpg").convert_alpha()
         social_img = pygame.image.load("buttons/game_buttons/social_button.jpg").convert_alpha()
         """stats buttons"""
-        govt_button = button.Button(100, 0, govt_img, 0.16)
-        econ_button = button.Button(600, 0, econ_img, 0.16)
-        foreign_button = button.Button(1100, 0, foreign_img, 0.16)
-        social_button = button.Button(1600, 0, social_img, 0.16)
-        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
-        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)
+        govt_button = button.Button(100, 200, govt_img, 0.16)
+        econ_button = button.Button(100, 400, econ_img, 0.16)
+        foreign_button = button.Button(100, 600, foreign_img, 0.16)
+        social_button = button.Button(100, 800, social_img, 0.16)
+        """back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
+        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)"""
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.sprite_background, (0, 0))
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
 
         if govt_button.draw(self.screen):
             self.game_state = "view government"
@@ -274,8 +263,8 @@ class SpriteGame:
         if social_button.draw(self.screen):
             self.game_state = "view society"
 
-        if back_button.draw(self.screen):
-            self.game_state = "main game"
+        """if back_button.draw(self.screen):
+            self.game_state = "main game"""
 
     def main_game(self):
         self.load_music()
