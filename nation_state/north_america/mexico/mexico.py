@@ -4,8 +4,7 @@ import time
 from collections import OrderedDict
 from datetime import datetime, timedelta
 """from other_images.flags import mexico"""
-import pygame.image
-import globe
+from globe_relations import globe
 from database_management import upload_database
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.se_asia.japan import japan_ai
@@ -26,7 +25,6 @@ from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.switzerland import swiss_ai
 from nation_state.international_relations.europe import brit_relations, spain_relations, \
     france_relations, belgium_relations, netherlands_relations, luxembourg_relations, austria_relations
-from nation_state.international_relations.north_america import canada_relations, cuba_relations
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
 from random_functions import random_functions
@@ -90,11 +88,11 @@ leader_images = {"1910": "../leaders/mexico/Porfirio_Diaz_en_1867.jpg",
                  "1939": "../leaders/mexico/lazaro_1936_1939.jpeg"
                  }
 class Mexico:
-    def __init__(self, year):
+    def __init__(self, globe):
         self.is_intact = True
         self.name = "Mexico"
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(int(globe.date.year), 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -104,7 +102,7 @@ class Mexico:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.past_population = self.population
         self.births = 0
         self.deaths = 0
@@ -113,18 +111,18 @@ class Mexico:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
+        self.leader = leaders[str(globe.date.year)]
         """leader image only for sprite version"""
-        self.leader_image = leader_images[year]
+        self.leader_image = leader_images[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.25
         """Stability"""
         self.stability = 95.56
-        self.flag = flags[year]
+        self.flag = flags[str(globe.date.year)]
         # economic
         self.e_s = "recovery"
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
         self.income_tax_rate = 25.00
         self.corporate_tax_rate = 35.00

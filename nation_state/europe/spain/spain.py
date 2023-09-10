@@ -2,7 +2,7 @@ import random
 import time
 from datetime import datetime, timedelta
 
-import globe
+from globe_relations import globe
 
 leaders = {
     "1910" : "Segismundo Moret",

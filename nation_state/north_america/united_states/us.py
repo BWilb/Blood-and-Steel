@@ -1,31 +1,11 @@
 # in-game libraries
 
-import globe
+from globe_relations import globe
 from datetime import datetime, timedelta
 # importation of Asian files
-from nation_state.asia.se_asia.china import china_ai
-from nation_state.asia.se_asia.japan import japan_ai
 # importation of European files
-from nation_state.europe.britain import britain_ai
-from nation_state.europe.spain import spain_ai
-from nation_state.europe.france import france_ai
-from nation_state.europe.austria import austria_ai
-from nation_state.europe.netherlands import netherlands_ai
-from nation_state.europe.belgium import belgium_ai
-from nation_state.europe.luxembourg import luxembourg_ai
-from nation_state.europe.denmark import denmark_ai
-from nation_state.europe.italy import italy_ai
-from nation_state.europe.switzerland import swiss_ai
-from nation_state.europe.sweden import sweden_ai
-from nation_state.europe.norway import norway_ai
-from nation_state.europe.greece import greece_ai
-from nation_state.europe.romania import romania_ai
-from nation_state.europe.serbia import serbia_ai
 # from nation_state.europe.germany import german_ai
 # importation of NorthAmerican files
-from nation_state.north_america.canada import canada_ai
-from nation_state.north_america.mexico import mexico_ai
-from nation_state.north_america.cuba import cuba_ai
 from nation_state.international_relations.north_america import mexico_relations, canada_relations, cuba_relations
 from nation_state.international_relations.europe import austria_relations, belgium_relations, brit_relations, \
     france_relations, luxembourg_relations, netherlands_relations, spain_relations

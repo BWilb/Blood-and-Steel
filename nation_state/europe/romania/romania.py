@@ -2,7 +2,8 @@ import random
 import time
 from datetime import datetime, timedelta
 
-import globe
+from globe_relations import globe
+
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""

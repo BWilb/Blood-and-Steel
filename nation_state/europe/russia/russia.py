@@ -2,7 +2,7 @@ import random
 import time
 from datetime import datetime, timedelta
 
-import globe
+from globe_relations import globe
 
 
 def establish_foreign_nations(globe, *args):

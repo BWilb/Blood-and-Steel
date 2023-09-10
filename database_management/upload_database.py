@@ -1,15 +1,13 @@
 import sys
-import time
 
 import pypyodbc
 
-
-def initial_upload_to_database(nations):
+def initial_upload_to_database(nations, globe):
     """initial upload to database function will upload to each and every database within database management directory"""
     foreign_records = []
     # establishment of national records, including the nation of the player
     for i in range(0, len(nations)):
-        foreign_records.append([nations[i].date.date(), nations[i].name, nations[i].stability, nations[i].leader,
+        foreign_records.append([globe.date, nations[i].name, nations[i].stability, nations[i].leader,
                                 nations[i].population, nations[i].births, nations[i].deaths, nations[i].happiness,
                                 nations[i].current_gdp, nations[i].national_debt, nations[i].alliance])
 

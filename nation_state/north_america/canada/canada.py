@@ -3,7 +3,7 @@ import time
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
-import globe
+from globe_relations import globe
 from database_management import upload_database
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.se_asia.japan import japan_ai
@@ -22,7 +22,6 @@ from nation_state.europe.serbia import serbia_ai
 from nation_state.europe.spain import spain_ai
 from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.switzerland import swiss_ai
-from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba_ai
 from nation_state.north_america.mexico import mexico_ai
 

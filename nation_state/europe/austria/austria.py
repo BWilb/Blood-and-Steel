@@ -2,7 +2,7 @@ import random
 import time
 from datetime import datetime, timedelta
 
-import globe
+from globe_relations import globe
 from database_management import upload_database
 from nation_state.asia.se_asia.china import china_ai
 from nation_state.asia.se_asia.japan import japan_ai

@@ -3,16 +3,8 @@ import random
 from datetime import datetime, timedelta
 import time
 
-import globe
-from database_management import upload_database
-from nation_state.asia.se_asia.china import china_ai
-from nation_state.asia.se_asia.japan import japan_ai
-from nation_state.europe.austria import austria_ai
-from nation_state.europe.britain import britain_ai
-from nation_state.europe.luxembourg import luxembourg_ai
-from nation_state.europe.netherlands import netherlands_ai
-from nation_state.europe.spain import spain_ai
-from random_functions import random_functions
+from globe_relations import globe
+
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
