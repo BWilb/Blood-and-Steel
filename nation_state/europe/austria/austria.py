@@ -1,6 +1,9 @@
+import json
 import random
 import time
 from datetime import datetime, timedelta
+import json as js
+import pyautogui
 
 from globe_relations import globe
 from database_management import upload_database
@@ -127,9 +130,26 @@ class Austria:
         # military
         # international
         self.alliance = ""
+        # drawing
+        self.coordinates = []
         # other
         self.sprite = False
     # population functions
+    def austria_to_pygame(self, lon, lat):
+        WIDTH = pyautogui.size().width
+        HEIGHT = pyautogui.size().height
+        lon_min, lon_max = -180, 180
+        lat_min, lat_max = -90, 90
+        x = ((lon - lon_min) / (lon_max - lon_min)) * WIDTH
+        y = HEIGHT - ((lat - lat_min) / (lat_max - lat_min)) * HEIGHT
+        return int(x), int(y)
+    def establish_map_coordinates(self):
+        with open('../nation_data/nation.json', 'r') as file:
+            nation_json = json.load(file)
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Austria":
+                for index, row in (nation_json['countries'][i]['coordinates']):
+                    self.coordinates.append(self.austria_to_pygame(index, row))
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
         if not self.sprite:

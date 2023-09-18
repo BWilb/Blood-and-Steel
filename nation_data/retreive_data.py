@@ -62,6 +62,7 @@ class JsonWriter:
         # re-writes information to json file
         for index, row in self.geo_file.iterrows():
             nation_name = row['name']
+            print(nation_name)
             geometry = row['geometry']
             if geometry.geom_type == 'Polygon':
                 coordinates = list(geometry.exterior.coords)
@@ -79,3 +80,5 @@ class JsonWriter:
         # sets/appends nation_dictionary to 'countries' list
         with open('nation.json', 'w') as writing_file:
             json.dump(nation_object, writing_file, indent=4)
+json_object = JsonWriter()
+json_object.writing_new_info()
