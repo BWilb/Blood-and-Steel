@@ -2,8 +2,8 @@ import sys
 import time
 from datetime import timedelta
 from buttons import button
-from globe_relations.message import Alert
-
+# from globe_relations.message import Alert
+from colors.color import Color
 import pyautogui
 import pygame
 import os
@@ -21,14 +21,14 @@ class SpriteGame:
         self.pop_alert = False
         # initial width and height will be 90% size of computer screen
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        if globe.date.year <= 1914:
+        """if globe.date.year <= 1914:
             self.sprite_background = \
                 pygame.transform.scale(pygame.image.load("background_image_files/potential/1914.jpg").convert_alpha(),
                                        (self.WIDTH, self.HEIGHT))
         else:
             self.sprite_background = \
                 pygame.transform.scale(pygame.image.load("background_image_files/potential/1936.jpg").convert_alpha(),
-                                       (self.WIDTH, self.HEIGHT))
+                                       (self.WIDTH, self.HEIGHT))"""
 
         # music playlist
         self.music_playlist = []
@@ -44,7 +44,7 @@ class SpriteGame:
         # while loop constraint; controls entire game
         self.nation = nation
         self.globe = globe
-        self.actual_day = self.nation.date
+        self.actual_day = self.globe.date
         self.speed = 1.5
         self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.10)
 
@@ -137,7 +137,7 @@ class SpriteGame:
         inc_tax_dec_button = button.Button(self.WIDTH * 0.11, 535, decrement_img, 0.025)
         """sub section of user nation that displays economic information regarding nation"""
 
-        self.screen.blit(self.sprite_background, (0, 0))
+        #self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
@@ -200,7 +200,7 @@ class SpriteGame:
 
     def view_society(self):
         """sub section of user nation that displays social information regarding nation"""
-        self.screen.blit(self.sprite_background, (0, 0))
+        #self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
@@ -257,7 +257,10 @@ class SpriteGame:
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
 
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.sprite_background, (0, 0))
+        #self.screen.blit(self.sprite_background, (0, 0))
+        for i in range(0, len(self.globe.nations)):
+            if self.globe.nations[i].name == "austria":
+                pygame.draw.polygon(self.screen, Color.RED, self.globe.nations[i].establish_map_coordinates())
 
         # later on background will be an actual SVG image of world and not part of the screen
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
@@ -309,7 +312,7 @@ class SpriteGame:
         """back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
         back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)"""
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.sprite_background, (0, 0))
+        #self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):

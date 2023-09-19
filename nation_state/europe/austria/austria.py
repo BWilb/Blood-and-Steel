@@ -1,9 +1,9 @@
-import json
 import random
 import time
 from datetime import datetime, timedelta
 import json as js
-import pyautogui
+
+from nation_data.convert_coords import convert_coords
 
 from globe_relations import globe
 from database_management import upload_database
@@ -86,10 +86,10 @@ leader_images = {"1910": "../leaders/austria/joseph_ii.jpeg",
                  }
 
 class Austria:
-    def __init__(self, year):
+    def __init__(self, globe):
         self.name = "austria"
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -99,7 +99,7 @@ class Austria:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -107,15 +107,15 @@ class Austria:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
+        self.leader = leaders[str(globe.date.year)]
         """Stability"""
         self.stability = 95.56
-        self.flag = flags[year]
-        self.leader_image = leader_images[year]
+        self.flag = flags[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
         # economic
         self.e_s = "recovery"
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
         """Components of GDP"""
         self.income_tax_rate = 25.00
@@ -135,21 +135,18 @@ class Austria:
         # other
         self.sprite = False
     # population functions
-    def austria_to_pygame(self, lon, lat):
-        WIDTH = pyautogui.size().width
-        HEIGHT = pyautogui.size().height
-        lon_min, lon_max = -180, 180
-        lat_min, lat_max = -90, 90
-        x = ((lon - lon_min) / (lon_max - lon_min)) * WIDTH
-        y = HEIGHT - ((lat - lat_min) / (lat_max - lat_min)) * HEIGHT
-        return int(x), int(y)
+
     def establish_map_coordinates(self):
-        with open('../nation_data/nation.json', 'r') as file:
-            nation_json = json.load(file)
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Austria":
                 for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.coordinates.append(self.austria_to_pygame(index, row))
+                    self.coordinates.append(convert_coords(index, row))
+        return self.coordinates
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
         if not self.sprite:
@@ -526,7 +523,7 @@ class Austria:
                         self.happiness += happiness_increase
 
 
-def main(time1):
+"""def main(time1):
     austria = Austria(time1)
     if not austria.sprite:
         globe1 = globe.Globe()
@@ -567,11 +564,10 @@ def main(time1):
             for i in range(0, len(globe1.nations)):
                 if not globe1.nations[i].name == "Great Britain":
                     globe1.nations[i].main(globe1)
-                    """
-                    looping through main function of each foreign nation object
-                    main function is connected to object itself, so as to use less memory space
-                    """
+                    
             upload_database.update_database_info(globe1.nations)
             austria.stats(globe1)
             austria.date += timedelta(1)
-            time.sleep(3)
+            time.sleep(3)"""
+austria = Austria
+austria.establish_map_coordinates(austria)

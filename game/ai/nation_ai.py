@@ -117,17 +117,17 @@ class NationAI:
 
 
     def regular_pop_growth(self):
-        if self.population < 1000000:
+        if self.population < 9000000:
             if self.birth_enhancer:
-                births = random.randrange(self.population * 0.00003, self.population * 0.00005)
-                deaths = random.randrange(self.population * 0.00002, self.population * 0.000045)
+                births = random.randrange(int(self.population * 0.00003), int(self.population * 0.00005))
+                deaths = random.randrange(int(self.population * 0.00002), int(self.population * 0.000045))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = int(random.randrange(self.population * 0.000015, self.population * 0.000030))
-                deaths = int(random.randrange(self.population * 0.000018, self.population * 0.000025))
+                births = (random.randrange(int(self.population * 0.000015), int(self.population * 0.000030)))
+                deaths = (random.randrange(int(self.population * 0.000018), int(self.population * 0.000025)))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -139,17 +139,17 @@ class NationAI:
                 self.births += births
                 self.deaths += deaths
 
-        elif self.population > 1000000 and self.population < 250000000:
+        elif self.population > 9000000 and self.population < 250000000:
             if self.birth_enhancer:
-                births = int(random.randrange(self.population * 0.0000007, self.population * 0.0000009))
-                deaths = int(random.randrange(self.population * 0.0000005, self.population * 0.0000008))
+                births = (random.randrange(int(self.population * 0.0000007), int(self.population * 0.0000009)))
+                deaths = (random.randrange(int(self.population * 0.0000005), int(self.population * 0.0000008)))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = int(random.randrange(self.population * 0.0000004, self.population * 0.0000007))
-                deaths = int(random.randrange(self.population * 0.0000005, self.population * 0.0000008))
+                births = (random.randrange(int(self.population * 0.0000004), int(self.population * 0.0000007)))
+                deaths = (random.randrange(int(self.population * 0.0000005), int(self.population * 0.0000008)))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
@@ -162,15 +162,15 @@ class NationAI:
                 self.deaths += deaths
         else:
             if self.birth_enhancer:
-                births = int(random.randrange(self.population * 0.00000007, self.population * 0.00000009))
-                deaths = int(random.randrange(self.population * 0.00000005, self.population * 0.00000008))
+                births = (random.randrange(int(self.population * 0.00000007), int(self.population * 0.00000009)))
+                deaths = (random.randrange(int(self.population * 0.00000005), int(self.population * 0.00000008)))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths
 
             if self.birth_control:
-                births = int(random.randrange(self.population * 0.00000004, self.population * 0.00000007))
-                deaths = int(random.randrange(self.population * 0.00000005, self.population * 0.00000008))
+                births = (random.randrange(int(self.population * 0.00000004), int(self.population * 0.00000007)))
+                deaths = (random.randrange(int(self.population * 0.00000005), int(self.population * 0.00000008)))
                 self.population += (births - deaths)
                 self.births += births
                 self.deaths += deaths

@@ -1,5 +1,6 @@
 import geopandas as gpd
 import json
+
 """json_cleaner = '''
                                 {
                                     "countries": []
@@ -38,6 +39,8 @@ with open('nation.json', 'w') as writing_file:
     json.dump(nation_object, writing_file, indent=4)
 
 """
+
+
 class JsonWriter:
     def __init__(self):
         self.geo_file = gpd.read_file("custom.geo (3).json")
@@ -62,17 +65,20 @@ class JsonWriter:
         # re-writes information to json file
         for index, row in self.geo_file.iterrows():
             nation_name = row['name']
-            print(nation_name)
+            # print(nation_name)
             geometry = row['geometry']
+            # print(geometry)
             if geometry.geom_type == 'Polygon':
-                coordinates = list(geometry.exterior.coords)
+                coordinates = list(geometry.to_list)
                 # extracts the coordinates of every nation as a list; if polygon
+                print(coordinates)
 
                 self.nation_dictionary.append({
                     'nation_id': index,
                     'nation_name': nation_name,
                     'coordinates': coordinates
                 })
+
         with open('nation.json', 'r') as nation:
             nation_object = json.loads(nation.read())
 
@@ -80,5 +86,7 @@ class JsonWriter:
         # sets/appends nation_dictionary to 'countries' list
         with open('nation.json', 'w') as writing_file:
             json.dump(nation_object, writing_file, indent=4)
+
+
 json_object = JsonWriter()
 json_object.writing_new_info()

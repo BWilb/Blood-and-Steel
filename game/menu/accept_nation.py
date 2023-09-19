@@ -95,4 +95,36 @@ def accept_nation(nation, time):
         game = SpriteGame(mexican, globe1)
         game.main_game()
 
+    if nation.lower() == "austria":
+        mexican = mexico_ai.MexicoAI(globe1)
+        canadian = canada_ai.Canada(globe1)
+        cuban = cuba_ai.CubaAI(globe1)
+        british = britain_ai.Britain(globe1)
+        italian = italy_ai.ItalyAI(globe1)
+        french = france_ai.FranceAI(globe1)
+        danish = denmark_ai.Denmark(globe1)
+        spanish = spain_ai.SpainAI(globe1)
+        greek = greece_ai.Greece(globe1)
+        dutch = netherlands_ai.Netherlands(globe1)
+        austrian = austria.Austria(globe1)
+        luxembourger = luxembourg_ai.LuxembourgAI(globe1)
+        belgian = belgium_ai.BelgiumAI(globe1)
+        swedish = sweden_ai.SwedenAI(globe1)
+        romanian = romania_ai.RomaniaAI(globe1)
+        norwegian = norway_ai.NorwayAI(globe1)
+        russian = russia_ai.RussiaAI(globe1)
+        polish = poland_ai.PolandAI(globe1)
+        japanese = japan_ai.JapanAI(globe1)
+        chinese = china_ai.ChinaAI(globe1)
+        iranian = iran_ai.Iran(globe1)
+        turkish = turkey_ai.TurkeyAI(globe1)
+        afghan = afghanistan_ai.AfghanistanAI(globe1)
+        iraqi = iraq_ai.Iraq(globe1)
+
+        establish_foreign_nations(globe1, swedish, romanian, british, french, russian, polish, japanese, chinese, iranian, iraqi,
+                                  turkish, afghan, greek, dutch, luxembourger, austrian, spanish, danish, belgian, french,
+                                  cuban, mexican, canadian, italian, norwegian)
+        game = SpriteGame(austrian, globe1)
+        game.main_game()
+
 
