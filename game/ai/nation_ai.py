@@ -316,7 +316,6 @@ class NationAI:
                              (self.exports - self.imports))
     # stability functions
     def stability_happiness_change(self, globe):
-        print('hhi')
         if globe.tension > 25 and globe.tension < 50:
             """if global tension is between 25 and 50"""
             if self.e_s.RECESSION or self.e_s.DEPRESSION:

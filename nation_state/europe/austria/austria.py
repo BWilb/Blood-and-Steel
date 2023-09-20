@@ -5,32 +5,6 @@ import json as js
 
 from nation_data.convert_coords import convert_coords
 
-from globe_relations import globe
-from database_management import upload_database
-from nation_state.asia.se_asia.china import china_ai
-from nation_state.asia.se_asia.japan import japan_ai
-from nation_state.europe.belgium import belgium_ai
-from nation_state.europe.britain import britain_ai
-from nation_state.europe.denmark import denmark_ai
-from nation_state.europe.france import france_ai
-from nation_state.europe.greece import greece_ai
-from nation_state.europe.italy import italy_ai
-from nation_state.europe.luxembourg import luxembourg_ai
-from nation_state.europe.netherlands import netherlands_ai
-from nation_state.europe.norway import norway_ai
-from nation_state.europe.romania import romania_ai
-from nation_state.europe.serbia import serbia_ai
-from nation_state.europe.spain import spain_ai
-from nation_state.europe.sweden import sweden_ai
-from nation_state.europe.switzerland import swiss_ai
-from nation_state.north_america.canada import canada_ai
-from nation_state.north_america.cuba import cuba_ai
-from nation_state.north_america.united_states import us_ai
-
-def establish_foreign_nations(globe, *args):
-    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
-    for i in range(0, len(args)):
-        globe.nations.append(args[i])
 
 """Population Dictionaries"""
 population = {
@@ -145,6 +119,7 @@ class Austria:
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Austria":
                 for index, row in (nation_json['countries'][i]['coordinates']):
+                    print(index, row)
                     self.coordinates.append(convert_coords(index, row))
         return self.coordinates
     def population_change(self):
@@ -569,5 +544,5 @@ class Austria:
             austria.stats(globe1)
             austria.date += timedelta(1)
             time.sleep(3)"""
-austria = Austria
-austria.establish_map_coordinates(austria)
+"""austria = Austria
+austria.establish_map_coordinates(austria)"""

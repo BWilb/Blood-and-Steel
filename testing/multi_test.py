@@ -1,8 +1,7 @@
 import json
 from shapely.geometry import MultiPolygon
-json_data = json.load('../nation_data/custom.geo (3).json')
-print(json_data)
-def extract_coordinates(json_data):
+
+"""def extract_coordinates(json_data):
     coordinates = []
 
     # Load JSON data
@@ -20,4 +19,4 @@ def extract_coordinates(json_data):
     return coordinates
 
 extracted_coordinates = extract_coordinates(json_data)
-print(extracted_coordinates)
+print(extracted_coordinates)"""

@@ -1,6 +1,8 @@
 import random
 import time
 from datetime import datetime, timedelta
+from nation_data.convert_coords import convert_coords
+import json as js
 
 leaders = {
     "1910": None,
@@ -49,10 +51,10 @@ leader_images = {
 }
 
 class Iraq:
-    def __init__(self, year):
+    def __init__(self, globe):
         self.name = "Iraq"
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -62,7 +64,7 @@ class Iraq:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -70,14 +72,14 @@ class Iraq:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
         """Stability"""
         self.stability = 95.56
-        self.flag = flags[year]
+        self.flag = flags[str(globe.date.year)]
         # economic
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
         self.e_s = "recovery"
         self.income_tax_rate = 25.00
@@ -94,8 +96,21 @@ class Iraq:
         # international
         """general"""
         self.alliance = ""
+        # coordinates
+        self.iraqi_coords = []
         # other
         self.sprite = False
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Iraq":
+                for index, row in (nation_json['countries'][i]['coordinates']):
+                    self.iraqi_coords.append(convert_coords(index, row))
+
+        return self.iraqi_coords
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

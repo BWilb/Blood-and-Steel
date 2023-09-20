@@ -6,7 +6,7 @@ from colors.color import Color
 
 with open('../nation_data/nation.json', 'r') as file:
     data = json.load(file)
-WIDTH, HEIGHT = pyautogui.size().width, pyautogui.size().height * 0.9
+"""WIDTH, HEIGHT = pyautogui.size().width, pyautogui.size().height * 0.9
 for i in range(0, len(data['countries'])):
     print(data['countries'][i]['nation_name'], i)
 # print(data['countries'][0]['coordinates'])
@@ -19,10 +19,10 @@ def geo_to_pygame(lon, lat):
     return int(x), int(y)
 for index, row in (data['countries'][94]['coordinates']):
     coordinates.append((geo_to_pygame(index, row)))
-
+"""
 # print(coordinates)
 
-import pygame
+"""import pygame
 
 pygame.init()
 
@@ -46,3 +46,6 @@ while running:
 pygame.quit()
 
 # print((data['countries'][0]['coordinates'][1]))
+"""
+for i in range(0, len(data['countries'])):
+    print(data['countries'][i]['nation_name'], i)

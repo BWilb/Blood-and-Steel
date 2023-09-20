@@ -1,9 +1,9 @@
 import random
 import time
 from datetime import datetime, timedelta
-
+import json as js
 from globe_relations import globe
-
+from nation_data.convert_coords import convert_coords
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
@@ -62,10 +62,10 @@ leader_images = {"1910": "../leaders/luxembourg/paul_eyschen_accroche_1910-1914.
                  }
 
 class Luxembourg:
-    def __init__(self, year):
+    def __init__(self, globe):
         self.name = "Kingdom of Luxembourg"
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -75,7 +75,7 @@ class Luxembourg:
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
         self.birth_control = False
@@ -83,9 +83,9 @@ class Luxembourg:
         """happiness"""
         self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        self.flag = flags[year]
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         """Stability"""
         self.stability = 95.56
         # economic
@@ -93,7 +93,7 @@ class Luxembourg:
         self.income_tax_rate = 25.00
         self.corporate_tax_rate = 35.00
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
         """Components of GDP"""
         self.consumer_spending = 0
@@ -106,8 +106,21 @@ class Luxembourg:
         # military
         # international
         self.alliance = ""
+        # coordinates
+        self.lux_coords = []
         # other
         self.sprite = False
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Luxembourg":
+                for index, row in (nation_json['countries'][i]['coordinates']):
+
+                    self.lux_coords.append(convert_coords(index, row))
+        return self.lux_coords
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

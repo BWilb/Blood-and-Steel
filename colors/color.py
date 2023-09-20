@@ -11,7 +11,7 @@ class Color(enum.Enum):
     DK_MIDNIGHT_BLUE = (0,51,102)
     # green colors
     GREEN = (0,128,0)
-    MD_SEA_GREEN = (60,179,113)
+    MD_SEA_GREEN = (60, 179, 113)
     SPG_GREEN = (0,255,127)
     SPANISH_GREEN = (0,145,80)
     # Teal colors
@@ -23,7 +23,7 @@ class Color(enum.Enum):
     CANDY_APPLE_RED = (255,8,0)
     RED = (255,0,0)
     REDWOOD = (164,90,82)
-    # Brown colors\
+    # Brown colors
     CHOCOLATE = (210,105,30)
     BROWN = (165,42,42)
     TRAD_BROWN = (150,75,0)

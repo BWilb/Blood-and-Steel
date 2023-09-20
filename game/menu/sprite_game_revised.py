@@ -21,14 +21,6 @@ class SpriteGame:
         self.pop_alert = False
         # initial width and height will be 90% size of computer screen
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        """if globe.date.year <= 1914:
-            self.sprite_background = \
-                pygame.transform.scale(pygame.image.load("background_image_files/potential/1914.jpg").convert_alpha(),
-                                       (self.WIDTH, self.HEIGHT))
-        else:
-            self.sprite_background = \
-                pygame.transform.scale(pygame.image.load("background_image_files/potential/1936.jpg").convert_alpha(),
-                                       (self.WIDTH, self.HEIGHT))"""
 
         # music playlist
         self.music_playlist = []
@@ -78,18 +70,6 @@ class SpriteGame:
                 self.music_playlist.append(f"background_music/in_game/after_1918/{song}")
         self.background_music()
 
-    """def check_alert_status(self):
-        # function loops through every alert within global alerts to check if they have expired or not
-        for i in range(0, len(self.globe.alerts)):
-            self.globe.alerts[i].check_expiration(self.nation.date)
-    def check_manual_economy(self):
-        if self.nation.births > self.nation.deaths and not self.pop_alert:
-            new_alert = Alert(self.nation.date)
-            self.globe.alerts.append(new_alert)"""
-
-    """def check_manual_pop_growth(self):
-        pass"""
-
     def draw_text(self, text, font, text_col, x, y):
         """function of opening menu class draws text"""
         # draws the text on screen
@@ -99,6 +79,11 @@ class SpriteGame:
     def update_screen(self):
         """updates screen"""
         pygame.display.update()
+
+    def draw_nations(self):
+        for i in range(0, len(self.globe.nations)):
+            pygame.draw.polygon(self.screen, (100, 100, 100),
+                                self.globe.nations[i].establish_map_coordinates())
 
     def resize_leader(self):
         """function for resizing both leader that will be displayed"""
@@ -137,11 +122,12 @@ class SpriteGame:
         inc_tax_dec_button = button.Button(self.WIDTH * 0.11, 535, decrement_img, 0.025)
         """sub section of user nation that displays economic information regarding nation"""
 
-        #self.screen.blit(self.sprite_background, (0, 0))
+        # self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
-        self.draw_text(f"Economic stats",  pygame.font.SysFont("Arial-Black", 30), (255, 255, 255), self.WIDTH * 0.025, 50)
+        self.draw_text(f"Economic stats", pygame.font.SysFont("Arial-Black", 30), (255, 255, 255), self.WIDTH * 0.025,
+                       50)
         #
         self.draw_text(f"GDP:", pygame.font.SysFont("Arial-Black", 20),
                        (255, 255, 255)
@@ -150,8 +136,9 @@ class SpriteGame:
                        (255, 255, 255)
                        , self.WIDTH * 0.035, 200)
         self.draw_text(f"National Debt: ", pygame.font.SysFont("Arial-Black", 20),
-                       (255, 255, 255),self.WIDTH * 0.055, 250)
-        self.draw_text(f"${round(self.nation.national_debt, 2)}", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255),
+                       (255, 255, 255), self.WIDTH * 0.055, 250)
+        self.draw_text(f"${round(self.nation.national_debt, 2)}", pygame.font.SysFont("Arial-Black", 20),
+                       (255, 255, 255),
                        self.WIDTH * 0.045,
                        300)
         self.draw_text(f"Current Corporate Tax Rate",
@@ -200,7 +187,7 @@ class SpriteGame:
 
     def view_society(self):
         """sub section of user nation that displays social information regarding nation"""
-        #self.screen.blit(self.sprite_background, (0, 0))
+        # self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
@@ -256,12 +243,9 @@ class SpriteGame:
         """primary screen user sees after opening menu"""
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
 
-        self.screen.fill((0, 0, 0))
-        #self.screen.blit(self.sprite_background, (0, 0))
-        for i in range(0, len(self.globe.nations)):
-            if self.globe.nations[i].name == "austria":
-                pygame.draw.polygon(self.screen, Color.RED, self.globe.nations[i].establish_map_coordinates())
-
+        self.screen.fill((65,105,225))
+        # self.screen.blit(self.sprite_background, (0, 0))
+        self.draw_nations()
         # later on background will be an actual SVG image of world and not part of the screen
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
@@ -274,8 +258,8 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
-        #self.screen.blit(flag, (self.WIDTH * 0.05, 150))
-        #self.screen.blit(leader, (self.WIDTH * 0.015, 300))
+        # self.screen.blit(flag, (self.WIDTH * 0.05, 150))
+        # self.screen.blit(leader, (self.WIDTH * 0.015, 300))
         if self.flag_button.draw(self.screen):
             self.game_state = "view infographics"
 
@@ -312,7 +296,7 @@ class SpriteGame:
         """back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
         back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)"""
         self.screen.fill((0, 0, 0))
-        #self.screen.blit(self.sprite_background, (0, 0))
+        # self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
@@ -348,7 +332,6 @@ class SpriteGame:
             if not self.game_paused:
                 if self.game_state == "main game":
                     self.primary_game()
-
                 elif self.game_state == "view infographics":
                     self.infographics()
 
@@ -360,7 +343,6 @@ class SpriteGame:
 
                 elif self.game_state == "view economy":
                     self.view_economy()
-
 
             self.check_stream()
             for event in pygame.event.get():
