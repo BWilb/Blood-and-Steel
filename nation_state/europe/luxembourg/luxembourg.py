@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta
 import json as js
 from globe_relations import globe
-from nation_data.convert_coords import convert_coords
+#from nation_data.convert_coords import convert_coords
 
 def establish_foreign_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
@@ -115,11 +115,11 @@ class Luxembourg:
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
+        """for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Luxembourg":
                 for index, row in (nation_json['countries'][i]['coordinates']):
 
-                    self.lux_coords.append(convert_coords(index, row))
+                    self.lux_coords.append(convert_coords(index, row))"""
         return self.lux_coords
     # population functions
     def population_change(self):

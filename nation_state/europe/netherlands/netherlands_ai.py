@@ -1,9 +1,9 @@
-import random
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 from enum import Enum
+#from nation_data.convert_coords import convert_coords
 
 from game.ai.nation_ai import NationAI
+import geopandas as gdp
 
 """Population Dictionaries"""
 population = {
@@ -80,6 +80,46 @@ class Netherlands(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case netherlands)
+        """file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Austria":
+                for index, row in (nation_json['countries'][i]['coordinates']):
+                    self.coordinates.append(convert_coords(index, row))
+        return self.coordinates"""
+        gdf = gdp.read_file('../nation_data/custom.geo (3).json').explode()
+
+        # Define the nation name you want to search for
+        target_nation = 'China'  # Replace with the nation you're interested in
+
+        # Filter the GeoDataFrame to get the specific nation
+        """nation_data = gdf[gdf['name'] == target_nation]
+        # Extract the coordinates as a list
+        coordinates = []
+        # coordinates represents the entire list of polygons within nation
+
+        for geometry in nation_data.geometry:
+            if geometry.geom_type == 'Polygon':
+                coordinates.append(list(geometry.exterior.coords))
+            elif geometry.geom_type == 'MultiPolygon':
+                for polygon in geometry:
+                    coordinates.append(list(polygon.exterior.coords))
+
+        for outer_coords in range(0, len(coordinates)):
+            # print(coordinates[outer_coords])
+            points = []
+            # outer coords represent the entire list of coordinates within each polygon
+            for inner_coords in range(0, len(coordinates[outer_coords])):
+                # pass
+                points.append(convert_coords(coordinates[outer_coords][inner_coords][0], coordinates[outer_coords]))
+
+            self.coordinates.append(points)"""
 
     # main function
     def main(self, globe):

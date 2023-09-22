@@ -2,7 +2,7 @@ import random
 import time
 from datetime import datetime, timedelta
 import json as js
-from nation_data.convert_coords import convert_coords
+from nation_data.coordination.retreive_and_convert import convert_coords, retreive_coords
 # Romania
 """Population Dictionaries"""
 population = {
@@ -118,9 +118,7 @@ class Romania:
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Romania":
                 # searching for Romania
-                for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.romanian_coords.append(convert_coords(index, row))
-        return self.romanian_coords
+                return retreive_coords(nation_json['countries'][i]['coordinates'])
     # population functions
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

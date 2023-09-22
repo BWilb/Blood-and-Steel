@@ -74,19 +74,17 @@ def accept_nation(nation, time):
 
     if nation.lower() == "austria":
         austrian = austria.Austria(globe1)
-        luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
-        belgian_ai = belgium_ai.BelgiumAI(globe1)
-        romanian_ai = romania_ai.RomaniaAI(globe1)
-        establish_nations(globe1, austrian, luxembourger_ai, belgian_ai, romanian_ai)
+
+        establish_nations(globe1, austrian)
         game = SpriteGame(austrian, globe1)
         game.main_game()
 
     if nation.lower() == "romania":
         romanian = romania.Romania(globe1)
-        luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
+        """luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
         belgian_ai = belgium_ai.BelgiumAI(globe1)
-        austrian_ai = austria_ai.Austria(globe1)
-        establish_nations(globe1, romanian, luxembourger_ai, belgian_ai, austrian_ai)
+        austrian_ai = austria_ai.Austria(globe1)"""
+        establish_nations(globe1, romanian)
         game = SpriteGame(romanian, globe1)
         game.main_game()
 

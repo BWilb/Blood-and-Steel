@@ -1,12 +1,8 @@
-import random
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
-from nation_data.convert_coords import convert_coords
+#from nation_data.convert_coords import convert_coords
 import json as js
-
-from random_functions import random_functions
 
 """Population Dictionaries"""
 population = {
@@ -91,11 +87,11 @@ class BelgiumAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
+        """for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Belgium":
                 for index, row in (nation_json['countries'][i]['coordinates']):
                     self.belgium_coordinates.append(convert_coords(index, row))
-        return self.belgium_coordinates
+        return self.belgium_coordinates"""
 
     # main function
     def main(self, globe):

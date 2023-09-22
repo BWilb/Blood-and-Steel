@@ -1,7 +1,7 @@
 import random
 import time
 from datetime import datetime, timedelta
-from nation_data.convert_coords import convert_coords
+#from nation_data.convert_coords import convert_coords
 import json as js
 
 """Population Dictionaries"""
@@ -112,10 +112,10 @@ class Belgium:
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
+        """for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Belgium":
                 for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.belgium_coordinates.append(convert_coords(index, row))
+                    self.belgium_coordinates.append(convert_coords(index, row))"""
         return self.belgium_coordinates
     # population functions
     def population_change(self):

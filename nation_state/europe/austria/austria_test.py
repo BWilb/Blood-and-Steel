@@ -1,4 +1,4 @@
-import os
+"""import os
 import json
 
 # Get the current directory of file1.py
@@ -20,3 +20,10 @@ if os.path.exists(json_file_path):
         print(data)
 else:
     print(f"The file 'data.json' does not exist in the specified folder.")
+"""
+
+import geopandas as gdp
+gdf = gdp.read_file('../../../nation_data/custom.geo (3).json')
+for i in range(len(gdf)):
+    nation_name = gdf['name'][i]
+    print(nation_name,gdf['geometry'][i])
