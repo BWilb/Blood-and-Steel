@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 from datetime import timedelta
@@ -38,7 +39,7 @@ class SpriteGame:
         self.globe = globe
         self.actual_day = self.globe.date
         self.speed = 1.5
-        self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.10)
+        self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.05)
 
     def background_music(self):
         """within function while loop will be established that """
@@ -81,8 +82,9 @@ class SpriteGame:
         pygame.display.update()
 
     def draw_nations(self):
+
         for i in range(0, len(self.globe.nations)):
-            pygame.draw.polygon(self.screen, (100, 100, 100),
+            pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
                                 self.globe.nations[i].establish_map_coordinates())
 
     def resize_leader(self):

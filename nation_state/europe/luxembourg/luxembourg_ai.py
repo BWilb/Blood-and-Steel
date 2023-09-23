@@ -1,3 +1,4 @@
+import random
 from datetime import timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
@@ -47,6 +48,7 @@ class EconomicState(Enum):
 class LuxembourgAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Kingdom of Luxembourg"
         # social variables

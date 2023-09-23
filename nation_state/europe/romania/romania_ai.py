@@ -1,3 +1,4 @@
+import random
 from datetime import timedelta
 from enum import Enum
 import json as js
@@ -53,6 +54,7 @@ class EconomicState(Enum):
 class RomaniaAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Kingdom of Romania"
         # social variables

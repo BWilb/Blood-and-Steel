@@ -62,6 +62,7 @@ leader_images = {
 class Iraq(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "asia"
         self.name = "Iraq"
         # social variables

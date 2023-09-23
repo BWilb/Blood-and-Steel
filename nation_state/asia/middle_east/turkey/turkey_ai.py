@@ -3,6 +3,8 @@ import time
 from datetime import datetime, timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 
 class EconomicState(Enum):
     RECESSION = 1
@@ -59,6 +61,7 @@ leader_images = {
 class TurkeyAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "asia"
         if globe.date.year < 1921:
             self.name = "Ottoman Empire"
@@ -90,6 +93,14 @@ class TurkeyAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Turkey":
+                return retreive_coords(nation_json['countries'][i]['coordinates'])
 
     # main function
     def main(self, globe):

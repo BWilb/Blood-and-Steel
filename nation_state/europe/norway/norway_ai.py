@@ -2,7 +2,8 @@ import random
 import time
 from datetime import datetime, timedelta
 from enum import Enum
-
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
 from game.ai.nation_ai import NationAI
 
 leaders = {
@@ -48,8 +49,9 @@ class EconomicState(Enum):
 class NorwayAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Kingdom of Belgium"
+        self.name = "Kingdom of Norway"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -76,6 +78,14 @@ class NorwayAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Norway":
+                return retreive_coords(nation_json['countries'][i]['coordinates'])
 
     # main function
     def main(self, globe):

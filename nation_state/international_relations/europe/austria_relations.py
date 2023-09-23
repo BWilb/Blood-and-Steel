@@ -995,7 +995,7 @@ def austrian_relations(self, austria, globe):
                     self.current_gdp -= nation_loss
                     austria.current_gdp -= austria_loss
                     for i in range(0, len(self.states)):
-                        self.states[i].gdp -= round(random.uniform(0, nation_loss * random.uniform(0.25, 0.33)), 0)
+                        self.states[i].grosdp -= round(random.uniform(0, nation_loss * random.uniform(0.25, 0.33)), 0)
                         """portion of each state's population being taken away"""
                     self.austria_relations -= self.austria_relations * 0.25
                     globe.tension += round(random.uniform(3.45, 5.56), 2)

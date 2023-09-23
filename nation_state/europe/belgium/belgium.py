@@ -61,6 +61,7 @@ leader_images = {
 class Belgium:
     def __init__(self, globe):
         self.name = "Kingdom of Belgium"
+        self.nation_color = (0, random.randrange(0, 255), random.randrange(0, 250))
         # date variables
         self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date

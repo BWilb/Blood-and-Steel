@@ -1,3 +1,4 @@
+import random
 from datetime import timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
@@ -52,6 +53,7 @@ gdp = {
 class Austria(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "Europe"
         if globe.date.year < 1918:
             self.name = "Austria Hungary"
