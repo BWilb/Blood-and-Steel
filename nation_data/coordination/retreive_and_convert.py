@@ -2,9 +2,10 @@ import pyautogui
 
 def retreive_coords(coords):
     coordinates = []
-    for index, row in coords:
-        coordinates.append(convert_coords(index, row))
-    return coordinates
+    for points in coords:
+        for index, row in points:
+            coordinates.append(convert_coords(index, row))
+        return coordinates
 
 
 def convert_coords(lon, lat):

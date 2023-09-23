@@ -1,7 +1,7 @@
 from datetime import timedelta
 from enum import Enum
 import json as js
-#from nation_data.convert_coords import convert_coords
+from nation_data.coordination.retreive_and_convert import retreive_coords
 
 from game.ai.nation_ai import NationAI
 
@@ -89,10 +89,9 @@ class RomaniaAI(NationAI):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        """for i in range(len(nation_json['countries'])):
+        for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Romania":
-                for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.coordinates.append(convert_coords(index, row))"""
+                return retreive_coords(nation_json['countries'][i]['coordinates'])
         return self.coordinates
 
     # main function

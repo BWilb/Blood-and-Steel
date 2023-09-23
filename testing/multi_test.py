@@ -66,6 +66,7 @@ individual_polygons.append(geom)"""
 """for polygon in shapely_polygons:
     print(polygon)"""
 
+
 def convert_coords(lon, lat):
     # lon is x
     # lat is y
@@ -77,13 +78,38 @@ def convert_coords(lon, lat):
     y = HEIGHT - ((lat - lat_min) / (lat_max - lat_min)) * HEIGHT
     return int(x), int(y)
 
-import geopandas as gpd
 
-# Load the GeoJSON data
+"""import geopandas as gpd
+
+# Read in your GeoJSON file and explode it
 gdf = gpd.read_file('../nation_data/custom.geo (3).json')
+exploded_gdf = gdf.explode()
 
+# Get a list of unique nation names
+unique_names = exploded_gdf['name'].unique()
 
-# Define the nation name you want to search for
+# Iterate through the GeoDataFrame based on the 'name' column
+i = 0
+for name in unique_names:
+    subset = exploded_gdf[exploded_gdf['name'] == name]
+    print(name)
+
+    # Initialize a list to store coordinates for the nation
+    nation_coordinates = []
+
+    for idx, row in subset.iterrows():
+        geometry = row['geometry']
+        # Extract coordinates from the geometry (e.g., centroid)
+        centroid = geometry.exterior.coords
+        # Append the centroid coordinates to the list
+        nation_coordinates.append(centroid)
+
+        #i += 1"""
+
+""" print(f"Name: {name}, Coordinates: {nation_coordinates}")
+print(len(nation_coordinates))"""
+
+"""# Define the nation name you want to search for
 target_nation = 'Russia'  # Replace with the nation you're interested in
 
 # Filter the GeoDataFrame to get the specific nation
@@ -93,13 +119,17 @@ nation_data = gdf[gdf['name'] == target_nation]
 coordinates = []
 # coordinates represents the entire list of polygons within nation
 
-print(nation_data.geometry)
+#print(nation_data.geometry)
 for geometry in nation_data.geometry.explode():
     if geometry.geom_type == 'Polygon':
         coordinates.append(list(geometry.exterior.coords))
     elif geometry.geom_type == 'MultiPolygon':
         for polygon in geometry:
             coordinates.append(list(polygon.exterior.coords))
+print(len(coordinates))
+
+for i in range(0, len(coordinates)):
+    print(coordinates[i])
 
 # Print the extracted coordinates
 coords = []
@@ -143,7 +173,7 @@ while running:
 # Handle other geometry types as needed
 
     pygame.display.flip()
-pygame.quit()
+pygame.quit()"""
 
 """
 extracting coordinates from geojson based upon nation name, using json, geopandas, and python

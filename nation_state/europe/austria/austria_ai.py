@@ -1,7 +1,7 @@
 from datetime import timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
-#from nation_data.convert_coords import convert_coords
+from nation_data.coordination.retreive_and_convert import retreive_coords
 import json as js
 
 
@@ -85,16 +85,15 @@ class Austria(NationAI):
         # other
         self.coordinates = []
     def establish_map_coordinates(self):
-        """# collection of coordinates will be done separately in every nation,
+        # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Austria":
-                for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.coordinates.append(convert_coords(index, row))"""
-        return self.coordinates
+                return retreive_coords( nation_json['countries'][i]['coordinates'])
+
 
     # main function
     def main(self, globe):

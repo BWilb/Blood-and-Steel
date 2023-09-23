@@ -244,8 +244,9 @@ class SpriteGame:
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
 
         self.screen.fill((65,105,225))
-        # self.screen.blit(self.sprite_background, (0, 0))
+        """"""
         self.draw_nations()
+        """"""
         # later on background will be an actual SVG image of world and not part of the screen
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
