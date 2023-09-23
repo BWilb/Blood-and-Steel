@@ -105,7 +105,7 @@ class Belgium:
         # international
         self.alliance = ""
         # drawing
-        self.belgium_coordinates = []
+        self.coordinates = []
         # other
         self.sprite = False
     def establish_map_coordinates(self):
@@ -115,7 +115,10 @@ class Belgium:
 
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Belgium":
-                return retreive_coords(nation_json['countries'][i]['coordinates'])
+                #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates.append(retreive_coords(nation_json['countries'][i]['coordinates']))
+
+
 
     # population functions
     def population_change(self):

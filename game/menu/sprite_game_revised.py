@@ -82,10 +82,17 @@ class SpriteGame:
         pygame.display.update()
 
     def draw_nations(self):
-
         for i in range(0, len(self.globe.nations)):
-            pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
-                                self.globe.nations[i].establish_map_coordinates())
+            self.globe.nations[i].establish_map_coordinates()
+            print(len(self.globe.nations[i].coordinates))
+            for coordinates in range(0, len(self.globe.nations[i].coordinates)):
+                if len((self.globe.nations[i].coordinates[coordinates])) == 1:
+                    pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
+                                        self.globe.nations[i].coordinates[coordinates])
+                else:
+                    pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
+                                        self.globe.nations[i].coordinates[coordinates])
+
 
     def resize_leader(self):
         """function for resizing both leader that will be displayed"""
@@ -245,7 +252,7 @@ class SpriteGame:
         """primary screen user sees after opening menu"""
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
 
-        self.screen.fill((65,105,225))
+        self.screen.fill((65, 105, 225))
         """"""
         self.draw_nations()
         """"""
