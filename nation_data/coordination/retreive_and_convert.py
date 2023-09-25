@@ -2,32 +2,29 @@ import pyautogui
 
 
 def retreive_coords(coords_list):
-    print(coords_list)
-    for i in range(len(coords_list)):
-        for x in coords_list[i]:
-            print(coords_list[i][0], coords_list[i][0])
-    """all_coordinates = []
+    # receives coordinates that were received from specific nation file
+    coordinates = []
     if len(coords_list) == 1:
-        for points in coords_list:
-            # print(points)
-            for index, row in points:
-                all_coordinates.append(convert_coords(index, row))
-            # print(coordinates)
-        return all_coordinates
-    else:
+        for sets in range(0, len(coords_list)):
+            for x, y in coords_list[sets]:
+                coordinates.append(convert_coords(x, y))
+        return coordinates
+
+    if len(coords_list) > 1:
 
         for points in coords_list:
-            coordinates = []  # Create a list to store sets of coordinates for each point
+            #print(points)
+            coords = []  # Create a list to store sets of coordinates for each point
 
             if isinstance(points, list):
                 for index, row in points:
-                    coordinates.append(convert_coords(index, row))
+                    coords.append(convert_coords(index, row))
             else:
-                coordinates.append(convert_coords(points[0], points[1]))
+                coords.append(convert_coords(points[0], points[1]))
 
-            all_coordinates.append(coordinates)  # Append the list of coordinates to the result
+            coordinates.append(coords)  # Append the list of coordinates to the result
 
-        return all_coordinates"""
+        return coordinates
 
     """code taken from ChatGPT for solving how to draw multipolygons
     command = {improve this code:
@@ -63,6 +60,8 @@ def convert_coords(lon, lat):
     # taken from ChatGPT
     # lon is x
     # lat is y
+    # file takes in user's screen width and height
+    # each lat and lon variable are taken from retrieve function up above and sent back once converted
     WIDTH = pyautogui.size().width
     HEIGHT = pyautogui.size().height
     lon_min, lon_max = -180, 180

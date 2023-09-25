@@ -59,11 +59,17 @@ def establish_nations(globe, *args):
     """
     for i in range(0, len(args)):
         if args[i].leader is not None:
+            args[i].establish_map_coordinates()
             globe.nations.append(args[i])
+def establish_json_files(time):
+    from nation_data.retreive_data import JsonWriter
+    json_writer = JsonWriter(int(time))
+    json_writer.clear_old_file()
+
 def accept_nation(nation, time):
-    print(time)
     from globe_relations import globe
     from sprite_game_revised import SpriteGame
+    establish_json_files(time)
 
     globe1 = globe.Globe(time)
     """if nation.lower() == "mexico":
@@ -115,7 +121,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         japanese_ai = japan_ai.JapanAI(globe1)
         chinese_ai = china_ai.ChinaAI(globe1)
-        establish_nations(globe1, belgian)
+        establish_nations(globe1,belgian, english_ai, luxembourger_ai)
         """russian_ai, austrian_ai, norwegian_ai, english_ai, dutch_ai, swedish_ai, danish_ai,
                           french_ai, italian_ai, luxembourger_ai, romanian_ai, swiss_ai, spanish_ai, polish_ai, greek_ai,
                           cuban_ai, canadian_ai, mexican_ai, turkish_ai, afghani_ai, iranian_ai, iraqi_ai, japanese_ai, chinese_ai"""

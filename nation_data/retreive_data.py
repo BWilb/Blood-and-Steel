@@ -1,6 +1,6 @@
 import geopandas as gpd
 import json
-import pandas as pd
+
 
 """json_cleaner = '''
                                 {
@@ -40,7 +40,7 @@ with open('nation.json', 'w') as writing_file:
     json.dump(nation_object, writing_file, indent=4)
 
 """
-from coordination.retreive_and_convert import convert_coords
+
 
 """class JsonWriter:
     def __init__(self):
@@ -108,12 +108,20 @@ from coordination.retreive_and_convert import convert_coords
 
 json_object = JsonWriter()
 json_object.writing_new_info()"""
-from shapely.geometry import MultiPolygon, Polygon
 
+file_dictionary = {
+    1910: "C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/world_1914.geojson",
+    1914: "C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/world_1914.geojson",
+    1918: "C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/world_1930.geojson",
+    1932: "world_1930.geojson",
+    1936: "C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/world_1930.geojson",
+    1939: "C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/world_1938.geojson"
+}
 
 class JsonWriter:
-    def __init__(self):
-        self.geo_file = gpd.read_file("custom.geo (3).json").explode()
+    def __init__(self, year):
+
+        self.geo_file = gpd.read_file("../nation_data/world_1930.geojson").explode()
         # file stores geographic and geopolitical information on nations
         self.json_cleaner = '''
                                 {
@@ -122,12 +130,12 @@ class JsonWriter:
                             '''
         # variable cleans out old file and replaces it with what it is assigned with
         self.nation_dictionary = []
-        self.convert = None
         # list stores nation info as dictionary
+        print(self.geo_file)
 
     def clear_old_file(self):
         # clears current file
-        with open('nation.json', 'w') as clear_file:
+        with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json', 'w') as clear_file:
             clear_file.write(self.json_cleaner)
 
         self.writing_new_info()
@@ -156,24 +164,15 @@ class JsonWriter:
                 """
         try:
             coordinates = []
-            idx = 0
 
             for index, row in self.geo_file.iterrows():
                 coordinates.append(list(row['geometry'].exterior.coords))
-                
-                #print(index, row['geometry'])
-                # print(list(row['geometry'].exterior.coords))
-
-                idx+=1
                 self.nation_dictionary.append({
                     'index': index[0],
-                    'nation_name': row['name'],
+                    'nation_name': row['NAME'],
                     'coordinates': list(row['geometry'].exterior.coords)
                 })
-            """for i in range(0, len(self.nation_dictionary)):
-                if self.nation_dictionary[i]['nation_name'] == "Russia":
-                    print(len(self.nation_dictionary[i]['coordinates']))
-                    print(self.nation_dictionary[i]['coordinates'])"""
+            print(self.nation_dictionary)
 
             """
             this piece has self.nation dictionary append the index, name, and coordinates of the specific nation
@@ -215,18 +214,17 @@ class JsonWriter:
             print(e)
         finally:
             try:
-                with open('nation.json', 'r') as nation:
+                with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json', 'r') as nation:
                     nation_object = json.loads(nation.read())
 
 
                 nation_object['countries'] = self.nation_dictionary
                 # sets/appends nation_dictionary to 'countries' list
-                with open('nation.json', 'w') as writing_file:
+                with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json', 'w') as writing_file:
                     json.dump(nation_object, writing_file, indent=4)
 
             except Exception as e:
                 print(e)
 
-
-json_object = JsonWriter()
-json_object.clear_old_file()
+"""json_object = JsonWriter(1932)
+json_object.clear_old_file()"""

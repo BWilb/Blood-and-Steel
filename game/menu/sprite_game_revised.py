@@ -84,10 +84,10 @@ class SpriteGame:
 
     def draw_nations(self):
         for i in range(0, len(self.globe.nations)):
-            self.globe.nations[i].establish_map_coordinates()
-            print(len(self.globe.nations[i].coordinates))
             for coordinates in range(0, len(self.globe.nations[i].coordinates)):
+
                 if len((self.globe.nations[i].coordinates[coordinates])) == 1:
+
                     pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
                                         self.globe.nations[i].coordinates[coordinates])
                 else:
@@ -275,8 +275,8 @@ class SpriteGame:
 
         self.nation_changes()
         self.globe_changes()
+        self.clock.tick(60)
         self.globe.date += timedelta(days=1)
-
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -353,7 +353,7 @@ class SpriteGame:
 
                 elif self.game_state == "view economy":
                     self.view_economy()
-            self.clock.tick(220)
+                time.sleep(1.25)
             self.check_stream()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:

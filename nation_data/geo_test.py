@@ -2,7 +2,7 @@ import geopandas as gpd
 import numpy as np
 
 # Load the GeoJSON file
-gdf = gpd.read_file("world_1914.geojson")
+gdf = gpd.read_file("json_fiels/world_1914.geojson")
 print(gdf.head())
 dictionary = []
 for index, row in gdf.iterrows():

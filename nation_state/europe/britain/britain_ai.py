@@ -3,6 +3,8 @@ import sys
 import time
 from datetime import datetime, timedelta
 from enum import Enum
+
+import globe_relations.globe
 from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
@@ -71,6 +73,7 @@ class Britain(NationAI):
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Great Britain"
+        self.date = datetime(globe.date.year, 1, 1)
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -102,13 +105,26 @@ class Britain(NationAI):
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "United Kingdom":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+        if self.date.year < 1918:
+
+            for i in range(len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "United Kingdom of Great Britain and Ireland":
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                    # print(self.coordinates)
+            # print(len(self.coordinates))
+            self.coordinates = (retreive_coords(self.coordinates))
+        elif self.date.year > 1918:
+
+            for i in range(len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "United Kingdom":
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                    # print(self.coordinates)
+            # print(len(self.coordinates))
+            self.coordinates = (retreive_coords(self.coordinates))
+
 
     # main function
     def main(self, globe):
@@ -119,3 +135,4 @@ class Britain(NationAI):
             super().stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
+

@@ -101,7 +101,7 @@ class Iraq:
         # other
         self.sprite = False
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = '/nation_data/json_fiels/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 

@@ -111,15 +111,15 @@ class Belgium:
         # other
         self.sprite = False
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Belgium":
                 #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
-
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]
 
 
     # population functions
@@ -474,7 +474,9 @@ class Belgium:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
-
-globe1 = globe_relations.globe.Globe('1932')
+"""globe1 = globe_relations.globe.Globe('1932')
 beglian = Belgium(globe1)
 beglian.establish_map_coordinates()
+
+print(beglian.coordinates)
+"""

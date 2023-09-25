@@ -22,7 +22,7 @@ class JsonWriter:
 
     def clear_old_file(self):
         # clears current file
-        with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json', 'w') as clear_file:
+        with open('/nation_data/json_fiels/nation.json', 'w') as clear_file:
             clear_file.write(self.json_cleaner)
 
         self.writing_new_info()
@@ -50,11 +50,11 @@ class JsonWriter:
             i += 1
         for i in range(0, len(self.nation_dictionary)):
             print(self.nation_dictionary[i])
-        with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json', 'r') as nation:
+        with open('/nation_data/json_fiels/nation.json', 'r') as nation:
             nation_json = json.loads(nation.read())
 
         nation_json['countries'] = self.nation_dictionary
-        with open('C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json', 'w') as writing_file:
+        with open('/nation_data/json_fiels/nation.json', 'w') as writing_file:
             json.dump(nation_json, writing_file, indent=4)
 
 json_object = JsonWriter()

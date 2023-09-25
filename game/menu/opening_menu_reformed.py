@@ -1,12 +1,9 @@
 import pygame
 import pyautogui
-import socket
-from pygame.constants import VIDEORESIZE
 from buttons import button
 import accept_nation
 import sys
-import time
-import threading
+
 
 pygame.init()
 
