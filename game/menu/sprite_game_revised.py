@@ -40,6 +40,7 @@ class SpriteGame:
         self.actual_day = self.globe.date
         self.speed = 1.5
         self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.05)
+        self.clock = pygame.time.Clock()
 
     def background_music(self):
         """within function while loop will be established that """
@@ -92,7 +93,6 @@ class SpriteGame:
                 else:
                     pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
                                         self.globe.nations[i].coordinates[coordinates])
-
 
     def resize_leader(self):
         """function for resizing both leader that will be displayed"""
@@ -276,7 +276,7 @@ class SpriteGame:
         self.nation_changes()
         self.globe_changes()
         self.globe.date += timedelta(days=1)
-        time.sleep(self.speed)
+
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -353,7 +353,7 @@ class SpriteGame:
 
                 elif self.game_state == "view economy":
                     self.view_economy()
-
+            self.clock.tick(220)
             self.check_stream()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:

@@ -93,6 +93,8 @@ class TurkeyAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
+
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
@@ -100,8 +102,8 @@ class TurkeyAI(NationAI):
 
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Turkey":
-                return retreive_coords(nation_json['countries'][i]['coordinates'])
-
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
     # main function
     def main(self, globe):
         while self.population > 2000000:

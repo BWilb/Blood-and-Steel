@@ -73,6 +73,7 @@ class FranceAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -81,18 +82,8 @@ class FranceAI(NationAI):
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "France":
-                return (retreive_coords(nation_json['countries'][i]['coordinates']))
-
-
-    def establish_map_coordinates(self):
-        # collection of coordinates will be done separately in every nation,
-        # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
-        with open(file_path, 'r') as file:
-            nation_json = js.load(file)
-        for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Austria":
-                return (retreive_coords(nation_json['countries'][i]['coordinates']))
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
 
     # main function
     def main(self, globe):

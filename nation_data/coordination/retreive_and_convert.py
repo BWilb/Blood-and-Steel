@@ -2,7 +2,11 @@ import pyautogui
 
 
 def retreive_coords(coords_list):
-    all_coordinates = []
+    print(coords_list)
+    for i in range(len(coords_list)):
+        for x in coords_list[i]:
+            print(coords_list[i][0], coords_list[i][0])
+    """all_coordinates = []
     if len(coords_list) == 1:
         for points in coords_list:
             # print(points)
@@ -22,9 +26,8 @@ def retreive_coords(coords_list):
                 coordinates.append(convert_coords(points[0], points[1]))
 
             all_coordinates.append(coordinates)  # Append the list of coordinates to the result
-        print(all_coordinates)
 
-        return all_coordinates
+        return all_coordinates"""
 
     """code taken from ChatGPT for solving how to draw multipolygons
     command = {improve this code:

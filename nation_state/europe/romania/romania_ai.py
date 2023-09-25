@@ -93,7 +93,9 @@ class RomaniaAI(NationAI):
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Romania":
-                return retreive_coords(nation_json['countries'][i]['coordinates'])
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates.append(retreive_coords(nation_json['countries'][i]['coordinates']))
+
         return self.coordinates
 
     # main function

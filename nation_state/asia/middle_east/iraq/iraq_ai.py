@@ -91,6 +91,7 @@ class Iraq(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -99,7 +100,7 @@ class Iraq(NationAI):
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Iraq":
-                return (retreive_coords(nation_json['countries'][i]['coordinates']))
+                self.coordinates.append((retreive_coords(nation_json['countries'][i]['coordinates'])))
     # main function
     def main(self, globe):
         while self.population > 100000:

@@ -1,6 +1,8 @@
 import random
 import time
 from datetime import datetime, timedelta
+
+import globe_relations.globe
 from nation_data.coordination.retreive_and_convert import convert_coords, retreive_coords
 import json as js
 
@@ -116,7 +118,7 @@ class Belgium:
         for i in range(len(nation_json['countries'])):
             if nation_json['countries'][i]['nation_name'] == "Belgium":
                 #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates.append(retreive_coords(nation_json['countries'][i]['coordinates']))
+                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
 
 
 
@@ -472,3 +474,7 @@ class Belgium:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
+
+globe1 = globe_relations.globe.Globe('1932')
+beglian = Belgium(globe1)
+beglian.establish_map_coordinates()

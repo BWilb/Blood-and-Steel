@@ -2,6 +2,8 @@ import random
 import time
 from datetime import timedelta, datetime
 from game.ai.nation_ai import NationAI
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
 
 leaders = {
     "1910": None,
@@ -34,6 +36,7 @@ gdp = {
 class PolandAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Kingdom of Belgium"
         # social variables
@@ -62,6 +65,17 @@ class PolandAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Poland":
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates.append((retreive_coords(nation_json['countries'][i]['coordinates'])))
 
     # main function
     def main(self, globe):

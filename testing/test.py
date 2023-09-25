@@ -75,7 +75,7 @@ for index, row in gdf.iterrows():
     else:
         print(f"Feature {index + 1} is not a Polygon.")
 """
-import geopandas as gpd
+"""import geopandas as gpd
 from shapely.geometry import MultiPolygon, Polygon
 
 # Load the GeoJSON file into a GeoDataFrame (replace 'your_multipolygon.geojson' with your file)
@@ -91,3 +91,50 @@ for index, row in gdf_exploded.iterrows():
     # Extract the coordinates of the polygon's exterior ring
 
 
+"""
+import geopandas as gpd
+
+# Load the GeoJSON file
+geojson_file = "../nation_data/custom.geo (3).json"
+gdf = gpd.read_file(geojson_file).explode()
+
+# Specify the index of the MultiPolygon feature you want to extract coordinates from
+feature_index = 166  # Replace with the index of the desired feature
+
+# Get the MultiPolygon geometry from the GeoDataFrame
+multi_polygon = gdf.loc[feature_index, 'geometry']
+"""for i in range(0, len(multi_polygon)):
+    print(multi_polygon[i].exterior.coords)"""
+"""coordinates = []
+try:
+    for i in range(0, len(gdf)):
+        name = gdf['name'][i]
+        geometry = gdf['geometry'][i]
+        for shape in geometry:
+            #print(name, shape.exterior.coords)
+            coordinates.append(shape.exterior.coords)
+except Exception as e:
+    print(e)
+finally:
+    print(coordinates)"""
+
+# Check if it's a MultiPolygon
+"""if multi_polygon.geom_type == 'Polygon':
+    # Iterate through the individual polygons within the MultiPolygon
+    for x, y in multi_polygon:
+        # Extract and print the coordinates of each Polygon
+        x_coordinates = x
+        y_coordinates = y
+        print("X-coordinates:", x_coordinates)
+        print("Y-coordinates:", y_coordinates)"""
+import pandas as pd
+import json
+
+# Create a pandas Series
+data = pd.Series([[1, 2, 3, 4, 5]])
+
+# Convert the Series to a list
+data_list = data.tolist()
+print(type(data_list))
+
+print(data_list)

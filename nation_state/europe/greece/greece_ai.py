@@ -3,6 +3,8 @@ import time
 from datetime import datetime, timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
 
 """Population Dictionaries"""
 population = {
@@ -51,6 +53,7 @@ class EconomicState(Enum):
 class Greece(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Kingdom of Greece"
         # social variables
@@ -79,6 +82,15 @@ class Greece(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            if nation_json['countries'][i]['nation_name'] == "Greece":
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
 
     # main function
     def main(self, globe):
