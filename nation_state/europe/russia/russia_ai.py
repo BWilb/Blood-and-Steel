@@ -81,19 +81,36 @@ class RussiaAI(NationAI):
         # other
         self.coordinates = []
     def establish_map_coordinates(self):
-        file_path = '/nation_data/json_fiels/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Russia":
-                print(len(nation_json['countries'][i]['coordinates']))
-                for jso in nation_json['countries'][i]['coordinates']:
-                    for index, row in jso:
-                        #print(index, row)
-                        pass
-                #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = retreive_coords(nation_json['countries'][i]['coordinates'])
+        if self.date.year <= 1918:
+            for i in range(len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "Russian Empire" or nation_json['countries'][i]['nation_name']\
+                        == "Finland":
+                    # print(nation_json['countries'][i]['coordinates'])
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                    print(self.coordinates)
+            self.coordinates = (retreive_coords(self.coordinates))
+        if self.date.year > 1918 and self.date.year < 1932:
+            for i in range(len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "USSR" or nation_json['countries'][i]['nation_name']\
+                        == "White Russia":
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+
+        if self.date.year >= 1932:
+            print('hi')
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "USSR"
+                    or nation_json['countries'][i]['nation_name'] == "White Russia" or
+                        nation_json['countries'][i]['nation_name'] == "Ukraine"):
+
+                    #print(nation_json['countries'][i]['coordinates'])
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

@@ -84,6 +84,7 @@ class SpriteGame:
 
     def draw_nations(self):
         for i in range(0, len(self.globe.nations)):
+            #print(self.globe.nations[i].name, self.globe.nations[i].coordinates)
             for coordinates in range(0, len(self.globe.nations[i].coordinates)):
 
                 if len((self.globe.nations[i].coordinates[coordinates])) == 1:

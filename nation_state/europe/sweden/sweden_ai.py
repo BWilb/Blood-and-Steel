@@ -82,7 +82,7 @@ class SwedenAI(NationAI):
         # other
         self.coordinates = []
     def establish_map_coordinates(self):
-        file_path = '/nation_data/json_fiels/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 

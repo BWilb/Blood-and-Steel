@@ -96,14 +96,28 @@ class TurkeyAI(NationAI):
         self.coordinates = []
 
     def establish_map_coordinates(self):
-        file_path = '/nation_data/json_fiels/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
+        if self.date.year <= 1918:
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "Ottoman Empire"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates.append(retreive_coords(self.coordinates))
+        if self.date.year == 1932 or self.date.year == 1936:
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "Ottoman Sultanate"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates.append(retreive_coords(self.coordinates))
 
-        for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Turkey":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+        if self.date.year > 1936:
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "Turkey"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
     # main function
     def main(self, globe):
         while self.population > 2000000:

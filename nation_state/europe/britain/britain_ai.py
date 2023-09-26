@@ -34,14 +34,17 @@ pm = {
 spare_pms = ["Duncan Pirie", "Henry Cowan", "Harold Baker", "James Calmont", "Ellis Ellis-Griffith",
              "Charles Craig", "William Jones", "Alfred Scott", "Sir Charles Hunter"]
 
-spare_1900_1950_monarchs = ["Louis", "Prince Arthur", "Beatrice", "Prince Henry", "Alexander Ramsay", "Alexander Cambridge",
+spare_1900_1950_monarchs = ["Louis", "Prince Arthur", "Beatrice", "Prince Henry", "Alexander Ramsay",
+                            "Alexander Cambridge",
                             "Albert Victor", "Victoria II", "George VI"]
+
 
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
+
 
 # population variables and dictionaries
 population = {
@@ -66,6 +69,7 @@ gdp = {
     "1936": 53157368421,
     "1939": 54936947368
 }
+
 
 class Britain(NationAI):
     def __init__(self, globe):
@@ -105,26 +109,37 @@ class Britain(NationAI):
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/json_fiels/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        if self.date.year < 1918:
-
+        if self.date.year <= 1936:
             for i in range(len(nation_json['countries'])):
-                if nation_json['countries'][i]['nation_name'] == "United Kingdom of Great Britain and Ireland":
+                print(nation_json['countries'][i]['nation_name'])
+                if (nation_json['countries'][i]['nation_name'] == "United Kingdom of Great Britain and Ireland" or
+                        nation_json['countries'][i]['nation_name'] == "British East Africa" or
+                        nation_json['countries'][i]['nation_name'] == "British Somaliland" or
+                        nation_json['countries'][i]['nation_name'] == "British Protectorate" or
+                        nation_json['countries'][i]['nation_name'] ==
+                        "British Raj" or nation_json['countries'][i]['nation_name'] == "Canada" or
+                        nation_json['countries'][i]['nation_name'] ==
+                        "Australia" or nation_json['countries'][i]['nation_name'] == "Malaya"):
+                    # print(nation_json['countries'][i]['coordinates'])
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-                    # print(self.coordinates)
-            # print(len(self.coordinates))
             self.coordinates = (retreive_coords(self.coordinates))
-        elif self.date.year > 1918:
-
+        if self.date.year > 1936:
             for i in range(len(nation_json['countries'])):
-                if nation_json['countries'][i]['nation_name'] == "United Kingdom":
+                print(nation_json['countries'][i]['nation_name'])
+                if (nation_json['countries'][i]['nation_name'] == "United Kingdom" or
+                        nation_json['countries'][i]['nation_name'] == "British East Africa" or
+                        nation_json['countries'][i]['nation_name'] == "British Somaliland" or
+                        nation_json['countries'][i]['nation_name'] == "British Protectorate" or
+                        nation_json['countries'][i]['nation_name'] ==
+                        "British Raj" or nation_json['countries'][i]['nation_name'] == "Canada" or
+                        nation_json['countries'][i]['nation_name'] ==
+                        "Australia" or nation_json['countries'][i]['nation_name'] == "Malaya"):
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-                    # print(self.coordinates)
-            # print(len(self.coordinates))
+            print(self.coordinates)
             self.coordinates = (retreive_coords(self.coordinates))
-
 
     # main function
     def main(self, globe):
@@ -135,4 +150,3 @@ class Britain(NationAI):
             super().stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break
-
