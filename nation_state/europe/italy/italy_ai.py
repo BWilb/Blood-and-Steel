@@ -82,18 +82,36 @@ class ItalyAI(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.land_1910 = ["Kingfom of Italy", "Eritrea"]
+        self.land_1914 = ["Kingfom of Italy", "Eritrea", "Libya"]
+        self.land_1932_1936 = ["Eritrea", "Italy", "Italian Somaliland"]
+        self.land_1939 = ["Eritrea (Italy)", "Ethiopia (Italy)", "Italy", "Italian Somaliland", "Libya"]
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        for i in range(len(nation_json['countries'])):
-            # print(nation_json['countries'][i]['nation_name'])
-            if (nation_json['countries'][i]['nation_name'] == "Kingfom of Italy"):
-                # print(nation_json['countries'][i]['coordinates'])
-                self.coordinates.append((nation_json['countries'][i]['coordinates']))
-        self.coordinates = (retreive_coords(self.coordinates))
+        if self.date.year <= 1914:
+            for land in range(0, len(self.land_1914)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1914[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year == 1932 or self.date.year == 1936:
+            for land in range(0, len(self.land_1932_1936)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932_1936[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1939:
+            for land in range(0, len(self.land_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

@@ -83,16 +83,16 @@ class Greece(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.land = ["Greece"]
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
-            # print(nation_json['countries'][i]['nation_name'])
-            if (nation_json['countries'][i]['nation_name'] == "Greece"):
-                # print(nation_json['countries'][i]['coordinates'])
-                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        for land in range(0, len(self.land)):
+            for i in range(0, len(nation_json['countries'])):
+                if self.land[land] == nation_json['countries'][i]['nation_name']:
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = (retreive_coords(self.coordinates))
 
     # main function

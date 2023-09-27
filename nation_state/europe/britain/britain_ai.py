@@ -105,6 +105,20 @@ class Britain(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.land_1910_1914 = ["United Kingdom of Great Britain and Ireland", "British East Africa", "British Somaliland",
+                               "Malaya", "British Protectorate", "British Raj", "Australia", "Anglo-Egyption Sudan", "Egypt",
+                               "Mesopotamia (GB)", "South Africa", "Botswana", "Rhodesia", "New Zealand"]
+
+        self.land_1918_1936 = ["United Kingdom of Great Britain and Ireland", "British East Africa", "British Somaliland",
+                               "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
+                               "Mesopotamia (GB)", "Union of South Africa", "Botswana", "German E. Africa (Tanganyika)",
+                          "German South-West Africa", "Mandatory Palestine (GB)", "Zambia", "Zimbabwe", "New Zealand"]
+
+        self.land_1939 = ["United Kingdom", "British East Africa", "British Somaliland",
+                               "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
+                               "Mesopotamia (GB)", "Union of South Africa", "Botswana", "Tanzania, United Republic of",
+                          "German South-West Africa", "Mandatory Palestine (GB)", "Dominion of Newfoundland", "New Zealand",
+                          "Swaziland", "Oman (British Raj)"]
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
@@ -112,33 +126,25 @@ class Britain(NationAI):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        if self.date.year <= 1936:
-            for i in range(len(nation_json['countries'])):
-                print(nation_json['countries'][i]['nation_name'])
-                if (nation_json['countries'][i]['nation_name'] == "United Kingdom of Great Britain and Ireland" or
-                        nation_json['countries'][i]['nation_name'] == "British East Africa" or
-                        nation_json['countries'][i]['nation_name'] == "British Somaliland" or
-                        nation_json['countries'][i]['nation_name'] == "British Protectorate" or
-                        nation_json['countries'][i]['nation_name'] ==
-                        "British Raj" or nation_json['countries'][i]['nation_name'] == "Canada" or
-                        nation_json['countries'][i]['nation_name'] ==
-                        "Australia" or nation_json['countries'][i]['nation_name'] == "Malaya"):
-                    # print(nation_json['countries'][i]['coordinates'])
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        if self.date.year <= 1914:
+            for land in range(0, len(self.land_1910_1914)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1914[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
-        if self.date.year > 1936:
-            for i in range(len(nation_json['countries'])):
-                print(nation_json['countries'][i]['nation_name'])
-                if (nation_json['countries'][i]['nation_name'] == "United Kingdom" or
-                        nation_json['countries'][i]['nation_name'] == "British East Africa" or
-                        nation_json['countries'][i]['nation_name'] == "British Somaliland" or
-                        nation_json['countries'][i]['nation_name'] == "British Protectorate" or
-                        nation_json['countries'][i]['nation_name'] ==
-                        "British Raj" or nation_json['countries'][i]['nation_name'] == "Canada" or
-                        nation_json['countries'][i]['nation_name'] ==
-                        "Australia" or nation_json['countries'][i]['nation_name'] == "Malaya"):
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            print(self.coordinates)
+
+        if self.date.year >= 1918 and self.date.year <= 1936:
+            for land in range(0, len(self.land_1918_1936)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1918_1936[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1939:
+            for land in range(0, len(self.land_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
 
     # main function

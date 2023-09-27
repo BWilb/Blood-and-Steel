@@ -80,18 +80,31 @@ class SwedenAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.land = ['Sweden']
         self.coordinates = []
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
+        if self.date.year < 1936:
+            for land in range(0, len(self.land)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+        if self.date.year == 1936:
+            for land in range(0, len(self.land)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = [(retreive_coords(self.coordinates))]
 
-        for i in range(len(nation_json['countries'])):
-            # print(nation_json['countries'][i]['nation_name'])
-            if (nation_json['countries'][i]['nation_name'] == "Sweden"):
-                # print(nation_json['countries'][i]['coordinates'])
-                self.coordinates.append((nation_json['countries'][i]['coordinates']))
-        self.coordinates = (retreive_coords(self.coordinates))
+        if self.date.year >= 1939:
+            for land in range(0, len(self.land)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

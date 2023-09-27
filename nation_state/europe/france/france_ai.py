@@ -74,6 +74,12 @@ class FranceAI(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.land_1910_1918 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
+                               "French West Africa", "Algeria", "Congo (France)", "Algeria (France)", "Morocco (France)"]
+
+        self.land_1932_1939 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
+                               "French West Africa", "Algeria (France)", "French Cameroons", "Congo (France)",
+                               "Syria (France)", "Armenia", "Morocco (France)", "Morocco", "Algeria"]
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -81,15 +87,19 @@ class FranceAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        for i in range(len(nation_json['countries'])):
-            if (nation_json['countries'][i]['nation_name'] == "France" or nation_json['countries'][i][
-                'nation_name'] == "French Cameroons" or
-                    nation_json['countries'][i]['nation_name'] == "French Guiana" or nation_json['countries'][i]['nation_name'] ==
-            "French Somaliland" or nation_json['countries'][i]['nation_name'] == "French Indo-China" or nation_json['countries'][i]['nation_name'] ==
-            "French West Africa" or nation_json['countries'][i]['nation_name'] == "French Equatorial Africa"):
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates.append((nation_json['countries'][i]['coordinates']))
-        self.coordinates = (retreive_coords(self.coordinates))
+        if self.date.year <= 1918:
+            for land in range(0, len(self.land_1910_1918)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1918[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1932:
+            for land in range(0, len(self.land_1932_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

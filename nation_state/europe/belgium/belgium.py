@@ -110,6 +110,9 @@ class Belgium:
         self.coordinates = []
         # other
         self.sprite = False
+        self.land_1910_1918 = ["Belgium", "Belgian Congo"]
+        self.land_1932_1939 = ["Belgium", "Zaire (Belgium)", "Rwanda", "Burundi"]
+
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
@@ -118,19 +121,18 @@ class Belgium:
 
             for i in range(len(nation_json['countries'])):
                 if (nation_json['countries'][i]['nation_name'] == "Belgium" or
-                nation_json['countries'][i]['nation_name'] == "Belgian Congo"):
-                    #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                        nation_json['countries'][i]['nation_name'] == "Belgian Congo"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
         if self.date.year >= 1932:
 
             for i in range(len(nation_json['countries'])):
                 if (nation_json['countries'][i]['nation_name'] == "Belgium" or
-                nation_json['countries'][i]['nation_name'] == "Zaire (Belgium)"):
-                    #print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                        nation_json['countries'][i]['nation_name'] == "Zaire (Belgium)"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
-
 
     # population functions
     def population_change(self):
