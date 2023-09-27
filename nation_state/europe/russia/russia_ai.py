@@ -86,9 +86,12 @@ class RussiaAI(NationAI):
             nation_json = js.load(file)
 
         if self.date.year <= 1918:
+            # Azerbaijan
+            # Armenia
             for i in range(len(nation_json['countries'])):
-                if nation_json['countries'][i]['nation_name'] == "Russian Empire" or nation_json['countries'][i]['nation_name']\
-                        == "Finland":
+                if (nation_json['countries'][i]['nation_name'] == "Russian Empire" or nation_json['countries'][i]['nation_name']
+                        == "Finland" or nation_json['countries'][i]['nation_name'] == "Azerbaijan" or
+                nation_json['countries'][i]['nation_name'] == "Armenia" or nation_json['countries'][i]['nation_name'] == "Georgia"):
                     # print(nation_json['countries'][i]['coordinates'])
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
                     print(self.coordinates)

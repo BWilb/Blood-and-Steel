@@ -80,9 +80,11 @@ class CubaAI(NationAI):
             nation_json = js.load(file)
 
         for i in range(len(nation_json['countries'])):
+            print(nation_json['countries'][i]['nation_name'])
             if nation_json['countries'][i]['nation_name'] == "Cuba":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates = [((nation_json['countries'][i]['coordinates']))]
+        self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
     def main(self, globe):

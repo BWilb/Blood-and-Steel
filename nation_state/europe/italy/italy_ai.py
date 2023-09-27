@@ -81,6 +81,7 @@ class ItalyAI(NationAI):
         self.alliance = ""
         self.us_relations = 34.56
         # other
+        self.coordinates = []
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -88,9 +89,11 @@ class ItalyAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Italy":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+            # print(nation_json['countries'][i]['nation_name'])
+            if (nation_json['countries'][i]['nation_name'] == "Kingfom of Italy"):
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

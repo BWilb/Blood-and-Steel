@@ -100,8 +100,10 @@ class AfghanistanAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Afghanistan":
-                self.coordinates.append((retreive_coords(nation_json['countries'][i]['coordinates'])))
+            if (nation_json['countries'][i]['nation_name'] == "Afghanistan"):
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]
 
 
     # main function

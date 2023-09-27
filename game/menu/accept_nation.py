@@ -1,11 +1,11 @@
-"""from nation_state.north_america.mexico import mexico
+from nation_state.north_america.mexico import mexico
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.canada import canada
 from nation_state.north_america.canada import canada_ai
 from nation_state.north_america.cuba import cuba
 from nation_state.north_america.cuba import cuba_ai
 # from nation_state.north_america.united_states import us
-from nation_state.north_america.united_states import us_ai"""
+from nation_state.north_america.united_states import us_ai
 from nation_state.europe.britain import britain_ai
 from nation_state.europe.britain import britain
 from nation_state.europe.italy import italy_ai
@@ -107,31 +107,33 @@ def accept_nation(nation, time):
         austrian_ai = austria_ai.Austria(globe1)
         english_ai = britain_ai.Britain(globe1)
         dutch_ai = netherlands_ai.Netherlands(globe1)
+        swiss_ai = SwitzerlandAI(globe1)
         french_ai = france_ai.FranceAI(globe1)
-        """swedish_ai = sweden_ai.SwedenAI(globe1)
-        norwegian_ai = norway_ai.NorwayAI(globe1)"""
+        greek_ai = greece_ai.Greece(globe1)
+        norwegian_ai = norway_ai.NorwayAI(globe1)
         russian_ai = russia_ai.RussiaAI(globe1)
         polish_ai = poland_ai.PolandAI(globe1)
-        """
-        danish_ai = denmark_ai.Denmark(globe1)"""
-        luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
-        """italian_ai = italy_ai.ItalyAI(globe1)
-        romanian_ai = romania_ai.RomaniaAI(globe1)
         spanish_ai = spain_ai.SpainAI(globe1)
-        swiss_ai = SwitzerlandAI(globe1)
-        greek_ai = greece_ai.Greece(globe1)
-        cuban_ai = cuba_ai.CubaAI(globe1)
-        mexican_ai = mexico_ai.MexicoAI(globe1)
+        danish_ai = denmark_ai.Denmark(globe1)
+        luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
+        swedish_ai = sweden_ai.SwedenAI(globe1)
+        """
         canadian_ai = canada_ai.Canada(globe1)
+        iraqi_ai = iraq_ai.Iraq(globe1)"""
+        italian_ai = italy_ai.ItalyAI(globe1)
+        mexican_ai = mexico_ai.MexicoAI(globe1)
+        american_ai = us_ai.USAI(globe1)
+        cuban_ai = cuba_ai.CubaAI(globe1)
+        chinese_ai = china_ai.ChinaAI(globe1)
+        romanian_ai = romania_ai.RomaniaAI(globe1)
+        turkish_ai = turkey_ai.TurkeyAI(globe1)
+        japanese_ai = japan_ai.JapanAI(globe1)
         afghani_ai = afghanistan_ai.AfghanistanAI(globe1)
         iranian_ai = iran_ai.Iran(globe1)
-        iraqi_ai = iraq_ai.Iraq(globe1)
-        japanese_ai = japan_ai.JapanAI(globe1)"""
-        chinese_ai = china_ai.ChinaAI(globe1)
-        turkish_ai = turkey_ai.TurkeyAI(globe1)
         germany = german_ai.GermanAI(globe1)
         establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
-                          french_ai, polish_ai, chinese_ai)
+                          iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
+                          greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, swedish_ai, norwegian_ai)
         """russian_ai, austrian_ai, norwegian_ai, english_ai, dutch_ai, swedish_ai, danish_ai,
                           french_ai, italian_ai, luxembourger_ai, romanian_ai, swiss_ai, spanish_ai, polish_ai, greek_ai,
                           cuban_ai, canadian_ai, mexican_ai, turkish_ai, afghani_ai, iranian_ai, iraqi_ai, japanese_ai, chinese_ai"""

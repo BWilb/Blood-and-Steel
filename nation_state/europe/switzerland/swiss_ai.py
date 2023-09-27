@@ -72,9 +72,9 @@ class SwitzerlandAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Switzerland":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates.append(retreive_coords(nation_json['countries'][i]['coordinates']))
+            if (nation_json['countries'][i]['nation_name'] == "Switzerland"):
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

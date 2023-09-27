@@ -87,9 +87,11 @@ class SwedenAI(NationAI):
             nation_json = js.load(file)
 
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Sweden":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+            # print(nation_json['countries'][i]['nation_name'])
+            if (nation_json['countries'][i]['nation_name'] == "Sweden"):
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

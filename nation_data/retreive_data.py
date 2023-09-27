@@ -124,5 +124,5 @@ class JsonWriter:
 
         except Exception as e:
             print(e.args)
-'''json_object = JsonWriter(1939)
-json_object.clear_old_file()'''
+"""json_object = JsonWriter(1914)
+json_object.clear_old_file()"""

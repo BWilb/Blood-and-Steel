@@ -92,9 +92,12 @@ class Denmark(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Denmark":
-                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+            # print(nation_json['countries'][i]['nation_name'])
+            if (nation_json['countries'][i]['nation_name'] == "Denmark" or nation_json['countries'][i]['nation_name'] ==
+                    "Iceland"):
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):

@@ -98,9 +98,10 @@ class Iran(NationAI):
             nation_json = js.load(file)
 
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Iran":
+            if (nation_json['countries'][i]['nation_name'] == "Iran" or nation_json['countries'][i]['nation_name'] == "Persia"):
                 # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                self.coordinates = (retreive_coords(nation_json['countries'][i]['coordinates']))
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
     def main(self, globe):
