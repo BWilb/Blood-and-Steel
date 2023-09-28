@@ -1,10 +1,8 @@
-import random
+
 import sys
 import time
 from datetime import timedelta
 from buttons import button
-# from globe_relations.message import Alert
-from colors.color import Color
 import pyautogui
 import pygame
 import os
@@ -13,7 +11,6 @@ from database_management import upload_database
 
 pygame.init()
 pygame.mixer.init()
-
 
 class SpriteGame:
     def __init__(self, nation, globe):
@@ -41,6 +38,10 @@ class SpriteGame:
         self.speed = 1.5
         self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.05)
         self.clock = pygame.time.Clock()
+        self.nation_map = []
+        # nation map stores memory locations of polygon buttons and the nations that they correlate with
+        self.nation_object = None
+        # nation object stores polygon button object that holds polygon coordinates and color
 
     def background_music(self):
         """within function while loop will be established that """
@@ -82,9 +83,19 @@ class SpriteGame:
         """updates screen"""
         pygame.display.update()
 
+    def storing_nations(self):
+        for i in range(0, len(self.globe.nations)):
+            for coordinates in range(0, len(self.globe.nations[i].coordinates)):
+                self.nation_object = button.PolygonButton(self.globe.nations[i].coordinates,
+                                                          self.globe.nations[i].nation_color,
+                                                          self.screen)
+            self.nation_map.append({
+                self.nation_object : self.globe.nations[i]
+            })
+
     def draw_nations(self):
         for i in range(0, len(self.globe.nations)):
-            print(self.globe.nations[i].name, self.globe.nations[i].coordinates)
+            #print(self.globe.nations[i].name, self.globe.nations[i].coordinates)
             for coordinates in range(0, len(self.globe.nations[i].coordinates)):
 
                 if len((self.globe.nations[i].coordinates[coordinates])) == 1:
@@ -339,6 +350,11 @@ class SpriteGame:
     def main_game(self):
         self.load_music()
         self.nation.sprite = True
+        self.storing_nations()
+        """for i in range(0, len(self.nation_map)):
+            print(self.nation_map[i])"""
+        for keys in self.nation_map:
+            print(keys.keys())
         while self.is_running:
             if not self.game_paused:
                 if self.game_state == "main game":

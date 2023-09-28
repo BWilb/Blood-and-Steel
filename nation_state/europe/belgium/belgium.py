@@ -124,8 +124,8 @@ class Belgium:
                         nation_json['countries'][i]['nation_name'] == "Belgian Congo"):
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
-        if self.date.year >= 1932:
+            self.coordinates = [(retreive_coords(self.coordinates))]
+        if self.date.year >= 1932 and self.date.year <= 1936:
 
             for i in range(len(nation_json['countries'])):
                 if (nation_json['countries'][i]['nation_name'] == "Belgium" or
@@ -133,6 +133,15 @@ class Belgium:
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1939:
+
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "Belgium" or
+                        nation_json['countries'][i]['nation_name'] == "Zaire (Belgium)"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = [(retreive_coords(self.coordinates))]
 
     # population functions
     def population_change(self):

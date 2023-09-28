@@ -38,7 +38,7 @@ class PolandAI(NationAI):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Kingdom of Belgium"
+        self.name = "Poland"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -77,7 +77,7 @@ class PolandAI(NationAI):
             for i in range(0, len(nation_json['countries'])):
                 if self.land[land] == nation_json['countries'][i]['nation_name']:
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-        self.coordinates = (retreive_coords(self.coordinates))
+        self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
     def main(self, globe):

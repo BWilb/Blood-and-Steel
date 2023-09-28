@@ -102,10 +102,10 @@ class ChinaAI(NationAI):
         if self.date.year > 1918:
 
             for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Chinese Warlords"):
+                if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates.append(retreive_coords(self.coordinates))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
     def main(self, globe):
