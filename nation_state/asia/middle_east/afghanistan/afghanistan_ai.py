@@ -70,10 +70,13 @@ class AfghanistanAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
         self.stability = 95.56
+
         # economic
         self.corporate_taxes = 24.00
         self.income_taxes = 20.00

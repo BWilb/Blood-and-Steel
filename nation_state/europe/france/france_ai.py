@@ -6,6 +6,22 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
+flags = {"1910": "../flags/france/Flag_of_France.jpg",
+         "1914": "../flags/france/Flag_of_France.jpg",
+         "1918": "../flags/france/Flag_of_France.jpg",
+         "1932": "../flags/france/Flag_of_France.jpg",
+         "1936": "../flags/france/Flag_of_France.jpg",
+         "1939": "../flags/france/Flag_of_France.jpg"}
+
+leader_images = {
+    "1910": "../leaders/france/Armand_Fallières_Paris_till_1913.jpg",
+    "1914": "../leaders/france/330px-Raymond_Poincaré_officiel_(cropped)_1913-1920.jpg",
+    "1918": "../leaders/france/330px-Raymond_Poincaré_officiel_(cropped)_1913-1920.jpg",
+    "1932": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg",
+    "1936": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg",
+    "1939": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg"
+}
+
 """Population Dictionaries"""
 population = {
     "1910": 39446500,
@@ -52,6 +68,8 @@ class FranceAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

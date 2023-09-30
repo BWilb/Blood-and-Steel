@@ -9,6 +9,23 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
+flags = {
+    "1910": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1914": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1918": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1932": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1936": "../flags/britain/United-Kingdom-Flag.jpg",
+    "1939": "../flags/britain/United-Kingdom-Flag.jpg"
+}
+
+leader_images = {"1910": "../leaders/britain/330px-Herbert_Henry_Asquith_till_1916.jpg",
+                 "1914": "../leaders/britain/330px-Herbert_Henry_Asquith_till_1916.jpg",
+                 "1918": "../leaders/britain/330px-David_Lloyd_George_1916-1922.jpg",
+                 "1932": "../leaders/britain/J._Ramsay_MacDonald_LCCN2014715885_(cropped)_till_1935.jpg",
+                 "1936": "../leaders/britain/Stanley_Baldwin_ggbain.35233_1935_1937.jpg",
+                 "1939": "../leaders/britain/chamberlain_1937-1939.jpeg"
+}
+
 monarchs = {
     """Dictionary for english monarchs
     Leader selection will be in sync with time frame selection
@@ -83,6 +100,8 @@ class Britain(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = pm[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

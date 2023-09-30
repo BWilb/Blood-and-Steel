@@ -39,6 +39,23 @@ gdp = {
     "1939": 703789473
 }
 
+flags = {
+    "1910": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg",
+    "1914": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg",
+    "1918": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg",
+    "1932": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg",
+    "1936": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg",
+    "1939": "../flags/luxembourg/1920px-Flag_of_Luxembourg_wide.jpg"
+}
+
+leader_images = {"1910": "../leaders/luxembourg/paul_eyschen_accroche_1910-1914.jpg",
+                 "1914": "../leaders/luxembourg/paul_eyschen_accroche_1910-1914.jpg",
+                 "1918": "../leaders/luxembourg/Léon_Kauffman_(1869-1952)_1918.jpg",
+                 "1932": "../leaders/luxembourg/Joseph_Bech_(detail)_1933.jpg",
+                 "1936": "../leaders/luxembourg/Pierre_Dupong,_Benelux_conference_The_Hague_March_1949,_Luxembourg_Delegation_1939.jpg",
+                 "1939": "../leaders/luxembourg/Pierre_Dupong,_Benelux_conference_The_Hague_March_1949,_Luxembourg_Delegation_1939.jpg"
+                 }
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -56,6 +73,8 @@ class LuxembourgAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

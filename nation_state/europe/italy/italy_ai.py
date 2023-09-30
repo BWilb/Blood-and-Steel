@@ -7,6 +7,23 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
+leader_images = {
+    "1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
+    "1914": "../leaders/italy/giolitti_1914.jpg",
+    "1918": "../leaders/italy/Flag_of_Greece.jpg",
+    "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
+}
+flags = {
+    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
+}
+
 prime_ministers = {
     "1910": "Luigi Luzzatti",
     "1914": "Antonio Salandra",
@@ -43,6 +60,8 @@ population = {
     "1936": 42400000,
     "1939": 43500000
 }
+
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -60,6 +79,8 @@ class ItalyAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = prime_ministers[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

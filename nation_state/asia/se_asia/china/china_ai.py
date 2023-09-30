@@ -50,6 +50,21 @@ gdp = {
     "1939": 54934157895
 }
 
+flags = {"1910": "../flags/china/1024px-flag_of_the_qing_dynasty_1889-1912-jpg.webp",
+         "1914": "../flags/china/Flag_of_China_(1912–1928).flag.png",
+         "1918": "../flags/china/Flag_of_China_(1912–1928).flag.png",
+         "1932": "../flags/china/Flag_of_the_Republic_of_China.jpg",
+         "1936": "../flags/china/Flag_of_the_Republic_of_China.jpg",
+         "1939": "../flags/china/Flag_of_the_Republic_of_China.jpg"}
+
+leader_images = {
+    "1910": "../leaders/china/Pu_Yi,_Qing_dynasty,_China,_Last_emperor-1910.jpg",
+    "1914": "../leaders/china/YuanShikaiPresidente1914.jpg",
+    "1918": "../leaders/china/Feng-Kwo-Chang,_President_of_China_(9to12)-1918.jpg",
+    "1932": "../leaders/china/Lin_Sen-1932-1939.jpg",
+    "1936": "../leaders/china/Lin_Sen-1932-1939.jpg",
+    "1939": "../leaders/china/Lin_Sen-1932-1939.jpg"
+}
 
 class ChinaAI(NationAI):
     def __init__(self, globe):
@@ -62,6 +77,8 @@ class ChinaAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
@@ -99,7 +116,15 @@ class ChinaAI(NationAI):
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
-        if self.date.year > 1918:
+        if self.date.year >= 1932 or self.date.year <= 1936:
+
+            for i in range(len(nation_json['countries'])):
+                if (nation_json['countries'][i]['nation_name'] == "Chinese Warlords"):
+                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1939:
 
             for i in range(len(nation_json['countries'])):
                 if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):

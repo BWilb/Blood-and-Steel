@@ -44,6 +44,21 @@ gdp = {
     "1936": 53157368421,
     "1939": 54936947368
 }
+flags = {"1910": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1914": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1918": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1932": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1936": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1939": "../flags/japan/Flag_of_Japan_(1870–1999).jpg"}
+
+leader_images = {
+    "1910": "../leaders/germany/holleg_1917.jpeg",
+    "1914": "../leaders/germany/holleg_1917.jpeg",
+    "1918": "../leaders/germany/von_herling-1918.jpg",
+    "1932": "../leaders/germany/bruning-1932.jpg",
+    "1936": "../leaders/germany/hitler-1936-1945.jpg",
+    "1939": "../leaders/germany/hitler-1936-1945.jpg"
+}
 
 class GermanAI(NationAI):
     def __init__(self, globe):
@@ -57,6 +72,8 @@ class GermanAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = chancellors[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

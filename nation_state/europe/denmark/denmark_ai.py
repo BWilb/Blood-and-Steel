@@ -7,6 +7,22 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
+flags = {"1910": "../flags/denmark/Flag_of_Denmark.jpg",
+         "1914": "../flags/denmark/Flag_of_Denmark.jpg",
+         "1918": "../flags/denmark/Flag_of_Denmark.jpg",
+         "1932": "../flags/denmark/Flag_of_Denmark.jpg",
+         "1936": "../flags/denmark/Flag_of_Denmark.jpg",
+         "1939": "../flags/denmark/Flag_of_Denmark.jpg"}
+
+leader_images = {
+    "1910": "../leaders/denmark/Ke019217_1910.jpg",
+    "1914": "../leaders/denmark/Ke019217_1910.jpg",
+    "1918": "../leaders/denmark/Ke019217_1910.jpg",
+    "1932": "../leaders/denmark/stauning_1932--1939.jpeg",
+    "1936": "../leaders/denmark/stauning_1932--1939.jpeg",
+    "1939": "../leaders/denmark/stauning_1932--1939.jpeg"
+}
+
 """Population Dictionaries"""
 population = {
     "1910": 2713555,
@@ -62,6 +78,8 @@ class Denmark(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

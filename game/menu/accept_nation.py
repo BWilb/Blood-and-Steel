@@ -73,7 +73,7 @@ def establish_json_files(time):
 
 
 def accept_nation(nation, time):
-    print(time)
+    #print(time)
     from globe_relations import globe
     from sprite_game_revised import SpriteGame
     establish_json_files(time)
@@ -133,7 +133,7 @@ def accept_nation(nation, time):
         germany = german_ai.GermanAI(globe1)
         establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
                           iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
-                          greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, swedish_ai, norwegian_ai)
+                          greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, norwegian_ai)
         """russian_ai, austrian_ai, norwegian_ai, english_ai, dutch_ai, swedish_ai, danish_ai,
                           french_ai, italian_ai, luxembourger_ai, romanian_ai, swiss_ai, spanish_ai, polish_ai, greek_ai,
                           cuban_ai, canadian_ai, mexican_ai, turkish_ai, afghani_ai, iranian_ai, iraqi_ai, japanese_ai, chinese_ai"""

@@ -86,18 +86,26 @@ class SwedenAI(NationAI):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-        if self.date.year < 1936:
+        if self.date.year >= 1918:
             for land in range(0, len(self.land)):
                 for i in range(0, len(nation_json['countries'])):
                     if self.land[land] == nation_json['countries'][i]['nation_name']:
                         self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year == 1932:
+            for land in range(0, len(self.land)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
         if self.date.year == 1936:
             for land in range(0, len(self.land)):
                 for i in range(0, len(nation_json['countries'])):
                     if self.land[land] == nation_json['countries'][i]['nation_name']:
                         self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = [(retreive_coords(self.coordinates))]
+            self.coordinates = (retreive_coords(self.coordinates))
 
         if self.date.year >= 1939:
             for land in range(0, len(self.land)):

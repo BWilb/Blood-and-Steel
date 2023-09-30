@@ -8,7 +8,7 @@ from nation_data.coordination.retreive_and_convert import retreive_coords
 leaders = {
     "1910": None,
     "1914": None,
-    "1918": "Józef Piłsudski",
+    "1918": None,
     "1932": "Ignacy Mościcki",
     "1936": "Ignacy Mościcki",
     "1939": "Ignacy Mościcki"

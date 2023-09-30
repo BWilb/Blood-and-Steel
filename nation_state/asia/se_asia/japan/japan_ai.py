@@ -54,6 +54,21 @@ gdp = {
     "1939": 23894736842
 }
 
+flags = {"1910": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1914": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1918": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1932": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1936": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
+         "1939": "../flags/japan/Flag_of_Japan_(1870–1999).jpg"}
+
+leader_images = {
+    "1910": "../leaders/japan/330px-11_KatsuraT-1910.jpg",
+    "1914": "../leaders/japan/330px-Gonbee_Yamamoto_later_years-1914.jpg",
+    "1918": "../leaders/japan/330px-Masatake_Terauchi_2-1918.jpg",
+    "1932": "../leaders/japan/Inukai_Tsuyoshi-1932.jpg",
+    "1936": "../leaders/japan/Prime_Minister_Keisuke_Okada-1936.jpg",
+    "1939": "../leaders/japan/Fumimaro_Konoe(cropped)-1939.jpg"
+}
 
 class JapanAI(NationAI):
     def __init__(self, globe):
@@ -66,6 +81,8 @@ class JapanAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

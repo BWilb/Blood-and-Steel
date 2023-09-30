@@ -6,6 +6,23 @@ from nation_data.coordination.retreive_and_convert import retreive_coords
 import json as js
 
 
+flags = {
+    "1910": "../flags/austria/Flag_of_the_Habsburg_Monarchy.jpg",
+    "1914": "../flags/austria/Flag_of_the_Habsburg_Monarchy.jpg",
+    "1918": "../flags/austria/Flag_of_the_Habsburg_Monarchy.jpg",
+    "1932": "../flags/austria/Flag_of_Austria_1932.jpg",
+    "1936": "../flags/austria/State_flag_of_Austria_(1934–1938).jpg",
+    "1939": "../flags/austria/Standarte_Adolf_Hitlers.jpg"
+}
+leader_images = {"1910": "../leaders/austria/joseph_ii.jpeg",
+                 "1914": "../leaders/austria/joseph_ii.jpeg",
+                 "1918": "../leaders/austria/charles_i.jpg",
+                 "1932": "../leaders/austria/miklas.jpeg",
+                 "1936": "../leaders/austria/miklas.jpeg",
+                 "1939": "../leaders/austria/adolf-hitler-10253.jpg"
+                 }
+
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -64,6 +81,8 @@ class Austria(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

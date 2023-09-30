@@ -6,6 +6,22 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
+flags = {"1910": "../flags/greece/Flag_of_Greece.jpg",
+         "1914": "../flags/greece/Flag_of_Greece.jpg",
+         "1918": "../flags/greece/Flag_of_Greece.jpg",
+         "1932": "../flags/greece/Flag_of_Greece.jpg",
+         "1936": "../flags/greece/Flag_of_Greece.jpg",
+         "1939": "../flags/greece/Flag_of_Greece.jpg"}
+
+leader_images = {
+    "1910": "../leaders/greece/george_i.jpeg",
+    "1914": "../leaders/greece/constantine_i_1914-1918.jpeg",
+    "1918": "../leaders/greece/King_Alexander_of_Greece_1918.jpg",
+    "1932": "../leaders/greece/330px-Zaimis37216v_1932.jpg",
+    "1936": "../leaders/greece/Georgeiiofgreece_1936-1939.jpg",
+    "1939": "../leaders/greece/Georgeiiofgreece_1936-1939.jpg"
+}
+
 """Population Dictionaries"""
 population = {
     "1910": 4510644,
@@ -61,6 +77,8 @@ class Greece(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

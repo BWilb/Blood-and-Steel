@@ -5,7 +5,23 @@ from nation_data.coordination.retreive_and_convert import retreive_coords, conve
 import json as js
 
 from game.ai.nation_ai import NationAI
-import geopandas as grosdp
+
+flags = {
+    "1910": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg",
+    "1914": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg",
+    "1918": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg",
+    "1932": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg",
+    "1936": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg",
+    "1939": "../flags/netherlands/vector-illustration-of-netherlands-flag.jpg"
+}
+
+leader_images = {"1910": "../leaders/netherlands/skirmer_1910.png",
+                 "1914": "../leaders/netherlands/250px-Pieter_Cort_van_der_Linden_1914-1918.jpg",
+                 "1918": "../leaders/netherlands/250px-Pieter_Cort_van_der_Linden_1914-1918.jpg",
+                 "1932": "../leaders/netherlands/Beerenbrouck_1932.jpg",
+                 "1936": "../leaders/netherlands/Hendrik_Colijn_(1925)_1936-1939.jpg",
+                 "1939": "../leaders/netherlands/Hendrik_Colijn_(1925)_1936-1939.jpg"
+                 }
 
 """Population Dictionaries"""
 population = {
@@ -36,7 +52,7 @@ monarchs = {
     "1939": "Wilhelmina"
 }
 
-grosdp = {
+gdp = {
     "1910": 865645049,
     "1914": 1111426098,
     "1918": 1844390540,
@@ -62,6 +78,8 @@ class Netherlands(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
@@ -69,7 +87,7 @@ class Netherlands(NationAI):
         # economic
         self.corporate_taxes = 24.00
         self.income_taxes = 20.00
-        self.current_gdp = grosdp[str(globe.date.year)]
+        self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
         self.consumer_spending = 200
         self.investment = 300

@@ -40,6 +40,22 @@ gdp = {
     "1939": 289281486
 }
 
+flags = {"1910": "../flags/norway/norway.jpeg",
+         "1914": "../flags/norway/norway.jpeg",
+         "1918": "../flags/norway/norway.jpeg",
+         "1932": "../flags/norway/norway.jpeg",
+         "1936": "../flags/norway/norway.jpeg",
+         "1939": "../flags/norway/norway.jpeg"}
+
+leader_images = {
+    "1910": "../leaders/norway/330px-Gunnar_Knudsen_02-1914-1918.jpg",
+    "1914": "../leaders/norway/330px-Gunnar_Knudsen_02-1914-1918.jpg",
+    "1918": "../leaders/norway/330px-Gunnar_Knudsen_02-1914-1918.jpg",
+    "1932": "../leaders/norway/Peder_Kolstad-1932.jpg",
+    "1936": "../leaders/norway/1936-1939.jpeg",
+    "1939": "../leaders/norway/1936-1939.jpeg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -57,6 +73,8 @@ class NorwayAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

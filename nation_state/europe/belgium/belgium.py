@@ -124,7 +124,7 @@ class Belgium:
                         nation_json['countries'][i]['nation_name'] == "Belgian Congo"):
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = [(retreive_coords(self.coordinates))]
+            self.coordinates = (retreive_coords(self.coordinates))
         if self.date.year >= 1932 and self.date.year <= 1936:
 
             for i in range(len(nation_json['countries'])):
