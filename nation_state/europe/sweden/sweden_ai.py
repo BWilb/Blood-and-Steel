@@ -41,6 +41,23 @@ gdp = {
     "1939": 2892814865
 }
 
+leader_images = {
+    "1910": "../leaders/sweden/330px-Arvid_Lindman_1910.jpg",
+    "1914": "../leaders/sweden/Karl_Staaff_1914.jpg",
+    "1918": "../leaders/sweden/Nils_Eden_1918.jpg",
+    "1932": "../leaders/sweden/330px-Carl_Gustaf_Ekman_1932.jpg",
+    "1936": "../leaders/sweden/330px-Per_Albin_Hansson_-_Sveriges_styresmän_1936-1939.jpg",
+    "1939": "../leaders/sweden/330px-Per_Albin_Hansson_-_Sveriges_styresmän_1936-1939.jpg"
+}
+flags = {
+    "1910": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1914": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1918": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1932": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1936": "../flags/sweden/Flag_of_Sweden.jpg",
+    "1939": "../flags/sweden/Flag_of_Sweden.jpg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -59,6 +76,8 @@ class SwedenAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

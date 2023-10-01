@@ -27,7 +27,7 @@ class Button():
 
         return action
 
-class PolygonButton:
+"""class PolygonButton:
     def __init__(self, vertices, color, nation_info, screen):
         self.vertices = vertices
         self.color = color
@@ -35,65 +35,50 @@ class PolygonButton:
         self.screen = screen
 
     def is_clicked(self, mouse_pos):
-        return pygame.draw.polygon(self.screen, self.color, self.vertices).collidepoint(mouse_pos)
+        return pygame.draw.polygon(self.screen, self.color, self.vertices).collidepoint(mouse_pos)"""
+class PolygonButton:
+    def __init__(self, vertices, color, nation_info):
+        self.vertices = vertices
+        self.color = color
+        self.nation_info = nation_info
 
-    """
-    Code taken from ChatGPT and worked into what I want it to do
-    
-    turning multiple pygame polygon into button and storing in list
-    import pygame
-    import sys
-    
-    pygame.init()
-    
-    # Colors
-    WHITE = (255, 255, 255)
-    GRAY = (150, 150, 150)
-    
-    # Initialize the screen
-    screen_width, screen_height = 800, 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Polygon Buttons")
-    
-    # Define a polygon shape for the buttons
-    button1_vertices = [(100, 200), (200, 150), (300, 200), (200, 250)]
-    button2_vertices = [(400, 200), (500, 150), (600, 200), (500, 250)]
-    button_color = GRAY
-    
-    class PolygonButton:
-        def __init__(self, vertices, color):
-            self.vertices = vertices
-            self.color = color
-    
-        def draw(self):
-            pygame.draw.polygon(screen, self.color, self.vertices)
-    
-        def is_hovered(self, mouse_pos):
-            return pygame.draw.polygon(screen, self.color, self.vertices).collidepoint(mouse_pos)
-    
-        # Create a list to store the buttons
-        buttons = []
-        buttons.append(PolygonButton(button1_vertices, button_color))
-        buttons.append(PolygonButton(button2_vertices, button_color))
-        
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-        
-            screen.fill(WHITE)
-            
-            mouse_pos = pygame.mouse.get_pos()
-        
-            for button in buttons:
-                if button.is_hovered(mouse_pos):
-                    button.color = WHITE
-                else:
-                    button.color = GRAY
-        
-                button.draw()
-        
-            pygame.display.flip()
+    def draw(self, screen):
+        for coord_sets in range(0, len(self.vertices)):
+            pygame.draw.polygon(screen, self.color, self.vertices[coord_sets])
 
-    """
+    def is_clicked(self, mouse_pos):
+        """polygon_rect = pygame.Rect(self.vertices[0], 1, 1)
+        for point in self.vertices[1:]:
+            polygon_rect.union_ip(pygame.Rect(*point, 1, 1))
+
+        return polygon_rect.collidepoint(mouse_pos)"""
+        x, y = mouse_pos
+
+        for vertices in self.vertices:
+            n = len(vertices)
+            inside = False
+
+            p1x, p1y = vertices[0]
+
+            for i in range(1, n + 1):
+                p2x, p2y = vertices[i % n]
+
+                if y > min(p1y, p2y):
+                    if y <= max(p1y, p2y):
+                        if x <= max(p1x, p2x):
+                            if p1y != p2y:
+                                xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
+                                if p1x == p2x or x <= xinters:
+                                    inside = not inside
+
+                p1x, p1y = p2x, p2y
+
+            if inside:
+                return True
+
+        return False
+        """Aided by ChatGPT in finding algorithm that could calculate whether or not a mouseclick was within
+        a polygon's borders
+        
+        Prompt: rewrite for polygons with multiple sets of vertices        
+        """

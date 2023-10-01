@@ -6,6 +6,7 @@ from buttons import button
 import pyautogui
 import pygame
 import os
+from game.ai.nation_ai import NationAI
 
 from database_management import upload_database
 
@@ -40,7 +41,6 @@ class SpriteGame:
         self.clock = pygame.time.Clock()
         self.nation_map = []
         self.nation_button = None
-        self.mouse_position = None
 
     def background_music(self):
         """within function while loop will be established that """
@@ -86,8 +86,7 @@ class SpriteGame:
         for i in range(0, len(self.globe.nations)):
             self.nation_button = button.PolygonButton(self.globe.nations[i].coordinates,
                                                       self.globe.nations[i].nation_color,
-                                                      self.globe.nations[i],
-                                                      self.screen)
+                                                      self.globe.nations[i])
             self.nation_map.append(self.nation_button)
 
     def draw_nations(self):
@@ -102,15 +101,17 @@ class SpriteGame:
                 else:
                     pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
                                         self.globe.nations[i].coordinates[coordinates])"""
-        for i in range(0, len(self.nation_map)):
+        """for i in range(0, len(self.nation_map)):
             for vertice_sets in range(0, len(self.nation_map[i].vertices)):
                 pygame.draw.polygon(self.screen,
                                     self.nation_map[i].color,
-                                    self.nation_map[i].vertices[vertice_sets])
+                                    self.nation_map[i].vertices[vertice_sets])"""
+        for i in range(0, len(self.nation_map)):
+            self.nation_map[i].draw(self.screen)
 
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
-        return pygame.transform.scale(pygame.image.load(leader_image).convert_alpha(), (250, 400))
+        return pygame.transform.scale(pygame.image.load(leader_image).convert_alpha(), (250, 300))
 
     def resize_flag(self):
         """function for resizing both flag that will be displayed"""
@@ -215,7 +216,7 @@ class SpriteGame:
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
         self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
-        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
+        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.05)
         self.draw_text(f"Social stats", pygame.font.SysFont("Arial-Black", 30),
                        self.text_col, self.WIDTH * 0.1, 100)
@@ -277,13 +278,12 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
-        # self.screen.blit(flag, (self.WIDTH * 0.05, 150))
-        # self.screen.blit(leader, (self.WIDTH * 0.015, 300))
-        if self.flag_button.draw(self.screen):
-            self.game_state = "view infographics"
-            self.nation_selected = self.nation
 
-    def infographics(self):
+        """if self.flag_button.draw(self.screen):
+            self.game_state = "view infographics"
+            self.nation_selected = self.nation"""
+
+    """def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
         econ_img = pygame.image.load("buttons/game_buttons/economy_buttion.jpg").convert_alpha()
         foreign_img = pygame.image.load("buttons/game_buttons/foreign_button.jpg").convert_alpha()
@@ -291,26 +291,26 @@ class SpriteGame:
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(125, 850, back_img, 0.05)
 
-        """stats buttons"""
+        stats buttons
         govt_button = button.Button(100, 450, govt_img, 0.125)
         econ_button = button.Button(100, 550, econ_img, 0.125)
         foreign_button = button.Button(100, 650, foreign_img, 0.125)
         social_button = button.Button(100, 750, social_img, 0.125)
-        """speed imgs"""
+        speed imgs
         faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
         fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
         regular_img = pygame.image.load("buttons/game_buttons/functionality_buttons/regular_speed.jpg").convert_alpha()
         slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
         slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
-        """speed buttons"""
+        speed buttons
         faster_button = button.Button(1720, 150, faster_img, 0.035)
         fast_button = button.Button(1680, 150, fast_img, 0.035)
         regular_button = button.Button(1640, 150, regular_img, 0.035)
         slow_button = button.Button(1600, 150, slow_img, 0.035)
         slower_button = button.Button(1560, 150, slower_img, 0.035)
-        """back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
-        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)"""
-        self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+       # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
             self.speed = 2.75
         if slow_button.draw(self.screen):
@@ -335,6 +335,42 @@ class SpriteGame:
             self.game_state = "view society"
 
         if back_button.draw(self.screen):
+            self.game_state = "main game"""
+    def view_foreign_nation(self):
+
+        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
+        back_button = button.Button(125, 850, back_img, 0.05)
+        """back button established to escape function"""
+        improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
+        relation_button = button.Button(25, 400, improve_relation_img, 0.20)
+        establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
+        pact_button = button.Button(25, 475, establish_pact, 0.20)
+        embargo = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
+        embargo_button = button.Button(25, 550, embargo, 0.20)
+        worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
+        worsen_button = button.Button(25, 625, worsen, 0.20)
+        justify = pygame.image.load("buttons/relations_buttons/justify_war.jpg").convert_alpha()
+        justify_button = button.Button(25, 700, justify, 0.20)
+
+        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+        """Two primary pieces of information on nation; leader and national flag"""
+        leader = self.resize_leader(self.nation_selected.leader_image)
+        self.screen.blit(leader, (50, 0))
+
+        if relation_button.draw(self.screen):
+            pass
+        if pact_button.draw(self.screen):
+            pass
+        if embargo_button.draw(self.screen):
+            pass
+        if worsen_button.draw(self.screen):
+            pass
+        if justify_button.draw(self.screen):
+            pass
+
+        if back_button.draw(self.screen):
             self.game_state = "main game"
 
     def main_game(self):
@@ -350,8 +386,9 @@ class SpriteGame:
                 """"""
                 if self.game_state == "main game":
                     self.primary_game()
-                elif self.game_state == "view infographics":
-                    self.infographics()
+
+                elif self.game_state == "view foreign nation":
+                    self.view_foreign_nation()
 
                 elif self.game_state == "view society":
                     self.view_society()
@@ -380,14 +417,38 @@ class SpriteGame:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # Left mouse button clicked
                         mouse_pos = pygame.mouse.get_pos()
+
+                        # Check if the mouse click is inside any of the buttons
+                        for button in self.nation_map:
+                            if button.is_clicked(mouse_pos):
+                                self.nation_selected = button.nation_info
+                                self.game_state = "view foreign nation"
+                                # Perform further actions with the nation information if needed
+                                break  # Exit the loop after the first button is clicked
+                        """received code from ChatGPT
+                        IMPROVE FOLLOWING CODE
+                        
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Left mouse button clicked
+                        mouse_pos = pygame.mouse.get_pos()
                         for i in range(0, len(self.nation_map)):
                             for vertex in range(0, len(self.nation_map[i].vertices)):
-                                if pygame.draw.polygon(self.screen, self.nation_map[i].color, self.nation_map[i].vertices[vertex]).collidepoint(mouse_pos):
+                                if pygame.draw.polygon(self.screen, 
+                                self.nation_map[i].color, 
+                                self.nation_map[i].vertices[vertex]).collidepoint(mouse_pos):
                                     print(f"Clicked on {self.globe.nations[i]}")
                                     self.nation_selected = self.globe.nations[i]
                                     self.game_state = "view infographics"
                                     # Perform further actions with the nation information
                                     break
+                        for buttons in self.nation_map:
+                            print(self.mouse_position)
+                            if buttons.is_clicked(self.mouse_position):
+                                print(buttons)
+                                self.nation_selected = buttons.nation_info
+                                self.game_state = "view infographics"
+                                print(self.nation_selected)
+                        """
 
                 if event.type == pygame.QUIT:
                     self.is_running = False

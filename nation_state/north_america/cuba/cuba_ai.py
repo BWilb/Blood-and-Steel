@@ -36,6 +36,22 @@ gdp = {
     "1939": 78347343
 }
 
+flags = {
+    "1910": "../flags/cuba/cuba.jpeg",
+    "1914": "../flags/cuba/cuba.jpeg",
+    "1918": "../flags/cuba/cuba.jpeg",
+    "1932": "../flags/cuba/cuba.jpeg",
+    "1936": "../flags/cuba/cuba.jpeg",
+    "1939": "../flags/cuba/cuba.jpeg"
+}
+leader_images = {"1910": "../leaders/cuba/Gral_de_División_José_Miguel_Gomez_Gomez_1910.jpeg",
+                 "1914": "../leaders/cuba/mario-garca-menocal-1866-1941-granger_1914-1918.jpg",
+                 "1918": "../leaders/cuba/mario-garca-menocal-1866-1941-granger_1914-1918.jpg",
+                 "1932": "../leaders/cuba/330px-Gmachado_1932.jpg",
+                 "1936": "../leaders/cuba/1936.png",
+                 "1939": "../leaders/cuba/1939.jpeg"
+                 }
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -53,6 +69,8 @@ class CubaAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

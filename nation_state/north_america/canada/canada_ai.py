@@ -49,6 +49,22 @@ gdp = {
     "1939": 74348873
 }
 
+flags = {"1910": "../flags/canada/canada_flag_1920.jpg",
+         "1914": "../flags/canada/canada_flag_1920.jpg",
+         "1918": "../flags/canada/canada_flag_1920.jpg",
+         "1932": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
+         "1936": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
+         "1939": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg"}
+
+leader_images = {
+    "1910": "../leaders/canada/wilfred_laurier_1910.jpeg",
+    "1914": "../leaders/canada/robert_borden_1914-1920.jpeg",
+    "1918": "../leaders/canada/robert_borden_1914-1920.jpeg",
+    "1932": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
+    "1936": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
+    "1939": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -66,6 +82,8 @@ class Canada(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = pms[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

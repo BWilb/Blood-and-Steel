@@ -41,6 +41,22 @@ gdp = {
     "1939": 4366978929
 }
 
+flags = {"1910": "../flags/spain/spain_flag_1910-1930.png",
+         "1914": "../flags/spain/spain_flag_1910-1930.png",
+         "1918": "../flags/spain/spain_flag_1910-1930.png",
+         "1932": "../flags/spain/spanish_flag_1932_1936.jpg",
+         "1936": "../flags/spain/spanish_flag_1932_1936.jpg",
+         "1939": "../flags/spain/nationalist_spain_1939.jpg"}
+
+leader_images = {
+    "1910": "../leaders/spain/alfonso_xiii.jpg",
+    "1914": "../leaders/spain/alfonso_xiii.jpg",
+    "1918": "../leaders/spain/alfonso_xiii.jpg",
+    "1932": "../leaders/spain/330px-Niceto_Alcalá-Zamora_(cropped)1932-1936.jpg",
+    "1936": "../leaders/spain/330px-Niceto_Alcalá-Zamora_(cropped)1932-1936.jpg",
+    "1939": "../leaders/spain/franco.jpg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -59,6 +75,8 @@ class SpainAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

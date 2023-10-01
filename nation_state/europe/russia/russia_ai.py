@@ -41,6 +41,22 @@ gdp = {
     "1939": 44428052632
 }
 
+flags = {"1910": "../flags/russia/Flag_of_Russia.jpg",
+         "1914": "../flags/russia/Flag_of_Russia.jpg",
+         "1918": "../flags/russia/Flag_of_Russia.jpg",
+         "1932": "../flags/russia/Flag_of_the_Soviet_Union_(1924–1936).jpg",
+         "1936": "../flags/russia/Flag_of_the_Soviet_Union_(1924–1936).jpg",
+         "1939": "../flags/russia/Flag_of_the_USSR_(1936-1955).jpg"}
+
+leader_images = {
+    "1910": "../leaders/russia/800px-Mikola_II_(cropped)-2.jpg",
+    "1914": "../leaders/russia/800px-Mikola_II_(cropped)-2.jpg",
+    "1918": "../leaders/russia/800px-Mikola_II_(cropped)-2.jpg",
+    "1932": "../leaders/russia/Joseph_Stalin,_1950_(cropped).jpg",
+    "1936": "../leaders/russia/Joseph_Stalin,_1950_(cropped).jpg",
+    "1939": "../leaders/russia/Joseph_Stalin,_1950_(cropped).jpg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -58,6 +74,8 @@ class RussiaAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = dictators[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

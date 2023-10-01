@@ -37,6 +37,22 @@ gdp = {
     "1939": 743488730
 }
 
+flags = {
+    "1910": "../flags/mexico/150px-Bandera_de_México_(1880-1914).jpg",
+    "1914": "../flags/mexico/150px-Bandera_de_México_(1880-1914).jpg",
+    "1918": "../flags/mexico/1920px-Bandera_de_la_Tercera_República_Federal_de_los_Estados_Unidos_Mexicanos(1916-1932).jpg",
+    "1932": "../flags/mexico/1920px-Bandera_de_la_Tercera_República_Federal_de_los_Estados_Unidos_Mexicanos(1916-1932).jpg",
+    "1936": "../flags/mexico/1920px-Bandera_de_la_Tercer_República_Federal_de_los_Estados_Unidos_Mexicanos_modelo_1934.jpg",
+    "1939": "../flags/mexico/1920px-Bandera_de_la_Tercer_República_Federal_de_los_Estados_Unidos_Mexicanos_modelo_1934.jpg"
+}
+leader_images = {"1910": "../leaders/mexico/Porfirio_Diaz_en_1867.jpg",
+                 "1914": "../leaders/mexico/huerta_1914.jpg",
+                 "1918": "../leaders/mexico/s20_15_venustiano-768x1024_1918.jpg",
+                 "1932": "../leaders/mexico/OIP_1932.jpeg",
+                 "1936": "../leaders/mexico/lazaro_1936_1939.jpeg",
+                 "1939": "../leaders/mexico/lazaro_1936_1939.jpeg"
+                 }
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -54,6 +70,8 @@ class MexicoAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
