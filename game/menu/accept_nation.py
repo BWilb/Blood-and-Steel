@@ -75,7 +75,8 @@ def establish_json_files(time):
 def accept_nation(nation, time):
     #print(time)
     from globe_relations import globe
-    from sprite_game_revised import SpriteGame
+    #from sprite_game_revised import SpriteGame
+    from practice_sprite import SpriteGame
     establish_json_files(time)
 
     globe1 = globe.Globe(time)
@@ -104,6 +105,7 @@ def accept_nation(nation, time):
 
     if nation.lower() == "belgium":
         belgian = belgium.Belgium(globe1)
+        belgian.chosen = True
         austrian_ai = austria_ai.Austria(globe1)
         english_ai = britain_ai.Britain(globe1)
         dutch_ai = netherlands_ai.Netherlands(globe1)

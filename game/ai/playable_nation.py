@@ -1,7 +1,7 @@
 import random
 import time
-from enum import Enum
 from datetime import datetime, timedelta
+from enum import Enum
 
 
 class EconomicState(Enum):
@@ -9,7 +9,8 @@ class EconomicState(Enum):
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
-class NationAI:
+
+class PlayableNation:
     def __init__(self, globe):
         # general information
         self.population_reward = 0
@@ -50,94 +51,66 @@ class NationAI:
         self.imports = 500
         self.chosen = False
 
-    def check_population_growth(self):
+    def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-
-        if self.year_placeholder < self.date.year:
+        if self.current_year < self.date.year:
             pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
-            if pop_change < 1.25:
-                self.population_stability = 0
-                self.population_reward -= 1.25
+            if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to promote population growth?: ")
+                not_answered = False
 
-                if choice == 1:
-                    print(f"{self.leader}'s government has decided to implement policies to increase growth in births.\n")
-                    time.sleep(1.25)
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_enhancer = True
+                        not_answered = True
 
-                    self.birth_enhancer = True
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
 
-                    if self.birth_control:
-                        self.birth_control = False
-
-            elif pop_change >= 1.25 and pop_change <= 8.56:
-                """If statement increments variable holding into account whether population is becoming stable or not"""
-                self.population_stability += 1
-                self.population_reward += 5
-
-                if self.population_stability >= 2:
-                    """checking to see if population growth has been stable for 2 years or longer"""
-                    if self.population_reward < 10:
-                        chance = random.randrange(0, 10)
-                        if chance % 4 == 2:
-                            """25% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-                    if self.population_reward > 10 and self.population_reward < 20:
-                        chance = random.randrange(0, 10)
-                        if chance % 3 == 2:
-                            """33% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-                    if self.population_reward >= 30:
-                        chance = random.randrange(0, 10)
-                        if chance % 2 == 0:
-                            """50% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-            elif pop_change > 8.56:
-                self.population_stability = 0
-                self.population_reward -= 1.25
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
+            elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
+                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                               f"Would you like to slow your population growth?: ")
+                not_answered = False
 
-                if choice == 1:
-                    print(f"{self.leader}'s government has decided to implement policies to control births.\n")
-                    time.sleep(1.25)
+                while not_answered:
+                    if choice.lower() == "y" or choice.lower() == "yes":
+                        self.birth_control = True
+                        not_answered = True
 
-                    self.birth_control = True
+                    elif choice.lower() == "n" or choice.lower() == "no":
+                        not_answered = True
 
-                    if self.birth_enhancer:
-                        self.birth_enhancer = False
+                    else:
+                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
+                        time.sleep(3)
         else:
-            self.regular_pop_growth()
+            if self.birth_enhancer:
+                births = random.randrange(0, 40)
+                deaths = random.randrange(0, 30)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
 
+            if self.birth_control:
+                births = random.randrange(0, 30)
+                deaths = random.randrange(0, 35)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
 
-    def regular_pop_growth(self):
-        if self.birth_enhancer:
-            births = random.randrange(0, 30)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
-
-        if self.birth_control:
-            births = random.randrange(0, 15)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
-
-        else:
-            births = random.randrange(0, 25)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
+            else:
+                births = random.randrange(0, 35)
+                deaths = random.randrange(0, 25)
+                self.population += (births - deaths)
+                self.births += births
+                self.deaths += deaths
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
@@ -154,7 +127,6 @@ class NationAI:
                 # economy rises into expansion
                 if self.e_s == EconomicState.RECOVERY:
                     self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
                     self.consumer_spending = 300
                     self.government_spending = 500
                     self.investment = 350
@@ -185,7 +157,7 @@ class NationAI:
                     self.investment = -250
                     self.imports = 1700
                     self.exports = 500
-                    print("Your economy is now in a recessionary period.\n")
+
                     time.sleep(3)
                     self.economic_change_date = self.date + timedelta(days=120)
 
@@ -197,7 +169,6 @@ class NationAI:
                     self.investment = -150
                     self.imports = 1500
                     self.exports = 800
-                    print("Your economy is now in a depression period.\n")
                     time.sleep(3)
                     self.economic_change_date = self.date + timedelta(days=120)
 

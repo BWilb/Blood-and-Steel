@@ -95,6 +95,7 @@ class AfghanistanAI(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.chosen = False
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

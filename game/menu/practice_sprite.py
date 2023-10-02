@@ -1,4 +1,3 @@
-
 import sys
 import time
 from datetime import timedelta
@@ -6,12 +5,14 @@ from buttons import button
 import pyautogui
 import pygame
 import os
-from game.ai.nation_ai import NationAI
+import networkx as nx
+import matplotlib.pyplot as plt
 
 from database_management import upload_database
 
 pygame.init()
 pygame.mixer.init()
+
 
 class SpriteGame:
     def __init__(self, nation, globe):
@@ -41,6 +42,7 @@ class SpriteGame:
         self.clock = pygame.time.Clock()
         self.nation_map = []
         self.nation_button = None
+        self.network = nx.Graph()
 
     def background_music(self):
         """within function while loop will be established that """
@@ -83,11 +85,21 @@ class SpriteGame:
         pygame.display.update()
 
     def loading_buttons(self):
+        """loading buttons establishes buttons that will be drawn to screen(enabling user interaction)
+        through user interaction of pressing buttons, if nation selected is not nation that user is playing as,
+        user will have option of potentially repairing or destroying relations. Network variable will come into play once selected.
+        If improving relations involves establishing alliance, edge will be drawn between user nation and AI nation, removed
+        once alliance is broken
+        """
         for i in range(0, len(self.globe.nations)):
             self.nation_button = button.PolygonButton(self.globe.nations[i].coordinates,
                                                       self.globe.nations[i].nation_color,
                                                       self.globe.nations[i])
             self.nation_map.append(self.nation_button)
+        for i in range(0, len(self.globe.nations)):
+            self.network.add_node(self.globe.nations[i].name)
+        for i in range(0, len(self.network)):
+            print(self.network)
 
     def draw_nations(self):
         """for i in range(0, len(self.globe.nations)):
@@ -109,6 +121,10 @@ class SpriteGame:
         for i in range(0, len(self.nation_map)):
             self.nation_map[i].draw(self.screen)
 
+            """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
+            nx.draw_spring(self.network, with_labels=True)
+            #plt.show()
+
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
         return pygame.transform.scale(pygame.image.load(leader_image).convert_alpha(), (250, 350))
@@ -123,7 +139,8 @@ class SpriteGame:
         self.draw_text(f"Political stats", self.font, self.text_col, self.WIDTH * 0.45, 100)
         self.draw_text(f"Current Leader: {self.nation_selected.leader}", self.font, self.text_col,
                        (self.WIDTH * 0.355) - len(self.nation_selected.leader), 200)
-        self.draw_text(f"Stability: {round(self.nation_selected.stability, 2)}%", self.font, self.text_col, self.WIDTH * 0.45,
+        self.draw_text(f"Stability: {round(self.nation_selected.stability, 2)}%", self.font, self.text_col,
+                       self.WIDTH * 0.45,
                        300)
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.15)
@@ -149,7 +166,7 @@ class SpriteGame:
 
         # self.screen.blit(self.sprite_background, (0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
-        #self.draw_text(f"{self.anation_selectedday.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        # self.draw_text(f"{self.anation_selectedday.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
 
         self.draw_text(f"Economic stats", pygame.font.SysFont("Arial-Black", 30), (255, 255, 255), self.WIDTH * 0.025,
                        50)
@@ -226,7 +243,8 @@ class SpriteGame:
         self.draw_text(f"{self.nation_selected.population}", pygame.font.SysFont("Arial-Black", 20),
                        self.text_col, self.WIDTH * 0.1, 250)
 
-        self.draw_text(f"Happiness: {round(self.nation_selected.happiness, 2)}%", pygame.font.SysFont("Arial-Black", 20),
+        self.draw_text(f"Happiness: {round(self.nation_selected.happiness, 2)}%",
+                       pygame.font.SysFont("Arial-Black", 20),
                        self.text_col, self.WIDTH * 0.1,
                        300)
 
@@ -309,7 +327,7 @@ class SpriteGame:
         slow_button = button.Button(1600, 150, slow_img, 0.035)
         slower_button = button.Button(1560, 150, slower_img, 0.035)
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
-       # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
             self.speed = 2.75
@@ -337,6 +355,7 @@ class SpriteGame:
 
         if back_button.draw(self.screen):
             self.game_state = "main game"
+
     def view_foreign_nation(self):
 
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
@@ -445,7 +464,7 @@ class SpriteGame:
                                 break  # Exit the loop after the first button is clicked
                         """received code from ChatGPT
                         IMPROVE FOLLOWING CODE
-                        
+
                         if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # Left mouse button clicked
                         mouse_pos = pygame.mouse.get_pos()
