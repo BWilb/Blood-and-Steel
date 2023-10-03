@@ -72,10 +72,7 @@ class Austria(NationAI):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "Europe"
-        if globe.date.year < 1918:
-            self.name = "Austria Hungary"
-        if globe.date.year > 1918:
-            self.name = "Federal Republic of Austria"
+        self.name = "Austria"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]

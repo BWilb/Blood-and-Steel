@@ -63,10 +63,7 @@ class TurkeyAI(NationAI):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "asia"
-        if globe.date.year < 1921:
-            self.name = "Ottoman Empire"
-        if globe.date.year > 1921:
-            self.name = "Republic of Turkey"
+        self.name = "Turkey"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]

@@ -71,7 +71,7 @@ class ChinaAI(NationAI):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "asia"
-        self.name = "Republic of China"
+        self.name = "China"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]

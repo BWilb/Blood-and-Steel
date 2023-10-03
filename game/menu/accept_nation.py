@@ -75,8 +75,8 @@ def establish_json_files(time):
 def accept_nation(nation, time):
     #print(time)
     from globe_relations import globe
-    #from sprite_game_revised import SpriteGame
-    from practice_sprite import SpriteGame
+    from sprite_game_revised import SpriteGame
+    #from practice_sprite import SpriteGame
     establish_json_files(time)
 
     globe1 = globe.Globe(time)

@@ -89,7 +89,7 @@ class SpriteGame:
         through user interaction of pressing buttons, if nation selected is not nation that user is playing as,
         user will have option of potentially repairing or destroying relations. Network variable will come into play once selected.
         If improving relations involves establishing alliance, edge will be drawn between user nation and AI nation, removed
-        once alliance is broken
+        once alliance is broken. Network nodes will be nation names, to keep things simple
         """
         for i in range(0, len(self.globe.nations)):
             self.nation_button = button.PolygonButton(self.globe.nations[i].coordinates,
@@ -98,8 +98,6 @@ class SpriteGame:
             self.nation_map.append(self.nation_button)
         for i in range(0, len(self.globe.nations)):
             self.network.add_node(self.globe.nations[i].name)
-        for i in range(0, len(self.network)):
-            print(self.network)
 
     def draw_nations(self):
         """for i in range(0, len(self.globe.nations)):

@@ -107,6 +107,35 @@ class Belgium(playable_nation.PlayableNation):
         # military
         # international
         self.alliance = ""
+        self.improving_relations = []
+        self.worsening_relations = []
+        self.embargoed_nations = []
+        self.foreign_relations = {
+            "Austria": 77.67,
+            "Great Britain": 89.56,
+            "Kingdom of Denmark": 80.56,
+            "French Republic": 88.45,
+            "Germany": 75.56,
+            "Kingdom of Greece": 80.56,
+            "Kingdom of Italy": 88.00,
+            "Kingdom of Luxembourg": 94.56,
+            "Kingdom of Netherlands": 92.34,
+            "Kingdom of Norway": 88.88,
+            "Poland": 90.56,
+            "Kingdom of Romania": 91.24,
+            "Russia": 78.45,
+            "Kingdom of Sweden": 85.56,
+            "Republic of Switzerland": 100,
+            "Dominion of Canada": 98.56,
+            "Republic of Cuba": 100,
+            "Republic of Mexico": 89.98,
+            "Afghanistan": 89.45,
+            "Iran": 88.23,
+            "Iraq": 89.12,
+            "Turkey": 78.45,
+            "China": 82.34,
+            "Japanese Empire": 75.67
+        }
         # drawing
         self.coordinates = []
         # other
@@ -145,3 +174,8 @@ class Belgium(playable_nation.PlayableNation):
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = [(retreive_coords(self.coordinates))]
 
+    def improve_relations(self):
+        for nation, relations in self.foreign_relations.items():
+            for i in range(0, len(self.improving_relations)):
+                if nation == self.improving_relations[i]:
+                    self.foreign_relations[nation] += 0.5

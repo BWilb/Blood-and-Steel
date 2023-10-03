@@ -47,8 +47,8 @@ class USAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.region = "europe"
-        self.name = "Great Britain"
+        self.region = "North America"
+        self.name = "United States"
         self.date = datetime(globe.date.year, 1, 1)
         # social variables
         """population"""
