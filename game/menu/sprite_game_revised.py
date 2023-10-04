@@ -6,9 +6,8 @@ import pyautogui
 import pygame
 import os
 import networkx as nx
-import matplotlib.pyplot as plt
-from game.international_relations.relations import establish_relations
 
+import matplotlib.pyplot as plt
 from database_management import upload_database
 
 pygame.init()
@@ -99,9 +98,19 @@ class SpriteGame:
         if not self.network.has_edge(nation1.name, nation2.name):
             print("no edge")
 
+    def remove_relations(self, nation1, nation2):
+        if self.network.has_edge(nation1.name, nation2.name):
+            self.network.remove_edge(nation1.name, nation2.name)
+            #print(self.network)
+
+        for i in range(0, len(self.nation.improving_relations)):
+            if nation2.name == self.nation.improving_relations[i]:
+                self.nation.improving_relations.pop(i)
+
     def establish_nodes(self):
         for i in range(0, len(self.globe.nations)):
             self.network.add_node(self.globe.nations[i].name)
+
 
     def loading_buttons(self):
         """loading buttons establishes buttons that will be drawn to screen(enabling user interaction)
@@ -275,6 +284,7 @@ class SpriteGame:
         self.nation.stability_happiness_change(self.globe)
         self.nation.improve_relations()
 
+
     def globe_changes(self):
         for i in range(len(self.globe.nations)):
             # will be re-introduced, once figure out how to deal with other nations than one currently playing as
@@ -379,6 +389,8 @@ class SpriteGame:
         """back button established to escape function"""
         improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
+        stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
+        stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
         pact_button = button.Button(25, 475, establish_pact, 0.20)
         embargo = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
@@ -406,8 +418,14 @@ class SpriteGame:
         if details_button.draw(self.screen):
             pass
 
-        if relation_button.draw(self.screen):
-            self.establish_relations(self.nation, self.nation_selected)
+        if not self.nation_selected.name in self.nation.improving_relations:
+            if relation_button.draw(self.screen):
+                self.establish_relations(self.nation, self.nation_selected)
+
+        else:
+            if stop_relations_button.draw(self.screen):
+                self.remove_relations(self.nation, self.nation_selected)
+
         if pact_button.draw(self.screen):
             pass
         if embargo_button.draw(self.screen):

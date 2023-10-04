@@ -49,6 +49,8 @@ class NationAI:
         self.exports = 500
         self.imports = 500
         self.chosen = False
+        # international
+        self.foreign_relations = {}
 
     def check_population_growth(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

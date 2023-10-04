@@ -22,10 +22,10 @@ kaisers = {
     "1936": "None",
     "1939": "None"
 }
-population = {
-    """Dictionary for population
+"""Dictionary for population
     Population selection will be in sync with time frame selection
     Population will then be set up to grow or shrink in random amounts"""
+population = {
 
     "1910": 44915900,
     "1914": 42956900,

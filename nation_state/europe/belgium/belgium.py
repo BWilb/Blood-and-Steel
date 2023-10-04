@@ -60,6 +60,7 @@ leader_images = {
     "1939": "../leaders/belgium/375px-Hubert_Pierlot_1939.jpg"
 }
 
+
 class Belgium(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
@@ -114,7 +115,7 @@ class Belgium(playable_nation.PlayableNation):
             "Austria": 77.67,
             "Great Britain": 89.56,
             "Kingdom of Denmark": 80.56,
-            "French Republic": 88.45,
+            "Republic of France": 88.45,
             "Germany": 75.56,
             "Kingdom of Greece": 80.56,
             "Kingdom of Italy": 88.00,
@@ -134,14 +135,17 @@ class Belgium(playable_nation.PlayableNation):
             "Iraq": 89.12,
             "Turkey": 78.45,
             "China": 82.34,
-            "Japanese Empire": 75.67
+            "Japanese Empire": 75.67,
+            "Brazil": 56.65,
+            "Venezuela": 86.45,
+            "Argentina": 67.45
         }
         # drawing
         self.coordinates = []
         # other
         self.sprite = False
         self.land_1910_1918 = ["Belgium", "Belgian Congo"]
-        self.land_1932_1939 = ["Belgium", "Zaire (Belgium)", "Rwanda", "Burundi"]
+        self.land_1932_1939 = ["Belgium", "Belgian Congo", "Rwanda (Belgium)", "Burundi"]
         self.chosen = True
 
     def establish_map_coordinates(self):
@@ -149,33 +153,26 @@ class Belgium(playable_nation.PlayableNation):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         if self.date.year < 1932:
-
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Belgium" or
-                        nation_json['countries'][i]['nation_name'] == "Belgian Congo"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
-        if self.date.year >= 1932 and self.date.year <= 1936:
-
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Belgium" or
-                        nation_json['countries'][i]['nation_name'] == "Zaire (Belgium)"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            for land in range(0, len(self.land_1910_1918)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1918[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
 
-        if self.date.year >= 1939:
-
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Belgium" or
-                        nation_json['countries'][i]['nation_name'] == "Zaire (Belgium)"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = [(retreive_coords(self.coordinates))]
+        if self.date.year >= 1932:
+            for land in range(0, len(self.land_1932_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     def improve_relations(self):
         for nation, relations in self.foreign_relations.items():
+            # looping through items in foreign relations
             for i in range(0, len(self.improving_relations)):
+                # looping through list of nations that user is improving relations with(based off of network variable in sprite game)
                 if nation == self.improving_relations[i]:
-                    self.foreign_relations[nation] += 0.5
+                    if self.foreign_relations[nation] + 0.5 <= 100:
+                        self.foreign_relations[nation] += 0.5
+
+        #print(self.improving_relations)

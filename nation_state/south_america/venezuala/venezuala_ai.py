@@ -1,9 +1,9 @@
-import json as js
 import random
 
 from nation_data.coordination.retreive_and_convert import retreive_coords
-from datetime import datetime, timedelta
 from game.ai.nation_ai import NationAI
+import json as js
+from datetime import datetime, timedelta
 leaders = {
     "1910" : "Hermes da Fonseca",
     "1914" : "Hermes da Fonseca",
@@ -46,11 +46,11 @@ leader_images = {
     "1939": "../leaders/brazil/330px-Getulio_Vargas_(1930)-1932-1939.jpg"
 }
 
-class Brazil(NationAI):
+class Venezuala(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.name = "Brazil"
+        self.name = "Venezuela"
         # date variables
         self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
@@ -104,17 +104,20 @@ class Brazil(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
             for i in range(len(nation_json['countries'])):
-                #print(nation_json['countries'][i]['nation_name'])
-                if (nation_json['countries'][i]['nation_name'] == "Brazil"):
+                # print(nation_json['countries'][i]['nation_name'])
+                if (nation_json['countries'][i]['nation_name'] == "Venezuela"):
                     # print(nation_json['countries'][i]['coordinates'])
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
+            self.coordinates = [(retreive_coords(self.coordinates))]
+
+    # main function
 
     def main(self, globe):
-        while self.population > 2000000:
+        while self.population > 4000000:
             super().check_economic_state()
             super().check_population_growth()
             # random_functions.random_functions(self, globe)
             super().stability_happiness_change(globe)
+            self.stability_happiness_change(globe)
             self.date += timedelta(days=1)
             break

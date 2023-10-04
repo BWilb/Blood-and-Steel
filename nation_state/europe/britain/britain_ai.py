@@ -64,10 +64,10 @@ class EconomicState(Enum):
 
 
 # population variables and dictionaries
-population = {
-    """Dictionary for population
+"""Dictionary for population
     Population selection will be in sync with time frame selection
     Population will then be set up to grow or shrink in random amounts"""
+population = {
 
     "1910": 44915900,
     "1914": 42956900,
@@ -126,18 +126,18 @@ class Britain(NationAI):
         self.coordinates = []
         self.land_1910_1914 = ["United Kingdom of Great Britain and Ireland", "British East Africa", "British Somaliland",
                                "Malaya", "British Protectorate", "British Raj", "Australia", "Anglo-Egyption Sudan", "Egypt",
-                               "Mesopotamia (GB)", "South Africa", "Botswana", "Rhodesia", "New Zealand"]
+                               "Mesopotamia (GB)", "South Africa", "Botswana", "Rhodesia", "New Zealand", "Nigeria"]
 
         self.land_1918_1936 = ["United Kingdom of Great Britain and Ireland", "British East Africa", "British Somaliland",
                                "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
                                "Mesopotamia (GB)", "Union of South Africa", "Botswana", "German E. Africa (Tanganyika)",
-                          "German South-West Africa", "Mandatory Palestine (GB)", "Zambia", "Zimbabwe", "New Zealand"]
+                          "German South-West Africa", "Mandatory Palestine (GB)", "Zambia", "Zimbabwe", "New Zealand", "Nigeria"]
 
         self.land_1939 = ["United Kingdom", "British East Africa", "British Somaliland",
                                "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
                                "Mesopotamia (GB)", "Union of South Africa", "Botswana", "Tanzania, United Republic of",
                           "German South-West Africa", "Mandatory Palestine (GB)", "Dominion of Newfoundland", "New Zealand",
-                          "Swaziland", "Oman (British Raj)"]
+                          "Swaziland", "Oman (British Raj)", "Nigeria"]
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

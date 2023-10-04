@@ -97,8 +97,28 @@ class ChinaAI(NationAI):
         self.economic_stimulus = False
         # military
         # international
-        self.alliance = ""
-        self.us_relations = 34.56
+        self.foreign_relations = {
+            "Japanese Empire": 34.56,
+            "Afghanistan": 67.65,
+            "Iran": 78.56,
+            "Iraq": 76.65,
+            "Turkey": 98.56,
+            "Austria": 45.45,
+            "Great Britain": 43.45,
+            "Kingdom of Denmark": 76.45,
+            "Republic of France": 77.65,
+            "Germany": 34.65,
+            "Kingdom of Greece": 64.56,
+            "Kingdom of Italy": 44.76,
+            "Kingdom of Luxembourg": 88.45,
+            "Kingdom of Norway": 89.23,
+            "Poland": 90.56,
+            "Russia": 27.34,
+            "Kingdom of Spain": 22.35,
+            "Dominion of Canada": 55.45,
+            "Republic of Cuba": 72.34,
+            "Republic of Mexico": 87.45
+        }
         # other
         self.coordinates = []
     def establish_map_coordinates(self):

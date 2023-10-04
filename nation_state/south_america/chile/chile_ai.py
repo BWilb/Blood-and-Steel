@@ -1,73 +1,67 @@
-import random
-
-from datetime import datetime, timedelta
-from game.ai.nation_ai import NationAI
 import json as js
+import random
+from datetime import datetime, timedelta
+
 from nation_data.coordination.retreive_and_convert import retreive_coords
-flags = {"1910": "../flags/united_states/Flag_of_the_United_States_(1908–1912).jpg",
-         "1914": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
-         "1918": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
-         "1932": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
-         "1936": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg",
-         "1939": "../flags/united_states/Flag_of_the_United_States_(1912-1959).jpg"}
-
-leader_images = {
-    "1910": "../leaders/united_states/taft-1913.jpeg",
-    "1914": "../leaders/united_states/wilson-1914-1918.jpg",
-    "1918": "../leaders/united_states/wilson-1914-1918.jpg",
-    "1932": "../leaders/united_states/President_Hoover_portrait-1932.jpg",
-    "1936": "../leaders/united_states/fdr-1936-1939.jpg",
-    "1939": "../leaders/united_states/fdr-1936-1939.jpg"
-}
-"""Population Dictionaries"""
-
+from game.ai.nation_ai import NationAI
 population = {
-    "1910": 7041174,
-    "1914": 7674382,
-    "1918": 8302357,
-    "1932": 10477365,
-    "1936": 10957346,
-    "1939": 11413434
+
+    "1910": 44915900,
+    "1914": 42956900,
+    "1918": 39582000,
+    "1932": 46335000,
+    "1936": 47081300,
+    "1939": 46029200
 }
-presidents = {
-    "1910": "William Howard Taft",
-    "1914": "Woodrow Wilson",
-    "1918": "Woodrow Wilson",
-    "1932": "Herbert Hoover",
-    "1936": "Franklin D. Roosevelt",
-    "1939": "Franklin D. Roosevelt"
-}
+
+# economic variables and dictionaries
 gdp = {
-    "1910": 50000000,
-    "1914": 65993945,
-    "1918": 73348873,
-    "1932": 72348873,
-    "1936": 72348873,
-    "1939": 74348873
+    "1910": 15783763158,
+    "1914": 17856842105,
+    "1918": 23873207895,
+    "1932": 44371994737,
+    "1936": 53157368421,
+    "1939": 54936947368
 }
 
-vice_presidents = {
-    # dictionary of vice presidents incase president gets assassinated
-    "1910": "James S. Sherman",
-    "1914": "Thomas R. Marshall",
-    "1918": "Thomas R. Marshall",
-    "1932": "Charles Curtis",
-    "1936": "John Garner",
-    "1939": "Henry Wallace"
+pm = {
+    "1910": "H.H. Asquith",
+    "1914": "H.H. Asquith",
+    "1918": "David Lloyd George",
+    "1932": "Ramsay MacDonald",
+    "1936": "Stanley Baldwin",
+    "1939": "Neville Chamberlain"
 }
 
-class USAI(NationAI):
+flags = {
+    "1910": "../flags/chile/Flag_of_Chile.jpg",
+    "1914": "../flags/chile/Flag_of_Chile.jpg",
+    "1918": "../flags/chile/Flag_of_Chile.jpg",
+    "1932": "../flags/chile/Flag_of_Chile.jpg",
+    "1936": "../flags/chile/Flag_of_Chile.jpg",
+    "1939": "../flags/chile/Flag_of_Chile.jpg"
+}
+
+leader_images = {"1910": "../leaders/britain/Pedro_Montt_(crop)-1910.jpg",
+                 "1914": "../leaders/britain/330px-Barros_Luco-MHN_(cropped)-1914.jpg",
+                 "1918": "../leaders/britain/330px-Jlsanfuentes-1918.png",
+                 "1932": "../leaders/britain/ARTURO ALESSANDRI PALMA-1932.jpg",
+                 "1936": "../leaders/britain/Bartolomé_Blanche-1932.jpeg",
+                 "1939": "../leaders/britain/330px-Pedro_Aguirre_Cerda-1939.jpg"
+}
+
+class Chile(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.region = "North America"
-        self.name = "United States"
+        self.region = "south america"
+        self.name = "Chile"
         self.date = datetime(globe.date.year, 1, 1)
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
         # political
-        self.leader = presidents[str(globe.date.year)]
+        self.leader = pm[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
         self.political_power = 200
@@ -101,14 +95,11 @@ class USAI(NationAI):
             nation_json = js.load(file)
             for i in range(len(nation_json['countries'])):
                 #print(nation_json['countries'][i]['nation_name'])
-                if (nation_json['countries'][i]['nation_name'] == "United States" or
-                        nation_json['countries'][i]['nation_name'] == "Philippines"):
+                if (nation_json['countries'][i]['nation_name'] == "Chile"):
                     # print(nation_json['countries'][i]['coordinates'])
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
 
-
-    # main function
     def main(self, globe):
         while self.population > 2000000:
             super().check_economic_state()
