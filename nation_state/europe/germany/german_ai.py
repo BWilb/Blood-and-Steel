@@ -74,6 +74,10 @@ class GermanAI(NationAI):
         self.leader = chancellors[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
+        if globe.date.year <= 1918:
+            self.political_typology = "Autocratic"
+        else:
+            self.political_typology = "Fascist"
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

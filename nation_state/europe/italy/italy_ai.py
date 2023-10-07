@@ -81,6 +81,8 @@ class ItalyAI(NationAI):
         self.leader = prime_ministers[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
+        if globe.date.year < 1932:
+            self.political_typology = ""
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""

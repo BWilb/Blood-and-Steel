@@ -101,7 +101,7 @@ class SpriteGame:
     def remove_relations(self, nation1, nation2):
         if self.network.has_edge(nation1.name, nation2.name):
             self.network.remove_edge(nation1.name, nation2.name)
-            #print(self.network)
+            print(self.network)
 
         for i in range(0, len(self.nation.improving_relations)):
             if nation2.name == self.nation.improving_relations[i]:
@@ -110,7 +110,6 @@ class SpriteGame:
     def establish_nodes(self):
         for i in range(0, len(self.globe.nations)):
             self.network.add_node(self.globe.nations[i].name)
-
 
     def loading_buttons(self):
         """loading buttons establishes buttons that will be drawn to screen(enabling user interaction)
@@ -295,6 +294,11 @@ class SpriteGame:
 
         upload_database.update_database_info(self.globe.nations)
 
+    def foreign_interactions(self):
+        for nation_agent in self.globe.nations:
+            foreign_agents = [nations for nations in self.globe.nations if nations != nation_agent]
+            nation_agent.international_decisions(foreign_agents)
+
     def primary_game(self):
         """speed imgs"""
         faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
@@ -421,6 +425,7 @@ class SpriteGame:
         if not self.nation_selected.name in self.nation.improving_relations:
             if relation_button.draw(self.screen):
                 self.establish_relations(self.nation, self.nation_selected)
+                #plt.show()
 
         else:
             if stop_relations_button.draw(self.screen):
@@ -443,7 +448,7 @@ class SpriteGame:
         self.nation.sprite = True
         self.loading_buttons()
         self.establish_nodes()
-        print(self.network)
+        #print(self.network)
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
         while self.is_running:
             if not self.game_paused:

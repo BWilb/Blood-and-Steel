@@ -88,6 +88,7 @@ class Belgium(playable_nation.PlayableNation):
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
+        self.political_typology = "Democratic"
         """Stability"""
         self.stability = 95.56
         # economic
@@ -140,6 +141,231 @@ class Belgium(playable_nation.PlayableNation):
             "Venezuela": 86.45,
             "Argentina": 67.45
         }
+        self.foreign_relations2 = {"foreign relations": [
+            {"nation name": "Iraq",
+             "relations": 76.23,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Afghanistan",
+             "relations": 64.34,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Iran",
+             "relations": 65.43,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Turkey",
+             "relations": 87.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "China",
+             "relations": 75.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Japanese Empire",
+             "relations": 70.65,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Austria",
+             "relations": 65.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Great Britain",
+             "relations": 86.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Denmark",
+             "relations": 88.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Republic of France",
+             "relations": 92.34,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Germany",
+             "relations": 65.23,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Greece",
+             "relations": 76.87,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Italy",
+             "relations": 83.23,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Luxembourg",
+             "relations": 89.86,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Netherlands",
+             "relations": 95.86,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Norway",
+             "relations": 84.86,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Poland",
+             "relations": 85.12,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Romania",
+             "relations": 90.34,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Russia",
+             "relations": 67.34,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Spain",
+             "relations": 73.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Kingdom of Sweden",
+             "relations": 87.12,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Republic of Switzerland",
+             "relations": 98.75,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Dominion of Canada",
+             "relations": 99.55,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Republic of Cuba",
+             "relations": 82.35,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Republic of Mexico",
+             "relations": 84.65,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "United States",
+             "relations": 80.95,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Argentina",
+             "relations": 78.94,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Brazil",
+             "relations": 76.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Chile",
+             "relations": 75.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Columbia",
+             "relations": 73.76,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Peru",
+             "relations": 65.45,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Venezuela",
+             "relations": 73.86,
+             "guarantee independence": False,
+             "alliance": "",
+             "war goal": False,
+             "at war with": False},
+        ]}
         # drawing
         self.coordinates = []
         # other
@@ -175,4 +401,4 @@ class Belgium(playable_nation.PlayableNation):
                     if self.foreign_relations[nation] + 0.5 <= 100:
                         self.foreign_relations[nation] += 0.5
 
-        #print(self.improving_relations)
+        # print(self.improving_relations)

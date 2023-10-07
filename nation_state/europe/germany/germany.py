@@ -1,7 +1,6 @@
 import random
 import time
 from datetime import datetime, timedelta
-from nation_state.europe.germany import alsace_lorraine, baden_wurttemburg, bavaria, prussia, saxony
 import os
 chancellors = {
     "1910": "Theobald von Bethmann Hollweg",

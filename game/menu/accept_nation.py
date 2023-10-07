@@ -148,7 +148,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
                           iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
                           greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, norwegian_ai, brazilian_ai, argentina_ai,
-                          venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai)
+                          venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai, swedish_ai )
         game = SpriteGame(belgian, globe1)
         game.main_game()
 

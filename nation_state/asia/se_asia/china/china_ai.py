@@ -119,16 +119,15 @@ class ChinaAI(NationAI):
             "Republic of Cuba": 72.34,
             "Republic of Mexico": 87.45
         }
+        self.alliance = ""
         # other
         self.coordinates = []
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
+
         if self.date.year <= 1918:
-#Xinjiang
-#Tibet
-#Mongolia
             for i in range(len(nation_json['countries'])):
                 if (nation_json['countries'][i]['nation_name'] == "Manchu Empire" or nation_json['countries'][i]['nation_name'] ==
                 "Xinjiang" or nation_json['countries'][i]['nation_name'] == "Mongolia" or nation_json['countries'][i]['nation_name'] ==
@@ -150,7 +149,7 @@ class ChinaAI(NationAI):
                 if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):
                     # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
+            self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
     def main(self, globe):

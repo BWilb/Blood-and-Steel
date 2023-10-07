@@ -47,11 +47,6 @@ class PolygonButton:
             pygame.draw.polygon(screen, self.color, self.vertices[coord_sets])
 
     def is_clicked(self, mouse_pos):
-        """polygon_rect = pygame.Rect(self.vertices[0], 1, 1)
-        for point in self.vertices[1:]:
-            polygon_rect.union_ip(pygame.Rect(*point, 1, 1))
-
-        return polygon_rect.collidepoint(mouse_pos)"""
         x, y = mouse_pos
 
         for vertices in self.vertices:
@@ -62,6 +57,7 @@ class PolygonButton:
 
             for i in range(1, n + 1):
                 p2x, p2y = vertices[i % n]
+                #print(p2x, p2y)
 
                 if y > min(p1y, p2y):
                     if y <= max(p1y, p2y):

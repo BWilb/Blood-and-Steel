@@ -50,7 +50,13 @@ class NationAI:
         self.imports = 500
         self.chosen = False
         # international
-        self.foreign_relations = {}
+        self.foreign_relations = {"foreign relations": [
+            {"nation name": "Nation",
+             "relations": 50,
+             "guarantee independence": False,
+             "war goal": False,
+             "at war with": False}
+        ]}
 
     def check_population_growth(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""

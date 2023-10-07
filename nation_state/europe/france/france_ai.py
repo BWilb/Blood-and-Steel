@@ -72,6 +72,7 @@ class FranceAI(NationAI):
         self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
+        self.political_typology = "Democratic"
         """Stability"""
         self.stability = 95.56
         # economic
