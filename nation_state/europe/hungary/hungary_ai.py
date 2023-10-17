@@ -1,10 +1,64 @@
 import random
-import time
 from datetime import datetime, timedelta
+import time
 from enum import Enum
 from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
+
+leader_images = {
+    "1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
+    "1914": "../leaders/italy/giolitti_1914.jpg",
+    "1918": "../leaders/italy/Flag_of_Greece.jpg",
+    "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
+    "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
+}
+flags = {
+    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
+    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
+}
+
+prime_ministers = {
+    "1910": "Luigi Luzzatti",
+    "1914": "Antonio Salandra",
+    "1918": "Vittorio Emanuele Orlando",
+    "1932": "Benito Mussolini",
+    "1936": "Benito Mussolini",
+    "1939": "Benito Mussolini"
+}
+
+monarchs = {
+    "1910": "Victor Emmanuel III",
+    "1914": "Victor Emmanuel III",
+    "1918": "Victor Emmanuel III",
+    "1932": "Victor Emmanuel III",
+    "1936": "Victor Emmanuel III",
+    "1939": "Victor Emmanuel III"
+}
+"""Economic variables and dictionaries"""
+gdp = {
+    "1910": 7243560000,
+    "1914": 7294052632,
+    "1918": 7318292632,
+    "1932": 12072684211,
+    "1936": 15920315789,
+    "1939": 19837894737
+}
+
+"""Population variables and dictionaries"""
+population = {
+    "1910": 36100000,
+    "1914": 36500000,
+    "1918": 36800000,
+    "1932": 41000000,
+    "1936": 42400000,
+    "1939": 43500000
+}
 
 
 class EconomicState(Enum):
@@ -13,65 +67,22 @@ class EconomicState(Enum):
     EXPANSION = 3
     RECOVERY = 4
 
-leaders = {
-    "1910": None,
-    "1914": None,
-    "1918": None,
-    "1932": "Nuri al-Said",
-    "1936": "Yasin al-Hashimi",
-    "1939": "Yasin al-Hashimi"
-}
 
-
-population = {
-    "1910": 10970000,
-    "1914": 10320000,
-    "1918": 9530000,
-    "1932": 13270000,
-    "1936": 14230000,
-    "1939": 14970000
-}
-
-"""Economic Dictionaries and Variables"""
-gdp = {
-    "1910": None,
-    "1914": None,
-    "1918": None,
-    "1932": 39024526316,
-    "1936": 44568947368,
-    "1939": 44428052632
-}
-
-flags = {"1910": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg",
-         "1914": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg",
-         "1918": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg",
-         "1932": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg",
-         "1936": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg",
-         "1939": "../flags/iraq/Flag_of_Iraq_(1924–1959).jpg"
-         }
-
-leader_images = {
-    "1910": "../leaders/iraq/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1914": "../leaders/iraq/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1918": "../leaders/iraq/330px-AhmadShahQajar2_1910-1918.jpg",
-    "1932": "../leaders/iraq/71nwewvdNlL.__AC_SY445_QL70_ML2_-1932.jpg",
-    "1936": "../leaders/iraq/330px-Yasin_Hashimi,_1927-1936.jpg",
-    "1939": "../leaders/iraq/330px-Yasin_Hashimi,_1927-1936.jpg"
-}
-
-class Iraq(NationAI):
+class HungaryAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.region = "asia"
-        self.name = "Iraq"
+        self.region = "europe"
+        self.name = "Kingdom of Italy"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
         # political
-        self.leader = leaders[str(globe.date.year)]
+        self.leader = prime_ministers[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
+        if globe.date.year < 1932:
+            self.political_typology = ""
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
@@ -94,6 +105,7 @@ class Iraq(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -101,10 +113,10 @@ class Iraq(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
             for i in range(0, len(nation_json['countries'])):
-                if nation_json['countries'][i]['nation_name'] == "Mesopotamia (GB)":
+                if nation_json['countries'][i]['nation_name'] == "Hungary":
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = [(retreive_coords(self.coordinates))]
-    # main function
+
     def main(self, globe):
         while self.population > 100000:
             super().check_economic_state()

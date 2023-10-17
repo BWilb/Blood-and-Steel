@@ -205,6 +205,10 @@ class PlayableNation:
                     self.investment -= 150
 
                 if chance % 3 == 0:
+
+
+
+
                     """33% chance that government will do something
                     - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
                     - increase government spending

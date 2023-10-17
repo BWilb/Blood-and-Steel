@@ -66,7 +66,8 @@ class EconomicState(Enum):
 class RussiaAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
-        self.nation_color = (0, random.randrange(0, 255), random.randrange(0, 250))
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.spare_color = self.nation_color
         self.region = "europe"
         self.name = "Russia"
         # social variables
@@ -98,6 +99,35 @@ class RussiaAI(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.foreign_relations = {
+            "Austria": 77.67,
+            "Great Britain": 89.56,
+            "Kingdom of Denmark": 80.56,
+            "Republic of France": 88.45,
+            "Germany": 75.56,
+            "Kingdom of Greece": 80.56,
+            "Kingdom of Italy": 88.00,
+            "Kingdom of Luxembourg": 94.56,
+            "Kingdom of Netherlands": 92.34,
+            "Kingdom of Norway": 88.88,
+            "Poland": 90.56,
+            "Kingdom of Romania": 91.24,
+            "Kingdom of Belgium": 88.45,
+            "Kingdom of Sweden": 85.56,
+            "Republic of Switzerland": 100,
+            "Dominion of Canada": 98.56,
+            "Republic of Cuba": 100,
+            "Republic of Mexico": 89.98,
+            "Afghanistan": 89.45,
+            "Iran": 88.23,
+            "Iraq": 89.12,
+            "Turkey": 78.45,
+            "China": 82.34,
+            "Japanese Empire": 75.67,
+            "Brazil": 56.65,
+            "Venezuela": 86.45,
+            "Argentina": 67.45
+        }
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:

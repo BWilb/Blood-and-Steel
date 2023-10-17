@@ -6,13 +6,13 @@ def initial_upload_to_database(nations, globe):
     """initial upload to database function will upload to each and every database within database management directory"""
     foreign_records = []
     # establishment of national records, including the nation of the player
-    for i in range(0, len(nations)):
+    for i in range(0, len(nations) - 1):
         foreign_records.append([globe.date, nations[i].name, nations[i].stability, nations[i].leader,
                                 nations[i].population, nations[i].births, nations[i].deaths, nations[i].happiness,
                                 nations[i].current_gdp, nations[i].national_debt, nations[i].alliance])
 
     DRIVER = "SQL Server"
-    SERVER_NAME = "VWNC71429\MSSQLSERVER01"
+    SERVER_NAME = "BRYCES-PC\MSSLQServer01"
     DATABASE_NAME = "Capstone"
 
     connection = f"""Driver={{{DRIVER}}};
@@ -75,20 +75,21 @@ def initial_upload_to_database(nations, globe):
     try:
 
         # inserting data from AI nations and user nation
-        for foreign_record in foreign_records:
+        """for foreign_record in foreign_records:
             cursor.execute(insert_statement, foreign_record)
-
+"""
+        pass
     except Exception as e:
         cursor.rollback()
         print(e.value)
         print("Failed to push to database")
-    else:
+    """else:
         print("records inserted successfully")
         cursor.commit()
     finally:
         if conn.connected == 1:
             print("connection closed")
-            # conn.close()
+            # conn.close()"""
 
 
 def update_database_info(nations):

@@ -2,8 +2,6 @@ import random
 import time
 from enum import Enum
 from datetime import datetime, timedelta
-
-
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -31,6 +29,7 @@ class NationAI:
         self.happiness = 98.56
         # political
         self.leader = "Gregory Prescov"
+        self.political_typology = "Republicanism"
         self.political_power = 100
         self.political_exponent = 1.00
         """Stability"""
@@ -50,13 +49,20 @@ class NationAI:
         self.imports = 500
         self.chosen = False
         # international
-        self.foreign_relations = {"foreign relations": [
-            {"nation name": "Nation",
-             "relations": 50,
-             "guarantee independence": False,
-             "war goal": False,
-             "at war with": False}
+        self.foreign_relations = {"foreign relations": [{}]}
+        self.improving_relations = []
+        self.worsening_relations = []
+        self.short_term_mem = []
+        """AI short and long term memory meant to aid in AIs decision making"""
+        self.long_term_mem = {"Policy": [
+            {"Domestic Policy": [],
+             "Foreign Policy": []}
         ]}
+        self.allies = []
+        # rival nations will have diplomacy of rate at above 50% in favorableness in Britain's eyes
+        self.rivals = []
+        # rival nations will have diplomacy of rate below 50% in favorableness in Britain's eyes
+        self.enemies = []
 
     def check_population_growth(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
@@ -123,8 +129,6 @@ class NationAI:
                         self.birth_enhancer = False
         else:
             self.regular_pop_growth()
-
-
     def regular_pop_growth(self):
         if self.birth_enhancer:
             births = random.randrange(0, 30)
@@ -146,10 +150,849 @@ class NationAI:
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
-
     def political_power_growth(self):
         self.political_power += self.political_exponent
 
+    def determine_diplomatic_approach(self, foreign_nations, globe):
+        if "Republicanism" or "Democratic" in self.political_typology:
+            self.democratic_international_decision(foreign_nations, globe)
+
+        if "Communism" or "Socialism" in self.political_typology:
+            self.communist_international_decision(foreign_nations, globe)
+
+        if "Fascism" or "Nazism" in self.political_typology:
+            self.fascist_international_decision(foreign_nations, globe)
+
+        if "Autocratic" or "Absolutism" in self.political_typology:
+            self.autocratic_international_decision(foreign_nations, globe)
+    def democratic_international_decision(self, foreign_nation_list, globe):
+        for foreign_nation in foreign_nation_list:
+            actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
+            chance = random.randrange(0, 100)
+
+            if self.political_power >= 10:
+                action = actions[random.randrange(0, len(actions))]
+                if "Republicanism" or "Democratic" in foreign_nation.political_typology:
+                    """Checking if political typology is democratic/republican"""
+                    # choosing random action
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 25:
+                                            self.foreign_relations["foreign relations"][i]["guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 25:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Communism" or "Socialism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Fascism" or "Nazism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 98:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 98:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Autocratic" in foreign_nation.political_typology:
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+    def autocratic_international_decision(self, foreign_nation_list, globe):
+        for foreign_nation in foreign_nation_list:
+            actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
+            chance = random.randrange(0, 100)
+
+            if self.political_power >= 10:
+                action = actions[random.randrange(0, len(actions))]
+                if "Republicanism" or "Democratic" in foreign_nation.political_typology:
+                    """Checking if political typology is democratic/republican"""
+                    # choosing random action
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 45:
+                                            self.foreign_relations["foreign relations"][i]["guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 45:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Communism" or "Socialism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Fascism" or "Nazism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 78:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 45:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 98:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Autocratic" in foreign_nation.political_typology:
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+    def fascist_international_decision(self, foreign_nation_list, globe):
+        for foreign_nation in foreign_nation_list:
+            actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
+            chance = random.randrange(0, 100)
+
+            if self.political_power >= 10:
+                action = actions[random.randrange(0, len(actions))]
+                if "Republicanism" or "Democratic" in foreign_nation.political_typology:
+                    """Checking if political typology is democratic/republican"""
+                    # choosing random action
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 67:
+                                            self.foreign_relations["foreign relations"][i]["guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 87:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Communism" or "Socialism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 88:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Fascism" or "Nazism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 76:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 23:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 89:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 34:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Autocratic" in foreign_nation.political_typology:
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 65:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 55:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+    def communist_international_decision(self, foreign_nation_list, globe):
+        for foreign_nation in foreign_nation_list:
+            actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
+            chance = random.randrange(0, 100)
+
+            if self.political_power >= 10:
+                action = actions[random.randrange(0, len(actions))]
+                if "Republicanism" or "Democratic" in foreign_nation.political_typology:
+                    """Checking if political typology is democratic/republican"""
+                    # choosing random action
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 65:
+                                            self.foreign_relations["foreign relations"][i]["guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 99:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 45:
+                                            self.foreign_relations["foreign relations"][i]["alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Communism" or "Socialism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 45:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 15:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 68:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 35:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Fascism" or "Nazism" in foreign_nation.political_typology:
+
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 98:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[
+                                i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 98:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
+
+                elif "Autocratic" in foreign_nation.political_typology:
+                    if action == "guarantee independence":
+                        for i in range(0, len(self.foreign_relations)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
+                                if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
+                                    if globe.tension <= 50:
+                                        if chance >= 90:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "guarantee independence"] = True
+
+                    if action == "form alliance":
+                        for i in range(0, len(foreign_nation_list)):
+                            if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation_list[i].name:
+                                if not (foreign_nation_list[i].alliance and
+                                        self.foreign_relations["foreign relations"][i]["alliance"]):
+                                    if globe.tension <= 35:
+                                        if chance >= 95:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+                                    else:
+                                        if chance >= 75:
+                                            self.foreign_relations["foreign relations"][i][
+                                                "alliance"] = "Anglo-Alliance"
+                                            foreign_nation_list[i].alliance = "Anglo-Alliance"
+
+                    if action == "improve relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.improving_relations]:
+                                self.improving_relations.append(foreign_nation_list[i].name)
+
+                                if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                                self.worsening_relations]:
+                                    self.worsening_relations.pop(foreign_nation_list[i].name)
+
+                    if action == "worsen relations":
+                        for i in range(0, len(foreign_nation_list)):
+                            if not foreign_nation_list[i].name in [foreign_nation for foreign_nation in
+                                                                   self.worsening_relations]:
+                                self.worsening_relations.append(foreign_nation_list[i].name)
+
+                            if foreign_nation_list.name in [foreign_nation for foreign_nation in
+                                                            self.improving_relations]:
+                                self.improving_relations.pop(foreign_nation_list[i].name)
     # economic functions
     def check_economic_state(self):
         """function dealing with primary economic decisions of canadian parliament"""
@@ -222,7 +1065,6 @@ class NationAI:
 
             elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
                 self.pos_ec_growth()
-
     def provide_economic_aid(self):
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
             if self.economic_reward < 10:
@@ -266,14 +1108,12 @@ class NationAI:
                 else:
                     self.stability -= 5
                     self.happiness -= 10
-
     def pos_ec_growth(self):
         self.national_debt += round(
             (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
 
         self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                              (self.exports - self.imports))
-
     def neg_ec_growth(self):
         self.national_debt += round(self.government_spending * round(random.uniform(0.15, 0.35), 4), 2)
 

@@ -26,6 +26,8 @@ from nation_state.europe.netherlands import netherlands
 from nation_state.europe.netherlands import netherlands_ai
 from nation_state.europe.greece import greece
 from nation_state.europe.greece import greece_ai
+from nation_state.europe.hungary import hungary
+from nation_state.europe.hungary import hungary_ai
 from nation_state.europe.sweden import sweden
 from nation_state.europe.sweden import sweden_ai
 from nation_state.europe.germany import german_ai
@@ -123,11 +125,12 @@ def accept_nation(nation, time):
         polish_ai = poland_ai.PolandAI(globe1)
         spanish_ai = spain_ai.SpainAI(globe1)
         danish_ai = denmark_ai.Denmark(globe1)
+        hungarian_ai = hungary_ai.HungaryAI(globe1)
         luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
         swedish_ai = sweden_ai.SwedenAI(globe1)
         """
-        canadian_ai = canada_ai.Canada(globe1)
-        iraqi_ai = iraq_ai.Iraq(globe1)"""
+        canadian_ai = canada_ai.Canada(globe1)"""
+        iraqi_ai = iraq_ai.Iraq(globe1)
         italian_ai = italy_ai.ItalyAI(globe1)
         mexican_ai = mexico_ai.MexicoAI(globe1)
         american_ai = us_ai.USAI(globe1)
@@ -148,7 +151,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
                           iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
                           greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, norwegian_ai, brazilian_ai, argentina_ai,
-                          venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai, swedish_ai )
+                          venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai, iraqi_ai, hungarian_ai)
         game = SpriteGame(belgian, globe1)
         game.main_game()
 

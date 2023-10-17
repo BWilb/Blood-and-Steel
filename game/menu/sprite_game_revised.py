@@ -43,6 +43,12 @@ class SpriteGame:
         self.nation_map = []
         self.nation_button = None
         self.network = nx.Graph()
+        self.first_polish = []
+        self.second_polish = []
+        self.attacking_nation = None
+        self.defending_nation = None
+        self.nation_under_attack = None
+        self.coordinates = []
 
     def background_music(self):
         """within function while loop will be established that """
@@ -91,7 +97,6 @@ class SpriteGame:
         if not self.network.has_node(nation2.name):
             self.network.add_node(nation2.name)
         if not self.network.has_edge(nation1.name, nation2.name):
-            print('hi')
             self.network.add_edge(nation1.name, nation2.name)
             self.nation.improving_relations.append(nation2.name)
             print(self.network)
@@ -124,29 +129,91 @@ class SpriteGame:
                                                       self.globe.nations[i])
             self.nation_map.append(self.nation_button)
 
+        for i in range(0, len(self.nation_map)):
+            if self.nation_map[i].nation_info.name == "Poland":
+                for vertice_set in range(0, len(self.nation_map[i].vertices)):
+                    # print(vertice_set)
+                    for set in range(0, int(len(self.nation_map[i].vertices[vertice_set]) / 2.5)):
+                        # print(set)
+                        self.first_polish.append(self.nation_map[i].vertices[vertice_set][set])
+
+                    for set in range(int(len(self.nation_map[i].vertices[vertice_set]) / 2.5),
+                                     len(self.nation_map[i].vertices[vertice_set])):
+                        # print(set)
+                        self.second_polish.append(self.nation_map[i].vertices[vertice_set][set])
+
     def draw_nations(self):
-        """for i in range(0, len(self.globe.nations)):
-            #print(self.globe.nations[i].name, self.globe.nations[i].coordinates)
-            for coordinates in range(0, len(self.globe.nations[i].coordinates)):
-
-                if len((self.globe.nations[i].coordinates[coordinates])) == 1:
-
-                    pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
-                                        self.globe.nations[i].coordinates[coordinates])
-                else:
-                    pygame.draw.polygon(self.screen, self.globe.nations[i].nation_color,
-                                        self.globe.nations[i].coordinates[coordinates])"""
-        """for i in range(0, len(self.nation_map)):
-            for vertice_sets in range(0, len(self.nation_map[i].vertices)):
-                pygame.draw.polygon(self.screen,
-                                    self.nation_map[i].color,
-                                    self.nation_map[i].vertices[vertice_sets])"""
         for i in range(0, len(self.nation_map)):
             self.nation_map[i].draw(self.screen)
 
             """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
-            nx.draw(self.network, with_labels=True)
-            #plt.show()
+        nx.draw(self.network, with_labels=True)
+        #plt.show()
+
+    def find_nation_by_name(self, name):
+        for nation in self.nation_map:
+            if nation.nation_info.name == name:
+                return nation
+        return None
+
+    def remove_vertices(self, nation, vertices_to_remove):
+        for vertex in vertices_to_remove:
+            """if vertex in nation.vertices:
+                nation.vertices.remove(vertex)"""
+            pass
+        #self.remove_nation(nation)
+
+    def remove_russian_vertices(self, nation, vertices_to_remove):
+        for vertices_set in vertices_to_remove:
+            for coordinates in vertices_set:
+                #print(coordinates)
+                for i in range(0, len(nation.vertices)):
+                    for coordinate_sets in range(0, len(nation.vertices[i])):
+                        #print(nation.vertices[i][coordinate_sets])
+                        if coordinates in nation.vertices[i]:
+                            nation.vertices[i].remove(coordinates)
+
+        #self.remove_nation(nation)
+
+    def remove_nation(self, target):
+        if target in self.nation_map:
+            self.nation_map.remove(target)
+
+    def invasion_1914(self, attacker, target):
+        # Find the attacking and target nations
+        self.attacking_nation = self.find_nation_by_name(attacker.nation_info.name)
+        self.defending_nation = self.find_nation_by_name(target.nation_info.name)
+
+        if self.attacking_nation is not None and self.defending_nation is not None:
+
+            """# Process the target nation's vertices
+            for vertex_set in target_nation.vertices:
+                if len(vertex_set) == 1:
+                    attacker_vertices.append(vertex_set)
+                else:
+                    attacker_vertices.append(vertex_set[:len(vertex_set) // 2])
+
+            # Add processed vertices to the attacking nation
+            attacker.vertices.append(attacker_vertices)
+
+            # Remove processed vertices from the attacking nation if needed
+            self.remove_russian_vertices(attacking_nation, attacker_vertices)"""
+            for i in range(0, len(self.defending_nation.vertices)):
+                self.coordinates = []
+                if i == 5:
+                    if len(self.defending_nation.vertices[i]) == 1:
+                        self.coordinates.append(self.defending_nation.vertices[i])
+                        #self.remove_nation(self.defending_nation)
+                    else:
+                        self.coordinates.append(self.defending_nation.vertices[i][0:int(len(self.defending_nation.vertices[i]) / 15)])
+                        #print(i, self.coordinates)
+                    self.remove_russian_vertices(self.defending_nation, self.coordinates)
+                    self.attacking_nation.vertices += self.coordinates
+                    self.coordinates = []
+                    break
+                    #((self.defending_nation.vertices[i]))
+                    """for coordinates in target_nation.vertices[i]:"""
+
 
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
@@ -283,7 +350,6 @@ class SpriteGame:
         self.nation.stability_happiness_change(self.globe)
         self.nation.improve_relations()
 
-
     def globe_changes(self):
         for i in range(len(self.globe.nations)):
             # will be re-introduced, once figure out how to deal with other nations than one currently playing as
@@ -292,12 +358,25 @@ class SpriteGame:
             else:
                 self.globe.nations[i].main(self.globe)
 
-        upload_database.update_database_info(self.globe.nations)
+        # upload_database.update_database_info(self.globe.nations)
 
     def foreign_interactions(self):
         for nation_agent in self.globe.nations:
             foreign_agents = [nations for nations in self.globe.nations if nations != nation_agent]
-            nation_agent.international_decisions(foreign_agents)
+            if "Democratic" or "Republicanism" in nation_agent.political_typology:
+                nation_agent.democratic_international_decisions(foreign_agents)
+
+            if "Socialism" or "Communism" in nation_agent.political_typology:
+                nation_agent.communist_international_decisions(foreign_agents)
+
+            if "Fascism" or "Nazism" in nation_agent.political_typology:
+                nation_agent.fascist_international_decisions(foreign_agents)
+
+            if "Autocratic" in nation_agent.political_typology:
+                nation_agent.autocratic_international_decisions(foreign_agents)
+
+            else:
+                pass
 
     def primary_game(self):
         """speed imgs"""
@@ -313,7 +392,6 @@ class SpriteGame:
         slow_button = button.Button(1600, 150, slow_img, 0.035)
         slower_button = button.Button(1560, 150, slower_img, 0.035)
         """primary screen user sees after opening menu"""
-
         # later on background will be an actual SVG image of world and not part of the screen
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
         if slower_button.draw(self.screen):
@@ -326,6 +404,15 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
+
+        if self.globe.date.year == 1914:
+            for i in range(0, len(self.nation_map)):
+                if self.nation_map[i].nation_info.name == "Germany":
+                    self.attacking_nation = self.nation_map[i]
+                if self.nation_map[i].nation_info.name == "Russia":
+                    self.defending_nation = self.nation_map[i]
+            if self.globe.date.day % 3 == 0:
+                self.invasion_1914(self.attacking_nation, self.defending_nation)
 
         """if self.flag_button.draw(self.screen):
             self.game_state = "view infographics"
@@ -389,20 +476,20 @@ class SpriteGame:
     def view_foreign_nation(self):
 
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
-        back_button = button.Button(125, 850, back_img, 0.05)
+        back_button = button.Button(125, 900, back_img, 0.05)
         """back button established to escape function"""
         improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
         stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
         stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
-        pact_button = button.Button(25, 475, establish_pact, 0.20)
+        pact_button = button.Button(25, 575, establish_pact, 0.20)
         embargo = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
-        embargo_button = button.Button(25, 550, embargo, 0.20)
+        embargo_button = button.Button(25, 650, embargo, 0.20)
         worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
-        worsen_button = button.Button(25, 625, worsen, 0.20)
+        worsen_button = button.Button(25, 725, worsen, 0.20)
         justify = pygame.image.load("buttons/relations_buttons/justify_war.jpg").convert_alpha()
-        justify_button = button.Button(25, 700, justify, 0.20)
+        justify_button = button.Button(25, 800, justify, 0.20)
         """Diplomacy buttons"""
         diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
         diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
@@ -425,11 +512,24 @@ class SpriteGame:
         if not self.nation_selected.name in self.nation.improving_relations:
             if relation_button.draw(self.screen):
                 self.establish_relations(self.nation, self.nation_selected)
-                #plt.show()
 
         else:
             if stop_relations_button.draw(self.screen):
                 self.remove_relations(self.nation, self.nation_selected)
+
+        for nation, relations in self.nation_selected.foreign_relations.items():
+            if nation == self.nation.name:
+                self.draw_text(f"{self.nation_selected.name} relations with {self.nation.name}: {relations}",
+                               pygame.font.SysFont("Arial-Black", 12), (255, 255, 255),
+                               10, 475)
+
+        for nation, relations in self.nation.foreign_relations.items():
+            if nation == self.nation_selected.name:
+                self.draw_text(f"{self.nation.name} relations with {self.nation_selected.name}: {relations}",
+                               pygame.font.SysFont("Arial-Black", 12), (255, 255, 255),
+                               10, 525)
+
+        # plt.show()
 
         if pact_button.draw(self.screen):
             pass
@@ -448,8 +548,8 @@ class SpriteGame:
         self.nation.sprite = True
         self.loading_buttons()
         self.establish_nodes()
-        #print(self.network)
-        upload_database.initial_upload_to_database(self.globe.nations, self.globe)
+        # print(self.network)
+        # upload_database.initial_upload_to_database(self.globe.nations, self.globe)
         while self.is_running:
             if not self.game_paused:
                 self.screen.fill((65, 105, 225))
@@ -503,31 +603,6 @@ class SpriteGame:
                                     self.game_state = "view infographics"
                                 # Perform further actions with the nation information if needed
                                 # Exit the loop after the first button is clicked
-                        """received code from ChatGPT
-                        IMPROVE FOLLOWING CODE
-
-                        if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left mouse button clicked
-                        mouse_pos = pygame.mouse.get_pos()
-                        for i in range(0, len(self.nation_map)):
-                            for vertex in range(0, len(self.nation_map[i].vertices)):
-                                if pygame.draw.polygon(self.screen, 
-                                self.nation_map[i].color, 
-                                self.nation_map[i].vertices[vertex]).collidepoint(mouse_pos):
-                                    print(f"Clicked on {self.globe.nations[i]}")
-                                    self.nation_selected = self.globe.nations[i]
-                                    self.game_state = "view infographics"
-                                    # Perform further actions with the nation information
-                                    break
-                        for buttons in self.nation_map:
-                            print(self.mouse_position)
-                            if buttons.is_clicked(self.mouse_position):
-                                print(buttons)
-                                self.nation_selected = buttons.nation_info
-                                self.game_state = "view infographics"
-                                print(self.nation_selected)
-                        """
-
                 if event.type == pygame.QUIT:
                     self.is_running = False
                     sys.exit()

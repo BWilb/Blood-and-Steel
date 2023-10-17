@@ -64,6 +64,7 @@ class GermanAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.spare_color = self.nation_color
         self.region = "europe"
         self.name = "Germany"
         self.date = datetime(globe.date.year, 1, 1)

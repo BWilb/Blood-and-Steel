@@ -1,7 +1,6 @@
 import random
 import time
 from datetime import datetime, timedelta
-
 from game.ai import playable_nation
 from nation_data.coordination.retreive_and_convert import convert_coords, retreive_coords
 import json as js
@@ -15,7 +14,6 @@ population = {
     "1936": 8210392,
     "1939": 8280500
 }
-
 """Political Dictionaries"""
 leaders = {
     "1910": "Frans Schollaert",
@@ -50,7 +48,6 @@ flags = {"1910": "../flags/belgium/belgian_flag.jpg",
          "1932": "../flags/belgium/belgian_flag.jpg",
          "1936": "../flags/belgium/belgian_flag.jpg",
          "1939": "../flags/belgium/belgian_flag.jpg"}
-
 leader_images = {
     "1910": "../leaders/belgium/Schollaert_1910.jpg",
     "1914": "../leaders/belgium/800px-Comte_de_Broqueville_1914-1918.jpg",
@@ -59,7 +56,6 @@ leader_images = {
     "1936": "../leaders/belgium/Paul_van_Zeeland,_1936.jpg",
     "1939": "../leaders/belgium/375px-Hubert_Pierlot_1939.jpg"
 }
-
 
 class Belgium(playable_nation.PlayableNation):
     def __init__(self, globe):

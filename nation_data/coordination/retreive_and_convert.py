@@ -17,6 +17,7 @@ def retreive_coords(coords_list):
             coords = []  # Create a list to store sets of coordinates for each point
 
             if isinstance(points, list):
+                #print(points)
                 for index, row in points:
                     coords.append(convert_coords(index, row))
             else:

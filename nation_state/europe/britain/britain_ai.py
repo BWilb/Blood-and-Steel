@@ -4,7 +4,6 @@ from enum import Enum
 from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
-from colors.color import Color
 
 flags = {
     "1910": "../flags/britain/United-Kingdom-Flag.jpg",
@@ -131,13 +130,13 @@ class Britain(NationAI):
         self.land_1918_1936 = ["United Kingdom of Great Britain and Ireland", "British East Africa",
                                "British Somaliland",
                                "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
-                               "Mesopotamia (GB)", "Union of South Africa", "Botswana", "German E. Africa (Tanganyika)",
+                               "Union of South Africa", "Botswana", "German E. Africa (Tanganyika)",
                                "German South-West Africa", "Mandatory Palestine (GB)", "Zambia", "Zimbabwe",
                                "New Zealand", "Nigeria"]
 
         self.land_1939 = ["United Kingdom", "British East Africa", "British Somaliland",
                           "Malaya", "British Protectorate", "British Raj", "Australia", "Sudan", "Egypt",
-                          "Mesopotamia (GB)", "Union of South Africa", "Botswana", "Tanzania, United Republic of",
+                          "Union of South Africa", "Botswana", "Tanzania, United Republic of",
                           "German South-West Africa", "Mandatory Palestine (GB)", "Dominion of Newfoundland",
                           "New Zealand",
                           "Swaziland", "Oman (British Raj)", "Nigeria"]
@@ -367,8 +366,6 @@ class Britain(NationAI):
              "war goal": False,
              "at war with": False},
         ]}
-        self.improving_relations = []
-        self.worsening_relations = []
         if globe.date.year <= 1932:
             self.objectives = {"objectives": [
                 {"International Objectives": ["Contain Germany",
@@ -394,18 +391,7 @@ class Britain(NationAI):
                                          "Keep stable population growth",
                                          "Maintain strong military"]}
             ]}
-
             """Establishment of both national and international objectives for british AI"""
-        self.allies = []
-        # rival nations will have diplomacy of rate at above 50% in favorableness in Britain's eyes
-        self.rivals = []
-        # rival nations will have diplomacy of rate below 50% in favorableness in Britain's eyes
-        self.enemies = []
-        """self.long_term_mem = {{"Foreign-Policy", []},
-                              {"Domestic-Policy", []}}"""
-        self.short_term_mem = []
-        """AI short and long term memory meant to aid in AIs decision making"""
-        self.long_term_mem = {}
 
     def international_decision(self, foreign_nation_list, globe):
         for foreign_nation in foreign_nation_list:
@@ -614,6 +600,7 @@ class Britain(NationAI):
                             if foreign_nation_list.name in [foreign_nation for foreign_nation in
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
+
     def domestic_decision(self, domestic_issue):
         pass
 
