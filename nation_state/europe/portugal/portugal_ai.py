@@ -27,18 +27,6 @@ pms = {
     "1936": "William Mackenzie King",
     "1939": "William Mackenzie King"
 }
-monarchs = {
-    """Dictionary for english monarchs
-    Leader selection will be in sync with time frame selection
-    Unlike population, leader dictionary will be setup to be as historically accurate as possible"""
-
-    "1910": "Edward VII",
-    "1914": "George V",
-    "1918": "George V",
-    "1932": "George V",
-    "1936": "Edward VIII",
-    "1939": "George VI"
-}
 
 gdp = {
     "1910": 50000000,
@@ -49,20 +37,20 @@ gdp = {
     "1939": 74348873
 }
 
-flags = {"1910": "../flags/canada/canada_flag_1920.jpg",
-         "1914": "../flags/canada/canada_flag_1920.jpg",
-         "1918": "../flags/canada/canada_flag_1920.jpg",
-         "1932": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
-         "1936": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg",
-         "1939": "../flags/canada/Can-Red-Ensign-after-1921-green-leaves.jpg"}
+flags = {"1910": "../flags/portugal/Flag_of_Portugal.svg.jpg",
+         "1914": "../flags/portugal/Flag_of_Portugal.svg.jpg",
+         "1918": "../flags/portugal/Flag_of_Portugal.svg.jpg",
+         "1932": "../flags/portugal/Flag_of_Portugal.svg.jpg",
+         "1936": "../flags/portugal/Flag_of_Portugal.svg.jpg",
+         "1939": "../flags/portugal/Flag_of_Portugal.svg.jpg"}
 
 leader_images = {
-    "1910": "../leaders/canada/wilfred_laurier_1910.jpeg",
-    "1914": "../leaders/canada/robert_borden_1914-1920.jpeg",
-    "1918": "../leaders/canada/robert_borden_1914-1920.jpeg",
-    "1932": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
-    "1936": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg",
-    "1939": "../leaders/canada/Wm_Lyon_Mackenzie_King_1932-1940.jpg"
+    "1910": "../leaders/portugal/1910.png",
+    "1914": "../leaders/portugal/1914.png",
+    "1918": "../leaders/portugal/1918.png",
+    "1932": "../leaders/portugal/1932-1939.jpg",
+    "1936": "../leaders/portugal/1932-1939.jpg",
+    "1939": "../leaders/portugal/1932-1939.jpg"
 }
 
 class EconomicState(Enum):
@@ -71,12 +59,12 @@ class EconomicState(Enum):
     EXPANSION = 3
     RECOVERY = 4
 
-class Canada(NationAI):
+class Portugal(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.region = "North America"
-        self.name = "Dominion of Canada"
+        self.region = "europe"
+        self.name = "Portugal"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -114,7 +102,9 @@ class Canada(NationAI):
 
         for i in range(len(nation_json['countries'])):
             # print(nation_json['countries'][i]['nation_name'])
-            if (nation_json['countries'][i]['nation_name'] == "Canada"):
+            if (nation_json['countries'][i]['nation_name'] == "Portugal" or
+            nation_json['countries'][i]['nation_name'] == "Angola (Portugal)" or
+            nation_json['countries'][i]['nation_name'] == "Mozambique (Portugal)"):
                 # print(nation_json['countries'][i]['coordinates'])
                 self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = (retreive_coords(self.coordinates))

@@ -49,86 +49,60 @@ class NationAI:
         self.imports = 500
         self.chosen = False
         # international
-        self.foreign_relations = {"foreign relations": [{}]}
+        self.foreign_relations = {"foreign relations": [
+            {"nation name": "name",
+             "relations": 60.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "war goal": False,
+             "at war with": False}
+        ]}
+        # nations that are potential allies of Nation will have diplomacy of rate at above 80%
+        # nations that are potential rivals of Nation will have diplomacy of rate from 40 - 79%
+        # nations that are potential enemies of Nation will have diplomacy of rate below 40%
         self.improving_relations = []
         self.worsening_relations = []
         self.short_term_mem = []
         """AI short and long term memory meant to aid in AIs decision making"""
         self.long_term_mem = {"Policy": [
-            {"Domestic Policy": [],
+            {"Domestic Policy": [{
+                "Population": [
+                    {"Birth Control": False,
+                     "Birth Enhancer": False,
+                     "No manipulation": True}
+                ],
+                "Economy": [],
+                "Political": []
+            }],
              "Foreign Policy": []}
         ]}
-        self.allies = []
-        # rival nations will have diplomacy of rate at above 50% in favorableness in Britain's eyes
-        self.rivals = []
-        # rival nations will have diplomacy of rate below 50% in favorableness in Britain's eyes
-        self.enemies = []
+    def check_relations_status(self, foreign_nations):
+        """checking and updating status of relationship of foreign nations with Nation"""
+        for foreign_nation in range(0, len(foreign_nations)):
+            # looping through foreign nations list
+            for foreign_relation in range(0, len(self.foreign_relations["foreign relations"])):
+                if (foreign_nations[foreign_nation].name
+                        == self.foreign_relations["foreign relations"][foreign_relation]["nation name"]):
+                    """checking to see if a specific name within parameter matches with name
+                    in foreign relations list
+                    """
+                    if self.foreign_relations["foreign relations"][foreign_relation]["relations"] >= 80:
+                        """Checking to see if relations with foreign nation are potentially awesome"""
+                        self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "ally"
+
+                    if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 80 and
+                    self.foreign_relations["foreign relations"][foreign_relation]["relations"] > 40):
+                        """Checking to see if relations with foreign nation are potentially rivalrous"""
+                        self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "rival"
+
+                    if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 40):
+                        """Checking to see if relations with foreign nation are potentially fatal"""
+                        self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
+    def domestic_decision(self, domestic_issue):
+        pass
 
     def check_population_growth(self):
-        """instead of having the headache of calling both national objects separately, why not combine them"""
-
-        if self.year_placeholder < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
-
-            if pop_change < 1.25:
-                self.population_stability = 0
-                self.population_reward -= 1.25
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
-
-                if choice == 1:
-                    print(f"{self.leader}'s government has decided to implement policies to increase growth in births.\n")
-                    time.sleep(1.25)
-
-                    self.birth_enhancer = True
-
-                    if self.birth_control:
-                        self.birth_control = False
-
-            elif pop_change >= 1.25 and pop_change <= 8.56:
-                """If statement increments variable holding into account whether population is becoming stable or not"""
-                self.population_stability += 1
-                self.population_reward += 5
-
-                if self.population_stability >= 2:
-                    """checking to see if population growth has been stable for 2 years or longer"""
-                    if self.population_reward < 10:
-                        chance = random.randrange(0, 10)
-                        if chance % 4 == 2:
-                            """25% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-                    if self.population_reward > 10 and self.population_reward < 20:
-                        chance = random.randrange(0, 10)
-                        if chance % 3 == 2:
-                            """33% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-                    if self.population_reward >= 30:
-                        chance = random.randrange(0, 10)
-                        if chance % 2 == 0:
-                            """50% chance that government will choose to remove protocols"""
-                            self.birth_control = False
-                            self.birth_enhancer = False
-
-            elif pop_change > 8.56:
-                self.population_stability = 0
-                self.population_reward -= 1.25
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = random.randrange(0, 2)
-
-                if choice == 1:
-                    print(f"{self.leader}'s government has decided to implement policies to control births.\n")
-                    time.sleep(1.25)
-
-                    self.birth_control = True
-
-                    if self.birth_enhancer:
-                        self.birth_enhancer = False
-        else:
-            self.regular_pop_growth()
+        self.regular_pop_growth()
     def regular_pop_growth(self):
         if self.birth_enhancer:
             births = random.randrange(0, 30)
@@ -180,8 +154,7 @@ class NationAI:
                         for i in range(0, len(self.foreign_relations)):
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
                                 if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
-                                    if globe.tension <= 50:
-                                        if chance >= 90:
+                                    if globe.tension <= 50 and chance >= 90:
                                             self.foreign_relations["foreign relations"][i][
                                                 "guarantee independence"] = True
                                     else:
@@ -220,7 +193,7 @@ class NationAI:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
 
                 elif "Communism" or "Socialism" in foreign_nation.political_typology:
-
+                    """If nation that NationAI is interacting with is Far-Left"""
                     if action == "guarantee independence":
                         for i in range(0, len(self.foreign_relations)):
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
@@ -272,13 +245,12 @@ class NationAI:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
 
                 elif "Fascism" or "Nazism" in foreign_nation.political_typology:
-
+                    """If nation that NationAI is interacting with is Far-Right"""
                     if action == "guarantee independence":
                         for i in range(0, len(self.foreign_relations)):
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
                                 if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
-                                    if globe.tension <= 50:
-                                        if chance >= 98:
+                                    if globe.tension <= 50 and chance >= 98:
                                             self.foreign_relations["foreign relations"][i][
                                                 "guarantee independence"] = True
                                     else:
@@ -324,6 +296,7 @@ class NationAI:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
 
                 elif "Autocratic" in foreign_nation.political_typology:
+                    """If nation that NationAI is interacting with, doesn't fit far-right or far-left"""
                     if action == "guarantee independence":
                         for i in range(0, len(self.foreign_relations)):
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
@@ -995,76 +968,13 @@ class NationAI:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
     # economic functions
     def check_economic_state(self):
-        """function dealing with primary economic decisions of canadian parliament"""
-        if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections/potential business cycles"""
-            gdp_growth = ((self.current_gdp - self.past_gdp) / ((self.current_gdp + self.past_gdp) / 2)) * 100
-            if gdp_growth >= 6.65:
-                self.economic_stability = 0
-                self.economic_reward -= 1.25
-                # economy rises into expansion
-                if self.e_s == EconomicState.RECOVERY:
-                    self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
-                    self.consumer_spending = 300
-                    self.government_spending = 500
-                    self.investment = 350
-                    self.imports = 1000
-                    self.exports = 1200
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-                # economy rises into recovery
-                elif self.e_s == EconomicState.RECESSION or self.e_s.lower() == EconomicState.DEPRESSION:
-                    self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
-                    self.consumer_spending = 200
-                    self.government_spending = 300
-                    self.investment = 250
-                    self.imports = 1000
-                    self.exports = 900
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
+        """function dealing with primary economic decisions"""
 
-            elif gdp_growth <= -0.25:
-                self.economic_stability = 0
-                self.economic_reward -= 1.25
-                # economy falls into depression
-                if self.e_s == EconomicState.RECESSION:
-                    self.e_s = "depression"
-                    self.consumer_spending = -200
-                    self.government_spending = 00
-                    self.investment = -250
-                    self.imports = 1700
-                    self.exports = 500
-                    print("Your economy is now in a recessionary period.\n")
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
+        if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
+            self.neg_ec_growth()
 
-                # economy falls into recession
-                elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-                    self.e_s = "recession"
-                    self.consumer_spending = -100
-                    self.government_spending = 300
-                    self.investment = -150
-                    self.imports = 1500
-                    self.exports = 800
-                    print("Your economy is now in a depression period.\n")
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-
-            elif gdp_growth < 6.65 or gdp_growth >= 1.25:
-                self.economic_stability += 1
-                self.economic_reward += 5
-
-        else:
-            # gets called regardless of the current economic state
-            self.provide_economic_aid()
-
-            if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-                self.neg_ec_growth()
-
-            elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-                self.pos_ec_growth()
+        elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
+            self.pos_ec_growth()
     def provide_economic_aid(self):
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
             if self.economic_reward < 10:

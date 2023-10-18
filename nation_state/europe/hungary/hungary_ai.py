@@ -7,29 +7,29 @@ import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
 leader_images = {
-    "1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
-    "1914": "../leaders/italy/giolitti_1914.jpg",
-    "1918": "../leaders/italy/Flag_of_Greece.jpg",
-    "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
-    "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
-    "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
+    "1910": "",
+    "1914": "",
+    "1918": "",
+    "1932": "../leaders/hungary/OIP.jpg",
+    "1936": "../leaders/hungary/OIP.jpg",
+    "1939": "../leaders/hungary/OIP.jpg"
 }
 flags = {
-    "1910": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1914": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1918": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1932": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1936": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg",
-    "1939": "../flags/italy/Flag_of_Italy_(1861-1946)_crowned.jpg"
+    "1910": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg",
+    "1914": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg",
+    "1918": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg",
+    "1932": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg",
+    "1936": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg",
+    "1939": "../flags/hungary/Flag_of_Hungary_(1915-1918,_1919-1946).svg.jpg"
 }
 
 prime_ministers = {
-    "1910": "Luigi Luzzatti",
-    "1914": "Antonio Salandra",
-    "1918": "Vittorio Emanuele Orlando",
-    "1932": "Benito Mussolini",
-    "1936": "Benito Mussolini",
-    "1939": "Benito Mussolini"
+    "1910": None,
+    "1914": None,
+    "1918": None,
+    "1932": "Miklos Horthy",
+    "1936": "Miklos Horthy",
+    "1939": "Miklos Horthy"
 }
 
 monarchs = {
@@ -60,20 +60,18 @@ population = {
     "1939": 43500000
 }
 
-
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
 
-
 class HungaryAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Kingdom of Italy"
+        self.name = "Hungary"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
