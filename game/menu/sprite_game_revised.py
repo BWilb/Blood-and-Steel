@@ -148,7 +148,7 @@ class SpriteGame:
 
             """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
         nx.draw(self.network, with_labels=True)
-        #plt.show()
+        plt.show()
 
     def find_nation_by_name(self, name):
         for nation in self.nation_map:

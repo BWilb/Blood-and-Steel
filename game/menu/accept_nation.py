@@ -71,6 +71,7 @@ from nation_state.south_america.columbia import columbia_ai
 from nation_state.south_america.peru import peru_ai
 #from nation_state.south_america.venezuala import venezuala
 from nation_state.south_america.chile import chile_ai
+from nation_state.south_america.bolivia import bolivia_ai
 
 def establish_nations(globe, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function
@@ -156,13 +157,14 @@ def accept_nation(nation, time):
         argentina_ai = argentine_ai.Argentina(globe1)
         venezuelan_ai = venezuala_ai.Venezuala(globe1)
         chilean_ai = chile_ai.Chile(globe1)
+        bolivian_ai = bolivia_ai.BoliviaAI(globe1)
         columbian_ai = columbia_ai.Columbia(globe1)
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
                           iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
                           greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, norwegian_ai, brazilian_ai, argentina_ai,
                           venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai, iraqi_ai, hungarian_ai, estonian_ai, lithuanian_ai,
-                          latvian_ai, canadian_ai, portuguese_ai)
+                          latvian_ai, canadian_ai, portuguese_ai, swedish_ai, bolivian_ai)
         game = SpriteGame(belgian, globe1)
         game.main_game()
 

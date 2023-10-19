@@ -10,8 +10,6 @@ class EconomicState(Enum):
 class NationAI:
     def __init__(self, globe):
         # general information
-        self.population_reward = 0
-        self.economic_reward = 0
         self.region = ""
         self.name = ""
         self.date = datetime(globe.date.year, 1, 1)
@@ -22,6 +20,7 @@ class NationAI:
         # social factors
         """population factors"""
         self.population = 0
+        self.past_population = self.population
         self.birth_control = False
         self.birth_enhancer = False
         self.births = 0
@@ -62,20 +61,37 @@ class NationAI:
         # nations that are potential enemies of Nation will have diplomacy of rate below 40%
         self.improving_relations = []
         self.worsening_relations = []
-        self.short_term_mem = []
         """AI short and long term memory meant to aid in AIs decision making"""
         self.long_term_mem = {"Policy": [
             {"Domestic Policy": [{
                 "Population": [
                     {"Birth Control": False,
                      "Birth Enhancer": False,
-                     "No manipulation": True}
+                     "No manipulation": True,
+                     "Low growth occurrences": 0.0,
+                     "Extreme growth occurrences": 0.0}
                 ],
-                "Economy": [],
-                "Political": []
+                "Economy": [
+                    {}
+                ],
+                "Political": [
+                    {"Repress Far-Left": False,
+                     "Repress Far-Right": False,
+                     "Repress Autocrats": False,
+                     "Repress Liberals": False},
+                    {"Far-Right protests": 0,
+                     "Far-Left protests": 0,
+                     "Autocrat protests": 0,
+                     "Liberal Protests": 0}
+                ]
             }],
              "Foreign Policy": []}
         ]}
+        self.objectives = {"objectives":
+                           [{"foreign objectives": [],
+                             "domestic objectives": []
+                             }]
+                           }
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
         for foreign_nation in range(0, len(foreign_nations)):
@@ -98,20 +114,88 @@ class NationAI:
                     if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 40):
                         """Checking to see if relations with foreign nation are potentially fatal"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
-    def domestic_decision(self, domestic_issue):
+
+    def population_decision(self, domestic_issue):
+        if (domestic_issue.keys() == "population issue" and domestic_issue.values()
+        == "insignificant growth"):
+            if ("maintain low population growth" in
+                    list(self.objectives['objectives'][0].values())[1]):
+                pass
+
+            elif ("maintain moderate population growth" in
+                    list(self.objectives['objectives'][0].values())[1]):
+                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+
+                    if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] >= 5:
+                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = False
+                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] = 0
+
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] += 1
+
+            elif ("maintain high population growth" in
+                    list(self.objectives['objectives'][0].values())[1]):
+                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+                    """Checking to see if a measure had been made to implement birth control to control population growth
+                    in nation
+                    """
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = False
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = True
+
+        elif (domestic_issue.keys() == "population issue" and domestic_issue.values()
+        == "extreme growth"):
+            if ("maintain low population growth" in
+                    list(self.objectives['objectives'][0].values())[1]):
+                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
+                    """Checking to see if a measure had been made to implement birth enhancer to stimulate population growth
+                    in nation
+                    """
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = False
+
+            elif ("maintain high population growth" in
+                      list(self.objectives['objectives'][0].values())[1]):
+                pass
+
+            elif ("maintain moderate population growth" in
+                      list(self.objectives['objectives'][0].values())[1]):
+                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Extreme growth occurrences"] >= 5:
+
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = True
+                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["No Manipulation"] = False
+
+                    if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
+                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = False
+
+    def political_decision(self, political_issue):
+        pass
+
+    def economic_decision(self, economic_issue):
         pass
 
     def check_population_growth(self):
-        self.regular_pop_growth()
-    def regular_pop_growth(self):
-        if self.birth_enhancer:
+        if self.year_placeholder < self.date.year:
+            """checking to see if an entire year has passed"""
+            population_calculation = ((self.population - self.past_population) /
+                                      ((self.population + self.past_population) / 2)) * 100
+
+            if population_calculation <= 1.5:
+                self.population_decision({"population issue": "insignificant growth"})
+            elif population_calculation >= 7.6:
+                self.population_decision({"population issue": "extreme growth"})
+            else:
+                self.population_decision({"population issue": "stable growth"})
+
+        else:
+            self.pop_growth()
+
+    def pop_growth(self):
+        if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
             births = random.randrange(0, 30)
             deaths = random.randrange(0, 20)
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
 
-        if self.birth_control:
+        if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
             births = random.randrange(0, 15)
             deaths = random.randrange(0, 20)
             self.population += (births - deaths)
@@ -976,48 +1060,8 @@ class NationAI:
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
             self.pos_ec_growth()
     def provide_economic_aid(self):
-        if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-            if self.economic_reward < 10:
-                """lower reward means government will most likely not choose to do anything
-                higher reward means the opposite
-                """
-                chance = random.randrange(0, 10)
-                if chance % 4 == 0:
-                    """25% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.05
-                    self.income_taxes = self.income_taxes * 0.05
-                    self.government_spending += 200
-                    self.consumer_spending -= 150
-                    self.investment -= 150
+        pass
 
-                if chance % 3 == 0:
-                    """33% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.10
-                    self.income_taxes = self.income_taxes * 0.10
-                    self.government_spending += 400
-                    self.consumer_spending -= 200
-                    self.investment -= 200
-
-                if chance % 2 == 0:
-                    """50% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.15
-                    self.income_taxes = self.income_taxes * 0.15
-                    self.government_spending += 600
-                    self.consumer_spending -= 250
-                    self.investment -= 250
-
-                else:
-                    self.stability -= 5
-                    self.happiness -= 10
     def pos_ec_growth(self):
         self.national_debt += round(
             (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
