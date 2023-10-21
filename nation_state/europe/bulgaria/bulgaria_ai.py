@@ -7,29 +7,29 @@ from nation_data.coordination.retreive_and_convert import retreive_coords
 from enum import Enum
 
 leader_images = {
-    "1910": "",
-    "1914": "",
-    "1918": "",
-    "1932": "../leaders/estonia/330px-Konstantin_Pats_1934.jpg",
-    "1936": "../leaders/estonia/330px-Konstantin_Pats_1934.jpg",
-    "1939": "../leaders/estonia/330px-Konstantin_Pats_1934.jpg"
+    "1910": "../leaders/bulgaria/800px-Zar_Ferdinand_Bulgarien.jpg",
+    "1914": "../leaders/bulgaria/800px-Zar_Ferdinand_Bulgarien.jpg",
+    "1918": "../leaders/bulgaria/800px-Zar_Ferdinand_Bulgarien.jpg",
+    "1932": "../leaders/bulgaria/800px-Boris_III_of_Bulgaria.jpg",
+    "1936": "../leaders/bulgaria/800px-Boris_III_of_Bulgaria.jpg",
+    "1939": "../leaders/bulgaria/800px-Boris_III_of_Bulgaria.jpg"
 }
 flags = {
-    "1910": "../flags/estonia/Flag_of_Estonia.svg.jpg",
-    "1914": "../flags/estonia/Flag_of_Estonia.svg.jpg",
-    "1918": "../flags/estonia/Flag_of_Estonia.svg.jpg",
-    "1932": "../flags/estonia/Flag_of_Estonia.svg.jpg",
-    "1936": "../flags/estonia/Flag_of_Estonia.svg.jpg",
-    "1939": "../flags/estonia/Flag_of_Estonia.svg.jpg"
+    "1910": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg",
+    "1914": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg",
+    "1918": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg",
+    "1932": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg",
+    "1936": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg",
+    "1939": "../flags/bulgaria/Flag_of_Bulgaria.svg.jpg"
 }
 
 leaders = {
-    "1910" : None,
-    "1914" : None,
-    "1918" : "Konstantin Päts",
-    "1932" : "Konstantin Päts",
-    "1936" : "Konstantin Päts",
-    "1939" : "Kaarel Eenpalu"
+    "1910" : "Ferdinand I",
+    "1914" : "Ferdinand I",
+    "1918" : "Ferdinand I",
+    "1932" : "Boris III",
+    "1936" : "Boris III",
+    "1939" : "Boris III"
 }
 
 population = {
@@ -49,12 +49,12 @@ gdp = {
     "1939": 7037894
 }
 
-class EstoniaAI(NationAI):
+class BulgariaAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Estonia"
+        self.name = "Bulgaria"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -94,7 +94,7 @@ class EstoniaAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
             for i in range(0, len(nation_json['countries'])):
-                if nation_json['countries'][i]['nation_name'] == "Estonia":
+                if nation_json['countries'][i]['nation_name'] == "Bulgaria":
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = [(retreive_coords(self.coordinates))]
 

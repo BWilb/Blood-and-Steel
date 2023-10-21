@@ -2,11 +2,15 @@ import random
 import time
 from enum import Enum
 from datetime import datetime, timedelta
+
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
+
+
 class NationAI:
     def __init__(self, globe):
         # general information
@@ -61,18 +65,27 @@ class NationAI:
         # nations that are potential enemies of Nation will have diplomacy of rate below 40%
         self.improving_relations = []
         self.worsening_relations = []
-        """AI short and long term memory meant to aid in AIs decision making"""
-        self.long_term_mem = {"Policy": [
+        """National policy variable stores information that is similar and regards to the Domesticity and 
+        foreign status of the AI
+        """
+        self.national_policy = {"Policy": [
             {"Domestic Policy": [{
                 "Population": [
                     {"Birth Control": False,
                      "Birth Enhancer": False,
                      "No manipulation": True,
                      "Low growth occurrences": 0.0,
-                     "Extreme growth occurrences": 0.0}
+                     "Extreme growth occurrences": 0.0},
+                    {"Happiness": 78.56,
+                     "Social rewards": 0.0}
                 ],
                 "Economy": [
-                    {}
+                    {"tax rate": 15.00,
+                     "government stimulus": False,
+                     "low growth occurrences": 0,
+                     "high growth occurrences": 0},
+                    {"Economic stability": 87.56,
+                     "Economic rewards": 0.0}
                 ],
                 "Political": [
                     {"Repress Far-Left": False,
@@ -82,16 +95,36 @@ class NationAI:
                     {"Far-Right protests": 0,
                      "Far-Left protests": 0,
                      "Autocrat protests": 0,
-                     "Liberal Protests": 0}
+                     "Liberal Protests": 0},
+                    {"Political stability": 90.0,
+                     "Political rewards": 0.0}
+                    # for political rewards to be utilized, AI must make political decision
+                    # for example if there is a far left protest and the AI handles the protest by killing everyone...
+                    # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
+                    # memory
                 ]
             }],
-             "Foreign Policy": []}
+                "Foreign Policy": []}
         ]}
+
         self.objectives = {"objectives":
-                           [{"foreign objectives": [],
-                             "domestic objectives": []
-                             }]
+                               [{"foreign objectives": [],
+                                 "domestic objectives": []
+                                 }]
                            }
+        self.long_term_memory = {
+            "Domestic decisions": [
+                {"Economic Decisions": [],
+                 "Political Decisions": [],
+                 "Social Decisions": []}
+            ],
+            "Foreign decisions": [
+                {"allies": []},
+                {"rivals": []},
+                {"enemies": []}
+            ]
+        }
+        # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
         for foreign_nation in range(0, len(foreign_nations)):
@@ -107,69 +140,186 @@ class NationAI:
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "ally"
 
                     if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 80 and
-                    self.foreign_relations["foreign relations"][foreign_relation]["relations"] > 40):
+                            self.foreign_relations["foreign relations"][foreign_relation]["relations"] > 40):
                         """Checking to see if relations with foreign nation are potentially rivalrous"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "rival"
 
                     if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 40):
                         """Checking to see if relations with foreign nation are potentially fatal"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
-
     def population_decision(self, domestic_issue):
-        if (domestic_issue.keys() == "population issue" and domestic_issue.values()
-        == "insignificant growth"):
-            if ("maintain low population growth" in
-                    list(self.objectives['objectives'][0].values())[1]):
-                pass
 
-            elif ("maintain moderate population growth" in
-                    list(self.objectives['objectives'][0].values())[1]):
-                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+        if (domestic_issue.values() == "insignificant growth" and "maintain low population growth" in
+                self.objectives['objectives'][0]['domestic objectives']):
+            """Checking if domestic issue is low growth in population and if one of nation's objectives is to maintain low growth"""
+            self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] += 1
 
-                    if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] >= 5:
-                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = False
-                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] = 0
+            if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] >= 6:
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = True
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] = 0
 
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Low growth occurrences"] += 1
+                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] == True:
+                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] = False
 
-            elif ("maintain high population growth" in
-                    list(self.objectives['objectives'][0].values())[1]):
-                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
-                    """Checking to see if a measure had been made to implement birth control to control population growth
-                    in nation
-                    """
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = False
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = True
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Low population growth": [
+                                {"Decision": ["Birth control policy removed", "Birth enhancer policy implemented"]}
+                            ]}
+                        ]
+                    })
+                else:
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Low population growth": [
+                                {"Decision": ["Birth enhancer policy implemented"]}
+                            ]}
+                        ]
+                    })
 
-        elif (domestic_issue.keys() == "population issue" and domestic_issue.values()
-        == "extreme growth"):
-            if ("maintain low population growth" in
-                    list(self.objectives['objectives'][0].values())[1]):
-                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
-                    """Checking to see if a measure had been made to implement birth enhancer to stimulate population growth
-                    in nation
-                    """
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = False
+        elif (domestic_issue.values() == "insignificant growth" and "maintain high population growth" in
+              self.objectives['objectives'][0]['domestic objectives']):
+            """Checking if domestic issue is low growth in population and if one of nation's objectives is to maintain high growth"""
+            self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] += 1
 
-            elif ("maintain high population growth" in
-                      list(self.objectives['objectives'][0].values())[1]):
-                pass
+            if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] >= 2:
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = True
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] = 0
 
-            elif ("maintain moderate population growth" in
-                      list(self.objectives['objectives'][0].values())[1]):
-                if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Extreme growth occurrences"] >= 5:
+                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] == True:
+                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] = False
 
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"] = True
-                    self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["No Manipulation"] = False
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Low population growth": [
+                                {"Decision": ["Birth control policy removed", "Birth enhancer policy implemented"]}
+                            ]}
+                        ]
+                    })
+                else:
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Low population growth": [
+                                {"Decision": ["Birth enhancer policy implemented"]}
+                            ]}
+                        ]
+                    })
 
-                    if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
-                        self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"] = False
+        elif (domestic_issue.values() == "extreme growth" and "maintain high population growth" in
+              self.objectives['objectives'][0]['domestic objectives']):
 
+            if (self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] >= 5 or
+                    "maintain sustainable food production" in self.objectives["domestic objectives"]):
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Control'] = True
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] = 0
+
+                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer']:
+                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = False
+
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Extreme population growth": [
+                                {"Decision": ["Implement Birth Control", "Remove Birth Enhancer"]}
+                            ]}
+                        ]
+                    })
+
+                else:
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Extreme population growth": [
+                                {"Decision": ["Implement Birth Control"]}
+                            ]}
+                        ]
+                    })
+
+            else:
+                self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                    "Issue": [
+                        {"Extreme population growth": [
+                            {"Decision": ["Do nothing"]}
+                        ]}
+                    ]
+                })
+
+        elif (domestic_issue.values() == "extreme growth" and "maintain low population growth" in
+              self.objectives['objectives'][0]['domestic objectives']):
+
+            if (self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] >= 2):
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Control'] = True
+                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] = 0
+
+                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer']:
+                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = False
+
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Extreme population growth": [
+                                {"Decision": ["Implement Birth Control", "Remove Birth Enhancer"]}
+                            ]}
+                        ]
+                    })
+
+                else:
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {"Extreme population growth": [
+                                {"Decision": ["Implement Birth Control"]}
+                            ]}
+                        ]
+                    })
     def political_decision(self, political_issue):
         pass
-
     def economic_decision(self, economic_issue):
-        pass
+        """Economic decisions based upon Objectives and policy.
+        stored in long term memory for AI, if nation were to experience situation again
+        """
+        if economic_issue.values() == ("Depression started" or "Continuing Depression"):
+            """checking to see if value is off a depression that has started or is perpetuating itself"""
+            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
+                pass
+
+            if (("Maintain economic stability" or "Maintain economic hegemony")
+                    in self.objectives['objectives'][0]["domestic objectives"]):
+                pass
+
+            elif (("Maintain low taxes" or "Maintain consumer confidence")
+                  in self.objectives['objectives'][0]["domestic objectives"]):
+                if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] <= 3:
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
+
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Decision": ["Decreased taxes"]},
+                                {"Effects": ["Increased Overall happiness", "Decreased economic stability",
+                                             "Decreased political stability", "Decreased national debt"]}
+                            ]}
+                        ]
+                    })
+
+                else:
+                    self.consumer_spending += 150
+                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Decision": ["Provide stimulus money to civilians"]},
+                                {"Effects": ["Increased Overall happiness", "Decreased economic stability", "Increased national debt"]}
+                            ]}
+                        ]
+                    })
+
+            elif (("Increase government involvement in economy" or "seize private assets")
+                  in self.objectives['objectives'][0]["domestic objectives"]):
+                pass
+
+            elif (("Maintain isolationist policies")
+                  in self.objectives['objectives'][0]["domestic objectives"]):
+                pass
+
+            elif (("Enslave minorities")
+                  in self.objectives['objectives'][0]["domestic objectives"]):
+                pass
 
     def check_population_growth(self):
         if self.year_placeholder < self.date.year:
@@ -188,14 +338,14 @@ class NationAI:
             self.pop_growth()
 
     def pop_growth(self):
-        if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
             births = random.randrange(0, 30)
             deaths = random.randrange(0, 20)
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
 
-        if self.long_term_mem["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
             births = random.randrange(0, 15)
             deaths = random.randrange(0, 20)
             self.population += (births - deaths)
@@ -208,6 +358,7 @@ class NationAI:
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
+
     def political_power_growth(self):
         self.political_power += self.political_exponent
 
@@ -223,6 +374,7 @@ class NationAI:
 
         if "Autocratic" or "Absolutism" in self.political_typology:
             self.autocratic_international_decision(foreign_nations, globe)
+
     def democratic_international_decision(self, foreign_nation_list, globe):
         for foreign_nation in foreign_nation_list:
             actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
@@ -239,8 +391,8 @@ class NationAI:
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
                                 if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
                                     if globe.tension <= 50 and chance >= 90:
-                                            self.foreign_relations["foreign relations"][i][
-                                                "guarantee independence"] = True
+                                        self.foreign_relations["foreign relations"][i][
+                                            "guarantee independence"] = True
                                     else:
                                         if chance >= 25:
                                             self.foreign_relations["foreign relations"][i]["guarantee independence"] = True
@@ -335,8 +487,8 @@ class NationAI:
                             if self.foreign_relations["foreign relations"][i]["nation name"] == foreign_nation.name:
                                 if not self.foreign_relations["foreign relations"][i]["guarantee independence"]:
                                     if globe.tension <= 50 and chance >= 98:
-                                            self.foreign_relations["foreign relations"][i][
-                                                "guarantee independence"] = True
+                                        self.foreign_relations["foreign relations"][i][
+                                            "guarantee independence"] = True
                                     else:
                                         if chance >= 95:
                                             self.foreign_relations["foreign relations"][i][
@@ -429,6 +581,7 @@ class NationAI:
                             if foreign_nation_list.name in [foreign_nation for foreign_nation in
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
+
     def autocratic_international_decision(self, foreign_nation_list, globe):
         for foreign_nation in foreign_nation_list:
             actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
@@ -636,6 +789,7 @@ class NationAI:
                             if foreign_nation_list.name in [foreign_nation for foreign_nation in
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
+
     def fascist_international_decision(self, foreign_nation_list, globe):
         for foreign_nation in foreign_nation_list:
             actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
@@ -843,6 +997,7 @@ class NationAI:
                             if foreign_nation_list.name in [foreign_nation for foreign_nation in
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
+
     def communist_international_decision(self, foreign_nation_list, globe):
         for foreign_nation in foreign_nation_list:
             actions = ["form alliance", "guarantee independence", "improve relations", "justify war goal", "worsen relations"]
@@ -1050,7 +1205,32 @@ class NationAI:
                             if foreign_nation_list.name in [foreign_nation for foreign_nation in
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
+
     # economic functions
+
+    def check_economic_growth(self):
+        if self.date > self.economic_change_date:
+            growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
+            if growth <= 1.95:
+                if self.e_s == EconomicState.RECESSION:
+                    self.e_s = EconomicState.DEPRESSION
+                    self.economic_decision({"economic issue": "Depression started"})
+
+                if self.e_s == EconomicState.RECOVERY:
+                    self.e_s = EconomicState.RECESSION
+                    self.economic_decision({"economic issue": "Recession started"})
+
+                if self.e_s == EconomicState.EXPANSION:
+                    self.e_s = EconomicState.RECOVERY
+
+            elif growth >= 8.95:
+                self.e_s = EconomicState.EXPANSION
+                self.economic_decision({"economic issue": "extraordinary growth"})
+            else:
+                self.economic_decision({"economic issue": "stable growth"})
+        else:
+            self.check_economic_state()
+
     def check_economic_state(self):
         """function dealing with primary economic decisions"""
 
@@ -1059,6 +1239,7 @@ class NationAI:
 
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
             self.pos_ec_growth()
+
     def provide_economic_aid(self):
         pass
 
@@ -1068,164 +1249,13 @@ class NationAI:
 
         self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                              (self.exports - self.imports))
+
     def neg_ec_growth(self):
         self.national_debt += round(self.government_spending * round(random.uniform(0.15, 0.35), 4), 2)
 
         self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                              (self.exports - self.imports))
+
     # stability functions
     def stability_happiness_change(self, globe):
-        if globe.tension > 25 and globe.tension < 50:
-            """if global tension is between 25 and 50"""
-            if self.e_s.RECESSION or self.e_s.DEPRESSION:
-                if self.improve_stability > self.date:
-                    """if improving of stability has been activated"""
-                    stability_increase = round(random.uniform(0.25, 1.56), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_increase = round(random.uniform(0.25, 1.25), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                if self.improve_happiness > self.date:
-                    happiness_increase = round(random.uniform(1.56, 2.56), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-                else:
-                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-            else:
-                if self.improve_stability > self.date:
-                    stability_increase = round(random.uniform(0.50, 1.75), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_increase = round(random.uniform(0.45, 1.65), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
-                    happiness_increase = round(random.uniform(1.75, 2.76), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-                else:
-                    happiness_increase = round(random.uniform(1.25, 2.25), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-        elif globe.tension > 50 and globe.tension < 75:
-            """if global tension is between 50 and 75"""
-            if self.e_s.RECESSION or self.e_s.DEPRESSION:
-                if self.improve_stability > self.date:
-                    stability_increase = round(random.uniform(0.10, 1.25), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_increase = round(random.uniform(0.05, 1.05), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
-                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-                else:
-                    happiness_increase = round(random.uniform(1.15, 2.25), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-            else:
-                if self.improve_stability > self.date:
-                    stability_increase = round(random.uniform(0.13, 0.96), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_increase = round(random.uniform(0.10, 0.76), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
-                    happiness_increase = round(random.uniform(1.05, 1.96), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-                else:
-                    happiness_increase = round(random.uniform(0.96, 1.56), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-        elif globe.tension > 75:
-            """if global tension is above 75"""
-            if self.e_s.RECESSION or self.e_s.DEPRESSION:
-                if self.improve_stability > self.date:
-                    """if improving of stability has been activated"""
-                    stability_increase = round(random.uniform(0.05, 0.75), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                else:
-                    stability_decrease = round(random.uniform(1.56, 3.75), 2)
-                    if (self.stability - stability_decrease) > 5:
-                        self.stability -= stability_decrease
-
-                if self.improve_happiness > self.date:
-                    stability_increase = round(random.uniform(0.05, 0.99), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-                else:
-                    stability_decrease = round(random.uniform(1.56, 2.56), 2)
-                    if (self.stability - stability_decrease) > 5:
-                        self.stability -= stability_decrease
-
-            else:
-                if self.improve_stability > self.date:
-                    stability_increase = round(random.uniform(1.56, 2.56), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                else:
-                    stability_increase = round(random.uniform(1.45, 2.34), 2)
-                    if (self.stability + stability_increase) < 100:
-                        self.stability += stability_increase
-
-                if self.improve_happiness > self.date:
-                    """If policies toward improving happiness have been imposed"""
-                    happiness_increase = round(random.uniform(1.05, 2.96), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-                else:
-                    happiness_increase = round(random.uniform(0.96, 2.56), 2)
-                    if (self.happiness + happiness_increase) < 100:
-                        self.happiness += happiness_increase
-
-        else:
-            if self.improve_stability > self.date:
-                stability_increase = round(random.uniform(1.56, 2.56), 2)
-                if (self.stability + stability_increase) < 100:
-                    self.stability += stability_increase
-
-            else:
-                stability_increase = round(random.uniform(1.45, 2.34), 2)
-                if (self.stability + stability_increase) < 100:
-                    self.stability += stability_increase
-
-            if self.improve_happiness > self.date:
-                """If policies toward improving happiness have been imposed"""
-                happiness_increase = round(random.uniform(1.05, 2.96), 2)
-                if (self.happiness + happiness_increase) < 100:
-                    self.happiness += happiness_increase
-            else:
-                happiness_increase = round(random.uniform(0.96, 2.56), 2)
-                if (self.happiness + happiness_increase) < 100:
-                    self.happiness += happiness_increase
+        pass
