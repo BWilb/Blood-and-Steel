@@ -11,11 +11,11 @@ from random_functions import random_functions
 """Population Dictionaries"""
 population = {
     "1910": 7041174,
-    "1914": 7674382,
-    "1918": 8302357,
-    "1932": 10477365,
-    "1936": 10957346,
-    "1939": 11413434
+    "1914": 7614382,
+    "1918": 8252357,
+    "1932": 10467365,
+    "1936": 10927346,
+    "1939": 11303434
 }
 
 """Political Dictionaries"""

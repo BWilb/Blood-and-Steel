@@ -6,12 +6,12 @@ from nation_data.coordination.retreive_and_convert import retreive_coords
 from game.ai.nation_ai import NationAI
 population = {
 
-    "1910": 44915900,
-    "1914": 42956900,
-    "1918": 39582000,
-    "1932": 46335000,
-    "1936": 47081300,
-    "1939": 46029200
+    "1910": 4940000,
+    "1914": 5430000,
+    "1918": 5980000,
+    "1932": 8350000,
+    "1936": 8730000,
+    "1939": 9140000
 }
 
 # economic variables and dictionaries

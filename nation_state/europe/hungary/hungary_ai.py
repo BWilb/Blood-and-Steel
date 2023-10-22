@@ -32,14 +32,6 @@ prime_ministers = {
     "1939": "Miklos Horthy"
 }
 
-monarchs = {
-    "1910": "Victor Emmanuel III",
-    "1914": "Victor Emmanuel III",
-    "1918": "Victor Emmanuel III",
-    "1932": "Victor Emmanuel III",
-    "1936": "Victor Emmanuel III",
-    "1939": "Victor Emmanuel III"
-}
 """Economic variables and dictionaries"""
 gdp = {
     "1910": 7243560000,
@@ -52,12 +44,12 @@ gdp = {
 
 """Population variables and dictionaries"""
 population = {
-    "1910": 36100000,
-    "1914": 36500000,
-    "1918": 36800000,
-    "1932": 41000000,
-    "1936": 42400000,
-    "1939": 43500000
+    "1910": 7600000,
+    "1914": 7740000,
+    "1918": 7860000,
+    "1932": 8740000,
+    "1936": 8900000,
+    "1939": 9180000
 }
 
 class EconomicState(Enum):

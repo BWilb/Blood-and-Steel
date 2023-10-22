@@ -23,12 +23,12 @@ lenin_successors = ["Leon Trotsky", "Joseph Stalin", "Vladimir Milyutin", "Nikol
 stalin_successors = ["Vyacheslav Molotov", "Anastas Mikoyan", "Lavrentiy Beria", "Nikolai Bulganin", "Georgy Malenkov",]
 
 population = {
-    "1910": 126200000,
-    "1914": 130000000,
-    "1918": 136800000,
-    "1932": 126000000,
-    "1936": 104900000,
-    "1939": 109397463
+    "1910": 70980000,
+    "1914": 73570000,
+    "1918": 76290000,
+    "1932": 86770000,
+    "1936": 90020000,
+    "1939": 92540000
 }
 
 """Economic Dictionaries and Variables"""

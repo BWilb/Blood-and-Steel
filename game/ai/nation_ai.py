@@ -279,8 +279,51 @@ class NationAI:
             if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
                 """checking to see if an event, similar to the current issue exists within long term memory"""
                 for objective in range(0, len(self.objectives['objectives'][0]['Domestic objectives'])):
-                    if objective in False:
-                        pass
+                    if (objective in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Current Economic Objectives']):
+                        """Checking if current objectives are the same as the ones in long term memory
+                        proceeding code checks the decision that was made in original issue
+                        """
+
+                        if ("Increased exports and decreased imports" in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Decision']):
+                            self.exports += 50
+                            self.imports -= 25
+
+                        elif ("Decreased taxes" in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Decision']):
+
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
+
+                        elif ("Provide stimulus money to civilians" in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Decision']):
+                            self.consumer_spending += 50
+
+                        elif ("Increase government involvement in economy" in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Decision']):
+                            self.government_spending += 150
+
+                        elif ("Seize private assets" in
+                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                            [0]["Economic Depression occurred"][0]['Decision']):
+                            self.government_spending += 50
+                            self.consumer_spending -= 30
+                            self.investment -= 40
+
+                        elif ("Isolationist policies implemented" in
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
+                            pass
+
+                        elif ("Enslave minorities" in
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
+                            pass
 
             else:
 
@@ -308,6 +351,7 @@ class NationAI:
 
                 elif (("Maintain low taxes" or "Maintain consumer confidence")
                       in self.objectives['objectives'][0]["domestic objectives"]):
+
                     if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] <= 3:
                         self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
 
@@ -327,6 +371,7 @@ class NationAI:
                         self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
                             "Issue": [
                                 {f"Economic Depression occurred": [
+                                    {"Current Economic Objectives": ["Maintain low taxes", "Maintain consumer confidence"]},
                                     {"Decision": ["Provide stimulus money to civilians"]},
                                     {"Effects": ["Increased Overall happiness", "Decreased economic stability", "Increased national debt"]}
                                 ]}
@@ -380,12 +425,18 @@ class NationAI:
                         "Issue": [
                             {f"Economic Depression occurred": [
                                 {"Current Economic Objectives": ["Enslave minorities"]},
-                                {"Decision": ["Isolationist policies implemented"]},
+                                {"Decision": ["Minorities enslaved"]},
                                 {"Effects": ["Decreased Overall happiness", "Increased economic stability",
                                              "Increased Political stability"]}
                             ]}
                         ]
                     })
+
+        elif economic_issue.values() == ("Recovery has begun" or "Expansion started" or "Continued expansion"):
+            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
+                pass
+            else:
+                pass
 
     def check_population_growth(self):
         if self.year_placeholder < self.date.year:

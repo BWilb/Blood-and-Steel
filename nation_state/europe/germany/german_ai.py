@@ -27,12 +27,12 @@ kaisers = {
     Population will then be set up to grow or shrink in random amounts"""
 population = {
 
-    "1910": 44915900,
-    "1914": 42956900,
-    "1918": 39582000,
-    "1932": 46335000,
-    "1936": 47081300,
-    "1939": 46029200
+    "1910": 64060000,
+    "1914": 64030000,
+    "1918": 63310000,
+    "1932": 68180000,
+    "1936": 70130000,
+    "1939": 71500000
 }
 
 # economic variables and dictionaries
