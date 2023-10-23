@@ -33,6 +33,10 @@ class NationAI:
         # political
         self.leader = "Gregory Prescov"
         self.political_typology = "Republicanism"
+        self.democratic_appeal = 75
+        self.communist_appeal = 15
+        self.fascist_appeal = 7
+        self.autocratic_appeal = 3
         self.political_power = 100
         self.political_exponent = 1.00
         """Stability"""
@@ -275,6 +279,8 @@ class NationAI:
         stored in long term memory for AI, if nation were to experience situation again
         """
         if economic_issue.values() == ("Recession started" or "Depression started" or "Continued economic downturn"):
+            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] += 1
+
             """checking to see if value is off a depression that has started or is perpetuating itself"""
             if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
                 """checking to see if an event, similar to the current issue exists within long term memory"""
@@ -326,7 +332,6 @@ class NationAI:
                             pass
 
             else:
-
                 if (("Maintain economic stability" or "Maintain economic hegemony")
                         in self.objectives['objectives'][0]["domestic objectives"]):
 
@@ -377,6 +382,7 @@ class NationAI:
                                 ]}
                             ]
                         })
+                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] = 0
 
                 elif (("Increase government involvement in economy" or "seize private assets")
                       in self.objectives['objectives'][0]["domestic objectives"]):
@@ -394,6 +400,7 @@ class NationAI:
                         })
 
                     else:
+                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] = 0
                         self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
                             "Issue": [
                                 {f"Economic Depression occurred": [
@@ -432,12 +439,225 @@ class NationAI:
                         ]
                     })
 
-        elif economic_issue.values() == ("Recovery has begun" or "Expansion started" or "Continued expansion"):
-            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
-                pass
-            else:
-                pass
+        elif economic_issue.values() == ("Recovery has begun" or "Expansion started" or "Continued economic expansion"):
+            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["Extreme growth occurrences"] += 1
 
+            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
+                """Checking length of long term memory within economic decisions"""
+                for objective in range(0, len(self.objectives['objectives'][0]["domestic objectives"])):
+                    """Looping through current domestic objectives"""
+                    for past_objective in range(0,
+                                                len(self.long_term_memory['Domestic decisions'][0]
+                                                    ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"])):
+                        """Looping through past objectives within past decisions"""
+                        if (self.objectives['objectives'][0]["domestic objectives"][objective] ==
+                                self.long_term_memory['Domestic decisions'][0]
+                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective]):
+                            """Checking to see if current objectives match with ones at time of snapshot"""
+
+                            if (self.long_term_memory['Domestic decisions'][0]
+                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective] == "increase taxes"):
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                                self.consumer_spending -= 25
+                                self.investment -= 25
+
+                            elif (self.long_term_memory['Domestic decisions'][0]
+                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective] == "increase government spending"):
+                                self.government_spending += 150
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
+                                self.investment -= 10
+                                self.consumer_spending -= 25
+
+                            elif (self.long_term_memory['Domestic decisions'][0]
+                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
+                                      past_objective] == "increase imports"):
+                                self.imports += 50
+
+                            elif (self.long_term_memory['Domestic decisions'][0]
+                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
+                                      past_objective] == "Consolidate economic power"):
+                                self.government_spending += 100
+                                self.consumer_spending -= 45
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
+
+                            elif (self.long_term_memory['Domestic decisions'][0]
+                                  ['Economic Decisions'][0]["Issue"][0]["Improve workers conditions"][
+                                      past_objective] == "Consolidate economic power"):
+                                self.consumer_spending += 100
+                                self.investment -= 45
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
+
+                        else:
+                            if (("Increase taxes") in self.objectives['objectives'][0]["domestic objectives"]):
+
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                                    "Issue": [
+                                        {f"Economic Depression occurred": [
+                                            {"Current Economic Objectives": ["Increase taxes"]},
+                                            {"Decision": ["Increased taxes"]},
+                                            {"Effects": ["decreased investment",
+                                                         "decreased consumer spending"]}
+                                        ]}
+                                    ]
+                                })
+
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                                self.consumer_spending -= 25
+                                self.investment -= 25
+
+                            elif (("Increase government spending") in self.objectives['objectives'][0]["domestic objectives"]):
+                                self.government_spending += 150
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
+                                self.investment -= 10
+                                self.consumer_spending -= 25
+
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                                    "Issue": [
+                                        {f"Economic Depression occurred": [
+                                            {"Current Economic Objectives": ["Increase government spending"]},
+                                            {"Decision": ["Increased taxes"]},
+                                            {"Effects": ["increased government spending", "decreased investment",
+                                                         "decreased consumer spending", "increased national debt"]}
+                                        ]}
+                                    ]
+                                })
+
+                            elif (("increase imports") in self.objectives['objectives'][0]["domestic objectives"]):
+                                self.imports += 50
+
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                                    "Issue": [
+                                        {f"Economic Depression occurred": [
+                                            {"Current Economic Objectives": ["Increase imports"]},
+                                            {"Decision": ["Increased imports"]},
+                                            {"Effects": []}
+                                        ]}
+                                    ]
+                                })
+
+                            elif (("consolidate economic power") in self.objectives['objectives'][0]["domestic objectives"]):
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                                    "Issue": [
+                                        {f"Economic Depression occurred": [
+                                            {"Current Economic Objectives": ["Consolidate economic power"]},
+                                            {"Decision": ["Consolidated economic power"]},
+                                            {"Effects": ["Increased government spending", "Increased economic stability",
+                                                         "Decreased national happiness", "Decreased consumer spending",
+                                                         "Increased taxes"]}
+                                        ]}
+                                    ]
+                                })
+                                self.government_spending += 100
+                                self.consumer_spending -= 45
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
+
+                            elif (("Improve workers conditions") in self.objectives['objectives'][0]["domestic objectives"]):
+
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                                    "Issue": [
+                                        {f"Economic Depression occurred": [
+                                            {"Current Economic Objectives": ["Improve workers conditions"]},
+                                            {"Decision": ["Increased worker wages"]},
+                                            {"Effects": ["Increase in consumer spending", "Increase in happiness",
+                                                         "Decrease in investment", "Decrease in economic stability"]}
+                                        ]}
+                                    ]
+                                })
+                                self.consumer_spending += 100
+                                self.investment -= 45
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
+
+            else:
+                if (("Increase taxes") in self.objectives['objectives'][0]["domestic objectives"]):
+
+                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Current Economic Objectives": ["Increase taxes"]},
+                                {"Decision": ["Increased taxes"]},
+                                {"Effects": ["decreased investment",
+                                             "decreased consumer spending"]}
+                            ]}
+                        ]
+                    })
+
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                    self.consumer_spending -= 25
+                    self.investment -= 25
+
+                elif (("Increase government spending") in self.objectives['objectives'][0]["domestic objectives"]):
+                    self.government_spending += 150
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
+                    self.investment -= 10
+                    self.consumer_spending -= 25
+
+                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Current Economic Objectives": ["Increase government spending"]},
+                                {"Decision": ["Increased taxes"]},
+                                {"Effects": ["increased government spending", "decreased investment",
+                                             "decreased consumer spending", "increased national debt"]}
+                            ]}
+                        ]
+                    })
+
+                elif (("increase imports") in self.objectives['objectives'][0]["domestic objectives"]):
+                    self.imports += 50
+
+                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Current Economic Objectives": ["Increase imports"]},
+                                {"Decision": ["Increased imports"]},
+                                {"Effects": []}
+                            ]}
+                        ]
+                    })
+
+                elif (("consolidate economic power") in self.objectives['objectives'][0]["domestic objectives"]):
+                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Current Economic Objectives": ["Consolidate economic power"]},
+                                {"Decision": ["Consolidated economic power"]},
+                                {"Effects": ["Increased government spending", "Increased economic stability",
+                                             "Decreased national happiness", "Decreased consumer spending",
+                                             "Increased taxes"]}
+                            ]}
+                        ]
+                    })
+                    self.government_spending += 100
+                    self.consumer_spending -= 45
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
+
+                elif (("Improve workers conditions") in self.objectives['objectives'][0]["domestic objectives"]):
+
+                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
+                        "Issue": [
+                            {f"Economic Depression occurred": [
+                                {"Current Economic Objectives": ["Improve workers conditions"]},
+                                {"Decision": ["Increased worker wages"]},
+                                {"Effects": ["Increase in consumer spending", "Increase in happiness",
+                                             "Decrease in investment", "Decrease in economic stability"]}
+                            ]}
+                        ]
+                    })
+                    self.consumer_spending += 100
+                    self.investment -= 45
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
+
+    def check_rewards(self):
+        pass
     def check_population_growth(self):
         if self.year_placeholder < self.date.year:
             """checking to see if an entire year has passed"""
@@ -1344,6 +1564,7 @@ class NationAI:
                 self.e_s = EconomicState.EXPANSION
                 self.economic_decision({"economic issue": "extraordinary growth"})
             else:
+                self.e_s = EconomicState.RECOVERY
                 self.economic_decision({"economic issue": "stable growth"})
         else:
             self.check_economic_state()
@@ -1352,9 +1573,13 @@ class NationAI:
         """function dealing with primary economic decisions"""
 
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
+            self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] -= 1.5
             self.neg_ec_growth()
 
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
+            if ((self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] + 1.5) < 100):
+                """Checking to see if adding of 1.5 to economic stability will exceed 100 or not"""
+                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] += 1.5
             self.pos_ec_growth()
 
     def provide_economic_aid(self):
