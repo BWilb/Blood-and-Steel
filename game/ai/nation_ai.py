@@ -99,7 +99,7 @@ class NationAI:
                     {"Far-Right protests": 0,
                      "Far-Left protests": 0,
                      "Autocrat protests": 0,
-                     "Liberal Protests": 0},
+                     "Liberal protests": 0},
                     {"Political stability": 90.0,
                      "Political rewards": 0.0}
                     # for political rewards to be utilized, AI must make political decision
@@ -695,6 +695,66 @@ class NationAI:
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
+
+    def protests(self):
+        """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
+        chance = random.randrange(0, 100)
+        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] <= 75.00 or
+        self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65.00):
+            if "Democratic" or "Republicanism" in self.political_typology:
+                if chance % 75 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
+                    self.political_decision({"Issue": "Liberal protests"})
+                elif chance % 60 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
+                    self.political_decision({"Issue": "Far-Left protests"})
+                elif chance % 35 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
+                    self.political_decision({"Issue": "Far-Right protests"})
+                elif chance % 25 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
+                    self.political_decision({"Issue": "Autocrat protests"})
+
+            elif "Communism" or "Socialism" in self.political_typology:
+                if chance % 80 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
+                    self.political_decision({"Issue": "Far-Left protests"})
+                elif chance % 15 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
+                    self.political_decision({"Issue": "Liberal protests"})
+                elif chance % 10 == 0:
+                    pass
+                elif chance % 2 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
+                    self.political_decision({"Issue": "Autocrat protests"})
+
+            elif "Fascism" or "Nazism" in self.political_typology:
+                if chance % 85 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
+                    self.political_decision({"Issue": "Far-Right protests"})
+                elif chance % 45 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
+                    self.political_decision({"Issue": "Far-Left protests"})
+                elif chance % 25 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
+                    self.political_decision({"Issue": "Liberal protests"})
+                elif chance % 15 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
+                    self.political_decision({"Issue": "Autocrat protests"})
+
+            elif "Autocratic" in self.political_typology:
+                if chance % 90 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
+                    self.political_decision({"Issue": "Autocrat protests"})
+                elif chance % 50 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
+                    self.political_decision({"Issue": "Far-Left protests"})
+                elif chance % 35 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
+                    self.political_decision({"Issue": "Far-Right protests"})
+                elif chance % 15 == 0:
+                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
+                    self.political_decision({"Issue": "Liberal protests"})
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
