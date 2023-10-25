@@ -80,35 +80,40 @@ class NationAI:
                      "No manipulation": True,
                      "Low growth occurrences": 0.0,
                      "Extreme growth occurrences": 0.0},
-                    {"Happiness": 78.56,
-                     "Social rewards": 0.0}
+                    {"Happiness": 78.56}
                 ],
                 "Economy": [
                     {"tax rate": 15.00,
                      "government stimulus": False,
                      "low growth occurrences": 0,
                      "high growth occurrences": 0},
-                    {"Economic stability": 87.56,
-                     "Economic rewards": 0.0}
+                    {"Economic stability": 87.56}
                 ],
                 "Political": [
                     {"Repress Far-Left": False,
                      "Repress Far-Right": False,
                      "Repress Autocrats": False,
-                     "Repress Liberals": False},
-                    {"Far-Right protests": 0,
-                     "Far-Left protests": 0,
-                     "Autocrat protests": 0,
-                     "Liberal protests": 0},
-                    {"Political stability": 90.0,
-                     "Political rewards": 0.0}
+                     "Repress Liberals": False,
+                     "Suppress Far-Left": False,
+                     "Supress Far-Right": False,
+                     "Suppress Autocrats": False,
+                     "Suppress Liberals": False},
+                    {"Far-Right protests": [],
+                     "Far-Left protests": [],
+                     "Autocrat protests": [],
+                     "Liberal protests": []},
+                    {"Political stability": 90.0}
                     # for political rewards to be utilized, AI must make political decision
                     # for example if there is a far left protest and the AI handles the protest by killing everyone...
                     # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
                     # memory
                 ]
             }],
-                "Foreign Policy": []}
+                "Foreign Policy": [{
+                    "Allies": [],
+                    "Rivals": [],
+                    "Enemies": [],
+                }]}
         ]}
 
         self.objectives = {"objectives":
@@ -129,6 +134,7 @@ class NationAI:
             ]
         }
         # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
+
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
         for foreign_nation in range(0, len(foreign_nations)):
@@ -151,6 +157,7 @@ class NationAI:
                     if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 40):
                         """Checking to see if relations with foreign nation are potentially fatal"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
+
     def population_decision(self, domestic_issue):
 
         if (domestic_issue.values() == "insignificant growth" and "maintain low population growth" in
@@ -272,8 +279,329 @@ class NationAI:
                             ]}
                         ]
                     })
+
+    def democratic_handling_protest(self, political_issue):
+        # function handles how democracies approach protests of different ideologies
+        days = random.randrange(10, 30)
+        if (self.national_policy["Policy"][0]["Domestic Policy"][2][
+            "Political stability"] > self.long_term_memory["Domestic Decisions"][0]["Political Decisions"][1][
+            'Current stability']):
+            for objective in range(0, len(self.objectives[0]["domestic objectives"])):
+                """iterating through current objectives"""
+                for past_objective in range(0, len(
+                        self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                        [3]['Current political objective'])):
+                    """iterating through objectives within past decisions"""
+                    if (self.objectives[0]["domestic objectives"][objective] ==
+                            self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                            [3]['Current political objective'][past_objective]):
+                        """Checking if current objective matches with past objective"""
+                        if political_issue.values() == "Fascist protest":
+                            """Checking if fascist protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"]:
+                                """Checking if nation is still suppressing far right"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Communist protest":
+                            """Checking if far left protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Autocratic protest":
+                            """Checking if autocrat protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+    def communist_handling_protest(self, political_issue):
+        days = random.randrange(10, 30)
+        if (self.national_policy["Policy"][0]["Domestic Policy"][2][
+            "Political stability"] > self.long_term_memory["Domestic Decisions"][0]["Political Decisions"][1][
+            'Current stability']):
+            for objective in range(0, len(self.objectives[0]["domestic objectives"])):
+                """iterating through current objectives"""
+                for past_objective in range(0, len(
+                        self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                        [3]['Current political objective'])):
+                    """iterating through objectives within past decisions"""
+                    if (self.objectives[0]["domestic objectives"][objective] ==
+                            self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                            [3]['Current political objective'][past_objective]):
+                        """Checking if current objective matches with past objective"""
+                        if political_issue.values() == "Fascist protest":
+                            """Checking if fascist protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"]:
+                                """Checking if nation is still suppressing far right"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Liberal protest":
+                            """Checking if far left protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Autocratic protest":
+                            """Checking if autocrat protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+    def fascist_handling_protest(self, political_issue):
+        days = random.randrange(10, 30)
+        if (self.national_policy["Policy"][0]["Domestic Policy"][2][
+            "Political stability"] > self.long_term_memory["Domestic Decisions"][0]["Political Decisions"][1][
+            'Current stability']):
+            for objective in range(0, len(self.objectives[0]["domestic objectives"])):
+                """iterating through current objectives"""
+                for past_objective in range(0, len(
+                        self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                        [3]['Current political objective'])):
+                    """iterating through objectives within past decisions"""
+                    if (self.objectives[0]["domestic objectives"][objective] ==
+                            self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                            [3]['Current political objective'][past_objective]):
+                        """Checking if current objective matches with past objective"""
+                        if political_issue.values() == "Communist protest":
+                            """Checking if fascist protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"]:
+                                """Checking if nation is still suppressing far right"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-left protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-left protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Liberal protest":
+                            """Checking if far left protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Autocratic protest":
+                            """Checking if autocrat protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+    def autocrat_handling_protest(self, political_issue):
+        days = random.randrange(10, 30)
+        if (self.national_policy["Policy"][0]["Domestic Policy"][2][
+            "Political stability"] > self.long_term_memory["Domestic Decisions"][0]["Political Decisions"][1][
+            'Current stability']):
+            for objective in range(0, len(self.objectives[0]["domestic objectives"])):
+                """iterating through current objectives"""
+                for past_objective in range(0, len(
+                        self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                        [3]['Current political objective'])):
+                    """iterating through objectives within past decisions"""
+                    if (self.objectives[0]["domestic objectives"][objective] ==
+                            self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                            [3]['Current political objective'][past_objective]):
+                        """Checking if current objective matches with past objective"""
+                        if political_issue.values() == "Communist protest":
+                            """Checking if fascist protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"]:
+                                """Checking if nation is still suppressing far right"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-left protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-left protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Liberal protest":
+                            """Checking if far left protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
+                        elif political_issue.values() == "Autocratic protest":
+                            """Checking if autocrat protest"""
+                            if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"]:
+                                """Checking if nation is still suppressing far left"""
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"][0]["Dates"][1][
+                                    "End date"] += timedelta(days=days)
+
+                            else:
+                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                                self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append(
+                                    {"Dates": [
+                                        {"Start date": self.date},
+                                        {"End date": self.date + timedelta(days=days)}
+                                    ]})
+
     def political_decision(self, political_issue):
-        pass
+        if len(self.long_term_memory['Domestic Decisions'][0]["Political Decisions"]) > 0:
+            if "Democratic" or "Republicanism" in self.political_typology:
+                # checking if current typology is liberal
+                self.democratic_handling_protest(political_issue)
+
+            elif "Communist" or "Socialism" in self.political_typology:
+                # checking if current typology is Far-left
+                self.communist_handling_protest(political_issue)
+
+            elif "Autocratic" in self.political_typology:
+                # checking if current typology is autocratic
+                self.autocrat_handling_protest(political_issue)
+
+            elif "Fascist" or "Nazism" in self.political_typology:
+                # checking if current typology is far-right
+                self.fascist_handling_protest(political_issue)
+
+        else:
+            days = random.randrange(10, 30)
+            if political_issue.values() == "Fascist protest" and ("Fascist" or "Nazism" not in self.political_typology):
+
+                # only option for any ideology within this path is to maintain stability
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
+                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                        {"Decision": "Arrested far-right leaders"},
+                        {"Effects": ["Decreased stability", "Began crack down on far-right parties"]},
+                        {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2][
+                            "Political stability"]},
+                        {"Current political objective": "Maintain stability"}
+                    ]})
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"] = True
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append({"Dates":[
+                        {"Start date": self.date},
+                        {"End date": self.date + timedelta(days=days)}
+                    ]})
+
+            elif political_issue.values() == "Liberal protest" and ("Democratic" or "Republicanism" not in self.political_typology):
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
+                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                        {"Decision": "Arrested liberal leaders"},
+                        {"Effects": ["Decreased stability", "Began crack down on liberal parties"]},
+                        {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2]["Political stability"]},
+                        {"Current political objective": "Maintain stability"}
+                    ]})
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Liberals"] = True
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Liberal protests"].append({"Dates": [
+                        {"Start date": self.date},
+                        {"End date": self.date + timedelta(days=days)}
+                    ]})
+
+            elif political_issue.values() == "Communist protest" and ("Communist" or "Socialist" not in self.political_typology):
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
+                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                        {"Decision": "Arrested far-left leaders"},
+                        {"Effects": ["Decreased stability", "Began crack down on far-left parties"]},
+                        {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2]["Political stability"]},
+                        {"Current political objective": "Maintain stability"}
+                    ]})
+
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"].append({"Dates":[
+                        {"Start date": self.date},
+                        {"End date": self.date + timedelta(days=days)}
+                    ]})
+
+            elif political_issue.values() == "Autocratic protest" and "Autocratic" not in self.political_typology:
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
+                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                        {"Decision": "Arrested autocratic leaders"},
+                        {"Effects": ["Decreased stability", "Began crack down on autocratic parties"]},
+                        {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2][
+                            "Political stability"]},
+                        {"Current political objective": "Maintain stability"}
+                    ]})
+
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append({"Dates":[
+                        {"Start date": self.date},
+                        {"End date": self.date + timedelta(days=days)}
+                    ]})
+
     def economic_decision(self, economic_issue):
         """Economic decisions based upon Objectives and policy.
         stored in long term memory for AI, if nation were to experience situation again
@@ -293,30 +621,30 @@ class NationAI:
                         """
 
                         if ("Increased exports and decreased imports" in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Decision']):
+                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                                [0]["Economic Depression occurred"][0]['Decision']):
                             self.exports += 50
                             self.imports -= 25
 
                         elif ("Decreased taxes" in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Decision']):
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
 
                             self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
 
                         elif ("Provide stimulus money to civilians" in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Decision']):
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
                             self.consumer_spending += 50
 
                         elif ("Increase government involvement in economy" in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Decision']):
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
                             self.government_spending += 150
 
                         elif ("Seize private assets" in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Decision']):
+                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
+                              [0]["Economic Depression occurred"][0]['Decision']):
                             self.government_spending += 50
                             self.consumer_spending -= 30
                             self.investment -= 40
@@ -351,7 +679,7 @@ class NationAI:
 
                     for nation in range(0, len(self.foreign_relations['foreign relations'])):
                         if (self.foreign_relations['foreign relations'][nation]['relation status'] == "ally" or
-                        self.foreign_relations['foreign relations'][nation]['relation status'] == "rival"):
+                                self.foreign_relations['foreign relations'][nation]['relation status'] == "rival"):
                             self.foreign_relations['foreign relations'][nation]['relations'] -= 1.5
 
                 elif (("Maintain low taxes" or "Maintain consumer confidence")
@@ -378,7 +706,8 @@ class NationAI:
                                 {f"Economic Depression occurred": [
                                     {"Current Economic Objectives": ["Maintain low taxes", "Maintain consumer confidence"]},
                                     {"Decision": ["Provide stimulus money to civilians"]},
-                                    {"Effects": ["Increased Overall happiness", "Decreased economic stability", "Increased national debt"]}
+                                    {"Effects": ["Increased Overall happiness", "Decreased economic stability",
+                                                 "Increased national debt"]}
                                 ]}
                             ]
                         })
@@ -391,7 +720,8 @@ class NationAI:
                         self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
                             "Issue": [
                                 {f"Economic downturn occurred": [
-                                    {"Current Economic Objectives": ["Seize private assets", "Increase government involvement in economy"]},
+                                    {"Current Economic Objectives": ["Seize private assets",
+                                                                     "Increase government involvement in economy"]},
                                     {"Decision": ["Increased government involvement in economy"]},
                                     {"Effects": ["Increased Overall happiness", "Decreased economic stability",
                                                  "Increased national debt", "Increased government spending"]}
@@ -456,13 +786,15 @@ class NationAI:
                             """Checking to see if current objectives match with ones at time of snapshot"""
 
                             if (self.long_term_memory['Domestic decisions'][0]
-                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective] == "increase taxes"):
+                            ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
+                                past_objective] == "increase taxes"):
                                 self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
                                 self.consumer_spending -= 25
                                 self.investment -= 25
 
                             elif (self.long_term_memory['Domestic decisions'][0]
-                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective] == "increase government spending"):
+                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
+                                      past_objective] == "increase government spending"):
                                 self.government_spending += 150
                                 self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
                                 self.investment -= 10
@@ -658,6 +990,7 @@ class NationAI:
 
     def check_rewards(self):
         pass
+
     def check_population_growth(self):
         if self.year_placeholder < self.date.year:
             """checking to see if an entire year has passed"""
@@ -699,62 +1032,62 @@ class NationAI:
     def protests(self):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
         chance = random.randrange(0, 100)
-        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] <= 75.00 or
-        self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65.00):
-            if "Democratic" or "Republicanism" in self.political_typology:
-                if chance % 75 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
-                    self.political_decision({"Issue": "Liberal protests"})
-                elif chance % 60 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
-                    self.political_decision({"Issue": "Far-Left protests"})
-                elif chance % 35 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
-                    self.political_decision({"Issue": "Far-Right protests"})
-                elif chance % 25 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
-                    self.political_decision({"Issue": "Autocrat protests"})
+        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] >= 75.00 or
+                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] >= 65.00):
+            """protests occurring in relative peaceful and stable times"""
+            for i in range(1, 101):
+                number = random.randrange(1, 101)
+                days = random.randrange(10, 31)
+                if number % i == 0 or number % i == 4:
+                    """chance, based upon remainder of 0 or 4 that fascist protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Fascist protest"})
+                    break
 
-            elif "Communism" or "Socialism" in self.political_typology:
-                if chance % 80 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
-                    self.political_decision({"Issue": "Far-Left protests"})
-                elif chance % 15 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
-                    self.political_decision({"Issue": "Liberal protests"})
-                elif chance % 10 == 0:
-                    pass
-                elif chance % 2 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
-                    self.political_decision({"Issue": "Autocrat protests"})
+                if number % i == 1 or number % i == 2:
+                    """chance, based upon remainder of 1 or 2 that liberal protest will occur with relative stability"""
 
-            elif "Fascism" or "Nazism" in self.political_typology:
-                if chance % 85 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
-                    self.political_decision({"Issue": "Far-Right protests"})
-                elif chance % 45 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
-                    self.political_decision({"Issue": "Far-Left protests"})
-                elif chance % 25 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
-                    self.political_decision({"Issue": "Liberal protests"})
-                elif chance % 15 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
-                    self.political_decision({"Issue": "Autocrat protests"})
+                    self.political_decision({"Issue": "Liberal protest"})
+                    break
 
-            elif "Autocratic" in self.political_typology:
-                if chance % 90 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Autocrat protests"] += 1
-                    self.political_decision({"Issue": "Autocrat protests"})
-                elif chance % 50 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Left protests"] += 1
-                    self.political_decision({"Issue": "Far-Left protests"})
-                elif chance % 35 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Far-Right protests"] += 1
-                    self.political_decision({"Issue": "Far-Right protests"})
-                elif chance % 15 == 0:
-                    self.national_policy["Policy"][0]["National Policy"][0]["Political"][1]["Liberal protests"] += 1
-                    self.political_decision({"Issue": "Liberal protests"})
+                if number % i == 5 or number % i == 7:
+                    """chance, based upon remainder of 5 or 7 that liberal protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Communist protest"})
+                    break
+
+                if number % i == 6 or number % i == 8:
+                    """chance, based upon remainder of 6 or 8 that liberal protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Autocratic protest"})
+                    break
+
+        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] < 75.00 or
+                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] < 65.00):
+            """protests occurring in relative non-peaceful times"""
+            for i in range(1, 101):
+                days = random.randrange(10, 31)
+                number = random.randrange(1, 10)
+                # lesser amount of options to be generated, creates greater possibilities of uprisings
+                if number % i == 0 or number % i == 4:
+                    """chance, based upon remainder of 0 or 4 fascist protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Fascist protest"})
+                    break
+
+                if number % i == 1 or number % i == 2:
+                    """chance, based upon remainder of 1 or 2 liberal protest will occur with relative stability"""
+                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Political'][1]["Liberal protests"].append(
+                        {"Start Date": self.date,
+                         "End Date": self.date + timedelta(days=days)})
+                    self.political_decision({"Issue": "Liberal protest"})
+                    break
+
+                if number % i == 5 or number % i == 7:
+                    """chance, based upon remainder of 5 or 7 liberal protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Communist protest"})
+                    break
+
+                if number % i == 6 or number % i == 8:
+                    """chance, based upon remainder of 6 or 8 that liberal protest will occur with relative stability"""
+                    self.political_decision({"Issue": "Autocratic protest"})
+                    break
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
