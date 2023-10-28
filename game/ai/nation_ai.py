@@ -79,8 +79,10 @@ class NationAI:
                      "Birth Enhancer": False,
                      "No manipulation": True,
                      "Low growth occurrences": 0.0,
+                     "Stable growth occurrences": 0.0,
                      "Extreme growth occurrences": 0.0},
                     {"Happiness": 78.56}
+                    # growth occurrences will be growth that is consistent, once change happens set back to 0
                 ],
                 "Economy": [
                     {"tax rate": 15.00,
@@ -118,14 +120,20 @@ class NationAI:
 
         self.objectives = {"objectives":
                                [{"foreign objectives": [],
-                                 "domestic objectives": []
+                                 "domestic objectives": [{
+                                     'population objectives': [],
+                                     'economic objectives': [],
+                                     'political objectives': [],
+                                     'social objectives': []
+                                 }]
                                  }]
                            }
         self.long_term_memory = {
             "Domestic decisions": [
                 {"Economic Decisions": [],
                  "Political Decisions": [],
-                 "Social Decisions": []}
+                 "Social Decisions": [],
+                 "Population Decisions": []}
             ],
             "Foreign decisions": [
                 {"allies": []},
@@ -134,6 +142,50 @@ class NationAI:
             ]
         }
         # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
+
+    def establishing_beginning_objectives(self):
+        # function for handling objectives of state
+        # objectives, whether social, economic, or political, will be based upon the stability of the state
+        if self.national_policy["Policy"][0]["Domestic Policy"][2]["Political"][2]["Political stability"] >= 90:
+            political_objectives = ["suppress rival factions", "maintain political growth"]
+
+            if self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] >= 65:
+                economic_objectives = ["promote sustainable growth"]
+                for objective in economic_objectives:
+                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+
+            elif self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] < 65:
+                economic_objectives = ["promote high growth"]
+
+                for objective in economic_objectives:
+                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+
+            for political_objective in political_objectives:
+                self.objectives['objectives'][0]['domestic objectives'][0]['political objectives'].append(political_objective)
+        else:
+            political_objectives = ["repress rival factions", "maintain political growth", "increase political stability"]
+            if self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] >= 65:
+                economic_objectives = ["promote high growth"]
+
+                for objective in economic_objectives:
+                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+
+            elif self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] < 65:
+                economic_objectives = ["promote extreme growth"]
+
+                for objective in economic_objectives:
+                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+
+            for political_objective in political_objectives:
+                self.objectives['objectives'][0]['domestic objectives'][0]['political objectives'].append(political_objective)
+
+        if 'Fascism' or "Communism" in self.political_typology:
+            self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                "maintain large population growth")
+
+        elif "Democratic" or "Autocratic" in self.political_typology:
+            self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                "maintain stable population growth")
 
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
@@ -147,7 +199,7 @@ class NationAI:
                     """
                     if self.foreign_relations["foreign relations"][foreign_relation]["relations"] >= 80:
                         """Checking to see if relations with foreign nation are potentially awesome"""
-                        self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "ally"
+                        self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "friend"
 
                     if (self.foreign_relations["foreign relations"][foreign_relation]["relations"] < 80 and
                             self.foreign_relations["foreign relations"][foreign_relation]["relations"] > 40):
@@ -158,127 +210,267 @@ class NationAI:
                         """Checking to see if relations with foreign nation are potentially fatal"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
 
+    def change_relations(self, foreign_nations):
+        for relation in self.improving_relations:
+            """looping through nations that nation is currently improving relations with"""
+            for nation in self.foreign_relations['foreign relations'][0]['nation_name']:
+                """looping through nations in foreign relations book of nation"""
+                if nation == relation:
+                    """checking if nation in book matches with nation that current nation is improving relations with"""
+                    if (self.foreign_relations['foreign relations'][0]["relations"] + 1.5) < 100:
+                        self.foreign_relations['foreign relations'][0]["relations"] += 1.5
+
+                    else:
+                        self.political_exponent += 0.25
+                        for i in range(0, len(self.objectives['objectives'][1]['foreign objectives'])):
+                            if (f"improve relations with {nation}") in self.objectives['objectives'][1]['foreign objectives'][i]:
+                                self.objectives['objectives'][1]['foreign objectives'].pop(
+                                    self.objectives['objectives'][1]['foreign objectives'][i])
+                                self.objectives['objectives'][1]['foreign objectives'].append(
+                                    f"create alliance with {self.foreign_relations['foreign relations'][0]['nation_name']}")
+
+        for relation in self.worsening_relations:
+            """looping through nations that nation is currently worsening relations with"""
+            for nation in self.foreign_relations['foreign relations'][0]['nation_name']:
+                """looping through nations in foreign relations book of nation"""
+                if nation == relation:
+                    """checking if nation in book matches with nation that current nation is worsening relations with"""
+                    if (self.foreign_relations['foreign relations'][0]["relations"] - 1.5) > -100:
+                        self.foreign_relations['foreign relations'][0]["relations"] -= 1.5
+                        for foreign_nation in foreign_nations:
+
+                            if self.foreign_relations['foreign relations'][0]["relations"] < -25 and (
+                                    self.political_typology not in
+                                    foreign_nation.political_typology):
+                                "poor relations with specific nation that isn't of similar ideology"
+                                (self.objectives['objectives'][1]['foreign objectives'].
+                                append(
+                                    f"develop war goal against {self.foreign_relations['foreign relations'][0]['nation_name']}"))
+
+                    else:
+                        self.political_exponent += 0.25
+        self.check_relations_status(foreign_nations)
+
     def population_decision(self, domestic_issue):
+        if len(self.long_term_memory['Domestic decisions'][0]["Population Decisions"]) > 0:
+            # checking if long term memory for population decisions is larger then 0
+            if domestic_issue.values() == "extreme growth":
+                if "Fascism" or "Communism" in self.political_typology:
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Extreme population growth occurred'][1]['Number of occurrences'] > 10 and (
+                    not "Slow down population growth"
+                        in self.objectives['objectives'][0]['domestic objectives'][0]['population objectives']):
 
-        if (domestic_issue.values() == "insignificant growth" and "maintain low population growth" in
-                self.objectives['objectives'][0]['domestic objectives']):
-            """Checking if domestic issue is low growth in population and if one of nation's objectives is to maintain low growth"""
-            self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] += 1
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
 
-            if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] >= 6:
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = True
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] = 0
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Slow down population growth")
 
-                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] == True:
-                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] = False
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
 
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Low population growth": [
-                                {"Decision": ["Birth control policy removed", "Birth enhancer policy implemented"]}
-                            ]}
-                        ]
-                    })
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Extreme population growth occurred'][1]['Number of occurrences'] > 15:
+
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
+
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Extreme population growth occurred'][1]['Number of occurrences'] = 0
                 else:
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Low population growth": [
-                                {"Decision": ["Birth enhancer policy implemented"]}
-                            ]}
-                        ]
-                    })
 
-        elif (domestic_issue.values() == "insignificant growth" and "maintain high population growth" in
-              self.objectives['objectives'][0]['domestic objectives']):
-            """Checking if domestic issue is low growth in population and if one of nation's objectives is to maintain high growth"""
-            self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] += 1
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Extreme population growth occurred'][1]['Number of occurrences'] > 4:
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
 
-            if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] >= 2:
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = True
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Low growth occurrences'] = 0
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Slow down population growth")
 
-                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] == True:
-                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth control'] = False
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
 
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Low population growth": [
-                                {"Decision": ["Birth control policy removed", "Birth enhancer policy implemented"]}
-                            ]}
-                        ]
-                    })
-                else:
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Low population growth": [
-                                {"Decision": ["Birth enhancer policy implemented"]}
-                            ]}
-                        ]
-                    })
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Extreme population growth occurred'][1]['Number of occurrences'] > 6:
 
-        elif (domestic_issue.values() == "extreme growth" and "maintain high population growth" in
-              self.objectives['objectives'][0]['domestic objectives']):
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
 
-            if (self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] >= 5 or
-                    "maintain sustainable food production" in self.objectives["domestic objectives"]):
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Control'] = True
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] = 0
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Extreme population growth occurred'][1]['Number of occurrences'] = 0
 
-                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer']:
-                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = False
+            elif domestic_issue.values() == "stable growth":
+                if "Fascism" or "Communism" in self.political_typology:
+                    if (self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Stable population growth occurred'][1]['Number of occurrences'] > 6 and (
+                    not 'Increase population growth' in
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
+                        # checking if stable population growth over 6 times and increase population growth has not become
+                        # an objective
 
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Extreme population growth": [
-                                {"Decision": ["Implement Birth Control", "Remove Birth Enhancer"]}
-                            ]}
-                        ]
-                    })
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Increase population growth")
+                        # implementing objective of increased population growth
+
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
+
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Stable population growth occurred'][1]['Number of occurrences'] > 8:
+                        # checking if stable population growth over 8 times
+
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
+                            # birth enhancer implemented if population doesn't grow fast enough
+
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Low population growth occurred'][1]['Number of occurrences'] = 0
 
                 else:
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Extreme population growth": [
-                                {"Decision": ["Implement Birth Control"]}
-                            ]}
-                        ]
-                    })
+                    if (self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Stable population growth occurred'][1]['Number of occurrences'] > 12 and (
+                            not 'Increase population growth' in
+                                self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
+                        # checking if stable population growth over 6 times and increase population growth has not become
+                        # an objective
+
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Increase population growth")
+                        # implementing objective of increased population growth
+
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
+
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Stable population growth occurred'][1]['Number of occurrences'] > 18:
+                        # checking if stable population growth over 8 times
+
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
+                            # birth enhancer implemented if population doesn't grow fast enough
+
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Low population growth occurred'][1]['Number of occurrences'] = 0
+
+            elif domestic_issue.values() == "insignificant growth":
+                if "Fascism" or "Communism" in self.political_typology:
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Low population growth occurred'][1]['Number of occurrences'] > 2:
+                        # checking if low growth has occurred more than twice
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Increase population growth")
+
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
+
+                    elif self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Low population growth occurred'][1]['Number of occurrences'] > 4:
+                        # checking if low growth has occurred more than 4 times
+
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            # implementing birth enhancer
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
+
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Low population growth occurred'][1]['Number of occurrences'] = 0
+
+                else:
+                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Low population growth occurred'][1]['Number of occurrences'] > 5:
+                        # checking if low growth has occurred more than twice
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+
+                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
+                            "Increase population growth")
+
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
+
+                    elif self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Low population growth occurred'][1]['Number of occurrences'] > 9:
+                        # checking if low growth has occurred more than 4 times
+
+                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
+                            # implementing birth enhancer
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
+
+                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                            'Low population growth occurred'][1]['Number of occurrences'] = 0
+
+        else:
+            if domestic_issue.values() == "extreme growth":
+                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append(
+                    {"Extreme population growth occurred": [
+                        {"Action Taken": "No action"},
+                        {"Number of occurrences": 1}
+                    ]})
+
+            elif domestic_issue.values() == "insignificant growth":
+                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append({"low population growth occurred": [
+                    {"Action Taken": "No action"},
+                    {"Number of occurrences": 1}
+                ]})
+
+            elif domestic_issue.values() == "stable growth":
+                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append(
+                    {"stable population growth occurred": [
+                        {"Action Taken": "No action"},
+                        {"Number of occurrences": 1}
+                    ]})
+
+    def check_population_growth(self):
+        if self.year_placeholder < self.date.year:
+            """checking to see if an entire year has passed"""
+            population_calculation = ((self.population - self.past_population) /
+                                      ((self.population + self.past_population) / 2)) * 100
+
+            if population_calculation <= 1.5:
+                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Low population growth occurred'][1]['Number of occurrences'] += 1
+                self.population_decision({"population issue": "insignificant growth"})
+
+            elif population_calculation >= 7.6:
+                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Extreme population growth occurred'][1]['Number of occurrences'] += 1
+                self.population_decision({"population issue": "extreme growth"})
 
             else:
-                self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                    "Issue": [
-                        {"Extreme population growth": [
-                            {"Decision": ["Do nothing"]}
-                        ]}
-                    ]
-                })
+                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        'Stable population growth occurred'][1]['Number of occurrences'] += 1
+                self.population_decision({"population issue": "stable growth"})
 
-        elif (domestic_issue.values() == "extreme growth" and "maintain low population growth" in
-              self.objectives['objectives'][0]['domestic objectives']):
+        else:
+            self.pop_growth()
 
-            if (self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] >= 2):
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Control'] = True
-                self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['high growth occurrences'] = 0
+    def pop_growth(self):
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
+            births = random.randrange(0, 30)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
 
-                if self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer']:
-                    self.national_policy["Policy"][0]['Domestic Policy'][0]['Population'][0]['Birth Enhancer'] = False
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+            births = random.randrange(0, 15)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
 
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Extreme population growth": [
-                                {"Decision": ["Implement Birth Control", "Remove Birth Enhancer"]}
-                            ]}
-                        ]
-                    })
-
-                else:
-                    self.long_term_memory["Domestic decisions"][0]["Social Decisions"].append({
-                        "Issue": [
-                            {"Extreme population growth": [
-                                {"Decision": ["Implement Birth Control"]}
-                            ]}
-                        ]
-                    })
+        else:
+            births = random.randrange(0, 25)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
 
     def democratic_handling_protest(self, political_issue):
         # function handles how democracies approach protests of different ideologies
@@ -340,6 +532,13 @@ class NationAI:
                                         {"Start date": self.date},
                                         {"End date": self.date + timedelta(days=days)}
                                     ]})
+
+                    else:
+                        if "Arrest dissidents" in self.objectives["objectives"][0]['domestic objectives']:
+                            pass
+                        elif "Eliminate dissidents" in self.objectives["objectives"][0]['domestic objectives']:
+                            pass
+
     def communist_handling_protest(self, political_issue):
         days = random.randrange(10, 30)
         if (self.national_policy["Policy"][0]["Domestic Policy"][2][
@@ -552,12 +751,13 @@ class NationAI:
                         {"Current political objective": "Maintain stability"}
                     ]})
                     self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"] = True
-                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append({"Dates":[
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append({"Dates": [
                         {"Start date": self.date},
                         {"End date": self.date + timedelta(days=days)}
                     ]})
 
-            elif political_issue.values() == "Liberal protest" and ("Democratic" or "Republicanism" not in self.political_typology):
+            elif political_issue.values() == "Liberal protest" and (
+                    "Democratic" or "Republicanism" not in self.political_typology):
                 if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
                     self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
                         {"Decision": "Arrested liberal leaders"},
@@ -581,7 +781,7 @@ class NationAI:
                     ]})
 
                     self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
-                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"].append({"Dates":[
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"].append({"Dates": [
                         {"Start date": self.date},
                         {"End date": self.date + timedelta(days=days)}
                     ]})
@@ -597,437 +797,10 @@ class NationAI:
                     ]})
 
                     self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
-                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append({"Dates":[
+                    self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append({"Dates": [
                         {"Start date": self.date},
                         {"End date": self.date + timedelta(days=days)}
                     ]})
-
-    def economic_decision(self, economic_issue):
-        """Economic decisions based upon Objectives and policy.
-        stored in long term memory for AI, if nation were to experience situation again
-        """
-        if economic_issue.values() == ("Recession started" or "Depression started" or "Continued economic downturn"):
-            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] += 1
-
-            """checking to see if value is off a depression that has started or is perpetuating itself"""
-            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
-                """checking to see if an event, similar to the current issue exists within long term memory"""
-                for objective in range(0, len(self.objectives['objectives'][0]['Domestic objectives'])):
-                    if (objective in
-                            self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                            [0]["Economic Depression occurred"][0]['Current Economic Objectives']):
-                        """Checking if current objectives are the same as the ones in long term memory
-                        proceeding code checks the decision that was made in original issue
-                        """
-
-                        if ("Increased exports and decreased imports" in
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                                [0]["Economic Depression occurred"][0]['Decision']):
-                            self.exports += 50
-                            self.imports -= 25
-
-                        elif ("Decreased taxes" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
-
-                        elif ("Provide stimulus money to civilians" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-                            self.consumer_spending += 50
-
-                        elif ("Increase government involvement in economy" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-                            self.government_spending += 150
-
-                        elif ("Seize private assets" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-                            self.government_spending += 50
-                            self.consumer_spending -= 30
-                            self.investment -= 40
-
-                        elif ("Isolationist policies implemented" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-                            pass
-
-                        elif ("Enslave minorities" in
-                              self.long_term_memory["Domestic decisions"][0]["Economic Decisions"][0]['Issue']
-                              [0]["Economic Depression occurred"][0]['Decision']):
-                            pass
-
-            else:
-                if (("Maintain economic stability" or "Maintain economic hegemony")
-                        in self.objectives['objectives'][0]["domestic objectives"]):
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Maintain economic stability", "Maintain economic hegemony"]},
-                                {"Decision": ["Increased exports and minimized imports"]},
-                                {"Effects": ["Increased national gdp", "Increased economic stability",
-                                             "Hurt relations with allies", "Worsened relations with rivals"]}
-                            ]}
-                        ]
-                    })
-                    self.exports += 50
-                    self.imports -= 25
-                    self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] += 1.5
-
-                    for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                        if (self.foreign_relations['foreign relations'][nation]['relation status'] == "ally" or
-                                self.foreign_relations['foreign relations'][nation]['relation status'] == "rival"):
-                            self.foreign_relations['foreign relations'][nation]['relations'] -= 1.5
-
-                elif (("Maintain low taxes" or "Maintain consumer confidence")
-                      in self.objectives['objectives'][0]["domestic objectives"]):
-
-                    if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] <= 3:
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] -= 1.5
-
-                        self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                            "Issue": [
-                                {f"Economic Depression occurred": [
-                                    {"Current Economic Objectives": ["Maintain low taxes", "Maintain consumer confidence"]},
-                                    {"Decision": ["Decreased taxes"]},
-                                    {"Effects": ["Increased Overall happiness", "Decreased economic stability",
-                                                 "Decreased political stability"]}
-                                ]}
-                            ]
-                        })
-
-                    else:
-                        self.consumer_spending += 150
-                        self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                            "Issue": [
-                                {f"Economic Depression occurred": [
-                                    {"Current Economic Objectives": ["Maintain low taxes", "Maintain consumer confidence"]},
-                                    {"Decision": ["Provide stimulus money to civilians"]},
-                                    {"Effects": ["Increased Overall happiness", "Decreased economic stability",
-                                                 "Increased national debt"]}
-                                ]}
-                            ]
-                        })
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] = 0
-
-                elif (("Increase government involvement in economy" or "seize private assets")
-                      in self.objectives['objectives'][0]["domestic objectives"]):
-                    if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] <= 4:
-
-                        self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                            "Issue": [
-                                {f"Economic downturn occurred": [
-                                    {"Current Economic Objectives": ["Seize private assets",
-                                                                     "Increase government involvement in economy"]},
-                                    {"Decision": ["Increased government involvement in economy"]},
-                                    {"Effects": ["Increased Overall happiness", "Decreased economic stability",
-                                                 "Increased national debt", "Increased government spending"]}
-                                ]}
-                            ]
-                        })
-
-                    else:
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["low growth occurrences"] = 0
-                        self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                            "Issue": [
-                                {f"Economic Depression occurred": [
-                                    {"Decision": ["Private assets seized"]},
-                                    {"Effects": ["Decreased Overall happiness", "Decreased economic stability",
-                                                 "Increased national debt", "Increased government spending"]}
-                                ]}
-                            ]
-                        })
-
-                elif (("Maintain isolationist policies")
-                      in self.objectives['objectives'][0]["domestic objectives"]):
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Maintain isolationist policies"]},
-                                {"Decision": ["Isolationist policies implemented"]},
-                                {"Effects": ["Decreased Overall happiness", "Decreased economic stability",
-                                             "Decreased imports", "Decreased exports",
-                                             "Increased Political stability"]}
-                            ]}
-                        ]
-                    })
-
-                elif (("Enslave minorities")
-                      in self.objectives['objectives'][0]["domestic objectives"]):
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Enslave minorities"]},
-                                {"Decision": ["Minorities enslaved"]},
-                                {"Effects": ["Decreased Overall happiness", "Increased economic stability",
-                                             "Increased Political stability"]}
-                            ]}
-                        ]
-                    })
-
-        elif economic_issue.values() == ("Recovery has begun" or "Expansion started" or "Continued economic expansion"):
-            self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["Extreme growth occurrences"] += 1
-
-            if len(self.long_term_memory['Domestic decisions'][0]['Economic Decisions']):
-                """Checking length of long term memory within economic decisions"""
-                for objective in range(0, len(self.objectives['objectives'][0]["domestic objectives"])):
-                    """Looping through current domestic objectives"""
-                    for past_objective in range(0,
-                                                len(self.long_term_memory['Domestic decisions'][0]
-                                                    ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"])):
-                        """Looping through past objectives within past decisions"""
-                        if (self.objectives['objectives'][0]["domestic objectives"][objective] ==
-                                self.long_term_memory['Domestic decisions'][0]
-                                ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][past_objective]):
-                            """Checking to see if current objectives match with ones at time of snapshot"""
-
-                            if (self.long_term_memory['Domestic decisions'][0]
-                            ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
-                                past_objective] == "increase taxes"):
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                                self.consumer_spending -= 25
-                                self.investment -= 25
-
-                            elif (self.long_term_memory['Domestic decisions'][0]
-                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
-                                      past_objective] == "increase government spending"):
-                                self.government_spending += 150
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
-                                self.investment -= 10
-                                self.consumer_spending -= 25
-
-                            elif (self.long_term_memory['Domestic decisions'][0]
-                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
-                                      past_objective] == "increase imports"):
-                                self.imports += 50
-
-                            elif (self.long_term_memory['Domestic decisions'][0]
-                                  ['Economic Decisions'][0]["Issue"][0]["Current Economic Objectives"][
-                                      past_objective] == "Consolidate economic power"):
-                                self.government_spending += 100
-                                self.consumer_spending -= 45
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
-
-                            elif (self.long_term_memory['Domestic decisions'][0]
-                                  ['Economic Decisions'][0]["Issue"][0]["Improve workers conditions"][
-                                      past_objective] == "Consolidate economic power"):
-                                self.consumer_spending += 100
-                                self.investment -= 45
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
-
-                        else:
-                            if (("Increase taxes") in self.objectives['objectives'][0]["domestic objectives"]):
-
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                                    "Issue": [
-                                        {f"Economic Depression occurred": [
-                                            {"Current Economic Objectives": ["Increase taxes"]},
-                                            {"Decision": ["Increased taxes"]},
-                                            {"Effects": ["decreased investment",
-                                                         "decreased consumer spending"]}
-                                        ]}
-                                    ]
-                                })
-
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                                self.consumer_spending -= 25
-                                self.investment -= 25
-
-                            elif (("Increase government spending") in self.objectives['objectives'][0]["domestic objectives"]):
-                                self.government_spending += 150
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
-                                self.investment -= 10
-                                self.consumer_spending -= 25
-
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                                    "Issue": [
-                                        {f"Economic Depression occurred": [
-                                            {"Current Economic Objectives": ["Increase government spending"]},
-                                            {"Decision": ["Increased taxes"]},
-                                            {"Effects": ["increased government spending", "decreased investment",
-                                                         "decreased consumer spending", "increased national debt"]}
-                                        ]}
-                                    ]
-                                })
-
-                            elif (("increase imports") in self.objectives['objectives'][0]["domestic objectives"]):
-                                self.imports += 50
-
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                                    "Issue": [
-                                        {f"Economic Depression occurred": [
-                                            {"Current Economic Objectives": ["Increase imports"]},
-                                            {"Decision": ["Increased imports"]},
-                                            {"Effects": []}
-                                        ]}
-                                    ]
-                                })
-
-                            elif (("consolidate economic power") in self.objectives['objectives'][0]["domestic objectives"]):
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                                    "Issue": [
-                                        {f"Economic Depression occurred": [
-                                            {"Current Economic Objectives": ["Consolidate economic power"]},
-                                            {"Decision": ["Consolidated economic power"]},
-                                            {"Effects": ["Increased government spending", "Increased economic stability",
-                                                         "Decreased national happiness", "Decreased consumer spending",
-                                                         "Increased taxes"]}
-                                        ]}
-                                    ]
-                                })
-                                self.government_spending += 100
-                                self.consumer_spending -= 45
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
-
-                            elif (("Improve workers conditions") in self.objectives['objectives'][0]["domestic objectives"]):
-
-                                self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                                    "Issue": [
-                                        {f"Economic Depression occurred": [
-                                            {"Current Economic Objectives": ["Improve workers conditions"]},
-                                            {"Decision": ["Increased worker wages"]},
-                                            {"Effects": ["Increase in consumer spending", "Increase in happiness",
-                                                         "Decrease in investment", "Decrease in economic stability"]}
-                                        ]}
-                                    ]
-                                })
-                                self.consumer_spending += 100
-                                self.investment -= 45
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
-                                self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
-
-            else:
-                if (("Increase taxes") in self.objectives['objectives'][0]["domestic objectives"]):
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Increase taxes"]},
-                                {"Decision": ["Increased taxes"]},
-                                {"Effects": ["decreased investment",
-                                             "decreased consumer spending"]}
-                            ]}
-                        ]
-                    })
-
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                    self.consumer_spending -= 25
-                    self.investment -= 25
-
-                elif (("Increase government spending") in self.objectives['objectives'][0]["domestic objectives"]):
-                    self.government_spending += 150
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 0.5
-                    self.investment -= 10
-                    self.consumer_spending -= 25
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Increase government spending"]},
-                                {"Decision": ["Increased taxes"]},
-                                {"Effects": ["increased government spending", "decreased investment",
-                                             "decreased consumer spending", "increased national debt"]}
-                            ]}
-                        ]
-                    })
-
-                elif (("increase imports") in self.objectives['objectives'][0]["domestic objectives"]):
-                    self.imports += 50
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Increase imports"]},
-                                {"Decision": ["Increased imports"]},
-                                {"Effects": []}
-                            ]}
-                        ]
-                    })
-
-                elif (("consolidate economic power") in self.objectives['objectives'][0]["domestic objectives"]):
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Consolidate economic power"]},
-                                {"Decision": ["Consolidated economic power"]},
-                                {"Effects": ["Increased government spending", "Increased economic stability",
-                                             "Decreased national happiness", "Decreased consumer spending",
-                                             "Increased taxes"]}
-                            ]}
-                        ]
-                    })
-                    self.government_spending += 100
-                    self.consumer_spending -= 45
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]["tax rate"] += 1.5
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 2.5
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] -= 3.5
-
-                elif (("Improve workers conditions") in self.objectives['objectives'][0]["domestic objectives"]):
-
-                    self.long_term_memory["Domestic decisions"][0]["Economic Decisions"].append({
-                        "Issue": [
-                            {f"Economic Depression occurred": [
-                                {"Current Economic Objectives": ["Improve workers conditions"]},
-                                {"Decision": ["Increased worker wages"]},
-                                {"Effects": ["Increase in consumer spending", "Increase in happiness",
-                                             "Decrease in investment", "Decrease in economic stability"]}
-                            ]}
-                        ]
-                    })
-                    self.consumer_spending += 100
-                    self.investment -= 45
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] -= 2.5
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][1]["Happiness"] += 3.5
-
-    def check_rewards(self):
-        pass
-
-    def check_population_growth(self):
-        if self.year_placeholder < self.date.year:
-            """checking to see if an entire year has passed"""
-            population_calculation = ((self.population - self.past_population) /
-                                      ((self.population + self.past_population) / 2)) * 100
-
-            if population_calculation <= 1.5:
-                self.population_decision({"population issue": "insignificant growth"})
-            elif population_calculation >= 7.6:
-                self.population_decision({"population issue": "extreme growth"})
-            else:
-                self.population_decision({"population issue": "stable growth"})
-
-        else:
-            self.pop_growth()
-
-    def pop_growth(self):
-        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
-            births = random.randrange(0, 30)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
-
-        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
-            births = random.randrange(0, 15)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
-
-        else:
-            births = random.randrange(0, 25)
-            deaths = random.randrange(0, 20)
-            self.population += (births - deaths)
-            self.births += births
-            self.deaths += deaths
 
     def protests(self):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
@@ -1936,29 +1709,100 @@ class NationAI:
                                                             self.improving_relations]:
                                 self.improving_relations.pop(foreign_nation_list[i].name)
 
-    # economic functions
+    def economic_decision(self, economic_issue, date):
+        """Economic decisions based upon Objectives and policy.
+        stored in long term memory for AI, if nation were to experience situation again
+        """
+        if self.long_term_memory['Domestic Decisions'][0]["Economic Decisions"] > 0:
 
-    def check_economic_growth(self):
+            if "Continued Recession" in economic_issue.values():
+                options = ["Increase corporate taxes", "Increase income taxes",
+                           "Increase government spending"]
+                option = options[random.randrange(0, len(options))]
+
+            elif "Continued Depression" in economic_issue.values():
+                options = ["Decrease corporate taxes", "Decrease income taxes",
+                           "Increase government spending", "Decrease worker wages"]
+                option = options[random.randrange(0, len(options))]
+
+            elif "Continued Recovery" in economic_issue.values():
+                options = ["Increase income taxes", "Increase worker wages"]
+                option = options[random.randrange(0, len(options))]
+                sum = 0
+
+            elif "Continued Expansion" in economic_issue.values():
+                options = ["Decrease government spending", "Increase income taxes",
+                           "Increase corporate taxes"]
+                option = options[random.randrange(0, len(options))]
+
+        else:
+            if "Recession started" in economic_issue.values():
+                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                    {"Recession started": [
+                        {"Action Taken": "No action"},
+                        {"Time stamps": [date]}
+                    ]})
+
+            elif "Depression started":
+                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                    {"Depression started": [
+                        {"Action Taken": "No action"},
+                        {"Time stamps": [date]}
+                    ]})
+
+            elif "Recovery started":
+                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                    {"Recovery started": [
+                        {"Action Taken": "No action"},
+                        {"Time stamps": [date]}
+                    ]})
+
+            elif "Expansion started":
+                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                    {"Expansion started": [
+                        {"Action Taken": "No action"},
+                        {"Time stamps": [date]}
+                    ]})
+
+    # economic functions
+    def check_economic_growth(self, date):
         if self.date > self.economic_change_date:
             growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
             if growth <= 1.95:
-                if self.e_s == EconomicState.RECESSION:
+                if self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']['Expansion started'][1]['Number of occurrences'] >= 2:
                     self.e_s = EconomicState.DEPRESSION
-                    self.economic_decision({"economic issue": "Depression started"})
+                    if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) > 0:
+                        self.economic_decision({"economic issue": "Depression started"}, date)
 
-                if self.e_s == EconomicState.RECOVERY:
+                    else:
+                        self.economic_decision({"economic issue": "Continuing Depression"}, date)
+
+                if self.e_s == (EconomicState.RECOVERY or EconomicState.EXPANSION):
                     self.e_s = EconomicState.RECESSION
-                    self.economic_decision({"economic issue": "Recession started"})
 
-                if self.e_s == EconomicState.EXPANSION:
-                    self.e_s = EconomicState.RECOVERY
+                    if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) > 0:
+                        pass
+
+                    else:
+                        self.economic_decision({"economic issue": "Recession started"}, date)
 
             elif growth >= 8.95:
                 self.e_s = EconomicState.EXPANSION
-                self.economic_decision({"economic issue": "extraordinary growth"})
+                self.economic_decision({"economic issue": "extraordinary growth"}, date)
+                if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) > 0:
+
+                    self.economic_decision({"economic issue": "Expansion continuing"}, date)
+                else:
+                    self.economic_decision({"economic issue": "Expansion started"}, date)
+
             else:
                 self.e_s = EconomicState.RECOVERY
-                self.economic_decision({"economic issue": "stable growth"})
+
+                if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) > 0:
+
+                    self.economic_decision({"economic issue": "Recovery continuing"}, date)
+                else:
+                    self.economic_decision({"economic issue": "Recovery started"}, date)
         else:
             self.check_economic_state()
 
@@ -1966,13 +1810,13 @@ class NationAI:
         """function dealing with primary economic decisions"""
 
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-            self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] -= 1.5
+            self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] -= 1.5
             self.neg_ec_growth()
 
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-            if ((self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] + 1.5) < 100):
+            if ((self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] + 1.5) < 100):
                 """Checking to see if adding of 1.5 to economic stability will exceed 100 or not"""
-                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][0]['Economic Stability'] += 1.5
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5
             self.pos_ec_growth()
 
     def provide_economic_aid(self):

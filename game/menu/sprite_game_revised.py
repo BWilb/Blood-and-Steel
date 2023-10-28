@@ -393,7 +393,7 @@ class SpriteGame:
         slower_button = button.Button(1560, 150, slower_img, 0.035)
         """primary screen user sees after opening menu"""
         # later on background will be an actual SVG image of world and not part of the screen
-        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.75, 100)
         if slower_button.draw(self.screen):
             self.speed = 2.75
         if slow_button.draw(self.screen):
@@ -576,8 +576,7 @@ class SpriteGame:
                 self.globe.date += timedelta(days=1)
                 self.nation_changes()
                 self.globe_changes()
-                self.clock.tick(60)
-                time.sleep(1.25)
+                time.sleep(0.00625)
             self.check_stream()
 
             for event in pygame.event.get():
