@@ -19,8 +19,6 @@ class NationAI:
         self.date = datetime(globe.date.year, 1, 1)
         self.year_placeholder = self.date.year
         self.economic_change_date = self.date + timedelta(days=120)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
         # social factors
         """population factors"""
         self.population = 0
@@ -46,8 +44,6 @@ class NationAI:
         self.national_debt = 0
         self.current_gdp = 0
         self.past_gdp = self.current_gdp
-        self.corporate_taxes = 5.00
-        self.income_taxes = 5.00
         """Components of GDP"""
         self.consumer_spending = 100
         self.investment = 100
@@ -1730,7 +1726,7 @@ class NationAI:
                                     (self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
                                          "Timestamps"][
                                          -1] +
-                                     timedelta(months=3) == date)):
+                                     timedelta(days=120) == date)):
                                 # checking
                                 # 1. random option equals that of the past option
                                 # 2. the timestamp of the past action is 3 months earlier then current action
@@ -1923,7 +1919,7 @@ class NationAI:
     def check_economic_growth(self, date):
         if self.date > self.economic_change_date:
             growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
-            if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) < 0:
+            if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) == 0:
                 if growth <= 1.95:
                     if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
                         self.e_s = EconomicState.RECESSION
@@ -1938,6 +1934,8 @@ class NationAI:
 
             else:
                 if growth <= 1.95:
+                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
+                        'high growth occurrences'] = 0
                     """for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
                         # looping through past actions within long term memory
                         if "Continued Depression" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][
@@ -1967,6 +1965,8 @@ class NationAI:
 
                 elif growth >= 6.95:
                     if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
+                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
+                            'low growth occurrences'] = 0
                         self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
                             'high growth occurrences'] = 1
                         self.e_s = EconomicState.RECOVERY
@@ -2006,9 +2006,6 @@ class NationAI:
                 self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5
             self.pos_ec_growth()
 
-    def provide_economic_aid(self):
-        pass
-
     def pos_ec_growth(self):
         self.national_debt += round(
             (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
@@ -2024,4 +2021,87 @@ class NationAI:
 
     # stability functions
     def stability_happiness_change(self, globe):
-        pass
+        #1. check economic stability
+        #2. check current economic state
+        if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] > 65:
+            if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve stability']['Expiration date'] > globe.date):
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 6.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 6.5
+
+                else:
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 3.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 3.5
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve happiness']['Expiration date'] > globe.date):
+                    if self.happiness + 7.5 < 100:
+                        self.happiness += 7.5
+
+                else:
+                    if self.happiness + 4.5 < 100:
+                        self.happiness += 4.5
+
+            else:
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve stability']['Expiration date'] > globe.date):
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
+                        'Political stability'] + 4.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 4.5
+
+                else:
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] - 1.5 > -100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve happiness']['Expiration date'] > globe.date):
+                    if self.happiness + 3 < 100:
+                        self.happiness += 3
+
+                else:
+                    if self.happiness - 2.5 > -100:
+                        self.happiness -= 2.5
+
+        else:
+            if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve stability']['Expiration date'] > globe.date):
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 4.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 4.5
+
+                else:
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 2.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 2.5
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve happiness']['Expiration date'] > globe.date):
+                    if self.happiness + 5.5 < 100:
+                        self.happiness += 5.5
+
+                else:
+                    if self.happiness + 2.5 < 100:
+                        self.happiness += 2.5
+
+            else:
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve stability']['Expiration date'] > globe.date):
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
+                        'Political stability'] + 0.5 < 100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 0.5
+
+                else:
+                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
+                        'Political stability'] - 1.5 > -100:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
+
+                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                ['Improve happiness']['Expiration date'] > globe.date):
+                    if self.happiness + 0.75 < 100:
+                        self.happiness += 3
+
+                else:
+                    if self.happiness - 2.5 > -100:
+                        self.happiness -= 2.5
