@@ -185,19 +185,6 @@ class SpriteGame:
         self.defending_nation = self.find_nation_by_name(target.nation_info.name)
 
         if self.attacking_nation is not None and self.defending_nation is not None:
-
-            """# Process the target nation's vertices
-            for vertex_set in target_nation.vertices:
-                if len(vertex_set) == 1:
-                    attacker_vertices.append(vertex_set)
-                else:
-                    attacker_vertices.append(vertex_set[:len(vertex_set) // 2])
-
-            # Add processed vertices to the attacking nation
-            attacker.vertices.append(attacker_vertices)
-
-            # Remove processed vertices from the attacking nation if needed
-            self.remove_russian_vertices(attacking_nation, attacker_vertices)"""
             for i in range(0, len(self.defending_nation.vertices)):
                 self.coordinates = []
                 if i == 5:
@@ -362,21 +349,7 @@ class SpriteGame:
 
     def foreign_interactions(self):
         for nation_agent in self.globe.nations:
-            foreign_agents = [nations for nations in self.globe.nations if nations != nation_agent]
-            if "Democratic" or "Republicanism" in nation_agent.political_typology:
-                nation_agent.democratic_international_decisions(foreign_agents)
-
-            if "Socialism" or "Communism" in nation_agent.political_typology:
-                nation_agent.communist_international_decisions(foreign_agents)
-
-            if "Fascism" or "Nazism" in nation_agent.political_typology:
-                nation_agent.fascist_international_decisions(foreign_agents)
-
-            if "Autocratic" in nation_agent.political_typology:
-                nation_agent.autocratic_international_decisions(foreign_agents)
-
-            else:
-                pass
+            nation_agent.determine_diplomatic_approach(self.globe.nations, self.globe, self.network)
 
     def primary_game(self):
         """speed imgs"""
@@ -404,19 +377,6 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
-
-        if self.globe.date.year == 1914:
-            for i in range(0, len(self.nation_map)):
-                if self.nation_map[i].nation_info.name == "Germany":
-                    self.attacking_nation = self.nation_map[i]
-                if self.nation_map[i].nation_info.name == "Russia":
-                    self.defending_nation = self.nation_map[i]
-            if self.globe.date.day % 3 == 0:
-                self.invasion_1914(self.attacking_nation, self.defending_nation)
-
-        """if self.flag_button.draw(self.screen):
-            self.game_state = "view infographics"
-            self.nation_selected = self.nation"""
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()

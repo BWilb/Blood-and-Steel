@@ -5,6 +5,4 @@ economic_objectives = ["increase corporate taxes", "increase government spending
                                        ]
 economic_objectives = ["increase taxes", "increase government spending", "cut workers wages",
                                        "increase corporate taxes"]"""
-numbers = [1, 2, 4, 5, 6, 7]
-if 4 not in numbers:
-    print("not")
+# content of test_sysexit.py
