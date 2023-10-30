@@ -111,7 +111,7 @@ class AfghanistanAI(NationAI):
 
 
     # main function
-    def main(self, globe, foreign_nations, network):
+    def main(self, globe, network):
         super().establishing_beginning_objectives()
         while self.population > 250000:
             super().check_economic_growth(globe.date)
@@ -119,8 +119,8 @@ class AfghanistanAI(NationAI):
             # random_functions.random_functions(self, globe)
             super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(foreign_nations, globe, network)
-            super().change_relations(foreign_nations)
+            super().determine_diplomatic_approach(globe.nations, globe, network)
+            super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 super().protests()

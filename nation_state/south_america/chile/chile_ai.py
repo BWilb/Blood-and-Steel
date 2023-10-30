@@ -100,11 +100,18 @@ class Chile(NationAI):
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
 
-    def main(self, globe):
+    def main(self, globe, network):
+        super().establishing_beginning_objectives()
         while self.population > 2000000:
-            super().check_economic_state()
+            super().check_economic_growth(globe.date)
             super().check_population_growth()
             # random_functions.random_functions(self, globe)
             super().stability_happiness_change(globe)
+            super().political_power_growth()
+            super().determine_diplomatic_approach(globe.nations, globe, network)
+            super().change_relations(globe.nations)
+            chance = random.randrange(1, 50)
+            if chance % 8 == 2 or chance % 5 == 4:
+                super().protests()
             self.date += timedelta(days=1)
             break
