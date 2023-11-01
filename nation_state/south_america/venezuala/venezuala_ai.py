@@ -111,7 +111,6 @@ class Venezuala(NationAI):
             self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
-
     def main(self, globe, network):
         super().establishing_beginning_objectives()
         while self.population > 4000000:

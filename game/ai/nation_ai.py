@@ -21,7 +21,7 @@ class NationAI:
         self.economic_change_date = self.date + timedelta(days=120)
         # social factors
         """population factors"""
-        self.population = 0
+        self.population = 1000000
         self.past_population = self.population
         self.birth_control = False
         self.birth_enhancer = False
