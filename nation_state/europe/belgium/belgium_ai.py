@@ -1,7 +1,10 @@
+import random
 from datetime import timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
 #from nation_data.convert_coords import convert_coords
+import json as js
+from nation_data.coordination.retreive_and_convert import convert_coords, retreive_coords
 import json as js
 
 """Population Dictionaries"""
@@ -53,6 +56,7 @@ class EconomicState(Enum):
 class BelgiumAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Kingdom of Belgium"
         # social variables
@@ -74,33 +78,46 @@ class BelgiumAI(NationAI):
         self.government_spending = 350
         self.exports = 1000
         self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
         # military
         # international
         self.alliance = ""
-        self.us_relations = 34.56
+        self.land_1910_1918 = ["Belgium", "Belgian Congo"]
+        self.land_1932_1939 = ["Belgium", "Belgian Congo", "Rwanda (Belgium)", "Burundi"]
         # other
-        self.belgium_coordinates = []
+        self.coordinates = []
+
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
+        if self.date.year < 1932:
+            for land in range(0, len(self.land_1910_1918)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1918[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
-        """for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Belgium":
-                for index, row in (nation_json['countries'][i]['coordinates']):
-                    self.belgium_coordinates.append(convert_coords(index, row))
-        return self.belgium_coordinates"""
+        if self.date.year >= 1932:
+            for land in range(0, len(self.land_1932_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
-    def main(self, globe):
+    def main(self, globe, network):
         while self.population > 2000000:
-            super().check_economic_state()
-            super().check_population_growth()
-            # random_functions.random_functions(self, globe)
-            super().stability_happiness_change(globe)
-
+            """super().check_economic_growth(globe.date)
+                        super().check_population_growth()
+                        # random_functions.random_functions(self, globe)
+                        super().stability_happiness_change(globe)
+                        super().political_power_growth()
+                        super().determine_diplomatic_approach(globe.nations, globe, network)
+                        super().change_relations(globe.nations)
+                        chance = random.randrange(1, 50)
+                        if chance % 8 == 2 or chance % 5 == 4:
+                            super().protests()"""
+            super().pop_growth()
+            super().check_economic_state(globe.date)
             self.date += timedelta(days=1)
             break
-

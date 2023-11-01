@@ -50,15 +50,107 @@ class PlayableNation:
         self.exports = 500
         self.imports = 500
         self.chosen = False
+        self.foreign_relations = {"foreign relations": [
+            {"nation name": "name",
+             "relations": 60.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False}
+        ]}
+        # nations that are potential allies of Nation will have diplomacy of rate at above 80%
+        # nations that are potential rivals of Nation will have diplomacy of rate from 40 - 79%
+        # nations that are potential enemies of Nation will have diplomacy of rate below 40%
+        self.improving_relations = []
+        self.worsening_relations = []
+        """National policy variable stores information that is similar and regards to the Domesticity and 
+        foreign status of the AI
+        """
+        self.national_policy = {"Policy": [
+            {"Domestic Policy": [{
+                "Population": [
+                    {"Birth Control": False,
+                     "Birth Enhancer": False,
+                     "No manipulation": True,
+                     "Low growth occurrences": 0.0,
+                     "Stable growth occurrences": 0.0,
+                     "Extreme growth occurrences": 0.0},
+                    {"Happiness": 78.56}
+                    # growth occurrences will be growth that is consistent, once change happens set back to 0
+                ],
+                "Economy": [
+                    {"tax rate": 15.00,
+                     "government stimulus": False,
+                     "low growth occurrences": 0,
+                     "high growth occurrences": 0},
+                    {"Economic stability": 87.56}
+                ],
+                "Political": [
+                    {"Repress Far-Left": False,
+                     "Repress Far-Right": False,
+                     "Repress Autocrats": False,
+                     "Repress Liberals": False,
+                     "Suppress Far-Left": False,
+                     "Supress Far-Right": False,
+                     "Suppress Autocrats": False,
+                     "Suppress Liberals": False},
+                    {"Far-Right protests": [],
+                     "Far-Left protests": [],
+                     "Autocrat protests": [],
+                     "Liberal protests": []},
+                    {"Political stability": 90.0}
+                    # for political rewards to be utilized, AI must make political decision
+                    # for example if there is a far left protest and the AI handles the protest by killing everyone...
+                    # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
+                    # memory
+                ]
+            }],
+                "Foreign Policy": [{
+                    "Allies": [],
+                    "Rivals": [],
+                    "Enemies": [],
+                }]}
+        ]}
+
+        self.objectives = {"objectives":
+                               [{"foreign objectives": [],
+                                 "domestic objectives": [{
+                                     'population objectives': [],
+                                     'economic objectives': [],
+                                     'political objectives': [],
+                                     'social objectives': []
+                                 }]
+                                 }]
+                           }
+        self.long_term_memory = {
+            "Domestic decisions": [
+                {"Economic Decisions": [],
+                 "Political Decisions": [],
+                 "Social Decisions": [],
+                 "Population Decisions": []}
+            ],
+            "Foreign decisions": [
+                {"allies": []},
+                {"rivals": []},
+                {"enemies": []},
+            ],
+            "Foreign decisions made against us": [
+                {"allies": [],
+                 "rivals": [],
+                 "enemies": []}
+            ]
+        }
 
     def population_change(self):
         """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
+        if self.year_placeholder < self.date.year:
             pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
 
             if pop_change < 2.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                choice = input(f"Your population growth rate for {self.year_placeholder} was {pop_change}%.\n"
                                f"Would you like to promote population growth?: ")
                 not_answered = False
 
@@ -75,7 +167,7 @@ class PlayableNation:
                         time.sleep(3)
             elif pop_change > 12.56:
                 """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
+                choice = input(f"Your population growth rate for {self.year_placeholder} was {pop_change}%.\n"
                                f"Would you like to slow your population growth?: ")
                 not_answered = False
 

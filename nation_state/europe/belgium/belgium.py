@@ -388,13 +388,3 @@ class Belgium(playable_nation.PlayableNation):
                         self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
 
-    def improve_relations(self):
-        for nation, relations in self.foreign_relations.items():
-            # looping through items in foreign relations
-            for i in range(0, len(self.improving_relations)):
-                # looping through list of nations that user is improving relations with(based off of network variable in sprite game)
-                if nation == self.improving_relations[i]:
-                    if self.foreign_relations[nation] + 0.5 <= 100:
-                        self.foreign_relations[nation] += 0.5
-
-        # print(self.improving_relations)

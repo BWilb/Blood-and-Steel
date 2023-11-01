@@ -5,4 +5,21 @@ economic_objectives = ["increase corporate taxes", "increase government spending
                                        ]
 economic_objectives = ["increase taxes", "increase government spending", "cut workers wages",
                                        "increase corporate taxes"]"""
-# content of test_sysexit.py
+# Initialize a dictionary with lists of lists as values
+objectives = {
+            "objectives": [
+                {"foreign objectives": []},
+                {
+                    "domestic": [
+                        {
+                            'population objectives': [],
+                            'economic objectives': [],
+                            'political objectives': [],
+                            'social objectives': []
+                        }
+                    ]
+                }
+            ]
+        }
+objectives['objectives'][1]['domestic'][0]['population objectives'].append("Population")
+print(objectives)

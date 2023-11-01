@@ -6,20 +6,20 @@ import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
 leaders = {
-    "1910" : "Paul Eyschen",
-    "1914" : "Paul Eyschen",
-    "1918" : "Léon Kauffman",
-    "1932" : "Pierre Dupong",
-    "1936" : "Pierre Dupong",
-    "1939" : "Pierre Dupong"
+    "1910": "Paul Eyschen",
+    "1914": "Paul Eyschen",
+    "1918": "Léon Kauffman",
+    "1932": "Pierre Dupong",
+    "1936": "Pierre Dupong",
+    "1939": "Pierre Dupong"
 }
 monarchs = {
-    "1910" : "Guillaume IV",
-    "1914" : "Marie-Adélaïde",
-    "1918" : "Marie-Adélaïde",
-    "1932" : "Charlotte",
-    "1936" : "Charlotte",
-    "1939" : "Charlotte"
+    "1910": "Guillaume IV",
+    "1914": "Marie-Adélaïde",
+    "1918": "Marie-Adélaïde",
+    "1932": "Charlotte",
+    "1936": "Charlotte",
+    "1939": "Charlotte"
 }
 
 population = {
@@ -56,11 +56,13 @@ leader_images = {"1910": "../leaders/luxembourg/paul_eyschen_accroche_1910-1914.
                  "1939": "../leaders/luxembourg/Pierre_Dupong,_Benelux_conference_The_Hague_March_1949,_Luxembourg_Delegation_1939.jpg"
                  }
 
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
+
 
 class LuxembourgAI(NationAI):
     def __init__(self, globe):
@@ -72,6 +74,7 @@ class LuxembourgAI(NationAI):
         """population"""
         self.population = population[str(globe.date.year)]
         # political
+        self.political_typology = "Republicanism"
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
@@ -98,6 +101,7 @@ class LuxembourgAI(NationAI):
         # other
         self.coordinates = []
         self.land = ["Luxembourg"]
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -112,18 +116,19 @@ class LuxembourgAI(NationAI):
         self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
-    def main(self, globe, network):
+    def main(self, globe, network, user_nation):
         super().establishing_beginning_objectives()
         while self.population > 100000:
             super().check_economic_growth(globe.date)
             super().check_population_growth()
-            # random_functions.random_functions(self, globe)
-            super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(globe.nations, globe, network)
+            #super().stability_happiness_change(globe)
+            super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 super().protests()
+            super().pop_growth()
+            super().check_economic_state(globe.date)
             self.date += timedelta(days=1)
             break

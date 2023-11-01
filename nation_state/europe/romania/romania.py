@@ -1,9 +1,6 @@
 import random
-import time
-from datetime import datetime, timedelta
 import json as js
 from nation_data.coordination.retreive_and_convert import convert_coords, retreive_coords
-from datetime import datetime, timedelta
 from game.ai import playable_nation
 """Population Dictionaries"""
 population = {
@@ -62,62 +59,49 @@ leader_images = {
 class Romania(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "europe"
         self.name = "Kingdom of Romania"
-        # date variables
-        self.date = datetime(globe.date.year, 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
+        self.political_typology = "Autocratic"
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
-        self.e_s = "recovery"
+        self.political_power = 200
+        self.political_exponent = 1.56
         """Stability"""
         self.stability = 95.56
         # economic
-        self.national_debt = 0
+        self.corporate_taxes = 24.00
+        self.income_taxes = 20.00
         self.current_gdp = gdp[str(globe.date.year)]
-        self.past_gdp = self.current_gdp
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
         """Economic Stimulus components"""
         self.economic_stimulus = False
         # military
         # international
         self.alliance = ""
-        # international
-        self.alliance = ""
-        # coordinates
-        self.romanian_coords = []
+        self.us_relations = 34.56
         # other
-        self.sprite = False
+        self.coordinates = []
+
     def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
-        # utilizing absolute path of file, to ensure that the file is found
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
-
         for i in range(len(nation_json['countries'])):
-            if nation_json['countries'][i]['nation_name'] == "Romania":
-                # searching for Romania
-                return retreive_coords(nation_json['countries'][i]['coordinates'])
+            if (nation_json['countries'][i]['nation_name'] == "Romania"):
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]
+
+        return self.coordinates

@@ -129,19 +129,6 @@ class SpriteGame:
                                                       self.globe.nations[i])
             self.nation_map.append(self.nation_button)
 
-        for i in range(0, len(self.nation_map)):
-            if self.nation_map[i].nation_info.name == "Poland":
-                for vertice_set in range(0, len(self.nation_map[i].vertices)):
-                    # print(vertice_set)
-                    for set in range(0, int(len(self.nation_map[i].vertices[vertice_set]) / 2.5)):
-                        # print(set)
-                        self.first_polish.append(self.nation_map[i].vertices[vertice_set][set])
-
-                    for set in range(int(len(self.nation_map[i].vertices[vertice_set]) / 2.5),
-                                     len(self.nation_map[i].vertices[vertice_set])):
-                        # print(set)
-                        self.second_polish.append(self.nation_map[i].vertices[vertice_set][set])
-
     def draw_nations(self):
         for i in range(0, len(self.nation_map)):
             self.nation_map[i].draw(self.screen)
@@ -149,58 +136,6 @@ class SpriteGame:
             """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
         nx.draw(self.network, with_labels=True)
         #plt.show()
-
-    def find_nation_by_name(self, name):
-        for nation in self.nation_map:
-            if nation.nation_info.name == name:
-                return nation
-        return None
-
-    def remove_vertices(self, nation, vertices_to_remove):
-        for vertex in vertices_to_remove:
-            """if vertex in nation.vertices:
-                nation.vertices.remove(vertex)"""
-            pass
-        #self.remove_nation(nation)
-
-    def remove_russian_vertices(self, nation, vertices_to_remove):
-        for vertices_set in vertices_to_remove:
-            for coordinates in vertices_set:
-                #print(coordinates)
-                for i in range(0, len(nation.vertices)):
-                    for coordinate_sets in range(0, len(nation.vertices[i])):
-                        #print(nation.vertices[i][coordinate_sets])
-                        if coordinates in nation.vertices[i]:
-                            nation.vertices[i].remove(coordinates)
-
-        #self.remove_nation(nation)
-
-    def remove_nation(self, target):
-        if target in self.nation_map:
-            self.nation_map.remove(target)
-
-    def invasion_1914(self, attacker, target):
-        # Find the attacking and target nations
-        self.attacking_nation = self.find_nation_by_name(attacker.nation_info.name)
-        self.defending_nation = self.find_nation_by_name(target.nation_info.name)
-
-        if self.attacking_nation is not None and self.defending_nation is not None:
-            for i in range(0, len(self.defending_nation.vertices)):
-                self.coordinates = []
-                if i == 5:
-                    if len(self.defending_nation.vertices[i]) == 1:
-                        self.coordinates.append(self.defending_nation.vertices[i])
-                        #self.remove_nation(self.defending_nation)
-                    else:
-                        self.coordinates.append(self.defending_nation.vertices[i][0:int(len(self.defending_nation.vertices[i]) / 15)])
-                        #print(i, self.coordinates)
-                    self.remove_russian_vertices(self.defending_nation, self.coordinates)
-                    self.attacking_nation.vertices += self.coordinates
-                    self.coordinates = []
-                    break
-                    #((self.defending_nation.vertices[i]))
-                    """for coordinates in target_nation.vertices[i]:"""
-
 
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
@@ -335,7 +270,7 @@ class SpriteGame:
         self.nation.check_economic_state()
         self.nation.population_change()
         self.nation.stability_happiness_change(self.globe)
-        self.nation.improve_relations()
+        #self.nation.improve_relations()
 
     def globe_changes(self):
         for i in range(len(self.globe.nations)):
@@ -343,7 +278,7 @@ class SpriteGame:
             if self.globe.nations[i].name == self.nation.name:
                 pass
             else:
-                self.globe.nations[i].main(self.globe)
+                self.globe.nations[i].main(self.globe, self.network, self.nation)
 
         # upload_database.update_database_info(self.globe.nations)
 

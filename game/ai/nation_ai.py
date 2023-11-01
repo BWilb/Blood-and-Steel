@@ -117,18 +117,25 @@ class NationAI:
                 }]}
         ]}
 
-        self.objectives = {"objectives":
-                               [{"foreign objectives": [],
-                                 "domestic objectives": [{
-                                     'population objectives': [],
-                                     'economic objectives': [],
-                                     'political objectives': [],
-                                     'social objectives': []
-                                 }]
-                                 }]
-                           }
+        self.objectives = {
+            "objectives": [
+                {"foreign objectives": []},
+                {
+                    "domestic": [
+                        {
+                            'population objectives': [],
+                            'economic objectives': [],
+                            'political objectives': [],
+                            'social objectives': []
+                        }
+                    ]
+                }
+            ]
+        }
+
         self.long_term_memory = {
-            "Domestic decisions": [
+            "Domestic decisions":
+                [
                 {"Economic Decisions": [],
                  "Political Decisions": [],
                  "Social Decisions": [],
@@ -148,52 +155,38 @@ class NationAI:
         # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
 
     def establishing_beginning_objectives(self):
-        # function for handling objectives of state
-        # objectives, whether social, economic, or political, will be based upon the stability of the state
-        if self.national_policy["Policy"][0]["Domestic Policy"][2]["Political"][2]["Political stability"] >= 90:
+        # Function for establishing state objectives
+        # Objectives, whether social, economic, or political, depend on the state's stability
+
+        political_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"]
+        economic_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"]
+        political_objectives = []
+        economic_objectives = []
+
+        if political_stability >= 90:
             political_objectives = ["suppress rival factions", "maintain political growth"]
-
-            if self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] >= 65:
-                economic_objectives = ["promote sustainable growth"]
-                for objective in economic_objectives:
-                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
-
-            elif self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] < 65:
-                economic_objectives = ["promote high growth"]
-
-                for objective in economic_objectives:
-                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
-
-            for political_objective in political_objectives:
-                self.objectives['objectives'][0]['domestic objectives'][0]['political objectives'].append(political_objective)
+            economic_objectives = ["promote sustainable growth"]
         else:
             political_objectives = ["repress rival factions", "maintain political growth", "increase political stability"]
-            if self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] >= 65:
-                economic_objectives = ["promote high growth"]
+            economic_objectives = ["promote high growth" if economic_stability >= 65 else "promote economic stability"]
 
-                for objective in economic_objectives:
-                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+        #self.objectives['objectives'][0]['foreign objectives'].extend([])
+        self.objectives['objectives'][1]['domestic'][0]['political objectives'].extend(political_objectives)
+        self.objectives['objectives'][1]['domestic'][0]['economic objectives'].extend(economic_objectives)
 
-            elif self.national_policy["Policy"][0]["Domestic Policy"][1]["Economic"][1]["Economic stability"] < 65:
-                economic_objectives = ["promote economic stability"]
+        political_typology = self.political_typology
+        population_objective = "maintain stable population growth"
 
-                for objective in economic_objectives:
-                    self.objectives['objectives'][0]['domestic objectives'][0]['economic objectives'].append(objective)
+        if 'Fascism' in political_typology or "Communism" in political_typology:
+            population_objective = "maintain large population growth"
 
-            for political_objective in political_objectives:
-                self.objectives['objectives'][0]['domestic objectives'][0]['political objectives'].append(political_objective)
-
-        if 'Fascism' or "Communism" in self.political_typology:
-            self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                "maintain large population growth")
-
-        elif "Democratic" or "Autocratic" in self.political_typology:
-            self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                "maintain stable population growth")
+        self.objectives['objectives'][1]['domestic'][0]['population objectives'].append(population_objective)
+        pass
 
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
         for foreign_nation in range(0, len(foreign_nations)):
+
             # looping through foreign nations list
             for foreign_relation in range(0, len(self.foreign_relations["foreign relations"])):
                 if (foreign_nations[foreign_nation].name
@@ -266,145 +259,274 @@ class NationAI:
 
         self.check_relations_status(foreign_nations)
 
-    def determine_diplomatic_approach(self, foreign_nations, globe, network):
+    def determine_diplomatic_approach(self, foreign_nations, globe, network, user_nation):
         if "Republicanism" or "Democratic" in self.political_typology:
-            self.democratic_international_decision(foreign_nations, globe, network)
+            self.democratic_international_decision(foreign_nations, globe, network, user_nation)
 
         if "Communism" or "Socialism" in self.political_typology:
-            self.communist_international_decision(foreign_nations, globe, network)
+            self.communist_international_decision(foreign_nations, globe, network, user_nation)
 
         if "Fascism" or "Nazism" in self.political_typology:
-            self.fascist_international_decision(foreign_nations, globe, network)
+            self.fascist_international_decision(foreign_nations, globe, network, user_nation)
 
         if "Autocratic" or "Absolutism" in self.political_typology:
-            self.autocratic_international_decision(foreign_nations, globe, network)
+            self.autocratic_international_decision(foreign_nations, globe, network, user_nation)
 
-    def democratic_international_decision(self, foreign_nation_list, globe, network):
+    def democratic_international_decision(self, foreign_nation_list, globe, network, user_nation):
+
         for foreign_nation in foreign_nation_list:
             if self.name != foreign_nation.name:
                 if self.political_power >= 10:
+                    if foreign_nation.name == user_nation.name:
+                        continue
+                    else:
+                        if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
+                                ("Democratic" or "Republicanism") not
+                                in foreign_nation.political_typology):
+                            actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark democratic protests"]
+                            action = actions[random.randrange(0, len(actions))]
 
-                    if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
-                            ("Democratic" or "Republicanism") not
-                            in foreign_nation.political_typology):
-                        actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark democratic protests"]
-                        action = actions[random.randrange(0, len(actions))]
+                            if action == "Incursion into sphere of influence":
+                                # checking if random action is incurring into foe's sphere of influence
+                                for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
+                                    # searching through foreign nation's list of foreign relations
+                                    if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
+                                        'relation status']:
+                                        # checking if in foreign relations, if a nation is a friend/ally
+                                        for potential_ally in foreign_nation_list:
+                                            if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
+                                                'nation name']:
+                                                potential_ally.long_term_memory.append({"Democratic Influence": [
+                                                    {"Expiration date": globe.date + timedelta(days=30)}
+                                                ]})
 
-                        if action == "Incursion into sphere of influence":
-                            # checking if random action is incurring into foe's sphere of influence
-                            for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
-                                # searching through foreign nation's list of foreign relations
-                                if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
-                                    'relation status']:
-                                    # checking if in foreign relations, if a nation is a friend/ally
-                                    for potential_ally in foreign_nation_list:
-                                        if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
-                                            'nation name']:
-                                            potential_ally.long_term_memory.append({"Democratic Influence": [
-                                                {"Expiration date": globe.date + timedelta(days=30)}
-                                            ]})
+                            elif action == "worsen relations":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
+                                        for worsening in range(0, len(self.worsening_relations)):
+                                            if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
+                                                self.worsening_relations[worsening]['duration'] += timedelta(days=20)
 
-                        elif action == "worsen relations":
-                            chance = random.randrange(1, 40)
-                            if chance % 6 == 4:
-                                if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
-                                    for worsening in range(0, len(self.worsening_relations)):
-                                        if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
-                                            self.worsening_relations[worsening]['duration'] += timedelta(days=20)
+                                            else:
+                                                if len(self.worsening_relations) <= 10:
+                                                    if not network.has_edge(self.name, foreign_nation.name):
+                                                        network.add_edge(self.name, foreign_nation.name)
+                                                    self.worsening_relations.append({"nation name": foreign_nation.name,
+                                                                                     "duration": globe.date + timedelta(days=20)})
 
-                                        else:
-                                            if len(self.worsening_relations) <= 10:
+                            elif action == "embargo":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
+                                        for foreign_relations in range(0, len(self.foreign_relations['foreign relations'])):
+                                            if (self.foreign_relations["foreign relations"][foreign_relations][
+                                                'nation name'] == foreign_nation.name):
+                                                if not self.foreign_relations['foreign relations'][foreign_relations]['embargoed']:
+                                                    self.foreign_relations['foreign relations'][foreign_relations]['embargoed'] = True
+                                                    self.exports -= 25
+                                                    self.imports -= 25
+
+                            elif action == "spark democratic protests":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
+                                        foreign_nation.political_decision({"Issue": "Liberal protest"})
+                                        return True
+
+                        if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
+                                self.objectives["objectives"][0]['foreign objectives'] or
+                                ("Democratic" or "Republicanism") in foreign_nation.political_typology):
+                            actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
+                                       "Improve relations"]
+                            action = actions[random.randrange(0, len(actions))]
+
+                            if self.political_power >= 10:
+                                if action == "Form alliance":
+                                    for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name):
+                                            if "" in foreign_nation.alliance and "" in self.alliance:
                                                 if not network.has_edge(self.name, foreign_nation.name):
                                                     network.add_edge(self.name, foreign_nation.name)
-                                                self.worsening_relations.append({"nation name": foreign_nation.name,
-                                                                                 "duration": globe.date + timedelta(days=20)})
+                                                self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
+                                                self.alliance = f"{self.name}'s alliance"
 
-                        elif action == "embargo":
-                            chance = random.randrange(1, 40)
-                            if chance % 6 == 4:
-                                if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
-                                    for foreign_relations in self.foreign_relations['foreign relations']:
-                                        if (foreign_relations in self.foreign_relations['foreign relations']
-                                        [foreign_relations]['nation name'] == foreign_nation.name):
-                                            if not self.foreign_relations['foreign relations'][foreign_relations]['nation name']:
-                                                self.foreign_relations['foreign relations'][foreign_relations]['nation name'] = True
-                                                self.exports -= 25
-                                                self.imports -= 25
-                                                return True
+                                            elif "" in foreign_nation.alliance and f"{self.name}'s alliance":
+                                                foreign_nation.alliance = f"{self.name}'s alliance"
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
 
-                        elif action == "spark democratic protests":
-                            chance = random.randrange(1, 40)
-                            if chance % 6 == 4:
-                                if ("Democratic" or "Republicanism") not in foreign_nation.political_typology:
-                                    foreign_nation.political_decision({"Issue": "Liberal protest"})
-                                    return True
+                                            else:
+                                                self.alliance = foreign_nation.alliance
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
 
-                    if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
-                            self.objectives["objectives"][0]['foreign objectives'] or
-                            ("Democratic" or "Republicanism") in foreign_nation.political_typology):
-                        actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
-                                   "Improve relations"]
-                        action = actions[random.randrange(0, len(actions))]
 
-                        if self.political_power >= 10:
-                            if action == "Form alliance":
-                                for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                    if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name):
-                                        if "" in foreign_nation.alliance and "" in self.alliance:
+                                elif action == "Increase exports":
+                                    self.exports += 25
+                                    foreign_nation.imports += 25
+
+                                elif action == "Increase imports":
+                                    self.imports += 45
+                                    foreign_nation.exports += 45
+
+                                elif action == "Guarantee independence":
+                                    for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
+                                                not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
                                             if not network.has_edge(self.name, foreign_nation.name):
                                                 network.add_edge(self.name, foreign_nation.name)
-                                            self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
-                                            self.alliance = f"{self.name}'s alliance"
+                                                self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
+                                                self.political_exponent -= 0.15
 
-                                        elif "" in foreign_nation.alliance and f"{self.name}'s alliance":
-                                            foreign_nation.alliance = f"{self.name}'s alliance"
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
+                                elif action == "Improve relations":
+                                    for nation in self.improving_relations:
+                                        if foreign_nation.name in self.improving_relations[nation]['nation name']:
+                                            self.improving_relations[nation]['duration'] += timedelta(days=20)
 
                                         else:
-                                            self.alliance = foreign_nation.alliance
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
+                                            if len(self.improving_relations) <= 10:
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
+                                                    self.improving_relations.append({"nation name": foreign_nation.name,
+                                                                                 "duration": globe.date + timedelta(days=20)})
 
-
-                            elif action == "Increase exports":
-                                self.exports += 25
-                                foreign_nation.imports += 25
-
-                            elif action == "Increase imports":
-                                self.imports += 45
-                                foreign_nation.exports += 45
-
-                            elif action == "Guarantee independence":
-                                for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                    if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
-                                            not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
-                                        if not network.has_edge(self.name, foreign_nation.name):
-                                            network.add_edge(self.name, foreign_nation.name)
-                                            self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
-                                            self.political_exponent -= 0.15
-
-                            elif action == "Improve relations":
-                                for nation in self.improving_relations:
-                                    if foreign_nation.name in self.improving_relations[nation]['nation name']:
-                                        self.improving_relations[nation]['duration'] += timedelta(days=20)
-
-                                    else:
-                                        if len(self.improving_relations) <= 10:
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
-                                                self.improving_relations.append({"nation name": foreign_nation.name,
-                                                                             "duration": globe.date + timedelta(days=20)})
-
-    def autocratic_international_decision(self, foreign_nation_list, globe, network):
+    def autocratic_international_decision(self, foreign_nation_list, globe, network, user_nation):
         for foreign_nation in foreign_nation_list:
             if self.name != foreign_nation.name:
                 if self.political_power >= 10:
+                    if foreign_nation.name == user_nation.name:
+                        continue
+                    else:
+                        if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
+                                ("Autocratic") not
+                                in foreign_nation.political_typology):
+                            actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark autocratic protests"]
+                            action = actions[random.randrange(0, len(actions))]
 
-                    if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
-                            ("Autocratic") not
-                            in foreign_nation.political_typology):
-                        actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark autocratic protests"]
+                            if action == "Incursion into sphere of influence":
+                                # checking if random action is incurring into foe's sphere of influence
+                                for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
+                                    # searching through foreign nation's list of foreign relations
+                                    if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
+                                        'relation status']:
+                                        # checking if in foreign relations, if a nation is a friend/ally
+                                        for potential_ally in foreign_nation_list:
+                                            if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
+                                                'nation name']:
+                                                if potential_ally.long_term_memory["Autocratic Influence"][0]['Expiration date'] > globe.date:
+                                                    potential_ally.long_term_memory["Autocratic Influence"][0]['Expiration date'] += timedelta(days=30)
+                                                else:
+                                                    potential_ally.long_term_memory.append({"Autocratic Influence": [
+                                                        {"Expiration date": globe.date + timedelta(days=30)}
+                                                    ]})
+                                        break
+
+                            elif action == "worsen relations":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if "Autocratic" not in foreign_nation.political_typology:
+                                        for worsening in range(0, len(self.worsening_relations)):
+                                            if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
+                                                self.worsening_relations[worsening]['duration'] += timedelta(days=20)
+                                                break
+                                            else:
+                                                if len(self.worsening_relations) <= 10:
+                                                    self.worsening_relations.append({"nation name": foreign_nation.name,
+                                                                                     "duration": globe.date + timedelta(days=20)})
+                                                    break
+
+                            elif action == "embargo":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if "Autocratic" not in foreign_nation.political_typology:
+                                        for foreign_relations in range(0, len(self.foreign_relations['foreign relations'])):
+                                            if (self.foreign_relations["foreign relations"][foreign_relations][
+                                                'nation name'] == foreign_nation.name):
+                                                if not self.foreign_relations['foreign relations'][foreign_relations]['embargoed']:
+                                                    self.foreign_relations['foreign relations'][foreign_relations]['embargoed'] = True
+                                                    self.exports -= 25
+                                                    self.imports -= 25
+
+                            elif action == "spark autocratic protests":
+                                chance = random.randrange(1, 40)
+                                if chance % 6 == 4:
+                                    if "Fascism" not in foreign_nation.political_typology:
+                                        foreign_nation.political_decision({"Issue": "Fascist protest"})
+
+                        if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
+                                self.objectives["objectives"][0]['foreign objectives'] or
+                                ("Autocratic") in foreign_nation.political_typology):
+                            actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
+                                       "Improve relations"]
+                            action = actions[random.randrange(0, len(actions))]
+
+                            if self.political_power >= 10:
+                                if action == "Form alliance":
+                                    for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations['foreign relations'][nation][
+                                            'nation name'] == foreign_nation.name):
+                                            if "" in foreign_nation.alliance and "" in self.alliance:
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
+                                                self.foreign_relations['foreign relations'][nation][
+                                                    'alliance'] = f"{self.name}'s alliance"
+                                                self.alliance = f"{self.name}'s alliance"
+
+                                            elif "" in foreign_nation.alliance and f"{self.name}'s alliance":
+                                                foreign_nation.alliance = f"{self.name}'s alliance"
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
+
+                                            else:
+                                                self.alliance = foreign_nation.alliance
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
+                                            break
+
+                                elif action == "Increase exports":
+                                    self.exports += 25
+                                    foreign_nation.imports += 25
+                                    break
+
+                                elif action == "Increase imports":
+                                    self.imports += 45
+                                    foreign_nation.exports += 45
+                                    break
+
+                                elif action == "Guarantee independence":
+                                    for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
+                                                not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
+                                            if not network.has_edge(self.name, foreign_nation.name):
+                                                network.add_edge(self.name, foreign_nation.name)
+                                            self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
+                                            self.political_exponent -= 0.15
+                                            break
+
+                                elif action == "Improve relations":
+                                    for nation in self.improving_relations:
+                                        if foreign_nation.name in self.improving_relations[nation]['nation name']:
+                                            self.improving_relations[nation]['duration'] += timedelta(days=20)
+                                            break
+                                        else:
+                                            if len(self.improving_relations) <= 10:
+                                                if not network.has_edge(self.name, foreign_nation.name):
+                                                    network.add_edge(self.name, foreign_nation.name)
+                                                self.improving_relations.append({"nation name": foreign_nation.name,
+                                                                                     "duration": globe.date + timedelta(days=20)})
+                                                break
+
+    def fascist_international_decision(self, foreign_nation_list, globe, network, user_nation):
+        for foreign_nation in foreign_nation_list:
+            if foreign_nation.name == user_nation.name:
+                continue
+            else:
+                if self.political_power >= 10:
+
+                    if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (("Fascism" or "Nazism") not
+                    in foreign_nation.political_typology):
+                        actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark far right protests"]
                         action = actions[random.randrange(0, len(actions))]
 
                         if action == "Incursion into sphere of influence":
@@ -417,10 +539,13 @@ class NationAI:
                                     for potential_ally in foreign_nation_list:
                                         if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
                                             'nation name']:
-                                            if potential_ally.long_term_memory["Autocratic Influence"][0]['Expiration date'] > globe.date:
-                                                potential_ally.long_term_memory["Autocratic Influence"][0]['Expiration date'] += timedelta(days=30)
+
+                                            if potential_ally.long_term_memory["Fascist Influence"][0][
+                                                'Expiration date'] > globe.date:
+                                                potential_ally.long_term_memory["Fascist Influence"][0][
+                                                    'Expiration date'] += timedelta(days=30)
                                             else:
-                                                potential_ally.long_term_memory.append({"Autocratic Influence": [
+                                                potential_ally.long_term_memory.append({"Fascist Influence": [
                                                     {"Expiration date": globe.date + timedelta(days=30)}
                                                 ]})
                                     break
@@ -428,7 +553,7 @@ class NationAI:
                         elif action == "worsen relations":
                             chance = random.randrange(1, 40)
                             if chance % 6 == 4:
-                                if "Autocratic" not in foreign_nation.political_typology:
+                                if "Fascism" not in foreign_nation.political_typology:
                                     for worsening in range(0, len(self.worsening_relations)):
                                         if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
                                             self.worsening_relations[worsening]['duration'] += timedelta(days=20)
@@ -442,16 +567,15 @@ class NationAI:
                         elif action == "embargo":
                             chance = random.randrange(1, 40)
                             if chance % 6 == 4:
-                                if "Autocratic" not in foreign_nation.political_typology:
-                                    for foreign_relations in self.foreign_relations['foreign relations']:
-                                        if (foreign_relations in self.foreign_relations['foreign relations']
-                                        [foreign_relations]['nation name'] == foreign_nation.name):
-                                            if not self.foreign_relations['foreign relations'][foreign_relations]['nation name']:
-                                                self.foreign_relations['foreign relations'][foreign_relations]['nation name'] = True
+                                if "Fascism" not in foreign_nation.political_typology:
+                                    for foreign_relations in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations["foreign relations"][foreign_relations]['nation name'] == foreign_nation.name):
+                                            if not self.foreign_relations['foreign relations'][foreign_relations]['embargoed']:
+                                                self.foreign_relations['foreign relations'][foreign_relations]['embargoed'] = True
                                                 self.exports -= 25
                                                 self.imports -= 25
 
-                        elif action == "spark autocratic protests":
+                        elif action == "spark far right protests":
                             chance = random.randrange(1, 40)
                             if chance % 6 == 4:
                                 if "Fascism" not in foreign_nation.political_typology:
@@ -459,7 +583,7 @@ class NationAI:
 
                     if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
                             self.objectives["objectives"][0]['foreign objectives'] or
-                            ("Autocratic") in foreign_nation.political_typology):
+                            ("Fascism" or "Nazism") in foreign_nation.political_typology):
                         actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
                                    "Improve relations"]
                         action = actions[random.randrange(0, len(actions))]
@@ -467,25 +591,11 @@ class NationAI:
                         if self.political_power >= 10:
                             if action == "Form alliance":
                                 for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                    if (self.foreign_relations['foreign relations'][nation][
-                                        'nation name'] == foreign_nation.name):
-                                        if "" in foreign_nation.alliance and "" in self.alliance:
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
-                                            self.foreign_relations['foreign relations'][nation][
-                                                'alliance'] = f"{self.name}'s alliance"
-                                            self.alliance = f"{self.name}'s alliance"
-
-                                        elif "" in foreign_nation.alliance and f"{self.name}'s alliance":
-                                            foreign_nation.alliance = f"{self.name}'s alliance"
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
-
-                                        else:
-                                            self.alliance = foreign_nation.alliance
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
-                                        break
+                                   if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
+                                   "" in self.foreign_relations['foreign relations'][nation]['alliance']):
+                                       self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
+                                       self.alliance = f"{self.name}'s alliance"
+                                break
 
                             elif action == "Increase exports":
                                 self.exports += 25
@@ -501,8 +611,6 @@ class NationAI:
                                 for nation in range(0, len(self.foreign_relations['foreign relations'])):
                                     if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
                                             not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
-                                        if not network.has_edge(self.name, foreign_nation.name):
-                                            network.add_edge(self.name, foreign_nation.name)
                                         self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
                                         self.political_exponent -= 0.15
                                         break
@@ -514,227 +622,120 @@ class NationAI:
                                         break
                                     else:
                                         if len(self.improving_relations) <= 10:
-                                            if not network.has_edge(self.name, foreign_nation.name):
-                                                network.add_edge(self.name, foreign_nation.name)
                                             self.improving_relations.append({"nation name": foreign_nation.name,
+                                                                             "duration": globe.date + timedelta(days=20)})
+                                            break
+
+    def communist_international_decision(self, foreign_nation_list, globe, network, user_nation):
+        for foreign_nation in foreign_nation_list:
+            if self.political_power >= 10:
+                if foreign_nation.name == user_nation.name:
+                    continue
+                else:
+
+                    if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
+                            ("Communism" or "Socialism") not
+                            in foreign_nation.political_typology):
+                        actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark far right protests"]
+                        action = actions[random.randrange(0, len(actions))]
+
+                        if action == "Incursion into sphere of influence":
+                            # checking if random action is incurring into foe's sphere of influence
+                            for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
+                                # searching through foreign nation's list of foreign relations
+                                if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
+                                    'relation status']:
+                                    # checking if in foreign relations, if a nation is a friend/ally
+                                    for potential_ally in foreign_nation_list:
+                                        if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
+                                            'nation name']:
+
+                                            if potential_ally.long_term_memory["Communist Influence"][0][
+                                                'Expiration date'] > globe.date:
+                                                potential_ally.long_term_memory["Communist Influence"][0][
+                                                    'Expiration date'] += timedelta(days=30)
+                                            else:
+                                                potential_ally.long_term_memory.append({"Communist Influence": [
+                                                    {"Expiration date": globe.date + timedelta(days=30)}
+                                                ]})
+                                    break
+
+                        elif action == "worsen relations":
+                            chance = random.randrange(1, 40)
+                            if chance % 6 == 4:
+                                if "Fascism" not in foreign_nation.political_typology:
+                                    for worsening in range(0, len(self.worsening_relations)):
+                                        if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
+                                            self.worsening_relations[worsening]['duration'] += timedelta(days=20)
+                                            break
+                                        else:
+                                            if len(self.worsening_relations) <= 10:
+                                                self.worsening_relations.append({"nation name": foreign_nation.name,
                                                                                  "duration": globe.date + timedelta(days=20)})
-                                            break
+                                                break
 
-    def fascist_international_decision(self, foreign_nation_list, globe, network):
-        for foreign_nation in foreign_nation_list:
-            if self.political_power >= 10:
+                        elif action == "embargo":
+                            chance = random.randrange(1, 40)
+                            if chance % 6 == 4:
+                                if "Fascism" not in foreign_nation.political_typology:
+                                    for foreign_relations in range(0, len(self.foreign_relations['foreign relations'])):
+                                        if (self.foreign_relations["foreign relations"][foreign_relations][
+                                            'nation name'] == foreign_nation.name):
+                                            if not self.foreign_relations['foreign relations'][foreign_relations]['embargoed']:
+                                                self.foreign_relations['foreign relations'][foreign_relations]['embargoed'] = True
+                                                self.exports -= 25
+                                                self.imports -= 25
 
-                if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (("Fascism" or "Nazism") not
-                in foreign_nation.political_typology):
-                    actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark far right protests"]
-                    action = actions[random.randrange(0, len(actions))]
+                        elif action == "spark far right protests":
+                            chance = random.randrange(1, 40)
+                            if chance % 6 == 4:
+                                if "Fascism" not in foreign_nation.political_typology:
+                                    foreign_nation.political_decision({"Issue": "Fascist protest"})
 
-                    if action == "Incursion into sphere of influence":
-                        # checking if random action is incurring into foe's sphere of influence
-                        for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
-                            # searching through foreign nation's list of foreign relations
-                            if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
-                                'relation status']:
-                                # checking if in foreign relations, if a nation is a friend/ally
-                                for potential_ally in foreign_nation_list:
-                                    if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
-                                        'nation name']:
+                    if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
+                            self.objectives["objectives"][0]['foreign objectives'] or
+                            ("Communism" or "Socialism") in foreign_nation.political_typology):
+                        actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
+                                   "Improve relations"]
+                        action = actions[random.randrange(0, len(actions))]
 
-                                        if potential_ally.long_term_memory["Fascist Influence"][0][
-                                            'Expiration date'] > globe.date:
-                                            potential_ally.long_term_memory["Fascist Influence"][0][
-                                                'Expiration date'] += timedelta(days=30)
-                                        else:
-                                            potential_ally.long_term_memory.append({"Fascist Influence": [
-                                                {"Expiration date": globe.date + timedelta(days=30)}
-                                            ]})
+                        if self.political_power >= 10:
+                            if action == "Form alliance":
+                                for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                    if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
+                                            "" in self.foreign_relations['foreign relations'][nation]['alliance']):
+                                        self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
+                                        self.alliance = f"{self.name}'s alliance"
                                 break
 
-                    elif action == "worsen relations":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                for worsening in range(0, len(self.worsening_relations)):
-                                    if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
-                                        self.worsening_relations[worsening]['duration'] += timedelta(days=20)
-                                        break
-                                    else:
-                                        if len(self.worsening_relations) <= 10:
-                                            self.worsening_relations.append({"nation name": foreign_nation.name,
-                                                                             "duration": globe.date + timedelta(days=20)})
-                                            break
-
-                    elif action == "embargo":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                for foreign_relations in self.foreign_relations['foreign relations']:
-                                    if (foreign_relations in self.foreign_relations['foreign relations']
-                                    [foreign_relations]['nation name'] == foreign_nation.name):
-                                        if not self.foreign_relations['foreign relations'][foreign_relations]['nation name']:
-                                            self.foreign_relations['foreign relations'][foreign_relations]['nation name'] = True
-                                            self.exports -= 25
-                                            self.imports -= 25
-
-                    elif action == "spark far right protests":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                foreign_nation.political_decision({"Issue": "Fascist protest"})
-
-                if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
-                        self.objectives["objectives"][0]['foreign objectives'] or
-                        ("Fascism" or "Nazism") in foreign_nation.political_typology):
-                    actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
-                               "Improve relations"]
-                    action = actions[random.randrange(0, len(actions))]
-
-                    if self.political_power >= 10:
-                        if action == "Form alliance":
-                            for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                               if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
-                               "" in self.foreign_relations['foreign relations'][nation]['alliance']):
-                                   self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
-                                   self.alliance = f"{self.name}'s alliance"
-                            break
-
-                        elif action == "Increase exports":
-                            self.exports += 25
-                            foreign_nation.imports += 25
-                            break
-
-                        elif action == "Increase imports":
-                            self.imports += 45
-                            foreign_nation.exports += 45
-                            break
-
-                        elif action == "Guarantee independence":
-                            for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
-                                        not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
-                                    self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
-                                    self.political_exponent -= 0.15
-                                    break
-
-                        elif action == "Improve relations":
-                            for nation in self.improving_relations:
-                                if foreign_nation.name in self.improving_relations[nation]['nation name']:
-                                    self.improving_relations[nation]['duration'] += timedelta(days=20)
-                                    break
-                                else:
-                                    if len(self.improving_relations) <= 10:
-                                        self.improving_relations.append({"nation name": foreign_nation.name,
-                                                                         "duration": globe.date + timedelta(days=20)})
-                                        break
-
-    def communist_international_decision(self, foreign_nation_list, globe, network):
-        for foreign_nation in foreign_nation_list:
-            if self.political_power >= 10:
-
-                if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign objectives'] or (
-                        ("Communism" or "Socialism") not
-                        in foreign_nation.political_typology):
-                    actions = ["Incursion into sphere of influence", "worsen relations", "embargo", "spark far right protests"]
-                    action = actions[random.randrange(0, len(actions))]
-
-                    if action == "Incursion into sphere of influence":
-                        # checking if random action is incurring into foe's sphere of influence
-                        for allies in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
-                            # searching through foreign nation's list of foreign relations
-                            if "ally" or "friend" in foreign_nation.foreign_relations['foreign relations'][allies][
-                                'relation status']:
-                                # checking if in foreign relations, if a nation is a friend/ally
-                                for potential_ally in foreign_nation_list:
-                                    if potential_ally.name == foreign_nation.foreign_relations['foreign relations'][allies][
-                                        'nation name']:
-
-                                        if potential_ally.long_term_memory["Communist Influence"][0][
-                                            'Expiration date'] > globe.date:
-                                            potential_ally.long_term_memory["Communist Influence"][0][
-                                                'Expiration date'] += timedelta(days=30)
-                                        else:
-                                            potential_ally.long_term_memory.append({"Communist Influence": [
-                                                {"Expiration date": globe.date + timedelta(days=30)}
-                                            ]})
+                            elif action == "Increase exports":
+                                self.exports += 25
+                                foreign_nation.imports += 25
                                 break
 
-                    elif action == "worsen relations":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                for worsening in range(0, len(self.worsening_relations)):
-                                    if foreign_nation.name in self.worsening_relations[worsening]['nation name']:
-                                        self.worsening_relations[worsening]['duration'] += timedelta(days=20)
+                            elif action == "Increase imports":
+                                self.imports += 45
+                                foreign_nation.exports += 45
+                                break
+
+                            elif action == "Guarantee independence":
+                                for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                                    if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
+                                            not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
+                                        self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
+                                        self.political_exponent -= 0.15
+                                        break
+
+                            elif action == "Improve relations":
+                                for nation in self.improving_relations:
+                                    if foreign_nation.name in self.improving_relations[nation]['nation name']:
+                                        self.improving_relations[nation]['duration'] += timedelta(days=20)
                                         break
                                     else:
-                                        if len(self.worsening_relations) <= 10:
-                                            self.worsening_relations.append({"nation name": foreign_nation.name,
+                                        if len(self.improving_relations) <= 10:
+                                            self.improving_relations.append({"nation name": foreign_nation.name,
                                                                              "duration": globe.date + timedelta(days=20)})
                                             break
-
-                    elif action == "embargo":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                for foreign_relations in self.foreign_relations['foreign relations']:
-                                    if (foreign_relations in self.foreign_relations['foreign relations']
-                                    [foreign_relations]['nation name'] == foreign_nation.name):
-                                        if not self.foreign_relations['foreign relations'][foreign_relations]['nation name']:
-                                            self.foreign_relations['foreign relations'][foreign_relations]['nation name'] = True
-                                            self.exports -= 25
-                                            self.imports -= 25
-
-                    elif action == "spark far right protests":
-                        chance = random.randrange(1, 40)
-                        if chance % 6 == 4:
-                            if "Fascism" not in foreign_nation.political_typology:
-                                foreign_nation.political_decision({"Issue": "Fascist protest"})
-
-                if ((f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}") in
-                        self.objectives["objectives"][0]['foreign objectives'] or
-                        ("Communism" or "Socialism") in foreign_nation.political_typology):
-                    actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
-                               "Improve relations"]
-                    action = actions[random.randrange(0, len(actions))]
-
-                    if self.political_power >= 10:
-                        if action == "Form alliance":
-                            for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
-                                        "" in self.foreign_relations['foreign relations'][nation]['alliance']):
-                                    self.foreign_relations['foreign relations'][nation]['alliance'] = f"{self.name}'s alliance"
-                                    self.alliance = f"{self.name}'s alliance"
-                            break
-
-                        elif action == "Increase exports":
-                            self.exports += 25
-                            foreign_nation.imports += 25
-                            break
-
-                        elif action == "Increase imports":
-                            self.imports += 45
-                            foreign_nation.exports += 45
-                            break
-
-                        elif action == "Guarantee independence":
-                            for nation in range(0, len(self.foreign_relations['foreign relations'])):
-                                if (self.foreign_relations['foreign relations'][nation]['nation name'] == foreign_nation.name and
-                                        not self.foreign_relations['foreign relations'][nation]['guaranteeing independence']):
-                                    self.foreign_relations['foreign relations'][nation]['guaranteeing independence'] = True
-                                    self.political_exponent -= 0.15
-                                    break
-
-                        elif action == "Improve relations":
-                            for nation in self.improving_relations:
-                                if foreign_nation.name in self.improving_relations[nation]['nation name']:
-                                    self.improving_relations[nation]['duration'] += timedelta(days=20)
-                                    break
-                                else:
-                                    if len(self.improving_relations) <= 10:
-                                        self.improving_relations.append({"nation name": foreign_nation.name,
-                                                                         "duration": globe.date + timedelta(days=20)})
-                                        break
-
     def population_decision(self, domestic_issue):
         if len(self.long_term_memory['Domestic decisions'][0]["Population Decisions"]) > 0:
             # checking if long term memory for population decisions is larger then 0
@@ -914,20 +915,20 @@ class NationAI:
                                       ((self.population + self.past_population) / 2)) * 100
 
             if population_calculation <= 1.5:
-                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
-                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                if len(self.long_term_memory["Domestic decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Low population growth occurred'][1]['Number of occurrences'] += 1
                 self.population_decision({"population issue": "insignificant growth"})
 
             elif population_calculation >= 7.6:
-                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
-                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                if len(self.long_term_memory["Domestic decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Extreme population growth occurred'][1]['Number of occurrences'] += 1
                 self.population_decision({"population issue": "extreme growth"})
 
             else:
-                if len(self.long_term_memory["Domestic Decisions"][0]['Population Decisions']) > 0:
-                    self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                if len(self.long_term_memory["Domestic decisions"][0]['Population Decisions']) > 0:
+                    self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Stable population growth occurred'][1]['Number of occurrences'] += 1
                 self.population_decision({"population issue": "stable growth"})
 
@@ -1204,7 +1205,7 @@ class NationAI:
                                     ]})
 
     def political_decision(self, political_issue):
-        if len(self.long_term_memory['Domestic Decisions'][0]["Political Decisions"]) > 0:
+        if len(self.long_term_memory['Domestic decisions'][0]["Political Decisions"]) > 0:
             if "Democratic" or "Republicanism" in self.political_typology:
                 # checking if current typology is liberal
                 self.democratic_handling_protest(political_issue)
@@ -1227,7 +1228,7 @@ class NationAI:
 
                 # only option for any ideology within this path is to maintain stability
                 if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
-                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                    self.long_term_memory["Domestic decisions"][0]["Political Decisions"].append({"protest": [
                         {"Decision": "Arrested far-right leaders"},
                         {"Effects": ["Decreased stability", "Began crack down on far-right parties"]},
                         {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2][
@@ -1242,8 +1243,8 @@ class NationAI:
 
             elif political_issue.values() == "Liberal protest" and (
                     "Democratic" or "Republicanism" not in self.political_typology):
-                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
-                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic"]:
+                    self.long_term_memory["Domestic decisions"][0]["Political Decisions"].append({"protest": [
                         {"Decision": "Arrested liberal leaders"},
                         {"Effects": ["Decreased stability", "Began crack down on liberal parties"]},
                         {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2]["Political stability"]},
@@ -1256,8 +1257,8 @@ class NationAI:
                     ]})
 
             elif political_issue.values() == "Communist protest" and ("Communist" or "Socialist" not in self.political_typology):
-                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
-                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic"]:
+                    self.long_term_memory["Domestic decisions"][0]["Political Decisions"].append({"protest": [
                         {"Decision": "Arrested far-left leaders"},
                         {"Effects": ["Decreased stability", "Began crack down on far-left parties"]},
                         {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2]["Political stability"]},
@@ -1271,8 +1272,8 @@ class NationAI:
                     ]})
 
             elif political_issue.values() == "Autocratic protest" and "Autocratic" not in self.political_typology:
-                if "Maintain stability" in self.objectives["objectives"][0]["domestic objectives"]:
-                    self.long_term_memory["Domestic Decisions"][0]["Political Decisions"].append({"protest": [
+                if "Maintain stability" in self.objectives["objectives"][0]["domestic"]:
+                    self.long_term_memory["Domestic decisions"][0]["Political Decisions"].append({"protest": [
                         {"Decision": "Arrested autocratic leaders"},
                         {"Effects": ["Decreased stability", "Began crack down on autocratic parties"]},
                         {"Current stability": self.national_policy["Policy"][0]["Domestic Policy"][2][
@@ -1288,36 +1289,32 @@ class NationAI:
 
     def protests(self):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
-        chance = random.randrange(0, 100)
-        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] >= 75.00 or
-                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] >= 65.00):
+        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"] >= 75.00 or
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] >= 65.00):
             """protests occurring in relative peaceful and stable times"""
-            for i in range(1, 101):
-                number = random.randrange(1, 101)
-                days = random.randrange(10, 31)
-                if number % i == 0 or number % i == 4:
-                    """chance, based upon remainder of 0 or 4 that fascist protest will occur with relative stability"""
-                    self.political_decision({"Issue": "Fascist protest"})
-                    break
+            number = random.randrange(1, 101)
+            if number % 9 == 5 or number % 6 == 4:
+                """chance, based upon remainder of 0 or 4 that fascist protest will occur with relative stability"""
+                print("fascism")
+                self.political_decision({"Issue": "Fascist protest"})
 
-                if number % i == 1 or number % i == 2:
-                    """chance, based upon remainder of 1 or 2 that liberal protest will occur with relative stability"""
+            if number % 3 == 2 or number % 7 == 5:
+                """chance, based upon remainder of 1 or 2 that liberal protest will occur with relative stability"""
+                print('liberalism')
+                self.political_decision({"Issue": "Liberal protest"})
 
-                    self.political_decision({"Issue": "Liberal protest"})
-                    break
+            if number % 7 == 6 or number % 9 == 7:
+                """chance, based upon remainder of 5 or 7 that liberal protest will occur with relative stability"""
+                print('communism')
+                self.political_decision({"Issue": "Communist protest"})
 
-                if number % i == 5 or number % i == 7:
-                    """chance, based upon remainder of 5 or 7 that liberal protest will occur with relative stability"""
-                    self.political_decision({"Issue": "Communist protest"})
-                    break
+            if number % 10 == 2 or number % 12 == 7:
+                """chance, based upon remainder of 6 or 8 that liberal protest will occur with relative stability"""
+                print('autocratic')
+                self.political_decision({"Issue": "Autocratic protest"})
 
-                if number % i == 6 or number % i == 8:
-                    """chance, based upon remainder of 6 or 8 that liberal protest will occur with relative stability"""
-                    self.political_decision({"Issue": "Autocratic protest"})
-                    break
-
-        if (self.national_policy["Policy"][0]["National Policy"][0]["Political"][2]["Political stability"] < 75.00 or
-                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] < 65.00):
+        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"] < 75.00 or
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] < 65.00):
             """protests occurring in relative non-peaceful times"""
             for i in range(1, 101):
                 days = random.randrange(10, 31)
@@ -1546,14 +1543,14 @@ class NationAI:
                     ]})
 
             elif "Recovery started":
-                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                     {"Recovery started": [
                         {"Action Taken": "No action"},
                         {"Time stamps": [date]}
                     ]})
 
             elif "Expansion started":
-                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                     {"Expansion started": [
                         {"Action Taken": "No action"},
                         {"Time stamps": [date]}
@@ -1563,7 +1560,7 @@ class NationAI:
     def check_economic_growth(self, date):
         if self.date > self.economic_change_date:
             growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
-            if len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions']) == 0:
+            if len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions']) == 0:
                 if growth <= 1.95:
                     if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
                         self.e_s = EconomicState.RECESSION
@@ -1667,11 +1664,11 @@ class NationAI:
     def stability_happiness_change(self, globe):
         #1. check economic stability
         #2. check current economic state
-        if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] > 65:
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] > 65:
             if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
-                ['Improve stability']['Expiration date'] > globe.date):
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
+                ['Improve stability']['Expiration date'][0] > globe.date):
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 6.5 < 100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 6.5
 
@@ -1679,7 +1676,7 @@ class NationAI:
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 3.5 < 100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 3.5
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve happiness']['Expiration date'] > globe.date):
                     if self.happiness + 7.5 < 100:
                         self.happiness += 7.5
@@ -1689,7 +1686,7 @@ class NationAI:
                         self.happiness += 4.5
 
             else:
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve stability']['Expiration date'] > globe.date):
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
                         'Political stability'] + 4.5 < 100:
@@ -1699,7 +1696,7 @@ class NationAI:
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] - 1.5 > -100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve happiness']['Expiration date'] > globe.date):
                     if self.happiness + 3 < 100:
                         self.happiness += 3
@@ -1711,7 +1708,7 @@ class NationAI:
         else:
             if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve stability']['Expiration date'] > globe.date):
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 4.5 < 100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 4.5
@@ -1720,7 +1717,7 @@ class NationAI:
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 2.5 < 100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 2.5
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve happiness']['Expiration date'] > globe.date):
                     if self.happiness + 5.5 < 100:
                         self.happiness += 5.5
@@ -1730,7 +1727,7 @@ class NationAI:
                         self.happiness += 2.5
 
             else:
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve stability']['Expiration date'] > globe.date):
                     if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
                         'Political stability'] + 0.5 < 100:
@@ -1741,7 +1738,7 @@ class NationAI:
                         'Political stability'] - 1.5 > -100:
                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
 
-                if (self.objectives['objectives'][0]['domestic objectives'][0]['political objectives']
+                if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
                 ['Improve happiness']['Expiration date'] > globe.date):
                     if self.happiness + 0.75 < 100:
                         self.happiness += 3
