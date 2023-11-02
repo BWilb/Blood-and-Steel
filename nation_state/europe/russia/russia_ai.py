@@ -99,7 +99,7 @@ class RussiaAI(NationAI):
         self.us_relations = 34.56
         # other
         self.coordinates = []
-        self.foreign_relations = {
+        """self.foreign_relations = {
             "Austria": 77.67,
             "Great Britain": 89.56,
             "Kingdom of Denmark": 80.56,
@@ -127,9 +127,9 @@ class RussiaAI(NationAI):
             "Brazil": 56.65,
             "Venezuela": 86.45,
             "Argentina": 67.45
-        }
+        }"""
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
@@ -164,19 +164,18 @@ class RussiaAI(NationAI):
             self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
-    def main(self, globe, network):
+    def main(self, globe, network, user_nation):
         #super().establishing_beginning_objectives()
         while self.population > 2000000:
-            """super().check_economic_growth(globe.date)
-                        super().check_population_growth()
-                        # random_functions.random_functions(self, globe)
-                        super().stability_happiness_change(globe)
-                        super().political_power_growth()
-                        super().determine_diplomatic_approach(globe.nations, globe, network)
-                        super().change_relations(globe.nations)
-                        chance = random.randrange(1, 50)
-                        if chance % 8 == 2 or chance % 5 == 4:
-                            super().protests()"""
+            super().check_economic_growth(globe.date)
+            super().check_population_growth()
+            super().political_power_growth()
+            super().stability_happiness_change(globe)
+            #super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
+            super().change_relations(globe.nations)
+            chance = random.randrange(1, 50)
+            if chance % 8 == 2 or chance % 5 == 4:
+                super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
             self.date += timedelta(days=1)

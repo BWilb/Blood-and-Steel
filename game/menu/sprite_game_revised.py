@@ -7,8 +7,8 @@ import pygame
 import os
 import networkx as nx
 
-import matplotlib.pyplot as plt
-from database_management import upload_database
+"""import matplotlib.pyplot as plt
+from database_management import upload_database"""
 
 pygame.init()
 pygame.mixer.init()
@@ -134,7 +134,7 @@ class SpriteGame:
             self.nation_map[i].draw(self.screen)
 
             """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
-        nx.draw(self.network, with_labels=True)
+        #nx.draw(self.network, with_labels=True)
         #plt.show()
 
     def resize_leader(self, leader_image):
@@ -279,7 +279,6 @@ class SpriteGame:
                 pass
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
-                print(self.globe.nations[i].long_term_memory)
 
         # upload_database.update_database_info(self.globe.nations)
 

@@ -105,7 +105,7 @@ class LuxembourgAI(NationAI):
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
@@ -117,12 +117,12 @@ class LuxembourgAI(NationAI):
 
     # main function
     def main(self, globe, network, user_nation):
-        #super().establishing_beginning_objectives()
+        #print(self.objectives)
         while self.population > 100000:
             super().check_economic_growth(globe.date)
             super().check_population_growth()
             super().political_power_growth()
-            #super().stability_happiness_change(globe)
+            super().stability_happiness_change(globe)
             #super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)

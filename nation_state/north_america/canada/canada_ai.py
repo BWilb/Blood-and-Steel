@@ -81,6 +81,7 @@ class Canada(NationAI):
         """population"""
         self.population = population[str(globe.date.year)]
         # political
+        self.political_typology = "Democratic"
         self.leader = pms[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
@@ -108,7 +109,7 @@ class Canada(NationAI):
         self.coordinates = []
 
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
@@ -120,18 +121,19 @@ class Canada(NationAI):
         self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
-    def main(self, globe, network):
-        super().establishing_beginning_objectives()
+    def main(self, globe, network, user_nation):
+        #super().establishing_beginning_objectives()
         while self.population > 2000000:
             super().check_economic_growth(globe.date)
             super().check_population_growth()
-            # random_functions.random_functions(self, globe)
-            super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(globe.nations, globe, network)
+            super().stability_happiness_change(globe)
+            # super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 super().protests()
+            super().pop_growth()
+            super().check_economic_state(globe.date)
             self.date += timedelta(days=1)
             break

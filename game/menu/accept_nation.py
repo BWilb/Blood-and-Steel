@@ -74,11 +74,14 @@ from nation_state.south_america.peru import peru_ai
 from nation_state.south_america.chile import chile_ai
 from nation_state.south_america.bolivia import bolivia_ai
 
-def establish_nations(globe, *args):
+def establish_nations(globe, user_nation, *args):
     """labelling second parameter as *args, due to unknown number of nations that will be sent into this function
     player nation will also be appended to globe's nation list
     """
     for i in range(0, len(args)):
+        if args[i].name != user_nation:
+            args[i].establishing_beginning_objectives()
+
         if args[i].leader is not None:
             args[i].establish_map_coordinates()
             globe.nations.append(args[i])
@@ -169,10 +172,11 @@ def accept_nation(nation, time):
 
     if nation.lower() == "romania":
         romanian = romania.Romania(globe1)
+        spanish_ai = spain_ai.SpainAI(globe1)
+        russian_ai = russia_ai.RussiaAI(globe1)
         luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
-        austrian_ai = austria_ai.Austria(globe1)
-        english_ai = britain_ai.Britain(globe1)
-        establish_nations(globe1, romanian, luxembourger_ai, austrian_ai, english_ai)
+        canadian_ai = canada_ai.Canada(globe1)
+        establish_nations(globe1, romanian.name, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai)
         game = SpriteGame(romanian, globe1)
         game.main_game()
 
