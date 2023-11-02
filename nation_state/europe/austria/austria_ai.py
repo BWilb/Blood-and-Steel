@@ -5,7 +5,6 @@ from game.ai.nation_ai import NationAI
 from nation_data.coordination.retreive_and_convert import retreive_coords
 import json as js
 
-
 flags = {
     "1910": "../flags/austria/Flag_of_the_Habsburg_Monarchy.jpg",
     "1914": "../flags/austria/Flag_of_the_Habsburg_Monarchy.jpg",
@@ -28,6 +27,7 @@ class EconomicState(Enum):
     DEPRESSION = 2
     EXPANSION = 3
     RECOVERY = 4
+
 
 """Population Dictionaries"""
 population = {
@@ -66,6 +66,7 @@ gdp = {
     "1936": 73462352,
     "1939": None
 }
+
 
 class Austria(NationAI):
     def __init__(self, globe):
@@ -108,6 +109,7 @@ class Austria(NationAI):
         self.coordinates = []
         self.land_1910_1918 = ["Austro-Hungarian Empire"]
         self.land_1932 = ["Austria"]
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
@@ -129,21 +131,20 @@ class Austria(NationAI):
             self.coordinates = [(retreive_coords(self.coordinates))]
 
     # main function
-    def main(self, globe, network):
+    def main(self, globe, network, user_nation):
         super().establishing_beginning_objectives()
         while self.population > 50000:
-            """super().check_economic_growth(globe.date)
-                        super().check_population_growth()
-                        # random_functions.random_functions(self, globe)
-                        super().stability_happiness_change(globe)
-                        super().political_power_growth()
-                        super().determine_diplomatic_approach(globe.nations, globe, network)
-                        super().change_relations(globe.nations)
-                        chance = random.randrange(1, 50)
-                        if chance % 8 == 2 or chance % 5 == 4:
-                            super().protests()"""
+            super().check_economic_growth(globe.date)
+            super().check_population_growth()
+            # random_functions.random_functions(self, globe)
+            super().stability_happiness_change(globe)
+            super().political_power_growth()
+            super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
+            super().change_relations(globe.nations)
+            chance = random.randrange(1, 50)
+            if chance % 8 == 2 or chance % 5 == 4:
+                super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
             self.date += timedelta(days=1)
             break
-

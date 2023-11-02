@@ -279,6 +279,7 @@ class SpriteGame:
                 pass
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
+                print(self.globe.nations[i].long_term_memory)
 
         # upload_database.update_database_info(self.globe.nations)
 

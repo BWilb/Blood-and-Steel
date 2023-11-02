@@ -424,19 +424,19 @@ class Britain(NationAI):
             self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
-    def main(self, globe, network):
+    def main(self, globe, network, user_nation):
         super().establishing_beginning_objectives()
         while self.population > 2000000:
-            """super().check_economic_growth(globe.date)
+            super().check_economic_growth(globe.date)
             super().check_population_growth()
             # random_functions.random_functions(self, globe)
             super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(globe.nations, globe, network)
+            super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
-                super().protests()"""
+                super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
             self.date += timedelta(days=1)

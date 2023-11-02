@@ -8,9 +8,8 @@ economic_objectives = ["increase taxes", "increase government spending", "cut wo
 # Initialize a dictionary with lists of lists as values
 objectives = {
             "objectives": [
-                {"foreign objectives": []},
-                {
-                    "domestic": [
+                {"foreign objectives": [],
+                "domestic": [
                         {
                             'population objectives': [],
                             'economic objectives': [],
@@ -21,5 +20,6 @@ objectives = {
                 }
             ]
         }
-objectives['objectives'][1]['domestic'][0]['population objectives'].append("Population")
+political_objectives = ["repress rival factions", "maintain political growth", "increase political stability"]
+objectives['objectives'][0]['domestic'][0]['political objectives'].append(political_objectives)
 print(objectives)

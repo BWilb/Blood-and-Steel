@@ -117,13 +117,13 @@ class LuxembourgAI(NationAI):
 
     # main function
     def main(self, globe, network, user_nation):
-        super().establishing_beginning_objectives()
+        #super().establishing_beginning_objectives()
         while self.population > 100000:
             super().check_economic_growth(globe.date)
             super().check_population_growth()
             super().political_power_growth()
             #super().stability_happiness_change(globe)
-            super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
+            #super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
