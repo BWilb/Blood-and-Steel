@@ -6,20 +6,10 @@ economic_objectives = ["increase corporate taxes", "increase government spending
 economic_objectives = ["increase taxes", "increase government spending", "cut workers wages",
                                        "increase corporate taxes"]"""
 # Initialize a dictionary with lists of lists as values
-objectives = {
-            "objectives": [
-                {"foreign objectives": [],
-                "domestic": [
-                        {
-                            'population objectives': [],
-                            'economic objectives': [],
-                            'political objectives': [],
-                            'social objectives': []
-                        }
-                    ]
-                }
-            ]
-        }
-political_objectives = ["repress rival factions", "maintain political growth", "increase political stability"]
-objectives['objectives'][0]['domestic'][0]['political objectives'].append(political_objectives)
-print(objectives)
+#numbers = {"numbers": [0, 1, 2, 3, 4, 5]}
+numbers = [[1, 2, 3, 4, 5, 6],
+           [5, 6, 7, 8, 9, 0]]
+for i in range(0, len(numbers)):
+    for j in range(0, len(numbers[i])):
+        print(numbers[i][j])
+        break

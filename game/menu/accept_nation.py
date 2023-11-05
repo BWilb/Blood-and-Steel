@@ -81,6 +81,7 @@ def establish_nations(globe, user_nation, *args):
     for i in range(0, len(args)):
         if args[i].name != user_nation:
             args[i].establishing_beginning_objectives()
+            args[i].establish_foreign_objectives()
 
         if args[i].leader is not None:
             args[i].establish_map_coordinates()
@@ -176,7 +177,8 @@ def accept_nation(nation, time):
         russian_ai = russia_ai.RussiaAI(globe1)
         luxembourger_ai = luxembourg_ai.LuxembourgAI(globe1)
         canadian_ai = canada_ai.Canada(globe1)
-        establish_nations(globe1, romanian.name, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai)
+        belgian_ai = belgium_ai.BelgiumAI(globe1)
+        establish_nations(globe1, romanian.name, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai)
         game = SpriteGame(romanian, globe1)
         game.main_game()
 

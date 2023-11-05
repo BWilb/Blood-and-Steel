@@ -60,7 +60,7 @@ leader_images = {
 class Belgium(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
-        self.name = "Kingdom of Belgium"
+        self.name = "Belgium"
         self.nation_color = (0, random.randrange(0, 255), random.randrange(0, 250))
         # date variables
         self.date = datetime(globe.date.year, 1, 1)

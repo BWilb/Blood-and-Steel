@@ -6,7 +6,7 @@ from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
-from random_functions import random_functions
+#from random_functions import random_functions
 
 """Population Dictionaries"""
 population = {

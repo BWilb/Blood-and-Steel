@@ -279,6 +279,11 @@ class SpriteGame:
                 pass
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
+                #print(self.globe.nations[i].objectives, self.globe.nations[i].long_term_memory, "\n")
+               # print(self.globe.nations[i].name, self.globe.nations[i].national_policy, "\n")
+                print(self.globe.nations[i].name, self.globe.nations[i].foreign_relations, "\n")
+                print(self.network)
+
 
         # upload_database.update_database_info(self.globe.nations)
 
@@ -471,7 +476,7 @@ class SpriteGame:
                 self.globe.date += timedelta(days=1)
                 self.nation_changes()
                 self.globe_changes()
-                time.sleep(0.00625)
+                time.sleep(2)
             self.check_stream()
 
             for event in pygame.event.get():
