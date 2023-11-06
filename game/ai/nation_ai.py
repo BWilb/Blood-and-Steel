@@ -14,6 +14,7 @@ class EconomicState(Enum):
 class NationAI:
     def __init__(self, globe):
         # general information
+        self.date_checker = globe.date + timedelta(days=3)
         self.region = ""
         self.name = ""
         self.date = datetime(globe.date.year, 1, 1)

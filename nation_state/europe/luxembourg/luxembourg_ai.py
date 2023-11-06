@@ -75,7 +75,7 @@ class LuxembourgAI(NationAI):
         """population"""
         self.population = population[str(globe.date.year)]
         # political
-        self.political_typology = "Republicanism"
+        self.political_typology = "Democratic"
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]

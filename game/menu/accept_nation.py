@@ -188,8 +188,25 @@ def accept_nation(nation, time):
         greek_ai = greece_ai.Greece(globe1)
         hungarian_ai = hungary_ai.HungaryAI(globe1)
         italian_ai = italy_ai.ItalyAI(globe1)
+        latvian_ai = latvia_ai.LatviaAI(globe1)
+        lithuanian_ai = lithuania_ai.LithuaniaAI(globe1)
+        dutch_ai = netherlands_ai.Netherlands(globe1)
+        norwegian_ai = norway_ai.NorwayAI(globe1)
+        polish_ai = poland_ai.PolandAI(globe1)
+        portuguese_ai = portugal_ai.Portugal(globe1)
+        swedish_ai = sweden_ai.SwedenAI(globe1)
+        swiss_ai = SwitzerlandAI(globe1)
+        cuban_ai = cuba_ai.CubaAI(globe1)
+        mexican_ai = mexico_ai.MexicoAI(globe1)
+        american_ai = us_ai.USAI(globe1)
+        argentina_ai = argentine_ai.Argentina(globe1)
+        bolivian_ai = bolivia_ai.BoliviaAI(globe1)
+        brazilian_ai = brazil_ai.Brazil(globe1)
         establish_nations(globe1, romanian.name, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
-                          bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany, greek_ai, hungarian_ai, italian_ai)
+                          bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany, greek_ai, hungarian_ai, italian_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai)
+
         game = SpriteGame(romanian, globe1)
         game.main_game()
 

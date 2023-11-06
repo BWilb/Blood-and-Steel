@@ -62,7 +62,7 @@ class FranceAI(NationAI):
         self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Republic of France"
+        self.name = "France"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
