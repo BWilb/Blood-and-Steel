@@ -1,5 +1,4 @@
 import random
-import time
 from datetime import datetime, timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
@@ -60,6 +59,7 @@ class EconomicState(Enum):
 class FranceAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Republic of France"
@@ -99,10 +99,26 @@ class FranceAI(NationAI):
         self.land_1932_1939 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
                                "French West Africa", "Algeria (France)", "French Cameroons", "Congo (France)",
                                "Syria (France)", "Armenia", "Morocco (France)", "Morocco", "Algeria"]
+
+    def establish_foreign_objectives(self):
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
+            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States"]
+
+        else:
+            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Japan"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with Britain", "Improve relations with Belgium"]
+
+        for enemy in objectives_enemy:
+            self.objectives["objectives"][0]['foreign'].append(enemy)
+
+        for ally in objectives_allies:
+            self.objectives["objectives"][0]['foreign'].append(ally)
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
@@ -121,21 +137,20 @@ class FranceAI(NationAI):
             self.coordinates = (retreive_coords(self.coordinates))
 
     # main function
-    def main(self, globe, network):
+    def main(self, globe, network, user_nation):
         #super().establishing_beginning_objectives()
         while self.population > 2000000:
-            """super().check_economic_growth(globe.date)
-                        super().check_population_growth()
-                        # random_functions.random_functions(self, globe)
-                        super().stability_happiness_change(globe)
-                        super().political_power_growth()
-                        super().determine_diplomatic_approach(globe.nations, globe, network)
-                        super().change_relations(globe.nations)
-                        chance = random.randrange(1, 50)
-                        if chance % 8 == 2 or chance % 5 == 4:
-                            super().protests()"""
+            super().check_economic_growth(globe.date)
+            super().check_population_growth()
+            super().political_power_growth()
+            super().stability_happiness_change(globe)
+            if globe.date > self.date_checker:
+                super().determine_diplomatic_approach(globe, network, user_nation)
+                self.date_checker = globe.date + timedelta(days=3)
+            super().change_relations(globe.nations)
+            chance = random.randrange(1, 50)
+            if chance % 8 == 2 or chance % 5 == 4:
+                super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
-            self.date += timedelta(days=1)
             break
-

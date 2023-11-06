@@ -67,6 +67,7 @@ class EconomicState(Enum):
 class LuxembourgAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Luxembourg"
@@ -481,7 +482,9 @@ class LuxembourgAI(NationAI):
             super().check_population_growth()
             super().political_power_growth()
             super().stability_happiness_change(globe)
-            super().determine_diplomatic_approach(globe, network, user_nation)
+            if globe.date > self.date_checker:
+                super().determine_diplomatic_approach(globe, network, user_nation)
+                self.date_checker = globe.date + timedelta(days=3)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:

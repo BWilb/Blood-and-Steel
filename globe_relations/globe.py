@@ -5,3 +5,4 @@ class Globe:
         self.tension = 0
         self.date = datetime(int(year), 1, 1)
         self.nations = []
+        self.events = [{"Foreign events": []}]

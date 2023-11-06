@@ -75,8 +75,6 @@ class Romania(playable_nation.PlayableNation):
         """Stability"""
         self.stability = 95.56
         # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
         self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
         self.consumer_spending = 200

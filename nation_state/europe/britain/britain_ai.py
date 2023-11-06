@@ -87,10 +87,10 @@ gdp = {
 class Britain(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
+        self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
         self.name = "Great Britain"
-        self.date = datetime(globe.date.year, 1, 1)
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -98,28 +98,11 @@ class Britain(NationAI):
         self.leader = pm[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
-        self.political_typology = "Republicanism"
+        self.political_typology = "Democratic"
         self.political_power = 200
         self.political_exponent = 1.56
         """Stability"""
-        self.stability = 95.56
-        # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
         self.current_gdp = gdp[str(globe.date.year)]
-        """Components of GDP"""
-        self.consumer_spending = 200
-        self.investment = 300
-        self.government_spending = 350
-        self.exports = 1000
-        self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        self.us_relations = 34.56
-        # other
         self.coordinates = []
         self.land_1910_1914 = ["United Kingdom of Great Britain and Ireland", "British East Africa",
                                "British Somaliland",
@@ -142,259 +125,364 @@ class Britain(NationAI):
                           "Swaziland", "Oman (British Raj)", "Nigeria"]
 
         self.foreign_relations = {"foreign relations": [
-            {"nation name": "Iraq",
-             "relations": 76.23,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
             {"nation name": "Afghanistan",
-             "relations": 64.34,
-             "guarantee independence": False,
+             "relations": 60.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Iran",
-             "relations": 65.43,
-             "guarantee independence": False,
+             "relations": 70.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Iraq",
+             "relations": 65.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Turkey",
-             "relations": 87.45,
-             "guarantee independence": False,
+             "relations": 57.56,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "China",
-             "relations": 75.45,
-             "guarantee independence": False,
+             "relations": 67.46,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Japanese Empire",
-             "relations": 70.65,
-             "guarantee independence": False,
-             "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Austria",
-             "relations": 65.45,
-             "guarantee independence": False,
+             "relations": 87.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Belgium",
-             "relations": 86.45,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Denmark",
-             "relations": 88.45,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Republic of France",
-             "relations": 92.34,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Germany",
-             "relations": 65.23,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Greece",
-             "relations": 76.87,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Italy",
-             "relations": 83.23,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Luxembourg",
-             "relations": 89.86,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Netherlands",
-             "relations": 95.86,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Norway",
-             "relations": 84.86,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Poland",
-             "relations": 85.12,
-             "guarantee independence": False,
-             "alliance": "",
-             "war goal": False,
-             "at war with": False},
-
-            {"nation name": "Kingdom of Romania",
-             "relations": 90.34,
-             "guarantee independence": False,
-             "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Russia",
-             "relations": 67.34,
-             "guarantee independence": False,
+             "relations": 75.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Kingdom of Spain",
-             "relations": 73.45,
-             "guarantee independence": False,
+            {"nation name": "Bulgaria",
+             "relations": 58.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Kingdom of Sweden",
-             "relations": 87.12,
-             "guarantee independence": False,
+            {"nation name": "Belgium",
+             "relations": 68.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Republic of Switzerland",
-             "relations": 98.75,
-             "guarantee independence": False,
+            {"nation name": "Denmark",
+             "relations": 98.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Dominion of Canada",
-             "relations": 99.55,
-             "guarantee independence": False,
+            {"nation name": "Estonia",
+             "relations": 48.34,
+             "relation status": "enemy",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Republic of Cuba",
-             "relations": 82.35,
-             "guarantee independence": False,
+            {"nation name": "France",
+             "relations": 76.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
-            {"nation name": "Republic of Mexico",
-             "relations": 84.65,
-             "guarantee independence": False,
+            {"nation name": "Germany",
+             "relations": 34.34,
+             "relation status": "enemy",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Greece",
+             "relations": 65.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Hungary",
+             "relations": 48.34,
+             "relation status": "enemy",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Italy",
+             "relations": 65.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Latvia",
+             "relations": 66.65,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Lithuania",
+             "relations": 48.34,
+             "relation status": "enemy",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Luxembourg",
+             "relations": 88.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Netherlands",
+             "relations": 88.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Norway",
+             "relations": 78.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Poland",
+             "relations": 54.45,
+             "relation status": "enemy",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Portugal",
+             "relations": 78.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Romania",
+             "relations": 78.94,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Spain",
+             "relations": 65.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Sweden",
+             "relations": 75.54,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Switzerland",
+             "relations": 98.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Canada",
+             "relations": 88.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Cuba",
+             "relations": 78.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Mexico",
+             "relations": 79.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "United States",
-             "relations": 80.95,
-             "guarantee independence": False,
+             "relations": 65.34,
+             "relation status": "rival",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Argentina",
-             "relations": 78.94,
-             "guarantee independence": False,
+             "relations": 74.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
+             "war goal": False,
+             "at war with": False},
+
+            {"nation name": "Bolivia",
+             "relations": 65.45,
+             "relation status": "rival",
+             "guaranteeing independence": False,
+             "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Brazil",
-             "relations": 76.45,
-             "guarantee independence": False,
+             "relations": 76.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Chile",
-             "relations": 75.45,
-             "guarantee independence": False,
+             "relations": 79.56,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Columbia",
-             "relations": 73.76,
-             "guarantee independence": False,
+             "relations": 72.34,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Peru",
-             "relations": 65.45,
-             "guarantee independence": False,
+             "relations": 74.54,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
              "at war with": False},
 
             {"nation name": "Venezuela",
-             "relations": 73.86,
-             "guarantee independence": False,
+             "relations": 74.54,
+             "relation status": "ally",
+             "guaranteeing independence": False,
              "alliance": "",
+             "embargoed": False,
              "war goal": False,
-             "at war with": False},
+             "at war with": False}
         ]}
-        if globe.date.year <= 1932:
-            self.objectives = {"objectives": [
-                {"International Objectives": ["Contain Germany",
-                                              "Improve relations with France",
-                                              "Contend with France over Africa",
-                                              "Contend with Italy over Africa",
-                                              "Keep Canada in Sphere of Influence"]},
 
-                {"National Objectives": ["Maintain positive GDP growth",
-                                         "Maintain stable population growth",
-                                         "Maintain 50% debt to GDP ratio",
-                                         "Maintain strong military"]}
-            ]}
+    def establish_foreign_objectives(self):
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
+            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States"]
+
         else:
-            self.objectives = {"objectives": [
-                {"International Objectives": ["Contain Germany",
-                                              "Improve relations with France",
-                                              "Contend with France over Africa",
-                                              "Contain Italy",
-                                              "Keep Canada in Sphere of Influence"]},
+            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France", "Improve relations with Canada"]
 
-                {"National Objectives": ["Keep positive GDP growth",
-                                         "Keep stable population growth",
-                                         "Maintain strong military"]}
-            ]}
-            """Establishment of both national and international objectives for british AI"""
+        for enemy in objectives_enemy:
+            self.objectives["objectives"][0]['foreign'].append(enemy)
 
-    def domestic_decision(self, domestic_issue):
-        pass
+        for ally in objectives_allies:
+            self.objectives["objectives"][0]['foreign'].append(ally)
+
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
@@ -432,12 +520,13 @@ class Britain(NationAI):
             # random_functions.random_functions(self, globe)
             super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(globe.nations, globe, network, user_nation)
+            if globe.date > self.date_checker:
+                super().determine_diplomatic_approach(globe, network, user_nation)
+                self.date_checker = globe.date + timedelta(days=3)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
-            self.date += timedelta(days=1)
             break

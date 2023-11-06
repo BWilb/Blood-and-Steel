@@ -6,7 +6,7 @@ import pyautogui
 import pygame
 import os
 import networkx as nx
-
+import matplotlib.pyplot as plt
 """import matplotlib.pyplot as plt
 from database_management import upload_database"""
 
@@ -279,12 +279,7 @@ class SpriteGame:
                 pass
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
-                #print(self.globe.nations[i].objectives, self.globe.nations[i].long_term_memory, "\n")
-               # print(self.globe.nations[i].name, self.globe.nations[i].national_policy, "\n")
-                print(self.globe.nations[i].name, self.globe.nations[i].foreign_relations, "\n")
                 print(self.network)
-
-
         # upload_database.update_database_info(self.globe.nations)
 
     def foreign_interactions(self):
@@ -317,6 +312,8 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
+        nx.draw_circular(self.network, with_labels= True)
+        plt.show()
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -476,7 +473,7 @@ class SpriteGame:
                 self.globe.date += timedelta(days=1)
                 self.nation_changes()
                 self.globe_changes()
-                time.sleep(2)
+                time.sleep(1)
             self.check_stream()
 
             for event in pygame.event.get():
