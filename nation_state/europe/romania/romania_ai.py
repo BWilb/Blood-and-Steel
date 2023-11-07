@@ -88,7 +88,7 @@ class RomaniaAI(NationAI):
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for i in range(len(nation_json['countries'])):
@@ -97,22 +97,3 @@ class RomaniaAI(NationAI):
         self.coordinates = [(retreive_coords(self.coordinates))]
 
         return self.coordinates
-
-    # main function
-    def main(self, globe, network):
-        #super().establishing_beginning_objectives()
-        while self.population > 2000000:
-            """super().check_economic_growth(globe.date)
-                        super().check_population_growth()
-                        # random_functions.random_functions(self, globe)
-                        super().stability_happiness_change(globe)
-                        super().political_power_growth()
-                        super().determine_diplomatic_approach(globe.nations, globe, network)
-                        super().change_relations(globe.nations)
-                        chance = random.randrange(1, 50)
-                        if chance % 8 == 2 or chance % 5 == 4:
-                            super().protests()"""
-            super().pop_growth()
-            super().check_economic_state(globe.date)
-            self.date += timedelta(days=1)
-            break

@@ -73,7 +73,7 @@ class Denmark(NationAI):
         self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Kingdom of Denmark"
+        self.name = "Denmark"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -489,4 +489,5 @@ class Denmark(NationAI):
                 super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
+            super().adding_conscription_pool(globe)
             break

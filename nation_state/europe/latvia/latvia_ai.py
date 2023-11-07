@@ -439,21 +439,3 @@ class LatviaAI(NationAI):
                 if nation_json['countries'][i]['nation_name'] == "Latvia":
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = [(retreive_coords(self.coordinates))]
-
-    def main(self, globe, network, user_nation):
-        #super().establishing_beginning_objectives()
-        while self.population > 100000:
-            super().check_economic_growth(globe.date)
-            super().check_population_growth()
-            super().political_power_growth()
-            super().stability_happiness_change(globe)
-            if globe.date > self.date_checker:
-                super().determine_diplomatic_approach(globe, network, user_nation)
-                self.date_checker = globe.date + timedelta(days=3)
-            super().change_relations(globe.nations)
-            chance = random.randrange(1, 50)
-            if chance % 8 == 2 or chance % 5 == 4:
-                super().protests()
-            super().pop_growth()
-            super().check_economic_state(globe.date)
-            break

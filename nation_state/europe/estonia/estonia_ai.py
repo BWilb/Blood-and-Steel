@@ -122,4 +122,5 @@ class EstoniaAI(NationAI):
                 super().protests()
             super().pop_growth()
             super().check_economic_state(globe.date)
+            super().adding_conscription_pool(globe)
             break

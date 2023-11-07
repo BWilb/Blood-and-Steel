@@ -74,11 +74,7 @@ class Iraq(NationAI):
         self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
+
         self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
         self.consumer_spending = 200
@@ -86,18 +82,27 @@ class Iraq(NationAI):
         self.government_spending = 350
         self.exports = 1000
         self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        self.us_relations = 34.56
         # other
         self.coordinates = []
+
+    def establish_foreign_objectives(self):
+        objectives_enemy = ['Contain Great Britain', "Contain Iran",
+                            "Contain Russia"]
+        objectives_allies = ["Improve relations with Germany",
+                             "Improve relations with Italy",
+                             "Improve relations with Romania",
+                             "Improve relations with Hungary",
+                             "Improve relations with Turkey"]
+        for enemy in objectives_enemy:
+            self.objectives["objectives"][0]['foreign'].append(enemy)
+
+        for ally in objectives_allies:
+            self.objectives["objectives"][0]['foreign'].append(ally)
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
             for i in range(0, len(nation_json['countries'])):
@@ -105,17 +110,21 @@ class Iraq(NationAI):
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = [(retreive_coords(self.coordinates))]
     # main function
-    def main(self, globe, network):
-        super().establishing_beginning_objectives()
+    def main(self, globe, network, user_nation):
+        #super().establishing_beginning_objectives()
         while self.population > 100000:
             super().check_economic_growth(globe.date)
             super().check_population_growth()
-            # random_functions.random_functions(self, globe)
-            super().stability_happiness_change(globe)
             super().political_power_growth()
-            super().determine_diplomatic_approach(globe.nations, globe, network)
+            super().stability_happiness_change(globe)
+            if globe.date > self.date_checker:
+                super().determine_diplomatic_approach(globe, network, user_nation)
+                self.date_checker = globe.date + timedelta(days=3)
             super().change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 super().protests()
+            super().pop_growth()
+            super().check_economic_state(globe.date)
+            super().adding_conscription_pool(globe)
             break

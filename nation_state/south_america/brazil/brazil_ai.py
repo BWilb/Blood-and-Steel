@@ -425,7 +425,7 @@ class Brazil(NationAI):
 
         objectives_allies = ["Improve relations with Germany",
                              "Improve relations with Mexico",
-                             "Improve relations with Brazil", "Improve relations with Chile",
+                             "Improve relations with Bolivia", "Improve relations with Chile",
                              "Improve relations with Argentina"]
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
@@ -445,22 +445,3 @@ class Brazil(NationAI):
                     # print(nation_json['countries'][i]['coordinates'])
                     self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
-
-    def main(self, globe, network, user_nation):
-        super().establishing_beginning_objectives()
-        while self.population > 2000000:
-            super().check_economic_growth(globe.date)
-            super().check_population_growth()
-            super().political_power_growth()
-            super().stability_happiness_change(globe)
-            if globe.date > self.date_checker:
-                super().determine_diplomatic_approach(globe, network, user_nation)
-                self.date_checker = globe.date + timedelta(days=3)
-            super().change_relations(globe.nations)
-            chance = random.randrange(1, 50)
-            if chance % 8 == 2 or chance % 5 == 4:
-                super().protests()
-            super().pop_growth()
-            super().check_economic_state(globe.date)
-            self.date += timedelta(days=1)
-            break

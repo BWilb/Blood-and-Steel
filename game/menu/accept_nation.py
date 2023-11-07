@@ -79,14 +79,16 @@ def establish_nations(globe, user_nation, *args):
     player nation will also be appended to globe's nation list
     """
     for i in range(0, len(args)):
-        if args[i].name != user_nation:
+
+        if args[i].leader is not None:
+            args[i].establish_map_coordinates()
+            globe.nations.append(args[i])
             args[i].establishing_beginning_objectives()
             args[i].establish_foreign_objectives()
 
-        if args[i].leader is not None:
-            print("hi")
-            args[i].establish_map_coordinates()
-            globe.nations.append(args[i])
+    user_nation.establish_map_coordinates()
+    globe.nations.append(user_nation)
+    print(globe.nations)
 
 def establish_json_files(time):
     from nation_data.retreive_data import JsonWriter
@@ -139,17 +141,17 @@ def accept_nation(nation, time):
         latvian_ai = latvia_ai.LatviaAI(globe1)
         lithuanian_ai = lithuania_ai.LithuaniaAI(globe1)
         canadian_ai = canada_ai.Canada(globe1)
-        iraqi_ai = iraq_ai.Iraq(globe1)
+        #iraqi_ai = iraq_ai.Iraq(globe1)
         italian_ai = italy_ai.ItalyAI(globe1)
         mexican_ai = mexico_ai.MexicoAI(globe1)
         american_ai = us_ai.USAI(globe1)
         cuban_ai = cuba_ai.CubaAI(globe1)
-        chinese_ai = china_ai.ChinaAI(globe1)
-        romanian_ai = romania_ai.RomaniaAI(globe1)
-        turkish_ai = turkey_ai.TurkeyAI(globe1)
-        japanese_ai = japan_ai.JapanAI(globe1)
+        #chinese_ai = china_ai.ChinaAI(globe1)
+        #romanian_ai = romania_ai.RomaniaAI(globe1)
+        #turkish_ai = turkey_ai.TurkeyAI(globe1)
+        """japanese_ai = japan_ai.JapanAI(globe1)
         afghani_ai = afghanistan_ai.AfghanistanAI(globe1)
-        iranian_ai = iran_ai.Iran(globe1)
+        iranian_ai = iran_ai.Iran(globe1)"""
         germany = german_ai.GermanAI(globe1)
         brazilian_ai = brazil_ai.Brazil(globe1)
         argentina_ai = argentine_ai.Argentina(globe1)
@@ -158,11 +160,12 @@ def accept_nation(nation, time):
         bolivian_ai = bolivia_ai.BoliviaAI(globe1)
         columbian_ai = columbia_ai.Columbia(globe1)
         peruvian_ai = peru_ai.Peru(globe1)
-        establish_nations(globe1, belgian, english_ai, austrian_ai, luxembourger_ai, russian_ai, germany, dutch_ai, turkish_ai,
-                          iranian_ai, afghani_ai, french_ai, swiss_ai, polish_ai, american_ai, mexican_ai, cuban_ai, japanese_ai,
-                          greek_ai, spanish_ai, romanian_ai, italian_ai, danish_ai, norwegian_ai, brazilian_ai, argentina_ai,
-                          venezuelan_ai, columbian_ai, chilean_ai, peruvian_ai, iraqi_ai, hungarian_ai, estonian_ai, lithuanian_ai,
-                          latvian_ai, canadian_ai, portuguese_ai, swedish_ai, bolivian_ai, bulgarian_ai)
+        establish_nations(globe1, belgian, austrian_ai, english_ai, dutch_ai, swiss_ai,
+                          french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany,
+                          brazilian_ai, argentina_ai, venezuelan_ai, chilean_ai, bolivian_ai, columbian_ai,
+                          peruvian_ai)
         game = SpriteGame(belgian, globe1)
         game.main_game()
 
@@ -199,13 +202,23 @@ def accept_nation(nation, time):
         cuban_ai = cuba_ai.CubaAI(globe1)
         mexican_ai = mexico_ai.MexicoAI(globe1)
         american_ai = us_ai.USAI(globe1)
-        argentina_ai = argentine_ai.Argentina(globe1)
-        bolivian_ai = bolivia_ai.BoliviaAI(globe1)
         brazilian_ai = brazil_ai.Brazil(globe1)
-        establish_nations(globe1, romanian.name, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
+        argentina_ai = argentine_ai.Argentina(globe1)
+        venezuelan_ai = venezuala_ai.Venezuala(globe1)
+        chilean_ai = chile_ai.Chile(globe1)
+        bolivian_ai = bolivia_ai.BoliviaAI(globe1)
+        columbian_ai = columbia_ai.Columbia(globe1)
+        peruvian_ai = peru_ai.Peru(globe1)
+        turkish_ai = turkey_ai.TurkeyAI(globe1)
+        afghani_ai = afghanistan_ai.AfghanistanAI(globe1)
+        japanese_ai = japan_ai.JapanAI(globe1)
+        iranian_ai = iran_ai.Iran(globe1)
+        iraqi_ai = iraq_ai.Iraq(globe1)
+        establish_nations(globe1, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany, greek_ai, hungarian_ai, italian_ai,
                           latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
-                          cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai)
+                          cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
+                          columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
         game = SpriteGame(romanian, globe1)
         game.main_game()

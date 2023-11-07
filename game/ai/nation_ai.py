@@ -3,6 +3,8 @@ import time
 from enum import Enum
 from datetime import datetime, timedelta
 
+import military.soldier
+from military import soldier
 
 class EconomicState(Enum):
     RECESSION = 1
@@ -15,6 +17,8 @@ class NationAI:
     def __init__(self, globe):
         # general information
         self.date_checker = globe.date + timedelta(days=3)
+        self.conscripting_checker = globe.date + timedelta(days=30)
+        self.recruiting_checker = globe.date + timedelta(days=20)
         self.region = ""
         self.name = ""
         self.date = datetime(globe.date.year, 1, 1)
@@ -24,11 +28,8 @@ class NationAI:
         """population factors"""
         self.population = 1000000
         self.past_population = self.population
-        self.birth_control = False
-        self.birth_enhancer = False
         self.births = 0
         self.deaths = 0
-        self.happiness = 98.56
         # political
         self.leader = "Gregory Prescov"
         self.alliance = ""
@@ -39,8 +40,6 @@ class NationAI:
         self.autocratic_appeal = 3
         self.political_power = 100
         self.political_exponent = 1.00
-        """Stability"""
-        self.stability = 95.56
         # economic
         self.e_s = EconomicState.RECOVERY
         self.national_debt = 0
@@ -152,15 +151,99 @@ class NationAI:
             "Foreign influence": []
         }
         # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
+        self.military = {
+            "military": {
+                "Conscription policy": "Volunteer",
+                "Army": {
+                    "Figures": {
+                        "Army size": [],
+                        "Cost": 0
+                    }
+                },
+            },
+            "conscript pool": self.population * 0.0001,
+        }
+     # military functions
+    def adding_conscription_pool(self, globe):
+        self.check_global_tension(globe)
+        if self.conscripting_checker < globe.date:
+            if "Volunteer" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.0001 < self.population:
+                    self.military['conscript pool'] += self.population * 0.0001
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Limited" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.0005 < self.population:
+                    self.military['conscript pool'] += self.population * 0.0005
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Extensive" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.001 < self.population:
+                    self.military['conscript pool'] += self.population * 0.001
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Total War" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.009 < self.population:
+                    self.military['conscript pool'] += self.population * 0.009
+                    self.conscripting_checker += timedelta(days=30)
+
+        self.recruit_from_pool(globe)
+    def check_global_tension(self, globe):
+        if globe.tension <= 25:
+            if "Volunteer" not in self.military['military']['Conscription policy']:
+                self.military['military']['Conscription policy'] = "Volunteer"
+
+        elif 25 < globe.tension > 55:
+            if "Limited" not in self.military['military']['Conscription policy']:
+                self.military['military']['Conscription policy'] = "Limited"
+
+        elif 55 < globe.tension > 75:
+            if "Extensive" not in self.military['military']['Conscription policy']:
+                self.military['military']['Conscription policy'] = "Extensive"
+
+        else:
+            if "Total War" not in self.military['military']['Conscription policy']:
+                self.military['military']['Conscription policy'] = "Total War"
+    def recruit_from_pool(self, globe):
+        if (self.national_debt / self.current_gdp) < 0.5:
+
+            if globe.tension <= 25:
+                recruits = self.military['conscript pool'] * 0.001
+                for i in range(0, recruits):
+                    soldier = military.soldier.Soldier(self.name)
+                    self.military['military']['Army']['Figures']["Army size"].append(soldier)
+                    self.military['military']['Army']['Figures']["Cost"] += soldier.monetary_cost
+                    self.national_debt += soldier.monetary_cost
+
+            elif 25 < globe.tension < 55:
+                recruits = self.military['conscript pool'] * 0.005
+                for i in range(0, recruits):
+                    soldier = military.soldier.Soldier(self.name)
+                    self.military['military']['Army']['Figures']["Army size"].append(soldier)
+                    self.military['military']['Army']['Figures']["Cost"] += soldier.monetary_cost
+                    self.national_debt += soldier.monetary_cost
+
+            elif 55 <= globe.tension < 75:
+                recruits = self.military['conscript pool'] * 0.009
+                for i in range(0, recruits):
+                    soldier = military.soldier.Soldier(self.name)
+                    self.military['military']['Army']['Figures']["Army size"].append(soldier)
+                    self.military['military']['Army']['Figures']["Cost"] += soldier.monetary_cost
+                    self.national_debt += soldier.monetary_cost
+
+            else:
+                recruits = self.military['conscript pool'] * 0.05
+                for i in range(0, recruits):
+                    soldier = military.soldier.Soldier(self.name)
+                    self.military['military']['Army']['Figures']["Army size"].append(soldier)
+                    self.military['military']['Army']['Figures']["Cost"] += soldier.monetary_cost
+                    self.national_debt += soldier.monetary_cost
 
     def establishing_beginning_objectives(self):
         # Function for establishing state objectives
         # Objectives, whether social, economic, or political, depend on the state's stability
 
         political_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"]
-        economic_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"]
-        political_objectives = []
-        economic_objectives = []
 
         if political_stability >= 90:
             political_objectives = ["suppress rival factions", "maintain political growth"]
@@ -395,7 +478,8 @@ class NationAI:
             else:
                 if self.political_power >= 10:
 
-                    if f"Challenge {foreign_nation.name}" in self.objectives["objectives"][0]['foreign']:
+                    if (f"Challenge {foreign_nation.name}" or
+                            f"Contain {foreign_nation.name}" in self.objectives["objectives"][0]['foreign']):
                         self.democratic_decisions_enemies(globe, network, foreign_nation)
 
                     elif (f"Establish ties with {foreign_nation.name}" or f"Improve relations with {foreign_nation.name}" in
@@ -1701,7 +1785,8 @@ class NationAI:
     def stability_happiness_change(self, globe):
         #1. check economic stability
         #2. check current economic state
-        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] > 65:
+        pass
+        """if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] > 65:
             if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
                 if "Improve political stability" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
 
@@ -1795,4 +1880,21 @@ class NationAI:
 
                 else:
                     if self.happiness - 2.5 > -100:
-                        self.happiness -= 2.5
+                        self.happiness -= 2.5"""
+    def main(self, globe, network, user_nation):
+        while self.population > 250000:
+            self.check_economic_growth(globe.date)
+            self.check_population_growth()
+            self.political_power_growth()
+            self.stability_happiness_change(globe)
+            if globe.date > self.date_checker:
+                self.determine_diplomatic_approach(globe, network, user_nation)
+                self.date_checker = globe.date + timedelta(days=3)
+            self.change_relations(globe.nations)
+            chance = random.randrange(1, 50)
+            if chance % 8 == 2 or chance % 5 == 4:
+                self.protests()
+            self.pop_growth()
+            self.check_economic_state(globe.date)
+            self.adding_conscription_pool(globe)
+            break
