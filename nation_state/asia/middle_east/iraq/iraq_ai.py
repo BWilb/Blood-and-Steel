@@ -84,6 +84,7 @@ class Iraq(NationAI):
         self.imports = 1200
         # other
         self.coordinates = []
+        self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
         objectives_enemy = ['Contain Great Britain', "Contain Iran",

@@ -87,11 +87,6 @@ class Austria(NationAI):
             self.political_typology = "Democratic"
         self.political_power = 200
         self.political_exponent = 1.56
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
         self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
         self.consumer_spending = 200
@@ -99,16 +94,11 @@ class Austria(NationAI):
         self.government_spending = 350
         self.exports = 1000
         self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        self.us_relations = 34.56
         # other
         self.coordinates = []
         self.land_1910_1918 = ["Austro-Hungarian Empire"]
         self.land_1932 = ["Austria"]
+        self.foreign_relations = {"foreign relations": []}
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

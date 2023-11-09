@@ -85,13 +85,7 @@ class FranceAI(NationAI):
         self.government_spending = 350
         self.exports = 1000
         self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        self.us_relations = 34.56
-        # other
+
         self.coordinates = []
         self.land_1910_1918 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
                                "French West Africa", "Algeria", "Congo (France)", "Algeria (France)", "Morocco (France)"]
@@ -99,6 +93,7 @@ class FranceAI(NationAI):
         self.land_1932_1939 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
                                "French West Africa", "Algeria (France)", "French Cameroons", "Congo (France)",
                                "Syria (France)", "Armenia", "Morocco (France)", "Morocco", "Algeria"]
+        self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
         if self.date.year <= 1918:

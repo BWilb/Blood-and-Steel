@@ -1,3 +1,5 @@
+import random
+
 from nation_state.north_america.mexico import mexico
 from nation_state.north_america.mexico import mexico_ai
 from nation_state.north_america.canada import canada
@@ -88,7 +90,32 @@ def establish_nations(globe, user_nation, *args):
 
     user_nation.establish_map_coordinates()
     globe.nations.append(user_nation)
-    print(globe.nations)
+    for nation in range(0, len(globe.nations)):
+        """establishing loop to loop through list of nations"""
+        for foreign_nation in range(0, len(globe.nations)):
+            if not globe.nations[nation].name == globe.nations[foreign_nation]:
+                """Looping through nations that will be foreign to nation variable"""
+                relation = random.randrange(0, 100)
+                relation_status = ''
+                if relation >= 75:
+                    relation_status = "ally"
+
+                elif 45 < relation < 75:
+                    relation_status = "rival"
+
+                elif relation < 45:
+                    relation_status = "enemy"
+
+                globe.nations[nation].foreign_relations['foreign relations'].append({
+                    "nation": globe.nations[foreign_nation],
+                    "relations": relation,
+                    "relation status": relation_status,
+                    "guaranteeing independence": False,
+                    "alliance": "",
+                    "embargoed": False,
+                    "war goal": False,
+                    "at war with": False
+                })
 
 def establish_json_files(time):
     from nation_data.retreive_data import JsonWriter

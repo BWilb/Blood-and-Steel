@@ -56,7 +56,7 @@ class RomaniaAI(NationAI):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.region = "europe"
-        self.name = "Kingdom of Romania"
+        self.name = "Romania"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
@@ -64,11 +64,7 @@ class RomaniaAI(NationAI):
         self.leader = leaders[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
+
         self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
         self.consumer_spending = 200
@@ -76,14 +72,25 @@ class RomaniaAI(NationAI):
         self.government_spending = 350
         self.exports = 1000
         self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        self.us_relations = 34.56
         # other
         self.coordinates = []
+        self.foreign_relations = {"foreign relations": []}
+
+    def establish_foreign_objectives(self):
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
+            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States",
+                                 "Improve relations with Belgium", "Improve relations with Luxembourg"]
+
+        else:
+            objectives_enemy = ["Contain Hungary", "Contain Russia", "Contain Bulgaria"]
+            objectives_allies = [""]
+
+        for enemy in objectives_enemy:
+            self.objectives["objectives"][0]['foreign'].append(enemy)
+
+        for ally in objectives_allies:
+            self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
