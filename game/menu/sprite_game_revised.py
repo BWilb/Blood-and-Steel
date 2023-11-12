@@ -280,6 +280,9 @@ class SpriteGame:
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
                 print(self.network)
+
+                print(self.globe.nations[i].name, (self.globe.nations[i].military['military']['Army']['Figures']['Cost']))
+
         # upload_database.update_database_info(self.globe.nations)
 
     def foreign_interactions(self):

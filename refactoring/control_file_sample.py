@@ -2,77 +2,69 @@ import random
 from datetime import timedelta
 
 
-def make_international_decision(self, globe, network, user_nation):
-    for foreign_nation in globe.nations:
-        if self.name == foreign_nation.name or user_nation.name == foreign_nation.name:
-            continue
+def democratic_handling_protest(self, political_issue):
+    # function handles how democracies approach protests of different ideologies
+    days = random.randrange(10, 30)
+    if (self.national_policy["Policy"][0]["Domestic Policy"][2][
+        "Political stability"] > self.long_term_memory["Domestic Decisions"][0]["Political Decisions"][1][
+        'Current stability']):
+        for objective in range(0, len(self.objectives[0]["domestic objectives"])):
+            """iterating through current objectives"""
+            for past_objective in range(0, len(
+                    self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                    [3]['Current political objective'])):
+                """iterating through objectives within past decisions"""
+                if (self.objectives[0]["domestic objectives"][objective] ==
+                        self.long_term_memory['Domestic decisions'][0]["Political Decisions"][0]['protest']
+                        [3]['Current political objective'][past_objective]):
+                    """Checking if current objective matches with past objective"""
+                    if political_issue.values() == "Fascist protest":
+                        """Checking if fascist protest"""
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"]:
+                            """Checking if nation is still suppressing far right"""
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"][0]["Dates"][1][
+                                "End date"] += timedelta(days=days)
 
-        else:
-            if (f"Challenge {foreign_nation.name}" or
-                    f"Contain {foreign_nation.name}" in self.objectives["objectives"][0]['foreign']):
-                potential_actions = ["incursion into sphere of influence", "worsen relations", "embargo",
-                                     "spark protests"]
+                        else:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Right"] = True
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Right protests"].append(
+                                {"Dates": [
+                                    {"Start date": self.date},
+                                    {"End date": self.date + timedelta(days=days)}
+                                ]})
 
-                action = potential_actions[random.randrange(0, len(potential_actions))]
+                    elif political_issue.values() == "Communist protest":
+                        """Checking if far left protest"""
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"]:
+                            """Checking if nation is still suppressing far left"""
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"][0]["Dates"][1][
+                                "End date"] += timedelta(days=days)
 
+                        else:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Far-Left"] = True
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Far-Left protests"].append(
+                                {"Dates": [
+                                    {"Start date": self.date},
+                                    {"End date": self.date + timedelta(days=days)}
+                                ]})
 
-                if action == "incursion into sphere of influence" and self.political_power >= 50:
+                    elif political_issue.values() == "Autocratic protest":
+                        """Checking if autocrat protest"""
+                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"]:
+                            """Checking if nation is still suppressing far left"""
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"][0]["Dates"][1][
+                                "End date"] += timedelta(days=days)
 
-                    for relation in range(0, len(foreign_nation.foreign_relations['foreign relations'])):
-                        if (foreign_nation.foreign_relations['foreign relations'][relation]['relation status'] == "ally" and
-                            self.political_typology not in
-                                foreign_nation.foreign_relations['foreign relations'][relation]['nation'].political_typology):
-                            for nation_search in globe.nations:
-                                if nation_search.name == foreign_nation.foreign_relations['foreign relations'][relation]['nation'].name:
-                                    for foreign_memories in range(0, len(nation_search.long_term_memory['Foreign influence'])):
-                                        if not f"{self.political_typology} Influence" in nation_search.long_term_memory['Foreign influence'][foreign_memories]:
-                                            nation_search.long_term_memory['Foreign influence'].append({
-                                                f"{self.political_typology} Influence": [
-                                                    {
-                                                        "Expiration date": globe.date + timedelta(days=30)
-                                                    }
-                                                ]
-                                            })
-                                            self.political_power -= 50
+                        else:
+                            self.national_policy["Policy"][0]["Domestic Policy"][0]["Suppress Autocrats"] = True
+                            self.national_policy["Policy"][0]["Domestic Policy"][1]["Autocrat protests"].append(
+                                {"Dates": [
+                                    {"Start date": self.date},
+                                    {"End date": self.date + timedelta(days=days)}
+                                ]})
 
-                elif action == "worsen relations" and self.political_power >= 15:
-                    chance = random.randrange(1, 40)
-
-                    if chance % 6 == 4:
-                        for worsening in self.worsening_relations:
-                            if not foreign_nation.name in worsening['nation name']:
-                                if len(self.worsening_relations) < 10:
-                                    network.add_edge(self.name, foreign_nation.name)
-
-                                self.worsening_relations.append({
-                                    "nation name": foreign_nation.name,
-                                    "duration": globe.date + timedelta(days=20)
-                                })
-                                self.political_power -= 15
-                                self.political_exponent -= 0.15
-                                break
-
-                elif action == "spark protests" and self.political_power >= 25:
-                    chance = random.randrange(1, 40)
-                    if chance % 6 == 4:
-                        if "Democratic" in self.political_typology:
-                            foreign_nation.political_decision({
-                                "Issue": "Liberal protest"
-                            })
-
-                        if "Fascist" in self.political_typology:
-                            foreign_nation.political_decision({
-                                "Issue": "Far right protest"
-                            })
-
-                        if "Communist" in self.political_typology:
-                            foreign_nation.political_decision({
-                                "Issue": "Far left protest"
-                            })
-
-                        if "Autocratic" in self.political_typology:
-                            foreign_nation.political_decision({
-                                "Issue": "Autocratic protest"
-                            })
-                        self.political_power -= 25
-                        break
+                else:
+                    if "Arrest dissidents" in self.objectives["objectives"][0]['domestic objectives']:
+                        pass
+                    elif "Eliminate dissidents" in self.objectives["objectives"][0]['domestic objectives']:
+                        pass
