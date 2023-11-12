@@ -168,24 +168,3 @@ class Britain(NationAI):
                     if self.land_1939[land] == nation_json['countries'][i]['nation_name']:
                         self.coordinates.append((nation_json['countries'][i]['coordinates']))
             self.coordinates = (retreive_coords(self.coordinates))
-
-    # main function
-    def main(self, globe, network, user_nation):
-        super().establishing_beginning_objectives()
-        while self.population > 2000000:
-            super().check_economic_growth(globe.date)
-            super().check_population_growth()
-            # random_functions.random_functions(self, globe)
-            super().stability_happiness_change(globe)
-            super().political_power_growth()
-            if globe.date > self.date_checker:
-                super().determine_diplomatic_approach(globe, network, user_nation)
-                self.date_checker = globe.date + timedelta(days=3)
-            super().change_relations(globe.nations)
-            chance = random.randrange(1, 50)
-            if chance % 8 == 2 or chance % 5 == 4:
-                super().protests()
-            super().pop_growth()
-            super().check_economic_state(globe.date)
-            super().adding_conscription_pool(globe)
-            break

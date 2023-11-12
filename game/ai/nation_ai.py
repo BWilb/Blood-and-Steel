@@ -137,14 +137,9 @@ class NationAI:
                 {"enemies": []},
             ],
             "Foreign influence": [],
-            "Protests": {
-                "Fascist": [],
-                "Communist": [],
-                "Autocratic": [],
-                "Democratic": []
-            },
+            "protests": [],
             "Ideologies": {
-                "Democratic": 0,
+                "Democratic": 100,
                 "Communist": 0,
                 "Fascist": 0,
                 "Autocratic": 0
@@ -213,6 +208,7 @@ class NationAI:
                     self.conscripting_checker += timedelta(days=30)
 
         self.recruit_from_pool(globe)
+        self.check_soldier_deployment(globe)
 
     def check_conscprtion_policy(self, globe):
         for relations in self.foreign_relations['foreign relations']:
@@ -270,12 +266,16 @@ class NationAI:
                         self.military['military']['Army']['Figures']["Army size"].append(soldier)
                         self.military['military']['Army']['Figures']["Cost"] += soldier.monetary_cost
                         self.national_debt += soldier.monetary_cost
+    def check_soldier_deployment(self, globe):
+        for soldier in self.military['military']['Army']['Figures']["Army size"]:
+            if globe.date > soldier.retiring_date:
+                self.military['military']['Army']['Figures']["Army size"].pop(soldier)
 
     def establishing_beginning_objectives(self):
         # Function for establishing state objectives
         # Objectives, whether social, economic, or political, depend on the state's stability
 
-        political_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"]
+        political_stability = self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][1]["Political stability"]
 
         if political_stability >= 90:
             political_objectives = ["maintain political growth", "maintain political stability"]
@@ -445,23 +445,23 @@ class NationAI:
                         if chance % 6 == 4:
                             if "Democratic" in self.political_typology:
                                 foreign_nation.political_decision({
-                                    "Issue": "Liberal protest"
-                                })
+                                    "Issue": "Democratic protest"
+                                }, globe)
 
                             if "Fascist" in self.political_typology:
                                 foreign_nation.political_decision({
-                                    "Issue": "Far right protest"
-                                })
+                                    "Issue": "Fascist protest"
+                                }, globe)
 
                             if "Communist" in self.political_typology:
                                 foreign_nation.political_decision({
-                                    "Issue": "Far left protest"
-                                })
+                                    "Issue": "Communist protest"
+                                }, globe)
 
                             if "Autocratic" in self.political_typology:
                                 foreign_nation.political_decision({
                                     "Issue": "Autocratic protest"
-                                })
+                                }, globe)
                             self.political_power -= 25
                             break
 
@@ -545,7 +545,7 @@ class NationAI:
             # checking if long term memory for population decisions is larger then 0
             if domestic_issue.values() == "extreme growth":
                 if "Fascism" or "Communism" in self.political_typology:
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Extreme population growth occurred'][1]['Number of occurrences'] > 10 and (
                             not "Slow down population growth"
                                 in self.objectives['objectives'][0]['domestic objectives'][0]['population objectives']):
@@ -558,17 +558,17 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
 
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Extreme population growth occurred'][1]['Number of occurrences'] > 15:
 
                         if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Extreme population growth occurred'][1]['Number of occurrences'] = 0
                 else:
 
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Extreme population growth occurred'][1]['Number of occurrences'] > 4:
                         self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
 
@@ -578,18 +578,18 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
 
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Extreme population growth occurred'][1]['Number of occurrences'] > 6:
 
                         if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Extreme population growth occurred'][1]['Number of occurrences'] = 0
 
             elif domestic_issue.values() == "stable growth":
                 if "Fascism" or "Communism" in self.political_typology:
-                    if (self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if (self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Stable population growth occurred'][1]['Number of occurrences'] > 6 and (
                             not 'Increase population growth' in
                                 self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
@@ -605,7 +605,7 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
 
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Stable population growth occurred'][1]['Number of occurrences'] > 8:
                         # checking if stable population growth over 8 times
 
@@ -613,11 +613,11 @@ class NationAI:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
                             # birth enhancer implemented if population doesn't grow fast enough
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Low population growth occurred'][1]['Number of occurrences'] = 0
 
                 else:
-                    if (self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if (self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Stable population growth occurred'][1]['Number of occurrences'] > 12 and (
                             not 'Increase population growth' in
                                 self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
@@ -633,7 +633,7 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
 
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Stable population growth occurred'][1]['Number of occurrences'] > 18:
                         # checking if stable population growth over 8 times
 
@@ -641,12 +641,12 @@ class NationAI:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
                             # birth enhancer implemented if population doesn't grow fast enough
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Low population growth occurred'][1]['Number of occurrences'] = 0
 
             elif domestic_issue.values() == "insignificant growth":
                 if "Fascism" or "Communism" in self.political_typology:
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Low population growth occurred'][1]['Number of occurrences'] > 2:
                         # checking if low growth has occurred more than twice
                         self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
@@ -657,7 +657,7 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
 
-                    elif self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    elif self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Low population growth occurred'][1]['Number of occurrences'] > 4:
                         # checking if low growth has occurred more than 4 times
 
@@ -665,11 +665,11 @@ class NationAI:
                             # implementing birth enhancer
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Low population growth occurred'][1]['Number of occurrences'] = 0
 
                 else:
-                    if self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Low population growth occurred'][1]['Number of occurrences'] > 5:
                         # checking if low growth has occurred more than twice
                         self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
@@ -680,7 +680,7 @@ class NationAI:
                         if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
 
-                    elif self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                    elif self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                         'Low population growth occurred'][1]['Number of occurrences'] > 9:
                         # checking if low growth has occurred more than 4 times
 
@@ -688,25 +688,25 @@ class NationAI:
                             # implementing birth enhancer
                             self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
 
-                        self.long_term_memory["Domestic Decisions"][0]['Population Decisions'][0][
+                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
                             'Low population growth occurred'][1]['Number of occurrences'] = 0
 
         else:
             if domestic_issue.values() == "extreme growth":
-                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append(
                     {"Extreme population growth occurred": [
                         {"Action Taken": "No action"},
                         {"Number of occurrences": 1}
                     ]})
 
             elif domestic_issue.values() == "insignificant growth":
-                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append({"low population growth occurred": [
+                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append({"low population growth occurred": [
                     {"Action Taken": "No action"},
                     {"Number of occurrences": 1}
                 ]})
 
             elif domestic_issue.values() == "stable growth":
-                self.long_term_memory["Domestic Decisions"][0]['Population Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append(
                     {"stable population growth occurred": [
                         {"Action Taken": "No action"},
                         {"Number of occurrences": 1}
@@ -763,35 +763,28 @@ class NationAI:
 
     def handle_protest(self, political_issue, globe):
         days = random.randrange(10, 30)
-        if len(self.long_term_memory["Domestic Decisions"][0]["protests"]) > 0:
-            for past_memory in \
-            self.long_term_memory["Domestic Decisions"][0]["protests"][political_issue.values()]["protest occurred"][
-                'Protest ideology']:
-                # looping through list of memories with protests
-                if f"{political_issue.values()}" in past_memory:
-                    # checking if the ideology of the protest is in the memory
-                    if self.political_typology != political_issue.values():
-                        # checking if own ideology is not similar to that of the protest
-                        self.long_term_memory["Domestic Decisions"][0]["protests"][political_issue.values()]["protest occurred"][
-                            'Date'] += globe.date
-                        self.long_term_memory["Domestic Decisions"][0]["protests"][political_issue.values()]["protest occurred"][
-                            'Duration'] += days
-
+        if len(self.long_term_memory["protests"]) > 0:
+            ideologies = []
+            """for past_memory in self.long_term_memory['protests']:
+                if political_issue.values() in past_memory:
+                    past_memory[political_issue.values()]['Duration'] += days
                 else:
-                    self.long_term_memory["Domestic Decisions"][0]["protests"][f"{political_issue.values()}"].append({
-                        "protest occurred": [
-                            {"Protest ideology": f"{political_issue.values()}",
-                             "Date": globe.date,
-                             "Duration": globe.date + timedelta(days=days),
-                             "Influence": round(random.uniform(0.01, 0.10), 2),
-                             "Action taken": "none"}
-                        ]
-                    })
+                    if not self.political_typology in political_issue.values():
+                        self.long_term_memory["protests"].append({
+                            political_issue.values(): [
+                                {"Protest ideology": f"{political_issue.values()}",
+                                 "Date": globe.date,
+                                 "Duration": globe.date + timedelta(days=days),
+                                 "Influence": round(random.uniform(0.01, 0.10), 2),
+                                 "Action taken": "none"}
+                            ]
+                        })"""
+            pass
 
         else:
             if not self.political_typology in political_issue.values():
-                self.long_term_memory["Domestic Decisions"][0]["protests"][f"{political_issue.values()}"].append({
-                    "protest occurred": [
+                self.long_term_memory["protests"].append({
+                    political_issue.values(): [
                         {"Protest ideology": f"{political_issue.values()}",
                          "Date": globe.date,
                          "Duration": globe.date + timedelta(days=days),
@@ -799,19 +792,39 @@ class NationAI:
                          "Action taken": "none"}
                     ]
                 })
+        self.updating_ideology(globe)
 
     def political_decision(self, political_issue, globe):
         self.handle_protest(political_issue, globe)
 
-    def updating_ideology(self):
-        ideology = ['Fascist', "Communist", "Democratic", "Autocratic"]
-        for ideal in ideology:
-            for influence in self.long_term_memory["Domestic Decisions"][0]["protests"][ideal]:
+    def updating_ideology(self, globe):
+        ideologies = ['Democratic', "Fascist", "Communist", "Autocratic"]
+        for protest in self.long_term_memory['protests']:
+            # looping through protest dictionaries within long term memory
+            for influence in ideologies:
+                if influence in protest:
+                    if "Democratic" in influence:
+                        self.long_term_memory['Ideologies'][0]['Democratic'] += (
+                            protest[influence]['protest occurred'][0]['Influence'])
 
+                    elif "Communist" in influence:
+                        self.long_term_memory['Ideologies'][0]['Communist'] += (
+                            protest[influence]['protest occurred'][0]['Influence'])
 
+                    elif "Fascist" in influence:
+                        self.long_term_memory['Ideologies'][0]['Fascist'] += (
+                            protest[influence]['protest occurred'][0]['Influence'])
+
+                    elif "Autocratic" in influence:
+                        self.long_term_memory['Ideologies'][0]['Autocratic'] += (
+                            protest[influence]['protest occurred'][0]['Influence'])
+
+                """if protest[influence]['protest occurred'][0]['Duration'] < globe.date:
+                    # checking if the specific ideological protest has become outdated
+                    protest[influence].clear()"""
     def protests(self, globe):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
-        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"] >= 75.00 or
+        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][1]["Political stability"] >= 75.00 or
                 self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] >= 65.00):
             """protests occurring in relative peaceful and stable times"""
             number = random.randrange(1, 101)
@@ -835,7 +848,7 @@ class NationAI:
                 print('autocratic')
                 self.political_decision({"Issue": "Autocratic protest"}, globe)
 
-        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][2]["Political stability"] < 75.00 or
+        if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Political"][1]["Political stability"] < 75.00 or
                 self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] < 65.00):
             """protests occurring in relative non-peaceful times"""
             number = random.randrange(1, 101)
@@ -866,34 +879,34 @@ class NationAI:
         """Economic decisions based upon Objectives and policy.
         stored in long term memory for AI, if nation were to experience situation again
         """
-        if self.long_term_memory['Domestic Decisions'][0]["Economic Decisions"] > 0:
+        if self.long_term_memory['Domestic decisions'][0]["Economic Decisions"] > 0:
 
             if "Continued Recession" in economic_issue.values():
                 options = ["Increase corporate taxes", "Increase income taxes",
                            "Increase government spending"]
                 option = options[random.randrange(0, len(options))]
 
-                for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
+                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
                     # looping through past actions within long term memory
-                    if "Continued Depression" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                    if "Continued Depression" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
+                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                             "Action Taken"]:
                             # looping through actions taken from past action
                             if (option == potential_options and
-                                    (self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                                          "Timestamps"][
                                          -1] +
                                      timedelta(days=120) == date)):
                                 # checking
                                 # 1. random option equals that of the past option
                                 # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                                     "Timestamps"].append(
                                     date)
 
                             else:
                                 # if continued recovery not in past action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                                     {"Continued Depression": [
                                         {"Action Taken": option},
                                         {"Time stamps": [date]}
@@ -901,7 +914,7 @@ class NationAI:
 
                     else:
                         # if original two constraints did not match
-                        self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                             {"Continued Depression": [
                                 {"Action Taken": option},
                                 {"Time stamps": [date]}
@@ -924,34 +937,34 @@ class NationAI:
                            "Increase government spending", "Decrease worker wages"]
                 option = options[random.randrange(0, len(options))]
 
-                for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
+                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
                     # looping through past actions within long term memory
-                    if "Continued Depression" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                    if "Continued Depression" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
+                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                             "Action Taken"]:
                             # looping through actions taken from past action
                             if (option == potential_options and
-                                    (self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                                          "Timestamps"][
                                          -1] +
                                      timedelta(months=3) == date)):
                                 # checking
                                 # 1. random option equals that of the past option
                                 # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                                     "Timestamps"].append(
                                     date)
 
                             else:
                                 # if continued recovery not in past action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                                     {"Continued Depression": [
                                         {"Action Taken": option},
                                         {"Time stamps": [date]}
                                     ]})
                     else:
                         # if original two constraints did not match
-                        self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                             {"Continued Depression": [
                                 {"Action Taken": option},
                                 {"Time stamps": [date]}
@@ -973,32 +986,32 @@ class NationAI:
             elif "Continued Recovery" in economic_issue.values():
                 options = ["Increase income taxes", "Increase worker wages"]
                 option = options[random.randrange(0, len(options))]
-                for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
+                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
                     # looping through past actions within long term memory
-                    if "Continued Recovery" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                    if "Continued Recovery" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
+                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                             "Action Taken"]:
                             # looping through actions taken from past action
                             if (option == potential_options and
-                                    (self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]["Timestamps"][
+                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"][
                                          -1] +
                                      timedelta(months=3) == date)):
                                 # checking
                                 # 1. random option equals that of the past option
                                 # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]["Timestamps"].append(
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"].append(
                                     date)
 
                             else:
                                 # if continued recovery not in past action
-                                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                                     {"Continued Recovery": [
                                         {"Action Taken": option},
                                         {"Time stamps": [date]}
                                     ]})
                     else:
                         # if original two constraints did not match
-                        self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                             {"Continued Recovery": [
                                 {"Action Taken": option},
                                 {"Time stamps": [date]}
@@ -1010,34 +1023,34 @@ class NationAI:
                            "Increase corporate taxes"]
                 option = options[random.randrange(0, len(options))]
 
-                for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
+                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
                     # looping through past actions within long term memory
-                    for potential_options in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                    for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                         "Action Taken"]:
                         # looping through actions taken from past action
                         if (option == potential_options and
-                                (self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action]["Timestamps"][-1] +
+                                (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"][-1] +
                                  timedelta(months=3) == date)):
                             # checking
                             # 1. random option equals that of the past option
                             # 2. the timestamp of the past action is 3 months earlier then current action
 
-                            for actions in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
+                            for actions in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
                                 # doing another search through the long term memory of economic decisions
-                                if "Continued Expansion" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][
+                                if "Continued Expansion" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][
                                     actions]:
                                     # searching for if continued recovery in past action
-                                    self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][action][
+                                    self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
                                         "Timestamps"].append(date)
                                 else:
                                     # if continued recovery not in past action
-                                    self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                                    self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                                         {"Continued Expansion": [
                                             {"Action Taken": option},
                                             {"Time stamps": [date]}
                                         ]})
                         else:
-                            self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                            self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                                 {"Continued Recession": [
                                     {"Action Taken": option},
                                     {"Time stamps": [date]}
@@ -1045,14 +1058,14 @@ class NationAI:
 
         else:
             if "Recession started" in economic_issue.values():
-                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                     {"Recession started": [
                         {"Action Taken": "No action"},
                         {"Time stamps": [date]}
                     ]})
 
             elif "Depression started":
-                self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'].append(
+                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
                     {"Depression started": [
                         {"Action Taken": "No action"},
                         {"Time stamps": [date]}
