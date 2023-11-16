@@ -12,9 +12,10 @@ class EconomicState(Enum):
 
 class PlayableNation:
     def __init__(self, globe):
+        self.nation_color = (0, random.randrange(0, 255), random.randrange(0, 250))
         # general information
-        self.population_reward = 0
-        self.economic_reward = 0
+        self.is_chosen = False
+        self.conscripting_checker = globe.date
         self.region = ""
         self.name = ""
         self.date = datetime(globe.date.year, 1, 1)
@@ -25,44 +26,26 @@ class PlayableNation:
         # social factors
         """population factors"""
         self.population = 0
-        self.birth_control = False
-        self.birth_enhancer = False
+        self.past_population = self.population
         self.births = 0
         self.deaths = 0
-        self.happiness = 98.56
         # political
         self.leader = "Gregory Prescov"
         self.political_power = 100
         self.political_exponent = 1.00
-        """Stability"""
-        self.stability = 95.56
         # economic
         self.e_s = EconomicState.RECOVERY
         self.national_debt = 0
         self.current_gdp = 0
         self.past_gdp = self.current_gdp
-        self.corporate_taxes = 5.00
-        self.income_taxes = 5.00
         """Components of GDP"""
         self.consumer_spending = 100
         self.investment = 100
         self.government_spending = 150
         self.exports = 500
         self.imports = 500
-        self.chosen = False
-        self.foreign_relations = {"foreign relations": [
-            {"nation name": "name",
-             "relations": 60.56,
-             "relation status": "rival",
-             "guaranteeing independence": False,
-             "alliance": "",
-             "embargoed": False,
-             "war goal": False,
-             "at war with": False}
-        ]}
-        # nations that are potential allies of Nation will have diplomacy of rate at above 80%
-        # nations that are potential rivals of Nation will have diplomacy of rate from 40 - 79%
-        # nations that are potential enemies of Nation will have diplomacy of rate below 40%
+        self.coordinates = []
+        self.foreign_relations = {"foreign relations": []}
         self.improving_relations = []
         self.worsening_relations = []
         """National policy variable stores information that is similar and regards to the Domesticity and 
@@ -91,240 +74,192 @@ class PlayableNation:
                     {"Repress Far-Left": False,
                      "Repress Far-Right": False,
                      "Repress Autocrats": False,
-                     "Repress Liberals": False,
-                     "Suppress Far-Left": False,
-                     "Supress Far-Right": False,
-                     "Suppress Autocrats": False,
-                     "Suppress Liberals": False},
-                    {"Far-Right protests": [],
-                     "Far-Left protests": [],
-                     "Autocrat protests": [],
-                     "Liberal protests": []},
+                     "Repress Liberals": False},
                     {"Political stability": 90.0}
                     # for political rewards to be utilized, AI must make political decision
                     # for example if there is a far left protest and the AI handles the protest by killing everyone...
                     # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
                     # memory
                 ]
-            }],
-                "Foreign Policy": [{
-                    "Allies": [],
-                    "Rivals": [],
-                    "Enemies": [],
-                }]}
+            }]},
+            {"Foreign Policy": [{
+                "Allies": [],
+                "Rivals": [],
+                "Enemies": [],
+                "Alliance": ""
+            }]}
         ]}
 
-        self.objectives = {"objectives":
-                               [{"foreign objectives": [],
-                                 "domestic objectives": [{
-                                     'population objectives': [],
-                                     'economic objectives': [],
-                                     'political objectives': [],
-                                     'social objectives': []
-                                 }]
-                                 }]
-                           }
+        self.objectives = {
+            "objectives": [
+                {
+                    'foreign': []
+                },
+                {
+                    'domestic': [
+                        {
+                            'population objectives': [],
+                            'economic objectives': [],
+                            'political objectives': [],
+                            'social objectives': []
+                        }
+                    ]
+                }
+            ]
+        }
+
         self.long_term_memory = {
-            "Domestic decisions": [
-                {"Economic Decisions": [],
-                 "Political Decisions": [],
-                 "Social Decisions": [],
-                 "Population Decisions": []}
-            ],
+            "Domestic decisions":
+                [
+                    {"Economic Decisions": [],
+                     "Political Decisions": [],
+                     "Population Decisions": []}
+                ],
             "Foreign decisions": [
                 {"allies": []},
                 {"rivals": []},
                 {"enemies": []},
             ],
-            "Foreign decisions made against us": [
-                {"allies": [],
-                 "rivals": [],
-                 "enemies": []}
+            "Foreign influence": [],
+            "protests": [],
+            "Ideologies": {
+                "Democratic": 100,
+                "Communist": 0,
+                "Fascist": 0,
+                "Autocratic": 0
+            }
+        }
+        # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
+        self.military = {
+            "military": {
+                "Conscription policy": "Volunteer",
+                "Army": {
+                    "Figures": {
+                        "Army size": [],
+                        "Cost": 0
+                    }
+                },
+            },
+            "conscript pool": 0,
+        }
+        self.messages = {
+            "messages": [
+                {
+                    "political": [],
+                    "economic": [],
+                    "social": []
+                }
             ]
         }
 
-    def population_change(self):
-        """instead of having the headache of calling both national objects separately, why not combine them"""
+    def adding_conscription_pool(self, globe):
+        if self.conscripting_checker < globe.date:
+            if "Volunteer" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.001 < self.population:
+                    self.military['conscript pool'] += self.population * 0.001
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Limited" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.005 < self.population:
+                    self.military['conscript pool'] += self.population * 0.005
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Extensive" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.01 < self.population:
+                    self.military['conscript pool'] += self.population * 0.01
+                    self.conscripting_checker += timedelta(days=30)
+
+            if "Total War" in self.military['military']['Conscription policy']:
+                if self.military['conscript pool'] + self.population * 0.09 < self.population:
+                    self.military['conscript pool'] += self.population * 0.09
+                    self.conscripting_checker += timedelta(days=30)
+
+    def check_population_growth(self, globe):
         if self.year_placeholder < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+            population_calculation = ((self.population - self.past_population) /
+                                      ((self.population + self.past_population) / 2)) * 100
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.year_placeholder} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
+            if population_calculation <= 1.5:
+                if "low population growth occurred" not in self.messages['messages'][0]['social']:
+                    self.messages['messages'][0]['social'].append({
+                        "low population growth occurred": [
+                            {"potential solutions": ['implement birth enhancer'],
+                             "expiration date": globe.date + timedelta(days=10)}
+                        ]
+                    })
 
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.year_placeholder} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-        else:
-            if self.birth_enhancer:
-                births = random.randrange(0, 40)
-                deaths = random.randrange(0, 30)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
-            if self.birth_control:
-                births = random.randrange(0, 30)
-                deaths = random.randrange(0, 35)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
+            elif population_calculation >= 7.6:
+                if "high population growth occurred" not in self.messages['messages'][0]['social']:
+                    self.messages['messages'][0]['social'].append({
+                        "low population growth occurred": [
+                            {"potential solutions": ['implement birth enhancer'],
+                             "expiration date": globe.date + timedelta(days=10)}
+                        ]
+                    })
             else:
-                births = random.randrange(0, 35)
-                deaths = random.randrange(0, 25)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
+                pass
+
+        else:
+            self.pop_growth()
+    def pop_growth(self):
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Enhancer"]:
+            births = random.randrange(0, 30)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
+
+        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Population"][0]["Birth Control"]:
+            births = random.randrange(0, 15)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
+
+        else:
+            births = random.randrange(0, 25)
+            deaths = random.randrange(0, 20)
+            self.population += (births - deaths)
+            self.births += births
+            self.deaths += deaths
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
 
     # economic functions
-    def check_economic_state(self):
-        """function dealing with primary economic decisions of canadian parliament"""
+    def check_economic_state(self, globe):
         if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections/potential business cycles"""
-            gdp_growth = ((self.current_gdp - self.past_gdp) / ((self.current_gdp + self.past_gdp) / 2)) * 100
-            if gdp_growth >= 6.65:
-                self.economic_stability = 0
-                self.economic_reward -= 1.25
-                # economy rises into expansion
-                if self.e_s == EconomicState.RECOVERY:
-                    self.e_s = "expansion"
-                    self.consumer_spending = 300
-                    self.government_spending = 500
-                    self.investment = 350
-                    self.imports = 1000
-                    self.exports = 1200
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-                # economy rises into recovery
-                elif self.e_s == EconomicState.RECESSION or self.e_s.lower() == EconomicState.DEPRESSION:
-                    self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
-                    self.consumer_spending = 200
-                    self.government_spending = 300
-                    self.investment = 250
-                    self.imports = 1000
-                    self.exports = 900
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-
-            elif gdp_growth <= -0.25:
-                self.economic_stability = 0
-                self.economic_reward -= 1.25
-                # economy falls into depression
-                if self.e_s == EconomicState.RECESSION:
-                    self.e_s = "depression"
-                    self.consumer_spending = -200
-                    self.government_spending = 00
-                    self.investment = -250
-                    self.imports = 1700
-                    self.exports = 500
-
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-
-                # economy falls into recession
-                elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-                    self.e_s = "recession"
-                    self.consumer_spending = -100
-                    self.government_spending = 300
-                    self.investment = -150
-                    self.imports = 1500
-                    self.exports = 800
-                    time.sleep(3)
-                    self.economic_change_date = self.date + timedelta(days=120)
-
-            elif gdp_growth < 6.65 or gdp_growth >= 1.25:
-                self.economic_stability += 1
-                self.economic_reward += 5
+            growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
+            if growth <= 1.95:
+                if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
+                    self.e_s = EconomicState.RECESSION
+                    if "low economic growth occurred" not in self.messages['messages'][0]['social']:
+                        self.messages['messages'][0]['social'].append({
+                            "low economic growth occurred": [
+                                {"potential solutions": ['implement birth enhancer'],
+                                 "expiration date": globe.date + timedelta(days=10)}
+                            ]
+                        })
+            elif growth >= 6.95:
+                if self.e_s == EconomicState.DEPRESSION or self.e_s == EconomicState.RECESSION:
+                    self.e_s = EconomicState.RECOVERY
+                    if "high economic growth occurred" not in self.messages['messages'][0]['social']:
+                        self.messages['messages'][0]['social'].append({
+                            "high economic growth occurred": [
+                                {"potential solutions": ['implement birth enhancer'],
+                                 "expiration date": globe.date + timedelta(days=10)}
+                            ]
+                        })
+            else:
+                pass
 
         else:
-            # gets called regardless of the current economic state
-            self.provide_economic_aid()
-
             if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
                 self.neg_ec_growth()
 
             elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
                 self.pos_ec_growth()
 
-    def provide_economic_aid(self):
-        if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-            if self.economic_reward < 10:
-                """lower reward means government will most likely not choose to do anything
-                higher reward means the opposite
-                """
-                chance = random.randrange(0, 10)
-                if chance % 4 == 0:
-                    """25% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.05
-                    self.income_taxes = self.income_taxes * 0.05
-                    self.government_spending += 200
-                    self.consumer_spending -= 150
-                    self.investment -= 150
-
-                if chance % 3 == 0:
-
-
-
-
-                    """33% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.10
-                    self.income_taxes = self.income_taxes * 0.10
-                    self.government_spending += 400
-                    self.consumer_spending -= 200
-                    self.investment -= 200
-
-                if chance % 2 == 0:
-                    """50% chance that government will do something
-                    - raise corporate and income taxes by 5-10%(causes consumer spending and investment to decrease)
-                    - increase government spending
-                    """
-                    self.corporate_taxes = self.corporate_taxes * 0.15
-                    self.income_taxes = self.income_taxes * 0.15
-                    self.government_spending += 600
-                    self.consumer_spending -= 250
-                    self.investment -= 250
-
-                else:
-                    self.stability -= 5
-                    self.happiness -= 10
 
     def pos_ec_growth(self):
         self.national_debt += round(
@@ -340,11 +275,12 @@ class PlayableNation:
                              (self.exports - self.imports))
     # stability functions
     def stability_happiness_change(self, globe):
-        if globe.tension > 25 and globe.tension < 50:
-            """if global tension is between 25 and 50"""
+        pass
+        """if globe.tension > 25 and globe.tension < 50:
+            
             if self.e_s.RECESSION or self.e_s.DEPRESSION:
                 if self.improve_stability > self.date:
-                    """if improving of stability has been activated"""
+                   
                     stability_increase = round(random.uniform(0.25, 1.56), 2)
                     if (self.stability + stability_increase) < 100:
                         self.stability += stability_increase
@@ -374,9 +310,7 @@ class PlayableNation:
                         self.stability += stability_increase
 
                 if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
+                    
                     happiness_increase = round(random.uniform(1.75, 2.76), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
@@ -386,7 +320,7 @@ class PlayableNation:
                         self.happiness += happiness_increase
 
         elif globe.tension > 50 and globe.tension < 75:
-            """if global tension is between 50 and 75"""
+            
             if self.e_s.RECESSION or self.e_s.DEPRESSION:
                 if self.improve_stability > self.date:
                     stability_increase = round(random.uniform(0.10, 1.25), 2)
@@ -398,9 +332,7 @@ class PlayableNation:
                         self.stability += stability_increase
 
                 if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
+                    
                     happiness_increase = round(random.uniform(1.15, 2.25), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
@@ -419,9 +351,7 @@ class PlayableNation:
                         self.stability += stability_increase
 
                 if self.improve_happiness > self.date:
-                    """if improving of happiness has been activated
-                    improved happiness improves stability
-                    """
+                    
                     happiness_increase = round(random.uniform(1.05, 1.96), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
@@ -431,10 +361,10 @@ class PlayableNation:
                         self.happiness += happiness_increase
 
         elif globe.tension > 75:
-            """if global tension is above 75"""
+            
             if self.e_s.RECESSION or self.e_s.DEPRESSION:
                 if self.improve_stability > self.date:
-                    """if improving of stability has been activated"""
+                    
                     stability_increase = round(random.uniform(0.05, 0.75), 2)
                     if (self.stability + stability_increase) < 100:
                         self.stability += stability_increase
@@ -465,7 +395,7 @@ class PlayableNation:
                         self.stability += stability_increase
 
                 if self.improve_happiness > self.date:
-                    """If policies toward improving happiness have been imposed"""
+                   
                     happiness_increase = round(random.uniform(1.05, 2.96), 2)
                     if (self.happiness + happiness_increase) < 100:
                         self.happiness += happiness_increase
@@ -486,11 +416,11 @@ class PlayableNation:
                     self.stability += stability_increase
 
             if self.improve_happiness > self.date:
-                """If policies toward improving happiness have been imposed"""
+                
                 happiness_increase = round(random.uniform(1.05, 2.96), 2)
                 if (self.happiness + happiness_increase) < 100:
                     self.happiness += happiness_increase
             else:
                 happiness_increase = round(random.uniform(0.96, 2.56), 2)
                 if (self.happiness + happiness_increase) < 100:
-                    self.happiness += happiness_increase
+                    self.happiness += happiness_increase"""

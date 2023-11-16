@@ -6,6 +6,7 @@ import pyautogui
 import pygame
 import os
 import networkx as nx
+from military.soldier import Soldier
 import matplotlib.pyplot as plt
 """import matplotlib.pyplot as plt
 from database_management import upload_database"""
@@ -147,6 +148,9 @@ class SpriteGame:
 
     def view_government(self):
         """sub section of user nation that displays political information regarding nation"""
+        increment_img = pygame.image.load(
+            "buttons/game_buttons/functionality_buttons/increment_sing.jpg").convert_alpha()
+        army_inc_button = button.Button(self.WIDTH * 0.45, 450, increment_img, 0.025)
         self.screen.fill((52, 78, 91))
         self.draw_text(f"Political stats", self.font, self.text_col, self.WIDTH * 0.45, 100)
         self.draw_text(f"Current Leader: {self.nation_selected.leader}", self.font, self.text_col,
@@ -154,8 +158,17 @@ class SpriteGame:
         self.draw_text(f"Stability: {round(self.nation_selected.stability, 2)}%", self.font, self.text_col,
                        self.WIDTH * 0.45,
                        300)
+        self.draw_text(f"Army size: {len(self.nation.military['military']['Army']['Figures']['Army size'])}",
+                       self.font, self.text_col, self.WIDTH * 0.355, 400)
+
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.15)
+
+        if army_inc_button.draw(self.screen):
+            soldier = Soldier(self.nation, self.globe)
+            self.nation.military['military']['Army']['Figures']['Army size'].append(soldier)
+            self.nation.military['military']['Army']['Figures']['Cost'] += soldier.monetary_cost
+            self.nation.national_debt += soldier.monetary_cost
 
         if back_button.draw(self.screen):
             self.game_state = "main game"
@@ -267,8 +280,8 @@ class SpriteGame:
             self.game_state = "main game"
 
     def nation_changes(self):
-        self.nation.check_economic_state()
-        self.nation.population_change()
+        self.nation.check_economic_state(self.globe)
+        self.nation.check_population_growth(self.globe)
         self.nation.stability_happiness_change(self.globe)
         #self.nation.improve_relations()
 
@@ -315,8 +328,8 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
-        nx.draw_circular(self.network, with_labels= True)
-        plt.show()
+        #nx.draw_circular(self.network, with_labels= True)
+        #plt.show()
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -496,7 +509,7 @@ class SpriteGame:
                         for button in self.nation_map:
                             if button.is_clicked(mouse_pos):
                                 self.nation_selected = button.nation_info
-                                if not self.nation_selected.chosen:
+                                if not self.nation_selected.is_chosen:
                                     self.game_state = "view foreign nation"
                                 else:
                                     self.game_state = "view infographics"

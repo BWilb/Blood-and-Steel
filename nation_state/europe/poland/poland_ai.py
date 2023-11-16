@@ -33,6 +33,22 @@ gdp = {
     "1939": 44428052632
 }
 
+flags = {"1910": None,
+         "1914": None,
+         "1918": "../flags/poland/Flag_of_Poland_(1919–1927).jpg",
+         "1932": "../flags/poland/Flag_of_Poland_(1919–1927).jpg",
+         "1936": "../flags/poland/Flag_of_Poland_(1919–1927).jpg",
+         "1939": "../flags/poland/Flag_of_Poland_(1919–1927).jpg"}
+
+leader_images = {
+    "1910": None,
+    "1914": None,
+    "1918": "../leaders/poland/Józef_Piłsudski_(-1930)-1918.jpg",
+    "1932": "../leaders/poland/Moscicki-1932-1939.jpg",
+    "1936": "../leaders/poland/Moscicki-1932-1939.jpg",
+    "1939": "../leaders/poland/Moscicki-1932-1939.jpg"
+}
+
 class PolandAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
@@ -46,6 +62,8 @@ class PolandAI(NationAI):
         # political
         self.political_typology = "Autocratic"
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         self.current_gdp = gdp[str(globe.date.year)]
