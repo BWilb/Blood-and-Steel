@@ -130,9 +130,9 @@ class NationAI:
                     "Population": [],
                     "Political": []
                 },
-                "Domestic problems": {
-                    "Protests": []
-                },
+                "Domestic problems": [
+                    {"Protests": []}
+                ],
                 "Domestic Ideologies":{
                     "Democratic": 100,
                     "Fascist": 0,
@@ -508,7 +508,7 @@ class NationAI:
                         self.political_exponent -= 0.15
 
 
-        elif action == "spark protests" and self.political_power >= 25:
+        """elif action == "spark protests" and self.political_power >= 25:
             chance = random.randrange(1, 40)
             if chance % 6 == 4:
                 if "Democratic" in self.political_typology:
@@ -530,7 +530,7 @@ class NationAI:
                     foreign_nation.political_decision({
                         "Issue": "Autocratic protest"
                     }, globe)
-                self.political_power -= 25
+                self.political_power -= 25"""
 
     def determine_diplomatic_approach(self, globe, network, user_nation):
         self.make_international_decision(globe, network, user_nation)
@@ -550,220 +550,239 @@ class NationAI:
 
                     self.make_positive_decision(foreign_nation, globe, network)
 
-    def population_decision(self, domestic_issue):
-        if len(self.long_term_memory['Domestic decisions'][0]["Population Decisions"]) > 0:
-            # checking if long term memory for population decisions is larger then 0
-            if domestic_issue.values() == "extreme growth":
-                if "Fascism" or "Communism" in self.political_typology:
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Extreme population growth occurred'][1]['Number of occurrences'] > 10 and (
-                            not "Slow down population growth"
-                                in self.objectives['objectives'][0]['domestic objectives'][0]['population objectives']):
+    def handle_insignificant_growth(self, globe):
+        if len(self.long_term_memory[0]['Domestic Decisions']['Population']) > 0:
+            insignificant_found = False
+            # search variable for finding insignificant growth within long term memory
+            for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                    "Issue"] == "Insignificant population growth":
+                    self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"].append(globe.date)
+                    insignificant_found = True
+                    # setting insignificant growth found to true if ig found
 
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+            if not insignificant_found:
+                # if not found add to memory
+                self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                    "Issue": "Insignificant population growth",
+                    "Date": [globe.date],
+                    "Action taken": []
+                })
 
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Slow down population growth")
+            if self.political_typology == "Democratic" or self.political_typology == "Autocratic":
+                sum = 0
+                for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                    if (len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]['Date']) > 1 and
+                            self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                                "Issue"] == "Insignificant population growth"):
 
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
+                        for date in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"])):
+                            if date >= 1:
+                                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][date] == (
+                                        self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][
+                                            date - 1] + timedelta(days=30)
+                                ):
+                                    sum += 1
+                                    if 4 < sum <= 10:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].clear()
+                                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Control']:
+                                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
 
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Extreme population growth occurred'][1]['Number of occurrences'] > 15:
+                                                'Birth Control'] = False
 
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
+                                    else:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].append(
+                                            "Maintain high population growth")
+                                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Enhancer'] = True
 
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Extreme population growth occurred'][1]['Number of occurrences'] = 0
-                else:
+            else:
+                sum = 0
+                for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                    if (len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]['Date']) > 1 and
+                            self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                                "Issue"] == "Insignificant population growth"):
 
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Extreme population growth occurred'][1]['Number of occurrences'] > 4:
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
+                        for date in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"])):
+                            if date >= 1:
+                                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][date] == (
+                                        self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][
+                                            date - 1] + timedelta(days=30)
+                                ):
 
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Slow down population growth")
+                                    sum += 1
+                                    if 2 < sum <= 6:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].clear()
+                                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Control']:
+                                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                                'Birth Control'] = False
 
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = False
-
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Extreme population growth occurred'][1]['Number of occurrences'] > 6:
-
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = True
-
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Extreme population growth occurred'][1]['Number of occurrences'] = 0
-
-            elif domestic_issue.values() == "stable growth":
-                if "Fascism" or "Communism" in self.political_typology:
-                    if (self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Stable population growth occurred'][1]['Number of occurrences'] > 6 and (
-                            not 'Increase population growth' in
-                                self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
-                        # checking if stable population growth over 6 times and increase population growth has not become
-                        # an objective
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Increase population growth")
-                        # implementing objective of increased population growth
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
-
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Stable population growth occurred'][1]['Number of occurrences'] > 8:
-                        # checking if stable population growth over 8 times
-
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
-                            # birth enhancer implemented if population doesn't grow fast enough
-
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Low population growth occurred'][1]['Number of occurrences'] = 0
-
-                else:
-                    if (self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Stable population growth occurred'][1]['Number of occurrences'] > 12 and (
-                            not 'Increase population growth' in
-                                self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'])):
-                        # checking if stable population growth over 6 times and increase population growth has not become
-                        # an objective
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Increase population growth")
-                        # implementing objective of increased population growth
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
-
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Stable population growth occurred'][1]['Number of occurrences'] > 18:
-                        # checking if stable population growth over 8 times
-
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
-                            # birth enhancer implemented if population doesn't grow fast enough
-
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Low population growth occurred'][1]['Number of occurrences'] = 0
-
-            elif domestic_issue.values() == "insignificant growth":
-                if "Fascism" or "Communism" in self.political_typology:
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Low population growth occurred'][1]['Number of occurrences'] > 2:
-                        # checking if low growth has occurred more than twice
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Increase population growth")
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
-
-                    elif self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Low population growth occurred'][1]['Number of occurrences'] > 4:
-                        # checking if low growth has occurred more than 4 times
-
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            # implementing birth enhancer
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
-
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Low population growth occurred'][1]['Number of occurrences'] = 0
-
-                else:
-                    if self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Low population growth occurred'][1]['Number of occurrences'] > 5:
-                        # checking if low growth has occurred more than twice
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].clear()
-
-                        self.objectives['objectives'][0]['domestic objectives'][0]['population objectives'].append(
-                            "Increase population growth")
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"]:
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Control"] = False
-
-                    elif self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                        'Low population growth occurred'][1]['Number of occurrences'] > 9:
-                        # checking if low growth has occurred more than 4 times
-
-                        if not self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"]:
-                            # implementing birth enhancer
-                            self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]["Birth Enhancer"] = True
-
-                        self.long_term_memory["Domestic decisions"][0]['Population Decisions'][0][
-                            'Low population growth occurred'][1]['Number of occurrences'] = 0
+                                    else:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].append(
+                                            "Maintain high population growth")
+                                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Enhancer'] = True
 
         else:
-            if domestic_issue.values() == "extreme growth":
-                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append(
-                    {"Extreme population growth occurred": [
-                        {"Action Taken": "No action"},
-                        {"Number of occurrences": 1}
-                    ]})
+            self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                "Issue": "Insignificant population growth",
+                "Date": [globe.date],
+                "Action taken": []
+            })
 
-            elif domestic_issue.values() == "insignificant growth":
-                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append({"low population growth occurred": [
-                    {"Action Taken": "No action"},
-                    {"Number of occurrences": 1}
-                ]})
+    def handle_extreme_growth(self, globe):
+        if len(self.long_term_memory[0]['Domestic Decisions']['Population']) > 0:
+            extreme_found = False
+            # search variable for finding extreme growth within long term memory
+            for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Issue"] == "Extreme population growth":
+                    self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"].append(globe.date)
+                    extreme_found = True
+                    # setting extreme_found to true if extreme pop growth found
 
-            elif domestic_issue.values() == "stable growth":
-                self.long_term_memory["Domestic decisions"][0]['Population Decisions'].append(
-                    {"stable population growth occurred": [
-                        {"Action Taken": "No action"},
-                        {"Number of occurrences": 1}
-                    ]})
+            if not extreme_found:
+                # if not found add to memory
+                self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                    "Issue": "Extreme population growth",
+                    "Date": [globe.date],
+                    "Action taken": []
+                })
 
-    def check_population_growth(self):
+            if self.political_typology == "Democratic" or self.political_typology == "Autocratic":
+                sum = 0
+                for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                    if (len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]['Date']) > 1 and
+                            self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                                "Issue"] == "Extreme population growth"):
+                        for date in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"])):
+                            if date >= 1:
+                                # checking if number is greater or equal to one, to prevent out of bounds
+                                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][date] == (
+                                        self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][
+                                            date - 1] + timedelta(days=30)
+                                ):
+                                    sum += 1
+                                    if 2 < sum <= 5:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].clear()
+                                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Enhancer']:
+                                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                                'Birth Enhancer'] = False
+
+                                    else:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].append(
+                                            "Maintain low population growth")
+                                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Control'] = True
+            else:
+                # else statement for fascism and communism
+                sum = 0
+                for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                    if (len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]['Date']) > 1 and
+                            self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                                "Issue"] == "Extreme population growth"):
+                        for date in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"])):
+                            if date >= 1:
+                                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][date] == (
+                                        self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][
+                                            date - 1] + timedelta(days=30)
+                                ):
+                                    sum += 1
+                                    if 3 < sum <= 9:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].clear()
+                                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Enhancer']:
+                                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                                'Birth Enhancer'] = False
+
+                                    else:
+                                        self.objectives['objectives'][0]['domestic'][0]['population objectives'].append(
+                                            "Maintain low population growth")
+                                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Control'] = True
+
+        else:
+            self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                "Issue": "Extreme population growth",
+                "Date": [globe.date],
+                "Action taken": []
+            })
+
+    def handle_stable_growth(self, globe):
+        if len(self.long_term_memory[0]['Domestic Decisions']['Population']) > 0:
+            stable_found = False
+            # search variable for finding stable growth within long term memory
+            for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                # searching through previous population decisions
+                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Issue"] == "stable population growth":
+                    self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"].append(globe.date)
+                    stable_found = True
+                    # setting stable_found to true if stable population found
+
+            if not stable_found:
+                # if not found add to memory
+                self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                    "Issue": "Stable population growth",
+                    "Date": [globe.date],
+                    "Action taken": []
+                })
+
+            if self.political_typology == "Democratic" or self.political_typology == "Autocratic":
+                pass
+
+            else:
+                # else statement designed for communist and fascist ideologies
+                sum = 0
+                for decision in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'])):
+                    if (len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]['Date']) > 1 and
+                            self.long_term_memory[0]['Domestic Decisions']['Population'][decision][
+                                "Issue"] == "Stable population growth"):
+                        for date in range(0, len(self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"])):
+                            if date >= 1:
+                                if self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][date] == (
+                                        self.long_term_memory[0]['Domestic Decisions']['Population'][decision]["Date"][
+                                            date - 1] + timedelta(days=30)
+                                ):
+                                    sum += 1
+                                    if sum >= 9:
+                                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
+                                            'Birth Enhancer'] = True
+                                else:
+                                    break
+
+        else:
+            self.long_term_memory[0]['Domestic Decisions']['Population'].append({
+                "Issue": "Stable population growth",
+                "Date": [globe.date],
+                "Action taken": []
+            })
+
+    def determine_population_decision(self, domestic_issue, globe):
+        if domestic_issue == "extreme growth":
+            self.handle_extreme_growth(globe)
+
+        elif domestic_issue == "stable growth":
+            self.handle_stable_growth(globe)
+
+        elif domestic_issue == "insignificant growth":
+            self.handle_insignificant_growth(globe)
+
+    def check_population_growth(self, globe):
         if self.year_placeholder < self.date.year:
             """checking to see if an entire year has passed"""
             population_calculation = ((self.population - self.past_population) /
                                       ((self.population + self.past_population) / 2)) * 100
-            if len(self.long_term_memory[0]["Domestic decisions"]['Population Decisions']) > 0:
-                if population_calculation <= 1.5:
-                    self.population_decision("Insignificant growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] += 1
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] = 0
 
-                elif population_calculation >= 7.6:
-                    self.population_decision("Extreme growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] += 1
+            if population_calculation <= 1.5:
+                self.determine_population_decision("Insignificant growth", globe)
 
-                else:
-                    self.population_decision("Stable growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] += 1
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] = 0
+            elif population_calculation >= 7.6:
+                self.determine_population_decision("Extreme growth", globe)
 
             else:
-                if population_calculation <= 1.5:
-                    self.population_decision("Insignificant growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] += 1
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] = 0
-
-                elif population_calculation >= 7.6:
-                    self.population_decision("Extreme growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] += 1
-
-                else:
-                    self.population_decision("Stable growth")
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Low growth occurrences'] = 0
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Stable growth occurrences'] += 1
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]['Population'][0]['Extreme growth occurrences'] = 0
+                self.determine_population_decision("Stable growth", globe)
 
         else:
             self.pop_growth()
@@ -790,44 +809,47 @@ class NationAI:
             self.births += births
             self.deaths += deaths
 
+        for objective in self.objectives['objectives'][1]['domestic'][0]['population objectives']:
+            if objective == "Maintain low population growth":
+                chance = random.randrange(3, 140)
+                if chance % 10 == 6 or chance % 15 == 2:
+                    killings = self.population * 0.001
+                    self.population -= killings
+                    self.deaths += killings
+
     def handle_protest(self, political_issue, globe):
-        print(political_issue)
         days = random.randrange(10, 30)
-        if len(self.long_term_memory[0]["Domestic problems"]["Protests"]) > 0:
-            ideologies = ["Democratic", "Fascist", "Communist", "Autocratic"]
-            for ideology in ideologies:
-                # looping through ideology list
-                for past_memories in self.long_term_memory[0]["Domestic problems"]["Protests"]:
-                    # searching through long memory for protests
-                    if past_memories["Protest ideology"] == political_issue and ideology in political_issue:
-                        past_memories['Duration'] += timedelta(days=days)
+        if len(self.long_term_memory[0]["Domestic problems"][0]["Protests"]) > 0:
+            issue_found = False
+            for memory in self.long_term_memory[0]["Domestic problems"][0]["Protests"]:
+                if memory['Protest ideology'] == political_issue:
+                    memory['Duration'] += timedelta(days=days)
+                    issue_found = True
 
+            if not issue_found:
+                self.long_term_memory[0]["Domestic problems"][0]["Protests"].append(
+                    {"Protest ideology": f"{political_issue}",
+                     "Date": globe.date,
+                     "Duration": globe.date + timedelta(days=days),
+                     "Influence": round(random.uniform(0.01, 0.10), 2)}
+                )
 
-                    else:
-                        self.long_term_memory[0]["Domestic problems"]["Protests"].append([
-                            {"Protest ideology": f"{political_issue}",
-                             "Date": globe.date,
-                             "Duration": globe.date + timedelta(days=days),
-                             "Influence": round(random.uniform(0.01, 0.10), 2),
-                             "Action taken": "none"}
-                        ])
         else:
-            self.long_term_memory[0]["Domestic problems"]["Protests"].append([
+            self.long_term_memory[0]["Domestic problems"][0]["Protests"].append(
                 {"Protest ideology": f"{political_issue}",
                  "Date": globe.date,
                  "Duration": globe.date + timedelta(days=days),
-                 "Influence": round(random.uniform(0.01, 0.10), 2),
-                 "Action taken": "none"}
-            ])
+                 "Influence": round(random.uniform(0.01, 0.10), 2)}
+            )
 
-            #self.updating_ideology(globe)
+        self.updating_ideology(globe)
 
     def political_decision(self, political_issue, globe):
         self.handle_protest(political_issue, globe)
 
     def updating_ideology(self, globe):
         ideologies = ['Democratic protest', "Fascist protest", "Communist protest", "Autocratic protest"]
-        for protest in self.long_term_memory[0]["Domestic problems"]["Protests"]:
+        for protest in self.long_term_memory[0]["Domestic problems"][0]["Protests"]:
             # looping through protest dictionaries within long term memory
             for ideology in ideologies:
                 if ideology == protest['Protest ideology']:
@@ -847,10 +869,10 @@ class NationAI:
                         self.long_term_memory[0]['Domestic Ideologies']['Autocratic'] += (
                             protest["Influence"])
 
-        for memories in range(0, len(self.long_term_memory[0]["Domestic problems"]["Protests"])):
-            if self.long_term_memory[0]["Domestic problems"]["Protests"][memories]['duration'] < globe.date:
-                self.long_term_memory[0]["Domestic problems"]["Protests"].pop(
-                    self.long_term_memory[0]["Domestic problems"]["Protests"][memories])
+        for memory in range(0, len(self.long_term_memory[0]["Domestic problems"][0]["Protests"])):
+            if self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory]['Duration'] < globe.date:
+                self.long_term_memory[0]["Domestic problems"][0]["Protests"].pop(
+                    self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory])
 
     def protests(self, globe):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
@@ -1323,7 +1345,7 @@ class NationAI:
     def main(self, globe, network, user_nation):
         while self.population > 250000:
             self.check_economic_growth(globe.date)
-            self.check_population_growth()
+            self.check_population_growth(globe)
             self.political_power_growth()
             self.stability_happiness_change(globe)
             if globe.date > self.date_checker:
@@ -1332,6 +1354,7 @@ class NationAI:
             self.change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
+                pass
                 self.protests(globe)
             self.pop_growth()
             self.check_economic_state(globe.date)
