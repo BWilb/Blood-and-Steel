@@ -76,15 +76,13 @@ class NationAI:
                      "Low growth occurrences": 0.0,
                      "Stable growth occurrences": 0.0,
                      "Extreme growth occurrences": 0.0},
-                    {"Happiness": 78.56}
+                    {"Happiness": 88.56}
                     # growth occurrences will be growth that is consistent, once change happens set back to 0
                 ],
                 "Economy": [
-                    {"tax rate": 15.00,
-                     "government stimulus": False,
-                     "low growth occurrences": 0,
-                     "high growth occurrences": 0},
-                    {"Economic stability": 87.56}
+                    {"debt interest payment rate": 2.00},
+                    {"Economic stability": 87.56,
+                     "Improving ES": False}
                 ],
                 "Political": [
                     {"Repress Far-Left": False,
@@ -188,6 +186,7 @@ class NationAI:
             self.communist_appeal = 75
             self.fascist_appeal = 10
             self.autocratic_appeal = 5
+
     # military functions
     def adding_conscription_pool(self, globe):
         self.check_conscprtion_policy(globe)
@@ -276,6 +275,8 @@ class NationAI:
             if globe.date > soldier.retiring_date:
                 self.military['military']['Army']['Figures']["Army size"].pop(soldier)
 
+    # objective functions
+
     def establishing_beginning_objectives(self):
         # Function for establishing state objectives
         # Objectives, whether social, economic, or political, depend on the state's stability
@@ -321,6 +322,8 @@ class NationAI:
             if pop_objective not in self.objectives['objectives'][1]['domestic'][0]['population objectives']:
                 self.objectives['objectives'][1]['domestic'][0]['population objectives'].append(pop_objective)
 
+    # international relations functions
+
     def check_relations_status(self, foreign_nations):
         """checking and updating status of relationship of foreign nations with Nation"""
         for foreign_nation in range(0, len(foreign_nations)):
@@ -358,7 +361,7 @@ class NationAI:
                     else:
                         self.political_exponent += 0.25
                         for i in range(0, len(self.objectives['objectives'][1]['foreign'])):
-                            if (f"improve relations with {nation}") in self.objectives['objectives'][1]['foreign'][i]:
+                            if (f"improve relations with {nation}") == self.objectives['objectives'][1]['foreign'][i]:
                                 self.objectives['objectives'][1]['foreign'].pop(
                                     self.objectives['objectives'][1]['foreign'][i])
                                 self.objectives['objectives'][1]['foreign'].append(
@@ -550,6 +553,8 @@ class NationAI:
 
                     self.make_positive_decision(foreign_nation, globe, network)
 
+    # population functions
+
     def handle_insignificant_growth(self, globe):
         if len(self.long_term_memory[0]['Domestic Decisions']['Population']) > 0:
             insignificant_found = False
@@ -676,6 +681,9 @@ class NationAI:
                                             "Maintain low population growth")
                                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
                                             'Birth Control'] = True
+
+                                else:
+                                    sum = 0
             else:
                 # else statement for fascism and communism
                 sum = 0
@@ -699,9 +707,12 @@ class NationAI:
 
                                     else:
                                         self.objectives['objectives'][0]['domestic'][0]['population objectives'].append(
-                                            "Maintain low population growth")
+                                            "reduce population growth")
                                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
                                             'Birth Control'] = True
+
+                                else:
+                                    sum = 0
 
         else:
             self.long_term_memory[0]['Domestic Decisions']['Population'].append({
@@ -750,7 +761,7 @@ class NationAI:
                                         self.national_policy['Policy'][0]['Domestic Policy'][0]["Population"][0][
                                             'Birth Enhancer'] = True
                                 else:
-                                    break
+                                    sum = 0
 
         else:
             self.long_term_memory[0]['Domestic Decisions']['Population'].append({
@@ -817,6 +828,8 @@ class NationAI:
                     self.population -= killings
                     self.deaths += killings
 
+    # political functions
+
     def handle_protest(self, political_issue, globe):
         days = random.randrange(10, 30)
         if len(self.long_term_memory[0]["Domestic problems"][0]["Protests"]) > 0:
@@ -874,6 +887,8 @@ class NationAI:
             if self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory]['Duration'] < globe.date:
                 self.long_term_memory[0]["Domestic problems"][0]["Protests"].pop(
                     self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory])
+
+        self.instill_ideological_growth()
 
     def instill_ideological_growth(self):
         # function developed to aid in increasing influence of current ideology
@@ -941,6 +956,8 @@ class NationAI:
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
+
+    # economic functions
 
     def handle_depression(self, depress_sum):
         if depress_sum >= 4:
@@ -1089,23 +1106,65 @@ class NationAI:
 
                 if self.e_s == EconomicState.EXPANSION:
                     self.handle_positive_growth("Expansion", globe)
+            self.check_economic_growth(globe)
+            self.check_national_debt()
 
         else:
             self.check_economic_state(globe)
+            self.check_national_debt()
+
+    def check_national_debt(self):
+        debt_gdp_ratio = (self.national_debt / self.current_gdp) * 100
+        # calculation of total debt to total current gdp ratio
+        if debt_gdp_ratio <= 55.00:
+            self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] -= 0.5
+
+        if debt_gdp_ratio <= 65.50:
+            # if ratio becomes excessive, AI has chance to pay off its debt in one fell swoop
+            chance = random.randrange(2, 140)
+            if chance % 5 == 4 or chance % 10 == 6:
+                self.current_gdp -= self.national_debt
+                self.national_debt = 0
+        self.paying_national_debt()
+
+    def paying_national_debt(self):
+        # function developed for nations to pay off their internal debt
+        debt_payment = (self.national_debt *
+                        (self.national_policy['Policy']
+                         [0]['Domestic Policy'][1]['Economy'][0]['debt interest payment rate'] / 100))
+
+        self.national_debt -= debt_payment
 
     def check_economic_state(self, globe):
         """function dealing with primary economic decisions"""
 
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-            self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] -= 1.5
-            """if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65:
-                self.economic_decision("Low economic stability", globe.date)"""
+            self.investment -= 12.5
+            self.consumer_spending -= 25
+            self.government_spending += 35
+            self.exports -= 15
+            self.imports += 25
+            if not self.national_policy['Policy'][0]["Domestic Policy"][0]["Economy"][1]['Improving ES']:
+                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] -= 1.5
+
+            else:
+                self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] += 0.5
+            if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65:
+                self.handle_other_economic_problems("Low economic stability")
             self.neg_ec_growth()
 
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-            """if ((self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] + 1.5) < 100):
-                Checking to see if adding of 1.5 to economic stability will exceed 100 or not
-                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5"""
+            self.investment += 15
+            self.consumer_spending += 25
+            self.exports += 15
+            # specific components of GDP are incremented each cycle if e_s is recovery or expansion
+            if ((self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] + 1.5) < 100):
+                """Checking to see if adding of 1.5 to economic stability will exceed 100 or not"""
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5
+
+            if (self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] >= 85 and
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Improving ES"]):
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Improving ES"] = False
             self.pos_ec_growth()
 
     def pos_ec_growth(self):
@@ -1120,6 +1179,16 @@ class NationAI:
 
         self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
                              (self.exports - self.imports))
+
+    def handle_low_es(self):
+        chance = random.randrange(4, 200)
+        if (chance % 5 == 4 or chance % 20 == 3) and not (self.national_policy['Policy'][0]['Domestic Policy']
+        [1]['Economy'][1]['Improving ES']):
+            self.national_policy['Policy'][0]['Domestic Policy'][1]['Economy'][1]['Improving ES'] = True
+
+    def handle_other_economic_problems(self, issue):
+        if issue == "Low economic stability":
+            self.handle_low_es()
 
     # stability functions
     def stability_happiness_change(self, globe):
@@ -1224,7 +1293,6 @@ class NationAI:
 
     def main(self, globe, network, user_nation):
         while self.population > 250000:
-            self.check_economic_growth(globe.date)
             self.check_population_growth(globe)
             self.political_power_growth()
             self.stability_happiness_change(globe)
@@ -1236,6 +1304,6 @@ class NationAI:
             if chance % 8 == 2 or chance % 5 == 4:
                 self.protests(globe)
             self.pop_growth()
-            self.check_economic_state(globe.date)
+            self.check_economic_state(globe)
             self.adding_conscription_pool(globe)
             break
