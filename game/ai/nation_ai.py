@@ -843,6 +843,7 @@ class NationAI:
             )
 
         self.updating_ideology(globe)
+        self.instill_ideological_growth()
 
     def political_decision(self, political_issue, globe):
         self.handle_protest(political_issue, globe)
@@ -873,6 +874,20 @@ class NationAI:
             if self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory]['Duration'] < globe.date:
                 self.long_term_memory[0]["Domestic problems"][0]["Protests"].pop(
                     self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory])
+
+    def instill_ideological_growth(self):
+        # function developed to aid in increasing influence of current ideology
+        if self.political_typology == "Democratic" and self.long_term_memory[0]['Domestic Ideologies']["Democratic"] <= 50:
+            self.long_term_memory[0]['Domestic Ideologies']["Democratic"] += round(random.uniform(0.03, 0.10), 2)
+
+        if self.political_typology == "Communist" and self.long_term_memory[0]['Domestic Ideologies']["Communist"] <= 50:
+            self.long_term_memory[0]['Domestic Ideologies']["Communist"] += round(random.uniform(0.03, 0.10), 2)
+
+        if self.political_typology == "Fascist" and self.long_term_memory[0]['Domestic Ideologies']["Fascist"] <= 50:
+            self.long_term_memory[0]['Domestic Ideologies']["Fascist"] += round(random.uniform(0.03, 0.10), 2)
+
+        if self.political_typology == "Autocratic" and self.long_term_memory[0]['Domestic Ideologies']["Autocratic"] <= 50:
+            self.long_term_memory[0]['Domestic Ideologies']["Autocratic"] += round(random.uniform(0.03, 0.10), 2)
 
     def protests(self, globe):
         """Protests will only occur if political stability drops below 75% or economic stability drops below 65%"""
@@ -927,305 +942,170 @@ class NationAI:
     def political_power_growth(self):
         self.political_power += self.political_exponent
 
-    def economic_decision(self, economic_issue, date):
-        """Economic decisions based upon Objectives and policy.
-        stored in long term memory for AI, if nation were to experience situation again
-        """
-        if self.long_term_memory['Domestic decisions'][0]["Economic Decisions"] > 0:
+    def handle_depression(self, depress_sum):
+        if depress_sum >= 4:
+            actions = ['Decrease Corporate Taxes', "Decrease Income Taxes", "Increase Exports", "Decrease Imports"]
+            action = actions[random.randrange(0, len(actions))]
+            if action == 'Decrease Corporate Taxes':
+                self.investment += 35
 
-            if "Continued Recession" in economic_issue.values():
-                options = ["Increase corporate taxes", "Increase income taxes",
-                           "Increase government spending"]
-                option = options[random.randrange(0, len(options))]
+            elif action == "Decrease Income Taxes":
+                self.consumer_spending += 25
 
-                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
-                    # looping through past actions within long term memory
-                    if "Continued Depression" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                            "Action Taken"]:
-                            # looping through actions taken from past action
-                            if (option == potential_options and
-                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                                         "Timestamps"][
-                                         -1] +
-                                     timedelta(days=120) == date)):
-                                # checking
-                                # 1. random option equals that of the past option
-                                # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                                    "Timestamps"].append(
-                                    date)
+            elif action == "Increase Exports":
+                self.exports += 100
 
-                            else:
-                                # if continued recovery not in past action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                                    {"Continued Depression": [
-                                        {"Action Taken": option},
-                                        {"Time stamps": [date]}
-                                    ]})
+            elif action == "Decrease Imports":
+                self.imports -= 10
 
-                    else:
-                        # if original two constraints did not match
-                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                            {"Continued Depression": [
-                                {"Action Taken": option},
-                                {"Time stamps": [date]}
-                            ]})
+    def handle_negative_growth(self, issue, globe):
+        recess_sum = 0
+        depress_sum = 0
+        recess_found = False
+        # variable designed for finding recoveries in decisions
+        depress_found = False
+        # variable designed for finding expansions in decisions
+        if len(self.long_term_memory[0]["Domestic Decisions"]['Economic']) > 0:
+            for decision in self.long_term_memory[0]["Domestic Decisions"]['Economic']:
+                if decision['Issue'] == "Recession" and issue == "Recession":
+                    recess_found = True
+                    for date in range(0, len(decision['Date'])):
+                        if date >= 1 and (decision['Date'][date - 1] + timedelta(days=120)) == decision['Date'][date]:
+                            recess_sum += 1
+                            if 3 <= recess_sum < 6 and not self.e_s == EconomicState.RECESSION:
+                                self.e_s = EconomicState.RECESSION
 
-                    if option == "Increase government spending":
-                        self.government_spending += 135
-
-                    elif option == "Increase income taxes":
-                        self.consumer_spending -= 75
-                        self.government_spending += 75
-
-                    elif option == "Increase corporate taxes":
-                        self.investment -= 50
-                        self.government_spending += 50
-
-
-            elif "Continued Depression" in economic_issue.values():
-                options = ["Decrease corporate taxes", "Decrease income taxes",
-                           "Increase government spending", "Decrease worker wages"]
-                option = options[random.randrange(0, len(options))]
-
-                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
-                    # looping through past actions within long term memory
-                    if "Continued Depression" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                            "Action Taken"]:
-                            # looping through actions taken from past action
-                            if (option == potential_options and
-                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                                         "Timestamps"][
-                                         -1] +
-                                     timedelta(months=3) == date)):
-                                # checking
-                                # 1. random option equals that of the past option
-                                # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                                    "Timestamps"].append(
-                                    date)
-
-                            else:
-                                # if continued recovery not in past action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                                    {"Continued Depression": [
-                                        {"Action Taken": option},
-                                        {"Time stamps": [date]}
-                                    ]})
-                    else:
-                        # if original two constraints did not match
-                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                            {"Continued Depression": [
-                                {"Action Taken": option},
-                                {"Time stamps": [date]}
-                            ]})
-
-                    if option == "Decrease corporate taxes":
-                        self.investment += 50
-
-                    elif option == 'Decrease income taxes':
-                        self.consumer_spending += 50
-
-                    elif option == "Increase government spending":
-                        self.government_spending += 100
-
-                    elif option == "Decrease worker wages":
-                        self.consumer_spending -= 45
-                        self.investment += 45
-
-            elif "Continued Recovery" in economic_issue.values():
-                options = ["Increase income taxes", "Increase worker wages"]
-                option = options[random.randrange(0, len(options))]
-                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
-                    # looping through past actions within long term memory
-                    if "Continued Recovery" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]:
-                        for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                            "Action Taken"]:
-                            # looping through actions taken from past action
-                            if (option == potential_options and
-                                    (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"][
-                                         -1] +
-                                     timedelta(months=3) == date)):
-                                # checking
-                                # 1. random option equals that of the past option
-                                # 2. the timestamp of the past action is 3 months earlier then current action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"].append(
-                                    date)
-
-                            else:
-                                # if continued recovery not in past action
-                                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                                    {"Continued Recovery": [
-                                        {"Action Taken": option},
-                                        {"Time stamps": [date]}
-                                    ]})
-                    else:
-                        # if original two constraints did not match
-                        self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                            {"Continued Recovery": [
-                                {"Action Taken": option},
-                                {"Time stamps": [date]}
-                            ]})
-
-
-            elif "Continued Expansion" in economic_issue.values():
-                options = ["Decrease government spending", "Increase income taxes",
-                           "Increase corporate taxes"]
-                option = options[random.randrange(0, len(options))]
-
-                for action in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
-                    # looping through past actions within long term memory
-                    for potential_options in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                        "Action Taken"]:
-                        # looping through actions taken from past action
-                        if (option == potential_options and
-                                (self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action]["Timestamps"][-1] +
-                                 timedelta(months=3) == date)):
-                            # checking
-                            # 1. random option equals that of the past option
-                            # 2. the timestamp of the past action is 3 months earlier then current action
-
-                            for actions in range(0, len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions'])):
-                                # doing another search through the long term memory of economic decisions
-                                if "Continued Expansion" in self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][
-                                    actions]:
-                                    # searching for if continued recovery in past action
-                                    self.long_term_memory["Domestic decisions"][0]['Economic Decisions'][action][
-                                        "Timestamps"].append(date)
-                                else:
-                                    # if continued recovery not in past action
-                                    self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                                        {"Continued Expansion": [
-                                            {"Action Taken": option},
-                                            {"Time stamps": [date]}
-                                        ]})
+                            elif recess_sum >= 6:
+                                self.e_s = EconomicState.DEPRESSION
                         else:
-                            self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                                {"Continued Recession": [
-                                    {"Action Taken": option},
-                                    {"Time stamps": [date]}
-                                ]})
+                            recess_sum = 0
+
+                elif decision['Issue'] == "Depression" and issue == "Depression":
+                    recess_found = True
+                    for date in range(0, len(decision['Date'])):
+                        if date >= 1 and (decision['Date'][date - 1] + timedelta(days=120)) == decision['Date'][date]:
+                            depress_sum += 1
+                            self.handle_depression(depress_sum)
+
+                        else:
+                            depress_sum = 0
+
+            if not recess_found and issue == "Recession":
+                self.long_term_memory[0]["Domestic Decisions"]['Economic'].append({
+                    "Issue": issue,
+                    "Date": [globe.date]
+                })
+
+            if not depress_found and issue == "Depression":
+                self.long_term_memory[0]["Domestic Decisions"]['Economic'].append({
+                    "Issue": issue,
+                    "Date": [globe.date]
+                })
+        else:
+            self.long_term_memory[0]['Domestic Decisions']['Economic'].append({
+                "Issue": issue,
+                "Date": [globe.date]
+            })
+
+    def handle_expansion(self, expan_sum):
+        if expan_sum >= 4:
+            actions = ['Increase taxes', "Decrease government spending", "increase corporate taxes"]
+            action = actions[random.randrange(0, len(actions))]
+            if action == "Increase taxes":
+                self.consumer_spending -= 25
+
+            elif action == "Decrease government spending":
+                self.government_spending -= 35
+
+            elif action == "increase corporate taxes":
+                self.investment -= 45
+
+    def handle_positive_growth(self, issue, globe):
+        recov_sum = 0
+        expan_sum = 0
+        recov_found = False
+        # variable designed for finding recoveries in decisions
+        expan_found = False
+        # variable designed for finding expansions in decisions
+        if len(self.long_term_memory[0]["Domestic Decisions"]['Economic']) > 0:
+            # checking length of domestic economic decisions
+            for decision in self.long_term_memory[0]["Domestic Decisions"]['Economic']:
+                if decision['Issue'] == "Recovery" and issue == "Recovery":
+                    recov_found = True
+                    for date in range(0, len(decision['Date'])):
+                        if date >= 1 and (decision['Date'][date - 1] + timedelta(days=120)) == decision['Date'][date]:
+                            recov_sum += 1
+
+                            if 3 < recov_sum < 6 and not self.e_s == EconomicState.RECOVERY:
+                                self.e_s = EconomicState.RECOVERY
+
+                            elif recov_sum == 6:
+                                self.e_s = EconomicState.EXPANSION
+
+                        else:
+                            recov_sum = 0
+
+                if decision['Issue'] == "Expansion" and issue == "Expansion":
+                    expan_found = True
+                    for date in range(0, len(decision['Date'])):
+                        if date >= 1 and (decision['Date'][date - 1] + timedelta(days=120)) == decision['Date'][date]:
+                            expan_sum += 1
+                            self.handle_expansion(expan_sum)
+
+                        else:
+                            expan_sum = 0
+
+            if not recov_found and issue == "Recovery":
+                self.long_term_memory[0]["Domestic Decisions"]['Economic'].append({
+                    "Issue": issue,
+                    "Date": [globe.date]
+                })
+
+            if not expan_found and issue == "Expansion":
+                self.long_term_memory[0]["Domestic Decisions"]['Economic'].append({
+                    "Issue": issue,
+                    "Date": [globe.date]
+                })
 
         else:
-            if "Recession started" in economic_issue.values():
-                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                    {"Recession started": [
-                        {"Action Taken": "No action"},
-                        {"Time stamps": [date]}
-                    ]})
+            self.long_term_memory[0]["Domestic Decisions"]['Economic'].append({
+                "Issue": issue,
+                "Date": [globe.date]
+            })
 
-            elif "Depression started":
-                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                    {"Depression started": [
-                        {"Action Taken": "No action"},
-                        {"Time stamps": [date]}
-                    ]})
-
-            elif "Recovery started":
-                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                    {"Recovery started": [
-                        {"Action Taken": "No action"},
-                        {"Time stamps": [date]}
-                    ]})
-
-            elif "Expansion started":
-                self.long_term_memory["Domestic decisions"][0]['Economic Decisions'].append(
-                    {"Expansion started": [
-                        {"Action Taken": "No action"},
-                        {"Time stamps": [date]}
-                    ]})
-
-    # economic functions
-    def check_economic_growth(self, date):
-        if self.date > self.economic_change_date:
+    def check_economic_growth(self, globe):
+        if globe.date > self.economic_change_date:
             growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
-            if len(self.long_term_memory["Domestic decisions"][0]['Economic Decisions']) == 0:
-                if growth <= 1.95:
-                    if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-                        self.e_s = EconomicState.RECESSION
-                        self.economic_decision({"Economic Issue": "Recession started"}, date)
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]['low growth occurrences'] = 1
+            if growth <= 1.95:
+                if self.e_s == EconomicState.RECESSION:
+                    self.handle_positive_growth("Recession", globe)
 
-                elif growth >= 6.95:
-                    if self.e_s == EconomicState.DEPRESSION or self.e_s == EconomicState.RECESSION:
-                        self.e_s = EconomicState.RECOVERY
-                        self.economic_decision({"Economic Issue": "Recovery started"}, date)
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0]['high growth occurrences'] = 1
+                if self.e_s == EconomicState.DEPRESSION:
+                    self.handle_positive_growth("Depression", globe)
 
-            else:
-                if growth <= 1.95:
-                    self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                        'high growth occurrences'] = 0
-                    """for action in range(0, len(self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'])):
-                        # looping through past actions within long term memory
-                        if "Continued Depression" in self.long_term_memory["Domestic Decisions"][0]['Economic Decisions'][
-                            action]:"""
-                    if self.e_s == EconomicState.EXPANSION or self.e_s == EconomicState.RECOVERY:
+            elif growth >= 6.95:
+                if self.e_s == EconomicState.RECOVERY:
+                    self.handle_positive_growth("Recovery", globe)
 
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'low growth occurrences'] = 1
-                        self.economic_decision({"Issue": "Recession started"}, date)
-                        self.e_s = EconomicState.RECESSION
-
-                    elif self.e_s == EconomicState.RECESSION:
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'low growth occurrences'] += 1
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'low growth occurrences'] < 4:
-                            self.economic_decision({"Issue": "Continued Recession"}, date)
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'low growth occurrences'] == 4:
-                            self.economic_decision({"Issue": "Depression started"}, date)
-                            self.e_s = EconomicState.DEPRESSION
-
-                        else:
-                            self.economic_decision({"Issue": "Continued Depression"}, date)
-
-                elif growth >= 6.95:
-                    if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'low growth occurrences'] = 0
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'high growth occurrences'] = 1
-                        self.e_s = EconomicState.RECOVERY
-                        self.economic_decision({"Issue": "Recovery started"}, date)
-
-                    elif self.e_s == EconomicState.RECOVERY:
-                        self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'high growth occurrences'] += 1
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'high growth occurrences'] < 4:
-                            self.economic_decision({"Issue": "Continued Recovery"}, date)
-
-                        if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][0][
-                            'high growth occurrences'] == 4:
-                            self.economic_decision({"Issue": "Expansion started"}, date)
-                            self.e_s = EconomicState.EXPANSION
-
-                        else:
-                            self.economic_decision({"Issue": "Continued Expansion"}, date)
+                if self.e_s == EconomicState.EXPANSION:
+                    self.handle_positive_growth("Expansion", globe)
 
         else:
-            self.check_economic_state(date)
+            self.check_economic_state(globe)
 
-    def check_economic_state(self, date):
+    def check_economic_state(self, globe):
         """function dealing with primary economic decisions"""
 
         if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
             self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] -= 1.5
-            if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65:
-                self.economic_decision({"Issue": "Low economic stability"}, date)
+            """if self.national_policy["Policy"][0]["National Policy"][0]["Economy"][1]["Economic stability"] <= 65:
+                self.economic_decision("Low economic stability", globe.date)"""
             self.neg_ec_growth()
 
         elif self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-            if ((self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] + 1.5) < 100):
-                """Checking to see if adding of 1.5 to economic stability will exceed 100 or not"""
-                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5
+            """if ((self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] + 1.5) < 100):
+                Checking to see if adding of 1.5 to economic stability will exceed 100 or not
+                self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] += 1.5"""
             self.pos_ec_growth()
 
     def pos_ec_growth(self):
@@ -1354,7 +1234,6 @@ class NationAI:
             self.change_relations(globe.nations)
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
-                pass
                 self.protests(globe)
             self.pop_growth()
             self.check_economic_state(globe.date)
