@@ -1,10 +1,7 @@
-import random
-import time
-from datetime import datetime, timedelta
-
-from globe_relations import globe
+import json as js
 from datetime import datetime, timedelta
 from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
 
 """Population Dictionaries"""
 population = {
@@ -62,12 +59,12 @@ leader_images = {"1910": "../leaders/netherlands/skirmer_1910.png",
                  }
 
 class Netherlands(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
+    def __init__(self, globe):
+        super().__init__(globe)
         self.region = "europe"
         self.name = "Netherlands"
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -77,36 +74,26 @@ class Netherlands(playable_nation.PlayableNation):
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        self.flag = flags[year]
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
-        self.e_s = "recovery"
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        # other
-        self.chosen = False
+        self.coordinates = []
+        self.land = ["Dutch East Indies", "Netherlands", "Netherlands Antilles"]
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for land in range(0, len(self.land)):
+            for i in range(0, len(nation_json['countries'])):
+                if self.land[land] == nation_json['countries'][i]['nation_name']:
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))

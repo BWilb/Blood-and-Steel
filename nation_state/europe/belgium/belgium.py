@@ -82,22 +82,14 @@ class Belgium(playable_nation.PlayableNation):
         self.flag = flags[str(globe.date.year)]
         self.political_typology = "Democratic"
         # economic
-        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
+        # relations
         self.improving_relations = []
         self.worsening_relations = []
         # drawing
         self.coordinates = []
-        # other
-
         self.land_1910_1918 = ["Belgium", "Belgian Congo"]
         self.land_1932_1939 = ["Belgium", "Belgian Congo", "Rwanda (Belgium)", "Burundi"]
 

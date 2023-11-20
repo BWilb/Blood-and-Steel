@@ -1,8 +1,8 @@
-import random
-import time
-from datetime import datetime, timedelta
+import json as js
 from datetime import datetime, timedelta
 from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
+
 leaders = {
     "1910": None,
     "1914": None,
@@ -51,7 +51,7 @@ leader_images = {
 class Poland(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
-        self.name = "Republic of Poland"
+        self.name = "Poland"
         # date variables
         self.date = datetime(globe.year, 1, 1)
         self.improve_stability = self.date
@@ -74,9 +74,16 @@ class Poland(playable_nation.PlayableNation):
         self.national_debt = 0
         self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
+        self.coordinates = []
+        self.land = ["Poland"]
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for land in range(0, len(self.land)):
+            for i in range(0, len(nation_json['countries'])):
+                if self.land[land] == nation_json['countries'][i]['nation_name']:
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]

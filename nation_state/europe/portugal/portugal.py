@@ -1,13 +1,7 @@
-import random
-import time
-from datetime import datetime, timedelta
-from enum import Enum
-from game.ai.nation_ai import NationAI
 import json as js
+import random
+from game.ai import playable_nation
 from nation_data.coordination.retreive_and_convert import retreive_coords
-
-from random_functions import random_functions
-
 """Population Dictionaries"""
 population = {
     "1910": 5850000,
@@ -53,13 +47,7 @@ leader_images = {
     "1939": "../leaders/portugal/1932-1939.jpg"
 }
 
-class EconomicState(Enum):
-    RECESSION = 1
-    DEPRESSION = 2
-    EXPANSION = 3
-    RECOVERY = 4
-
-class Portugal(NationAI):
+class Portugal(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
@@ -98,18 +86,3 @@ class Portugal(NationAI):
                 # print(nation_json['countries'][i]['coordinates'])
                 self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = (retreive_coords(self.coordinates))
-    def establish_foreign_objectives(self):
-        if self.date.year <= 1918:
-            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
-            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States",
-                                 "Improve relations with Belgium", "Improve relations with Luxembourg"]
-
-        else:
-            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Japan"]
-            objectives_allies = [""]
-
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
-
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)

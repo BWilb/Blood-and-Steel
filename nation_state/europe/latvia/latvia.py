@@ -1,262 +1,87 @@
 import random
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta
+import json as js
+from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
+
+leader_images = {
+    "1910": "",
+    "1914": "",
+    "1918": "",
+    "1932": "../leaders/latvia/330px-Konstantin_Pats_1934.jpg",
+    "1936": "../leaders/latvia/330px-Konstantin_Pats_1934.jpg",
+    "1939": "../leaders/latvia/330px-Konstantin_Pats_1934.jpg"
+}
+flags = {
+    "1910": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg",
+    "1914": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg",
+    "1918": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg",
+    "1932": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg",
+    "1936": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg",
+    "1939": "../flags/latvia/330px-KFlag_of_Latvia.svg.jpg"
+}
+
 leaders = {
     "1910" : None,
     "1914" : None,
-    "1918" : "Jānis Čakste",
-    "1932" : "Alberts Kviesis",
-    "1936" : "Kārlis Ulmanis",
-    "1939" : "Kārlis Ulmanis"
+    "1918" : "Konstantin Päts",
+    "1932" : "Konstantin Päts",
+    "1936" : "Konstantin Päts",
+    "1939" : "Konstantin Päts"
 }
 
 population = {
-    "1910": 984000,
-    "1914": 1030000,
+    "1910": 2450000,
+    "1914": 2200000,
     "1918": 1950000,
-    "1932": 1890000,
+    "1932": 1880000,
     "1936": 1910000,
-    "1939": 1930000
+    "1939": 1920000
 }
 gdp = {
-    "1910": 9659663,
-    "1914": 9847024,
-    "1918": 10153286,
-    "1932": 10037403,
-    "1936": 10228000,
-    "1939": 10337894
+    "1910": 4659663,
+    "1914": 4847024,
+    "1918": 4953286,
+    "1932": 5037403,
+    "1936": 5228000,
+    "1939": 7037894
 }
 
-class Latvia:
-    def __init__(self, year):
-        # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
+class Latvia(playable_nation.PlayableNation):
+    def __init__(self, globe):
+        super().__init__(globe)
+        self.date_checker = globe.date + timedelta(days=3)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "europe"
+        self.name = "Latvia"
         # social variables
         """population"""
-        self.population = population[year]
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
+        self.population = population[str(globe.date.year)]
         # political
-        self.leader = leaders[year]
-        """Stability"""
-        self.stability = 95.56
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
+        self.political_typology = "Autocratic"
+        self.political_power = 200
+        self.political_exponent = 1.56
         # economic
-        self.national_debt = 0
-        self.current_gdp = gdp[year]
-        self.past_gdp = self.current_gdp
+        self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # other
-    # population functions
-    def population_change(self):
-        """instead of having the headache of calling both national objects separately, why not combine them"""
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
+        self.coordinates = []
+        self.foreign_relations = {"foreign relations": []}
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-        else:
-            if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
-                self.population = (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
-            if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
-                self.population = (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
-            else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
-                self.population = (births - deaths)
-                self.births += births
-                self.deaths += deaths
-    # economic functions
-    def check_economic_state(self):
-        """function dealing with primary economic decisions of canadian parliament"""
-        if self.date > self.economic_change_date:
-            """instead of comparing an entire year, break the year up into sections"""
-            if self.current_gdp > self.past_gdp:
-                if self.e_s.lower() == "recovery":
-                    self.e_s = "expansion"
-                    print("Your economy is now in an expansionary period.\n")
-                    time.sleep(3)
-
-                elif self.e_s.lower() == "recession" or self.e_s.lower() == "depression":
-                    self.e_s = "recovery"
-                    print("Your economy is now in recovery period.\n")
-                    time.sleep(3)
-
-            elif self.current_gdp < self.past_gdp:
-                if self.e_s.lower() == "recession":
-                    self.e_s = "depression"
-                    print("Your economy is now in a recessionary period.\n")
-                    time.sleep(3)
-
-                elif self.e_s.lower() == "recovery" or self.e_s.lower() == "expansion":
-                    self.e_s = "recession"
-                    print("Your economy is now in a depression period.\n")
-                    time.sleep(3)
-        else:
-            if self.e_s == "recession":
-                self.recession()
-
-            elif self.e_s == "recovery":
-                self.recovery()
-
-            elif self.e_s == "depression":
-                self.depression()
-
-            elif self.e_s == "expansion":
-                self.expansion()
-    def recession(self):
-        if self.economic_stimulus:
-
-            self.consumer_spending = -round(random.uniform(10, 150), 2)
-            self.government_spending = round(random.uniform(100, 600), 2)
-            self.national_debt += round(
-                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(50, 350), 2)
-            self.exports = round(random.uniform(10, 45), 2)
-            self.imports = round(random.uniform(10, 75), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-
-        else:
-            self.consumer_spending = -round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 700), 2)
-            self.national_debt += round((-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 500), 2)
-            self.exports = round(random.uniform(10, 30), 2)
-            self.imports = round(random.uniform(10, 105), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                    (self.exports - self.imports))
-    def recovery(self):
-        if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 450), 2)
-            self.government_spending = round(random.uniform(100, 200), 2)
-            self.national_debt += round(
-                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 700), 2)
-            self.exports = round(random.uniform(10, 100), 2)
-            self.imports = round(random.uniform(10, 75), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-        else:
-            self.consumer_spending = round(random.uniform(10, 350), 2)
-            self.government_spending = round(random.uniform(100, 350), 2)
-            self.national_debt += round(
-                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 500), 2)
-            self.exports = round(random.uniform(10, 75), 2)
-            self.imports = round(random.uniform(10, 58), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-
-    def expansion(self):
-        if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 2000), 2)
-            self.government_spending = round(random.uniform(100, 600), 2)
-            self.national_debt += round(
-                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 500), 2)
-            self.imports = round(random.uniform(10, 400), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-        else:
-            self.consumer_spending = round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 500), 2)
-            self.national_debt += round(
-                (self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 500), 2)
-            self.imports = round(random.uniform(10, 350), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-
-    def depression(self):
-        if self.economic_stimulus:
-            self.consumer_spending = round(random.uniform(10, 15), 2)
-            self.government_spending = round(random.uniform(100, 500), 2)
-            self.national_debt += round(
-                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 50), 2)
-            self.imports = round(random.uniform(10, 20), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-        else:
-            self.consumer_spending = -round(random.uniform(10, 200), 2)
-            self.government_spending = round(random.uniform(100, 100), 2)
-            self.national_debt += round(
-                (-self.consumer_spending + self.government_spending) * round(random.uniform(0.15, 0.35), 4), 2)
-            self.investment = -round(random.uniform(100, 300), 2)
-            self.exports = round(random.uniform(10, 50), 2)
-            self.imports = round(random.uniform(10, 20), 2)
-
-            self.current_gdp += (self.consumer_spending + self.investment + self.government_spending +
-                                 (self.exports - self.imports))
-    # stability functions
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+            for i in range(0, len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "Latvia":
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]

@@ -1,6 +1,4 @@
 import random
-import time
-from datetime import datetime, timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
 import json as js
@@ -14,13 +12,6 @@ dictators = {
     "1936": "Joseph Stalin",
     "1939": "Joseph Stalin"
 }
-alternate_monarchs = ["Olga I", "Peter of Oldenburg", "Nikolai III", "Alexandra I",
-                      "Olga II", "Tatiana", "Maria", "Anastasia", "Alexei"]
-
-lenin_successors = ["Leon Trotsky", "Joseph Stalin", "Vladimir Milyutin", "Nikolai Krylenko",
-                    "Pavel Dybenko", "Alexei Rykov", "Anatoly Lunacharsky"]
-
-stalin_successors = ["Vyacheslav Molotov", "Anastas Mikoyan", "Lavrentiy Beria", "Nikolai Bulganin", "Georgy Malenkov",]
 
 population = {
     "1910": 70980000,
@@ -66,7 +57,6 @@ class EconomicState(Enum):
 class RussiaAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
-        self.date_checker = globe.date + timedelta(days=3)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
         self.spare_color = self.nation_color
         self.region = "europe"

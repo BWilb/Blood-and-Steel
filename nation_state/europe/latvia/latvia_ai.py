@@ -1,10 +1,8 @@
 import random
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json as js
 from game.ai.nation_ai import NationAI
 from nation_data.coordination.retreive_and_convert import retreive_coords
-from enum import Enum
 
 leader_images = {
     "1910": "",

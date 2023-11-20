@@ -1,6 +1,5 @@
-import random
-import time
-from datetime import datetime, timedelta
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
 from datetime import datetime, timedelta
 from game.ai import playable_nation
 leaders = {
@@ -30,10 +29,10 @@ gdp = {
 }
 
 class Switzerland(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
+    def __init__(self, globe):
+        super().__init__(globe)
         # date variables
-        self.date = datetime(int(year), 1, 1)
+        self.date = datetime(globe.date.year, 1, 1)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         self.debt_repayment = self.date
@@ -46,28 +45,21 @@ class Switzerland(playable_nation.PlayableNation):
         self.population = population[year]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
         self.leader = leaders[year]
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
+
         self.national_debt = 0
         self.current_gdp = gdp[year]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # other
-        self.chosen = False
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+        for i in range(len(nation_json['countries'])):
+            if (nation_json['countries'][i]['nation_name'] == "Switzerland"):
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))

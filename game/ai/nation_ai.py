@@ -89,7 +89,8 @@ class NationAI:
                      "Repress Far-Right": False,
                      "Repress Autocrats": False,
                      "Repress Liberals": False},
-                    {"Political stability": 90.0}
+                    {"Political stability": 90.0,
+                     "Improving PS": False}
                     # for political rewards to be utilized, AI must make political decision
                     # for example if there is a far left protest and the AI handles the protest by killing everyone...
                     # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
@@ -885,8 +886,7 @@ class NationAI:
 
         for memory in range(0, len(self.long_term_memory[0]["Domestic problems"][0]["Protests"])):
             if self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory]['Duration'] < globe.date:
-                self.long_term_memory[0]["Domestic problems"][0]["Protests"].pop(
-                    self.long_term_memory[0]["Domestic problems"][0]["Protests"][memory])
+                self.long_term_memory[0]["Domestic problems"][0]["Protests"].pop(memory)
 
         self.instill_ideological_growth()
 
@@ -958,7 +958,6 @@ class NationAI:
         self.political_power += self.political_exponent
 
     # economic functions
-
     def handle_depression(self, depress_sum):
         if depress_sum >= 4:
             actions = ['Decrease Corporate Taxes', "Decrease Income Taxes", "Increase Exports", "Decrease Imports"]
@@ -1191,111 +1190,44 @@ class NationAI:
             self.handle_low_es()
 
     # stability functions
-    def stability_happiness_change(self, globe):
-        # 1. check economic stability
-        # 2. check current economic state
-        pass
-        """if self.national_policy["Policy"][0]["Domestic Policy"][0]["Economy"][1]["Economic stability"] > 65:
-            if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-                if "Improve political stability" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
 
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve stability']['Expiration date'][0] > globe.date):
-                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 6.5 < 100:
-                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 6.5
+    def check_stability(self):
+        chance = random.randrange(10, 200)
+        if self.political_typology == "Communism" or self.political_typology == "Fascist" or self.political_typology == "Autocratic":
+            if self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] <= 80:
+                if chance % 3 == 1 or chance % 6 == 2:
+                    if not self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS']:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS'] = True
+        else:
+            if self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] <= 60:
+                if chance % 9 == 5 or chance % 15 == 6:
+                    if not self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS']:
+                        self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS'] = True
 
-                else:
+        if 90 <= self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] <= 100:
+            self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS'] = False
 
-                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 3.5 < 100:
-                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 3.5
-
-                if "Improve happiness levels" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve happiness']['Expiration date'] > globe.date):
-                        if self.happiness + 7.5 < 100:
-                            self.happiness += 7.5
-                else:
-
-                    if self.happiness + 4.5 < 100:
-                        self.happiness += 4.5
-
+    def stability_change(self):
+        if self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] <= 50:
+            if self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS']:
+                if (self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] + 0.25) < 100:
+                    self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] += 0.25
             else:
-                if "Improve political stability" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve stability']['Expiration date'] > globe.date):
-                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
-                            'Political stability'] + 4.5 < 100:
-                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 4.5
-                else:
-
-                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] - 1.5 > -100:
-                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
-
-                if "Improve happiness levels" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve happiness']['Expiration date'] > globe.date):
-                        if self.happiness + 3 < 100:
-                            self.happiness += 3
-
-                else:
-                    if self.happiness - 2.5 > -100:
-                        self.happiness -= 2.5
+                self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] -= 2.5
 
         else:
-            if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
-
-                if "Improve political stability" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve stability']['Expiration date'] > globe.date):
-                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 4.5 < 100:
-                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 4.5
-
-                else:
-                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] + 2.5 < 100:
-                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 2.5
-
-                if "Improve happiness levels" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve happiness']['Expiration date'] > globe.date):
-                        if self.happiness + 5.5 < 100:
-                            self.happiness += 5.5
-
-                else:
-                    if self.happiness + 2.5 < 100:
-                        self.happiness += 2.5
-
+            if self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Improving PS']:
+                if (self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] + 4.25) < 100:
+                    self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] += 4.25
             else:
-                if "Improve political stability" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve stability']['Expiration date'] > globe.date):
-                        if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
-                            'Political stability'] + 0.5 < 100:
-                            self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] += 0.5
-
-                else:
-                    if self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2][
-                        'Political stability'] - 1.5 > -100:
-                        self.national_policy['Policy'][0]['Domestic Policy'][0]["Political"][2]['Political stability'] -= 1.5
-
-                if "Improve happiness levels" in self.objectives['objectives'][1]['domestic'][0]['political objectives']:
-                    if (self.objectives['objectives'][1]['domestic'][0]['political objectives']
-                    ['Improve happiness']['Expiration date'] > globe.date):
-                        if self.happiness + 0.75 < 100:
-                            self.happiness += 3
-
-                else:
-                    if self.happiness - 2.5 > -100:
-                        self.happiness -= 2.5"""
+                if (self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] + 2.25) < 100:
+                    self.national_policy['Policy'][0]['Domestic Policy'][0]['Political'][1]['Political stability'] += 2.25
 
     def main(self, globe, network, user_nation):
         while self.population > 250000:
             self.check_population_growth(globe)
             self.political_power_growth()
-            self.stability_happiness_change(globe)
+            #self.stability_change()
             if globe.date > self.date_checker:
                 self.determine_diplomatic_approach(globe, network, user_nation)
                 self.date_checker = globe.date + timedelta(days=3)

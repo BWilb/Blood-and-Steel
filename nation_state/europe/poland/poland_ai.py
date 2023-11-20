@@ -1,6 +1,4 @@
 import random
-import time
-from datetime import timedelta, datetime
 from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
