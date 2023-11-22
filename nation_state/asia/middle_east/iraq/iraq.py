@@ -1,5 +1,15 @@
-from datetime import datetime, timedelta
+import random
+from enum import Enum
 from game.ai import playable_nation
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
+
+
+class EconomicState(Enum):
+    RECESSION = 1
+    DEPRESSION = 2
+    EXPANSION = 3
+    RECOVERY = 4
 
 leaders = {
     "1910": None,
@@ -12,12 +22,12 @@ leaders = {
 
 
 population = {
-    "1910": 10970000,
-    "1914": 10320000,
-    "1918": 9530000,
-    "1932": 13270000,
-    "1936": 14230000,
-    "1939": 14970000
+    "1910": 2850000,
+    "1914": 3090000,
+    "1918": 3340000,
+    "1932": 3980000,
+    "1936": 4020000,
+    "1939": 4080000
 }
 
 """Economic Dictionaries and Variables"""
@@ -50,51 +60,36 @@ leader_images = {
 class Iraq(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "asia"
         self.name = "Iraq"
-        # date variables
-        self.date = datetime(globe.date.year, 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
-        """Stability"""
-        self.stability = 95.56
         self.flag = flags[str(globe.date.year)]
-        # economic
-        self.national_debt = 0
+        self.political_power = 200
+        self.political_exponent = 1.56
+
         self.current_gdp = gdp[str(globe.date.year)]
-        self.past_gdp = self.current_gdp
-        self.e_s = "recovery"
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        """general"""
-        self.alliance = ""
-        # coordinates
-        self.iraqi_coords = []
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
         # other
-        self.chosen = False
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+            for i in range(0, len(nation_json['countries'])):
+                if nation_json['countries'][i]['nation_name'] == "Mesopotamia (GB)":
+                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]

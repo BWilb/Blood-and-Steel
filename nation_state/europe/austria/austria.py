@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 
 """Population Dictionaries"""
 population = {
@@ -60,11 +62,6 @@ class Austria(playable_nation.PlayableNation):
         self.name = "austria"
         # date variables
         self.date = datetime(globe.date.year, 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
         # amount of days that is given to the economy for it to either shrink or grow before being checked
         self.current_year = self.date.year
         # social variables
@@ -72,35 +69,34 @@ class Austria(playable_nation.PlayableNation):
         self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
         self.leader = leaders[str(globe.date.year)]
-        """Stability"""
-        self.stability = 95.56
         self.flag = flags[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         # economic
-        self.e_s = "recovery"
         self.national_debt = 0
         self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        # drawing
+        self.land_1910_1918 = ["Austro-Hungarian Empire"]
+        self.land_1932 = ["Austria"]
         self.coordinates = []
-        # other
-        self.chosen = False
+
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+        if self.date.year <= 1918:
+            for land in range(0, len(self.land_1910_1918)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1918[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = [(retreive_coords(self.coordinates))]
+
+        if self.date.year > 1918:
+            for land in range(0, len(self.land_1932)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = [(retreive_coords(self.coordinates))]

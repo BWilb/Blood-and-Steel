@@ -68,12 +68,6 @@ class Brazil(NationAI):
         self.national_debt = 0
         self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        """Components of GDP"""
-        """self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0"""
         # other
         self.coordinates = []
 

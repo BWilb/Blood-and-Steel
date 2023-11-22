@@ -1,17 +1,16 @@
-import random
-import time
 from datetime import datetime, timedelta
-from datetime import datetime, timedelta
+from enum import Enum
 from game.ai import playable_nation
-
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 """Population Dictionaries"""
 population = {
     "1910": 2286981,
-    "1914": 2618301,
-    "1918": 2916220,
-    "1932": 4147085,
-    "1936": 4409675,
-    "1939": 4620766
+    "1914": 2578301,
+    "1918": 2906220,
+    "1932": 4087085,
+    "1936": 4379675,
+    "1939": 4610766
 }
 
 """Political Dictionaries"""
@@ -49,51 +48,40 @@ leader_images = {"1910": "../leaders/cuba/Gral_de_División_José_Miguel_Gomez_G
                  "1939": "../leaders/cuba/1939.jpeg"
                  }
 
+class EconomicState(Enum):
+    RECESSION = 1
+    DEPRESSION = 2
+    EXPANSION = 3
+    RECOVERY = 4
+
 class Cuba(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
-        self.name = "Cuban Republic"
+    def __init__(self, globe):
+        super().__init__(globe)
+        self.name = "Cuba"
         # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
+        self.date = datetime(globe.date.year, 1, 1)
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        self.flag = flags[year]
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        self.e_s = "recovery"
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        # other
-        self.chosen = False
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            print(nation_json['countries'][i]['nation_name'])
+            if nation_json['countries'][i]['nation_name'] == "Cuba":
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates = [((nation_json['countries'][i]['coordinates']))]
+        self.coordinates = [(retreive_coords(self.coordinates))]

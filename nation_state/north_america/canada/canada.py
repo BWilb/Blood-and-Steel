@@ -51,50 +51,25 @@ leader_images = {
 }
 
 class Canada(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
-        self.is_intact = True
+    def __init__(self, globe):
+        super().__init__(globe)
         self.name = "Canada"
         # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_stimulus = self.date
-        self.economic_change_date = self.date + timedelta(days=60)
+        self.date = datetime(globe.date.year, 1, 1)
         # amount of days that is given to the economy for it to either shrink or grow before being checked
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
-        self.birth_enhancer = False
-        self.birth_control = False
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
-        """happiness"""
-        self.happiness = 98.56
         # political
-        self.leader = pms[year]
-        self.leader_image = leader_images[year]
+        self.leader = pms[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
         """Stability"""
         self.stability = 95.56
-        self.flag = flags[year]
+        self.flag = flags[str(globe.date.year)]
         # economic
         self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        self.e_s = "recovery"
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        """general"""

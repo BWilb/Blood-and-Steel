@@ -1,32 +1,20 @@
-import random
-import sys
-import time
-from collections import OrderedDict
 from datetime import datetime, timedelta
-from datetime import datetime, timedelta
+from enum import Enum
 from game.ai import playable_nation
-def establish_foreign_nations(globe, *args):
-    """labelling second parameter as *args, due to unknown number of nations that will be sent into this function"""
-    for i in range(0, len(args)):
-        globe.nations.append(args[i])
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
+import random
 
-
-def slow_print(words):
-    # used in international relations function, when dealing out region names
-    for c in words:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.19)
-
+#from random_functions import random_functions
 
 """Population Dictionaries"""
 population = {
-    "1910": 14702456,
-    "1914": 14742623,
-    "1918": 14782786,
+    "1910": 14502456,
+    "1914": 14532623,
+    "1918": 17242786,
     "1932": 17635255,
-    "1936": 18971701,
-    "1939": 19961661
+    "1936": 18471701,
+    "1939": 19511661
 }
 
 """Political Dictionaries"""
@@ -63,52 +51,46 @@ leader_images = {"1910": "../leaders/mexico/Porfirio_Diaz_en_1867.jpg",
                  "1936": "../leaders/mexico/lazaro_1936_1939.jpeg",
                  "1939": "../leaders/mexico/lazaro_1936_1939.jpeg"
                  }
+
+class EconomicState(Enum):
+    RECESSION = 1
+    DEPRESSION = 2
+    EXPANSION = 3
+    RECOVERY = 4
+
 class Mexico(playable_nation.PlayableNation):
     def __init__(self, globe):
         super().__init__(globe)
-        self.is_intact = True
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "North America"
         self.name = "Mexico"
-        # date variables
-        self.date = datetime(int(globe.date.year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
-        self.past_population = self.population
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
+        self.political_typology = "Autocratic"
         self.leader = leaders[str(globe.date.year)]
-        """leader image only for sprite version"""
         self.leader_image = leader_images[str(globe.date.year)]
-        self.political_power = 200
-        self.political_exponent = 1.25
-        """Stability"""
-        self.stability = 95.56
         self.flag = flags[str(globe.date.year)]
-        # economic
-        self.e_s = "recovery"
-        self.national_debt = 0
+        self.political_power = 200
+        self.political_exponent = 1.56
         self.current_gdp = gdp[str(globe.date.year)]
-        self.past_gdp = self.current_gdp
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            print(nation_json['countries'][i]['nation_name'])
+            if nation_json['countries'][i]['nation_name'] == "Mexico":
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates = [((nation_json['countries'][i]['coordinates']))]
+        self.coordinates = [(retreive_coords(self.coordinates))]

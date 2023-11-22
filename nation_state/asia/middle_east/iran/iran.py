@@ -1,7 +1,16 @@
 import random
 import time
 from datetime import datetime, timedelta
+from enum import Enum
 from game.ai import playable_nation
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
+
+class EconomicState(Enum):
+    RECESSION = 1
+    DEPRESSION = 2
+    EXPANSION = 3
+    RECOVERY = 4
 
 leaders = {
     "1910": "Ahmad Shah Qajar",
@@ -50,114 +59,38 @@ leader_images = {
 }
 
 class Iran(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
-        self.name = "iran"
-        # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
+    def __init__(self, globe):
+        super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "asia"
+        self.name = "Iran"
         # social variables
         """population"""
-        self.population = population[year]
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
+        self.population = population[str(globe.date.year)]
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        """Stability"""
-        self.stability = 95.56
-        self.flag = flags[year]
-        # economic
-        self.national_debt = 0
-        self.current_gdp = gdp[year]
-        self.past_gdp = self.current_gdp
-        self.e_s = "recovery"
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
+        self.political_power = 200
+        self.political_exponent = 1.56
+        """Economic"""
+        self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        """general"""
-        self.alliance = ""
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
         # other
-        self.chosen = False
-    # population functions
-    def population_change(self):
-        """instead of having the headache of calling both national objects separately, why not combine them"""
+        self.coordinates = []
 
-        if self.current_year < self.date.year:
-            pop_change = ((self.births - self.deaths) / ((self.births + self.deaths) / 2)) * 100
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
 
-            if pop_change < 2.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to promote population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_enhancer = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-            elif pop_change > 12.56:
-                """incorporation of what happens when Mexican birth rate becomes too low"""
-                choice = input(f"Your population growth rate for {self.current_year} was {pop_change}%.\n"
-                               f"Would you like to slow your population growth?: ")
-                not_answered = False
-
-                while not_answered:
-                    if choice.lower() == "y" or choice.lower() == "yes":
-                        self.birth_control = True
-                        not_answered = True
-
-                    elif choice.lower() == "n" or choice.lower() == "no":
-                        not_answered = True
-
-                    else:
-                        print("Please enter your answer more efficiently. (y, yes, n, or no)\n")
-                        time.sleep(3)
-        else:
-            if self.birth_enhancer:
-                births = random.randrange(20, 40)
-                deaths = random.randrange(11, 30)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
-            if self.birth_control:
-                births = random.randrange(10, 30)
-                deaths = random.randrange(25, 35)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
-
-            else:
-                births = random.randrange(7, 15)
-                deaths = random.randrange(4, 10)
-                self.population += (births - deaths)
-                self.births += births
-                self.deaths += deaths
-    # economic functions
+        for i in range(len(nation_json['countries'])):
+            if (nation_json['countries'][i]['nation_name'] == "Iran" or nation_json['countries'][i]['nation_name'] == "Persia"):
+                # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = [(retreive_coords(self.coordinates))]

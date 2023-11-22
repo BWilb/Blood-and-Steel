@@ -44,11 +44,6 @@ class SpriteGame:
         self.nation_map = []
         self.nation_button = None
         self.network = nx.Graph()
-        self.first_polish = []
-        self.second_polish = []
-        self.attacking_nation = None
-        self.defending_nation = None
-        self.nation_under_attack = None
         self.coordinates = []
 
     def background_music(self):
@@ -292,9 +287,9 @@ class SpriteGame:
                 pass
             else:
                 self.globe.nations[i].main(self.globe, self.network, self.nation)
-                print(self.network)
+                """print(self.network)
 
-                print(self.globe.nations[i].name, (self.globe.nations[i].military['military']['Army']['Figures']['Cost']))
+                print(self.globe.nations[i].name, (self.globe.nations[i].military['military']['Army']['Figures']['Cost']))"""
 
         # upload_database.update_database_info(self.globe.nations)
 
@@ -386,7 +381,35 @@ class SpriteGame:
         if back_button.draw(self.screen):
             self.game_state = "main game"
 
+    def finding_pos_foreign_nations(self):
+        nations = []
+        print(self.nation.improving_relations)
+        for nation in self.nation_selected.improving_relations:
+            for foreign_nation in self.globe.nations:
+                if nation['nation name'] == foreign_nation.name:
+                    print(foreign_nation.name)
+                    nations.append(foreign_nation.flag)
+        return nations
+
+    def finding_neg_foreign_relations(self):
+        nations = []
+        print(self.nation.worsening_relations)
+        for nation in self.nation_selected.worsening_relations:
+            for foreign_nation in self.globe.nations:
+                if foreign_nation.name == nation['nation name']:
+                    nations.append(foreign_nation.flag)
+
+        return nations
+
+    def finding_guarantees(self):
+        pass
+
     def view_foreign_nation(self):
+        #print(self.nation_selected.flag)
+        worsening_relations = []
+        improving_relations = []
+        improving_relations.append(self.finding_pos_foreign_nations())
+        worsening_relations.append(self.finding_neg_foreign_relations())
 
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(125, 900, back_img, 0.05)
@@ -429,8 +452,19 @@ class SpriteGame:
         else:
             if stop_relations_button.draw(self.screen):
                 self.remove_relations(self.nation, self.nation_selected)
+        relation_button = button.Button(25, 400, improve_relation_img, 0.20)
+        # initial starting point (y = 425 for all, x go by 15, also draw flag of nation
+        x = 15
+        for relation in improving_relations:
+            for flag in relation:
+                flag_img = pygame.image.load(flag).convert_alpha()
+                flag_img = pygame.transform.scale(flag_img, (50, 50))
+                flag_button = button.Button(x, 475, flag_img, 0.60)
+                flag_button.draw(self.screen)
+                x += 40
 
-        for nation, relations in self.nation_selected.foreign_relations.items():
+
+        """for nation, relations in self.nation_selected.foreign_relations.items():
             if nation == self.nation.name:
                 self.draw_text(f"{self.nation_selected.name} relations with {self.nation.name}: {relations}",
                                pygame.font.SysFont("Arial-Black", 12), (255, 255, 255),
@@ -451,7 +485,7 @@ class SpriteGame:
         if worsen_button.draw(self.screen):
             pass
         if justify_button.draw(self.screen):
-            pass
+            pass"""
 
         if back_button.draw(self.screen):
             self.game_state = "main game"

@@ -1,5 +1,19 @@
-from datetime import datetime, timedelta
+import random
+from enum import Enum
 from game.ai import playable_nation
+import json as js
+from nation_data.coordination.retreive_and_convert import retreive_coords
+
+class EconomicState(Enum):
+    RECESSION = 1
+    DEPRESSION = 2
+    EXPANSION = 3
+    RECOVERY = 4
+
+class PopulationState(Enum):
+    LOW_GROWTH = 1
+    HIGH_GROWTH = 2
+    STABLE = 3
 
 leaders = {
     "1910": "Katsura Tarō",
@@ -19,12 +33,12 @@ monarchs = {
 }
 
 population = {
-    "1910": 49600000,
-    "1914": 52500000,
-    "1918": 55000000,
-    "1932": 66300000,
-    "1936": 70400000,
-    "1939": 72500000
+    "1910": 49880000,
+    "1914": 52340000,
+    "1918": 54930000,
+    "1932": 66390000,
+    "1936": 69870000,
+    "1939": 72630000
 }
 gdp = {
     "1910": 6366802632,
@@ -52,51 +66,43 @@ leader_images = {
 }
 
 class Japan(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
+    def __init__(self, globe):
+        super().__init__(globe)
+        self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
+        self.region = "asia"
         self.name = "Japan"
-        # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
-        # amount of days that is given to the economy for it to either shrink or grow before being checked
-        self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
-        self.births = 0
-        self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
+        self.population = population[str(globe.date.year)]
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        """Stability"""
-        self.stability = 95.56
-        self.flag = flags[year]
-        # economic
-        self.national_debt = 0
-        self.current_gdp = gdp[year]
-        self.past_gdp = self.current_gdp
-        self.e_s = "recovery"
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
+        if globe.date.year <= 1932:
+            self.political_typology = "Autocratic"
+
+        else:
+            self.political_typology = "Fascist"
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
+        self.political_power = 200
+        self.political_exponent = 1.56
+        self.current_gdp = gdp[str(globe.date.year)]
         """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        """general"""
-        self.alliance = ""
+        self.consumer_spending = 200
+        self.investment = 300
+        self.government_spending = 350
+        self.exports = 1000
+        self.imports = 1200
         # other
-        self.chosen = False
+        self.coordinates = []
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            # print(nation_json['countries'][i]['nation_name'])
+            if (nation_json['countries'][i]['nation_name'] == "Empire of Japan"):
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
