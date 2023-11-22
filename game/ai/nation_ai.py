@@ -351,8 +351,33 @@ class NationAI:
                         """Checking to see if relations with foreign nation are potentially fatal"""
                         self.foreign_relations["foreign relations"][foreign_relation]["relation status"] = "enemy"
 
-    def change_relations(self, foreign_nations):
-        pass
+    def change_relations(self):
+        for relation in range(0, len(self.improving_relations)):
+            for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                if self.foreign_relations['foreign relations'][nation]['nation'].name == self.improving_relations[relation]['nation name']:
+                    if (self.foreign_relations['foreign relations'][nation]['relations'] + 1.5) < 100:
+                        self.foreign_relations['foreign relations'][nation]['relations'] += 1.5
+
+                    else:
+                        for i in range(0, len(self.objectives['objectives'][0]['foreign'])):
+                            if (f"improve relations with {nation}") == self.objectives['objectives'][0]['foreign'][i]:
+                                self.objectives['objectives'][0]['foreign'].pop(i)
+
+                                self.objectives['objectives'][0]['foreign'].append(
+                                    f"create alliance with {self.foreign_relations['foreign relations'][0]['nation'].name}")
+
+        for relation in range(0, len(self.worsening_relations)):
+            for nation in range(0, len(self.foreign_relations['foreign relations'])):
+                if self.worsening_relations[relation]['nation name'] == self.foreign_relations['foreign relations'][nation][
+                    'nation'].name:
+                    if (self.foreign_relations['foreign relations'][nation]['relations'] - 1.5) > -100:
+                        self.foreign_relations['foreign relations'][nation]['relations'] -= 1.5
+
+                        if (self.foreign_relations['foreign relations'][nation]['relations'] < -25 and self.political_typology !=
+                                self.foreign_relations['foreign relations'][nation]['nation'].political_typology):
+                            (self.objectives['objectives'][0]['foreign'].
+                            append(
+                                f"develop war goal against {self.foreign_relations['foreign relations'][nation]['nation'].name}"))
 
     def make_positive_decision(self, foreign_nation, globe, network):
         potential_actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
@@ -416,21 +441,29 @@ class NationAI:
                         if not network.has_edge(self.name, foreign_nation.name):
                             network.add_edge(self.name, foreign_nation.name)
 
-        elif action == "Improve relations" and self.political_power >= 25:
-            if len(self.improving_relations) > 0:
-                for nation in self.improving_relations:
-                    if foreign_nation.name not in nation['nation name']:
+        if action == "Improve relations" and self.political_power >= 25:
+            if foreign_nation.name not in [rel['nation name'] for rel in self.improving_relations]:
+                # Check if there's room for additional relations and the absence of a direct connection
+                if len(self.improving_relations) < 10 and not network.has_edge(self.name, foreign_nation.name):
+                    network.add_edge(self.name, foreign_nation.name)
+                    # Add a new relation entry and adjust political attributes
+                    self.improving_relations.append({
+                        "nation name": foreign_nation.name,
+                        "duration": globe.date + timedelta(days=20)
+                    })
 
-                        if len(self.improving_relations) < 10:
-                            if not network.has_edge(self.name, foreign_nation.name):
-                                network.add_edge(self.name, foreign_nation.name)
-                            self.improving_relations.append({"nation name": foreign_nation.name,
-                                                             "duration": globe.date + timedelta(days=20)})
-                            self.political_power -= 25
-                            self.political_exponent -= 0.15
-            else:
-                self.improving_relations.append({"nation name": foreign_nation.name,
-                                                "duration": globe.date + timedelta(days=20)})
+                    self.political_power -= 25
+                    self.political_exponent -= 15
+                else:
+                    # If maximum relations reached or a direct connection exists, add relation without network or power modification
+                    self.improving_relations.append({
+                        "nation name": foreign_nation.name,
+                        "duration": globe.date + timedelta(days=20)
+                    })
+
+                    self.political_power -= 25
+
+                    self.political_exponent -= 15
 
     def make_negative_decision(self, foreign_nation, globe, network):
         potential_actions = ["incursion into sphere of influence", "worsen relations", "embargo",
@@ -520,6 +553,28 @@ class NationAI:
                         self.objectives["objectives"][0]['foreign']):
 
                     self.make_positive_decision(foreign_nation, globe, network)
+        self.check_improve_relations(globe)
+        self.check_worsen_relations(globe)
+
+    def check_improve_relations(self, globe):
+        expired_relations = []
+        for relation in self.improving_relations:
+            if globe.date > relation['duration']:
+                expired_relations.append(relation)
+
+        # Remove expired relations after iteration to avoid modifying the list during iteration
+        for relation in expired_relations:
+            self.improving_relations.remove(relation)
+
+    def check_worsen_relations(self, globe):
+        expired_relations = []
+        for relation in self.worsening_relations:
+            if globe.date > relation['duration']:
+                expired_relations.append(relation)
+
+        # Remove expired relations after iteration to avoid modifying the list during iteration
+        for relation in expired_relations:
+            self.worsening_relations.remove(relation)
 
     # population functions
 
@@ -1204,7 +1259,7 @@ class NationAI:
             if globe.date > self.date_checker:
                 self.determine_diplomatic_approach(globe, network, user_nation)
                 self.date_checker = globe.date + timedelta(days=3)
-            self.change_relations(globe.nations)
+            self.change_relations()
             chance = random.randrange(1, 50)
             if chance % 8 == 2 or chance % 5 == 4:
                 self.protests(globe)

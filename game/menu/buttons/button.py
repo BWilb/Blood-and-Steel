@@ -27,15 +27,6 @@ class Button():
 
         return action
 
-"""class PolygonButton:
-    def __init__(self, vertices, color, nation_info, screen):
-        self.vertices = vertices
-        self.color = color
-        self.nation_info = nation_info
-        self.screen = screen
-
-    def is_clicked(self, mouse_pos):
-        return pygame.draw.polygon(self.screen, self.color, self.vertices).collidepoint(mouse_pos)"""
 class PolygonButton:
     def __init__(self, vertices, color, nation_info):
         self.vertices = vertices

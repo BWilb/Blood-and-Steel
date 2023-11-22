@@ -45,6 +45,22 @@ gdp = {
     "1939": 19882323232
 }
 
+flags = {"1910": "../flags/romania/romania.jpeg",
+         "1914": "../flags/romania/romania.jpeg",
+         "1918": "../flags/romania/romania.jpeg",
+         "1932": "../flags/romania/romania.jpeg",
+         "1936": "../flags/romania/romania.jpeg",
+         "1939": "../flags/romania/romania.jpeg"}
+
+leader_images = {
+    "1910": "../leaders/romania/Carp_(The_Road_to_Romanian_Independence)_1910.jpeg",
+    "1914": "../leaders/romania/IonelBratianu3b40761r_1914-1918.jpg",
+    "1918": "../leaders/romania/IonelBratianu3b40761r_1914-1918.jpg",
+    "1932": "../leaders/romania/Iorga_at_his_desk_Luceaferul_2,_1914-1932.jpg",
+    "1936": "../leaders/romania/255px-Gheorghe_Tătărescu-1936.jpg",
+    "1939": "../leaders/romania/Miron_Cristia_patriach_of_Romania-1939.jpeg"
+}
+
 class EconomicState(Enum):
     RECESSION = 1
     DEPRESSION = 2
@@ -62,6 +78,8 @@ class RomaniaAI(NationAI):
         self.population = population[str(globe.date.year)]
         # political
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
 

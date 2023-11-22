@@ -383,20 +383,17 @@ class SpriteGame:
 
     def finding_pos_foreign_nations(self):
         nations = []
-        print(self.nation.improving_relations)
         for nation in self.nation_selected.improving_relations:
             for foreign_nation in self.globe.nations:
                 if nation['nation name'] == foreign_nation.name:
-                    print(foreign_nation.name)
                     nations.append(foreign_nation.flag)
         return nations
 
     def finding_neg_foreign_relations(self):
         nations = []
-        print(self.nation.worsening_relations)
         for nation in self.nation_selected.worsening_relations:
             for foreign_nation in self.globe.nations:
-                if foreign_nation.name == nation['nation name']:
+                if nation['nation name'] == foreign_nation.name:
                     nations.append(foreign_nation.flag)
 
         return nations
@@ -416,14 +413,14 @@ class SpriteGame:
         """back button established to escape function"""
         improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
+        worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
+        worsen_button = button.Button(25, 525, worsen, 0.20)
         stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
         stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
         pact_button = button.Button(25, 575, establish_pact, 0.20)
         embargo = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
         embargo_button = button.Button(25, 650, embargo, 0.20)
-        worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
-        worsen_button = button.Button(25, 725, worsen, 0.20)
         justify = pygame.image.load("buttons/relations_buttons/justify_war.jpg").convert_alpha()
         justify_button = button.Button(25, 800, justify, 0.20)
         """Diplomacy buttons"""
@@ -463,7 +460,16 @@ class SpriteGame:
                 flag_button.draw(self.screen)
                 x += 40
 
-
+        if worsen_button.draw(self.screen):
+            pass
+        x = 15
+        for relation in worsening_relations:
+            for flag in relation:
+                flag_img = pygame.image.load(flag).convert_alpha()
+                flag_img = pygame.transform.scale(flag_img, (50, 50))
+                flag_button = button.Button(x, 600, flag_img, 0.60)
+                flag_button.draw(self.screen)
+                x += 40
         """for nation, relations in self.nation_selected.foreign_relations.items():
             if nation == self.nation.name:
                 self.draw_text(f"{self.nation_selected.name} relations with {self.nation.name}: {relations}",

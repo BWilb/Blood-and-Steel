@@ -42,12 +42,12 @@ flags = {
     "1939": "../flags/chile/Flag_of_Chile.jpg"
 }
 
-leader_images = {"1910": "../leaders/britain/Pedro_Montt_(crop)-1910.jpg",
-                 "1914": "../leaders/britain/330px-Barros_Luco-MHN_(cropped)-1914.jpg",
-                 "1918": "../leaders/britain/330px-Jlsanfuentes-1918.png",
-                 "1932": "../leaders/britain/ARTURO ALESSANDRI PALMA-1932.jpg",
-                 "1936": "../leaders/britain/Bartolomé_Blanche-1932.jpeg",
-                 "1939": "../leaders/britain/330px-Pedro_Aguirre_Cerda-1939.jpg"
+leader_images = {"1910": "../leaders/Chile/Pedro_Montt_(crop)-1910.jpg",
+                 "1914": "../leaders/Chile/330px-Barros_Luco-MHN_(cropped)-1914.jpg",
+                 "1918": "../leaders/Chile/330px-Jlsanfuentes-1918.png",
+                 "1932": "../leaders/Chile/ARTURO ALESSANDRI PALMA-1932.jpg",
+                 "1936": "../leaders/Chile/Bartolomé_Blanche-1932.jpeg",
+                 "1939": "../leaders/Chile/330px-Pedro_Aguirre_Cerda-1939.jpg"
 }
 
 class Chile(NationAI):

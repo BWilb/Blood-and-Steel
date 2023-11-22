@@ -130,7 +130,6 @@ def establish_json_files(time):
     json_writer = JsonWriter(int(time))
     json_writer.clear_old_file()
 
-
 def accept_nation(nation, time):
     #print(time)
     from globe_relations import globe
