@@ -95,14 +95,12 @@ class SpriteGame:
         if not self.network.has_edge(nation1.name, nation2.name):
             self.network.add_edge(nation1.name, nation2.name)
             self.nation.improving_relations.append(nation2.name)
-            print(self.network)
-        if not self.network.has_edge(nation1.name, nation2.name):
-            print("no edge")
+            #print(self.network)
 
     def remove_relations(self, nation1, nation2):
         if self.network.has_edge(nation1.name, nation2.name):
             self.network.remove_edge(nation1.name, nation2.name)
-            print(self.network)
+            #print(self.network)
 
         for i in range(0, len(self.nation.improving_relations)):
             if nation2.name == self.nation.improving_relations[i]:
@@ -384,29 +382,61 @@ class SpriteGame:
     def finding_pos_foreign_nations(self):
         nations = []
         for nation in self.nation_selected.improving_relations:
-            for foreign_nation in self.globe.nations:
-                if nation['nation name'] == foreign_nation.name:
-                    nations.append(foreign_nation.flag)
+            for foreign_nation in self.nation_selected.foreign_relations['foreign relations']:
+                if nation['nation name'] == foreign_nation['nation'].name:
+                    nations.append(foreign_nation['nation'].flag)
         return nations
 
     def finding_neg_foreign_relations(self):
         nations = []
         for nation in self.nation_selected.worsening_relations:
-            for foreign_nation in self.globe.nations:
-                if nation['nation name'] == foreign_nation.name:
-                    nations.append(foreign_nation.flag)
+            for foreign_nation in self.nation_selected.foreign_relations['foreign relations']:
+                if nation['nation name'] == foreign_nation['nation'].name:
+                    nations.append(foreign_nation['nation'].flag)
 
         return nations
 
     def finding_guarantees(self):
-        pass
+        nations = []
+        for nation in self.nation_selected.foreign_relations['foreign relations']:
+            if nation['guaranteeing independence']:
+                nations.append(nation['nation'].flag)
 
-    def view_foreign_nation(self):
+        return nations
+
+    def view_foreign_nation_info(self):
+        font = pygame.font.SysFont("Arial-Black", 15)
+        diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
+        diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
+        details_img = pygame.image.load("buttons/relations_buttons/national_details.jpg").convert_alpha()
+        details_button = button.Button(200, 350, details_img, 0.1)
+        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 50)
+
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+        self.draw_text(f"Government Stats", font, (255, 255, 255), 125, 400)
+        self.draw_text(f"Ideology: {self.nation_selected.political_typology}", font, (255, 255, 255), 150, 450)
+
+        self.draw_text('Economic stats', font, (255, 255, 255), 125, 575)
+        self.draw_text(f'Gross Domestic Product: {self.nation_selected.current_gdp}', font, (255, 255, 255), 75, 600)
+        self.draw_text(f'National Debt: {self.nation_selected.current_gdp}', font, (255, 255, 255), 75, 635)
+
+        self.draw_text('Social stats', font, (255, 255, 255), 125, 700)
+        self.draw_text(f'Population: {self.nation_selected.population}', font, (255, 255, 255), 100, 725)
+
+        if diplomacy_button.draw(self.screen):
+            self.game_state = "view foreign nation"
+
+        if details_button.draw(self.screen):
+            pass
+
+    def view_foreign_nation_diplomacy(self):
         #print(self.nation_selected.flag)
         worsening_relations = []
         improving_relations = []
+        guaranteeing = []
         improving_relations.append(self.finding_pos_foreign_nations())
         worsening_relations.append(self.finding_neg_foreign_relations())
+        guaranteeing.append(self.finding_guarantees())
 
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(125, 900, back_img, 0.05)
@@ -418,11 +448,7 @@ class SpriteGame:
         stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
         stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
-        pact_button = button.Button(25, 575, establish_pact, 0.20)
-        embargo = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
-        embargo_button = button.Button(25, 650, embargo, 0.20)
-        justify = pygame.image.load("buttons/relations_buttons/justify_war.jpg").convert_alpha()
-        justify_button = button.Button(25, 800, justify, 0.20)
+        pact_button = button.Button(25, 700, establish_pact, 0.20)
         """Diplomacy buttons"""
         diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
         diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
@@ -440,7 +466,7 @@ class SpriteGame:
             pass
 
         if details_button.draw(self.screen):
-            pass
+            self.game_state = "view foreign nation stats"
 
         if not self.nation_selected.name in self.nation.improving_relations:
             if relation_button.draw(self.screen):
@@ -470,6 +496,19 @@ class SpriteGame:
                 flag_button = button.Button(x, 600, flag_img, 0.60)
                 flag_button.draw(self.screen)
                 x += 40
+
+        if pact_button.draw(self.screen):
+            pass
+
+        x = 15
+        for guarantee in guaranteeing:
+            for flag in guarantee:
+                flag_img = pygame.image.load(flag).convert_alpha()
+                flag_img = pygame.transform.scale(flag_img, (50, 50))
+                flag_button = button.Button(x, 775, flag_img, 0.50)
+                flag_button.draw(self.screen)
+                x += 35
+
         """for nation, relations in self.nation_selected.foreign_relations.items():
             if nation == self.nation.name:
                 self.draw_text(f"{self.nation_selected.name} relations with {self.nation.name}: {relations}",
@@ -513,7 +552,10 @@ class SpriteGame:
                     self.primary_game()
 
                 elif self.game_state == "view foreign nation":
-                    self.view_foreign_nation()
+                    self.view_foreign_nation_diplomacy()
+
+                elif self.game_state == "view foreign nation stats":
+                    self.view_foreign_nation_info()
 
                 elif self.game_state == "view infographics":
                     self.infographics()

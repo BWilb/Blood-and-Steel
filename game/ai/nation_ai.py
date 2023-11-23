@@ -383,7 +383,7 @@ class NationAI:
         potential_actions = ["Form alliance", "Increase exports", "Increase imports", "Guarantee independence",
                              "Improve relations"]
         action = potential_actions[random.randrange(0, len(potential_actions))]
-        print(self.name, self.improving_relations)
+        #print(self.name, self.improving_relations)
 
         if action == "Form alliance" and self.political_power >= 60:
             for foreign_relation in range(0, len(self.foreign_relations['foreign relations'])):
@@ -444,8 +444,7 @@ class NationAI:
         if action == "Improve relations" and self.political_power >= 25:
             if foreign_nation.name not in [rel['nation name'] for rel in self.improving_relations]:
                 # Check if there's room for additional relations and the absence of a direct connection
-                if len(self.improving_relations) < 10 and not network.has_edge(self.name, foreign_nation.name):
-                    network.add_edge(self.name, foreign_nation.name)
+                if len(self.improving_relations) < 10:
                     # Add a new relation entry and adjust political attributes
                     self.improving_relations.append({
                         "nation name": foreign_nation.name,
@@ -454,16 +453,8 @@ class NationAI:
 
                     self.political_power -= 25
                     self.political_exponent -= 15
-                else:
-                    # If maximum relations reached or a direct connection exists, add relation without network or power modification
-                    self.improving_relations.append({
-                        "nation name": foreign_nation.name,
-                        "duration": globe.date + timedelta(days=20)
-                    })
 
-                    self.political_power -= 25
-
-                    self.political_exponent -= 15
+                    network.add_edge(self.name, foreign_nation.name)
 
     def make_negative_decision(self, foreign_nation, globe, network):
         potential_actions = ["incursion into sphere of influence", "worsen relations", "embargo",
@@ -495,22 +486,16 @@ class NationAI:
                                     self.political_power -= 50"""
             pass
 
-        elif action == "worsen relations" and self.political_power >= 15:
-            chance = random.randrange(1, 40)
-
-            if chance % 6 == 4:
-                for worsening in self.worsening_relations:
-                    if not foreign_nation.name in worsening['nation name']:
-                        if len(self.worsening_relations) < 10:
-                            network.add_edge(self.name, foreign_nation.name)
-
-                        self.worsening_relations.append({
-                            "nation name": foreign_nation.name,
-                            "duration": globe.date + timedelta(days=20)
-                        })
-                        self.political_power -= 15
-                        self.political_exponent -= 0.15
-
+        if action == 'worsen relations' and self.political_power >= 15:
+            if foreign_nation.name not in [rel['nation name'] for rel in self.worsening_relations]:
+                if len(self.worsening_relations) < 10:
+                    self.worsening_relations.append({
+                        "nation name": foreign_nation.name,
+                        "duration": globe.date + timedelta(days=20)
+                    })
+                    self.political_power -= 25
+                    self.political_exponent -= 15
+                    network.add_edge(self.name, foreign_nation.name)
 
         """elif action == "spark protests" and self.political_power >= 25:
             chance = random.randrange(1, 40)

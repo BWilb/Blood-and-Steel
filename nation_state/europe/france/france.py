@@ -1,8 +1,7 @@
-import random
-import time
-from datetime import datetime, timedelta
 from datetime import datetime, timedelta
 from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 
 """Population Dictionaries"""
 population = {
@@ -49,52 +48,50 @@ leader_images = {
     "1939": "../leaders/france/Albert_Lebrun_1932_(2)_(cropped_2)_1932-1940.jpg"
 }
 
-
 class France(playable_nation.PlayableNation):
-    def __init__(self, year):
-        super().__init__(year)
-        self.name = "French Republic"
+    def __init__(self, globe):
+        super().__init__(globe)
+        self.name = "France"
         # date variables
-        self.date = datetime(int(year), 1, 1)
-        self.improve_stability = self.date
-        self.improve_happiness = self.date
-        self.debt_repayment = self.date
-        self.check_stats = self.date + timedelta(days=3)
-        self.economic_change_date = self.date + timedelta(days=60)
+        self.date = datetime(globe.date.year, 1, 1)
         # amount of days that is given to the economy for it to either shrink or grow before being checked
         self.current_year = self.date.year
         # social variables
         """population"""
-        self.population = population[year]
+        self.population = population[str(globe.date.year)]
         self.births = 0
         self.deaths = 0
-        self.birth_control = False
-        self.birth_enhancer = False
-        """happiness"""
-        self.happiness = 98.56
         # political
-        self.leader = leaders[year]
-        self.leader_image = leader_images[year]
-        self.flag = flags[year]
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.e_s = "recovery"
-        self.national_debt = 0
-        self.current_gdp = gdp[year]
+        self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
+        self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
-        self.income_tax_rate = 25.00
-        self.corporate_tax_rate = 35.00
-        """Components of GDP"""
-        self.consumer_spending = 0
-        self.investment = 0
-        self.government_spending = 0
-        self.exports = 0
-        self.imports = 0
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.alliance = ""
-        # other
-        self.chosen = False
+        self.coordinates = []
+        self.land_1910_1918 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
+                               "French West Africa", "Algeria", "Congo (France)", "Algeria (France)", "Morocco (France)"]
+
+        self.land_1932_1939 = ["Tunisia", "France", "French Guiana", "French Indo-China", "French Equatorial Africa",
+                               "French West Africa", "Algeria (France)", "French Cameroons", "Congo (France)",
+                               "Syria (France)", "Armenia", "Morocco (France)", "Morocco", "Algeria"]
+    def establish_map_coordinates(self):
+        # collection of coordinates will be done separately in every nation,
+        # so as to access information specifically to the nation(in this case Austria)
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        if self.date.year <= 1918:
+            for land in range(0, len(self.land_1910_1918)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1910_1918[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+
+        if self.date.year >= 1932:
+            for land in range(0, len(self.land_1932_1939)):
+                for i in range(0, len(nation_json['countries'])):
+                    if self.land_1932_1939[land] == nation_json['countries'][i]['nation_name']:
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            self.coordinates = (retreive_coords(self.coordinates))
+

@@ -1,9 +1,7 @@
-import random
-import time
-from collections import OrderedDict
-from datetime import datetime, timedelta
 from datetime import datetime, timedelta
 from game.ai import playable_nation
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 
 """Population Dictionaries"""
 population = {
@@ -73,3 +71,15 @@ class Canada(playable_nation.PlayableNation):
         self.national_debt = 0
         self.current_gdp = gdp[str(globe.date.year)]
         self.past_gdp = self.current_gdp
+
+    def establish_map_coordinates(self):
+        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        with open(file_path, 'r') as file:
+            nation_json = js.load(file)
+
+        for i in range(len(nation_json['countries'])):
+            # print(nation_json['countries'][i]['nation_name'])
+            if (nation_json['countries'][i]['nation_name'] == "Canada"):
+                # print(nation_json['countries'][i]['coordinates'])
+                self.coordinates.append((nation_json['countries'][i]['coordinates']))
+        self.coordinates = (retreive_coords(self.coordinates))
