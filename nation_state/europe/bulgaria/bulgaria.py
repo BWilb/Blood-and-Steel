@@ -1,7 +1,8 @@
 import random
 from datetime import timedelta
 from game.ai import playable_nation
-
+from nation_data.coordination.retreive_and_convert import retreive_coords
+import json as js
 leader_images = {
     "1910": "../leaders/bulgaria/800px-Zar_Ferdinand_Bulgarien.jpg",
     "1914": "../leaders/bulgaria/800px-Zar_Ferdinand_Bulgarien.jpg",

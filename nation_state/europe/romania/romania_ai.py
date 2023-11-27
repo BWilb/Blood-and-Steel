@@ -98,17 +98,22 @@ class RomaniaAI(NationAI):
         if self.date.year <= 1918:
             objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
             objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States",
-                                 "Improve relations with Belgium", "Improve relations with Luxembourg"]
+                                 "Improve relations with Belgium", "Improve relations with Luxembourg", "Improve relations with Great Britain"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
         else:
             objectives_enemy = ["Contain Hungary", "Contain Russia", "Contain Bulgaria"]
-            objectives_allies = [""]
+            objectives_allies = ["Improve relations with Germany", "Improve relations with Poland"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

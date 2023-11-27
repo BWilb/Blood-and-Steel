@@ -100,6 +100,29 @@ class Austria(NationAI):
         self.land_1932 = ["Austria"]
         self.foreign_relations = {"foreign relations": []}
 
+    def establish_foreign_objectives(self):
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Turkey", "Contain Russia", "Contain France", "Contain Britain"]
+            objectives_allies = ["Improve relations with Germany", "Improve relations with Mexico",
+                                 "Improve relations with Sweden", "Improve relations with China"]
+
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
+
+        else:
+            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                                 "Improve relations with Canada", "Improve relations with Belgium",
+                                 "Improve relations with Netherlands"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
+
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)

@@ -92,16 +92,18 @@ class NorwayAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        objectives_enemy = ["Contain Sweden", "Contain Finland", "Contain Denmark",
-                            "Contain Germany"]
-        objectives_allies = ["Improve relations with United States", "Improve relations with France",
-                             "Improve relations with Great Britain"]
+        if self.date.year > 1918:
+            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                                 "Improve relations with Canada", "Improve relations with Belgium",
+                                 "Improve relations with Netherlands", "Improve relations with Estonia",
+                                 "Improve relations with Sweden", "Improve relations with Denmark"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'

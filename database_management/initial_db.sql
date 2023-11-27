@@ -19,13 +19,10 @@ CREATE TABLE nations.Nation
 (NationID int primary key IDENTITY(1, 1) NOT NULL,
 CurrentDate date NOT NULL,
 NationName varchar(35) NOT NULL,
-NationStability FLOAT NOT NULL,
 NationLeader VARCHAR(35) NOT NULL,
 NationPopulation int NOT NULL,
 Births INT NOT NULL,
 Deaths INT NOT NULL,
-NationHappiness FLOAT NOT NULL,
 NationGDP float NOT NULL,
-NationalDebt float NOT NULL,
-NationalAlliance varchar(20) NOT NULL
+NationalDebt float NOT NULL
 )

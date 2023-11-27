@@ -103,6 +103,7 @@ class Britain(NationAI):
         self.political_exponent = 1.56
         """Stability"""
         self.current_gdp = gdp[str(globe.date.year)]
+        self.national_debt = 0
         self.coordinates = []
         self.land_1910_1914 = ["United Kingdom of Great Britain and Ireland", "British East Africa",
                                "British Somaliland",
@@ -128,18 +129,28 @@ class Britain(NationAI):
 
     def establish_foreign_objectives(self):
         if self.date.year <= 1918:
-            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
-            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States"]
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                                 "Improve relations with Canada", "Improve relations with Belgium",
+                                 "Improve relations with Netherlands", "Improve relations with Russia"]
+
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
         else:
-            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia"]
-            objectives_allies = ["Improve relations with United States", "Improve relations with France", "Improve relations with Canada"]
+            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                                 "Improve relations with Canada", "Improve relations with Belgium",
+                                 "Improve relations with Netherlands"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
 
     def establish_map_coordinates(self):

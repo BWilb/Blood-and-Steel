@@ -30,20 +30,20 @@ gdp = {
     "1939": 7037894737
 }
 
-flags = {"1910": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg",
-         "1914": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg",
-         "1918": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg",
-         "1932": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg",
-         "1936": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg",
-         "1939": "../flags/brazil/1280px-Flag_of_Brazil_(1889–1960).jpg"}
+flags = {"1910": "../flags/venezuela/Flag_of_Venezuela_(1905–1930).svg.png",
+         "1914": "../flags/venezuela/Flag_of_Venezuela_(1905–1930).svg.png",
+         "1918": "../flags/venezuela/Flag_of_Venezuela_(1905–1930).svg.png",
+         "1932": "../flags/venezuela/State_flag_of_Venezuela_(1930–1954).svg.png",
+         "1936": "../flags/venezuela/State_flag_of_Venezuela_(1930–1954).svg.png",
+         "1939": "../flags/venezuela/State_flag_of_Venezuela_(1930–1954).svg.png"}
 
 leader_images = {
-    "1910": "../leaders/brazil/330px-Nilo_Peçanha_02-1910.jpg",
-    "1914": "../leaders/brazil/330px-Venceslau_Brás-1918.jpg",
-    "1918": "../leaders/brazil/330px-Venceslau_Brás-1918.jpg",
-    "1932": "../leaders/brazil/330px-Getulio_Vargas_(1930)-1932-1939.jpg",
-    "1936": "../leaders/brazil/330px-Getulio_Vargas_(1930)-1932-1939.jpg",
-    "1939": "../leaders/brazil/330px-Getulio_Vargas_(1930)-1932-1939.jpg"
+    "1910": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1914": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1918": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1932": "../leaders/venezuela/Juan_Vicente_Gómez_2-1932.jpg",
+    "1936": "../leaders/venezuela/Eleazar_López_Contreras-35-41.jpg",
+    "1939": "../leaders/venezuela/Eleazar_López_Contreras-35-41.jpg"
 }
 
 class Venezuala(NationAI):

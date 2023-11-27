@@ -10,7 +10,7 @@ from nation_data.coordination.retreive_and_convert import retreive_coords
 leader_images = {
     "1910": "../leaders/italy/Sidney_sonnino_1910.jpg",
     "1914": "../leaders/italy/giolitti_1914.jpg",
-    "1918": "../leaders/italy/Flag_of_Greece.jpg",
+    "1918": "../leaders/italy/Vittorio_Emanuele_Orlando_1918.jpeg",
     "1932": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
     "1936": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg",
     "1939": "../leaders/italy/220px-Benito_Mussolini_uncolored.jpg"
@@ -133,15 +133,22 @@ class ItalyAI(NationAI):
 
     def establish_foreign_objectives(self):
         if self.date.year <= 1918:
-            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
-            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States"]
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States",
+                                 "Improve relations with Great Britain", "Improve relations with Belgium"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
         else:
-            objectives_enemy = ["Contain France", "Contain Great Britain", "Contain Russia", "Contain Ethiopia"]
+            objectives_enemy = ["Contain France", "Contain Great Britain", "Contain Russia", "Contain Ethiopia", "Contain Belgium",
+                                "Contain Netherlands"]
             objectives_allies = ["Improve relations with Germany", "Improve relations with Hungary", "Improve relations with Japan"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)

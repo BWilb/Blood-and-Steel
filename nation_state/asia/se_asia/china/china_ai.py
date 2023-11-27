@@ -1,13 +1,8 @@
 import random
-import time
-from datetime import datetime, timedelta
 from enum import Enum
 from game.ai.nation_ai import NationAI
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
-
-from random_functions import random_functions
-
 
 class EconomicState(Enum):
     RECESSION = 1
@@ -70,62 +65,58 @@ class ChinaAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
         self.nation_color = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
-        self.region = "asia"
         self.name = "China"
         # social variables
         """population"""
         self.population = population[str(globe.date.year)]
         # political
+        self.political_typology = "Autocratic"
+
         self.leader = leaders[str(globe.date.year)]
         self.leader_image = leader_images[str(globe.date.year)]
         self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
-        """Stability"""
-        self.stability = 95.56
-        # economic
-        self.corporate_taxes = 24.00
-        self.income_taxes = 20.00
         self.current_gdp = gdp[str(globe.date.year)]
-        """Components of GDP"""
-        self.consumer_spending = 200
-        self.investment = 300
-        self.government_spending = 350
-        self.exports = 1000
-        self.imports = 1200
-        """Economic Stimulus components"""
-        self.economic_stimulus = False
-        # military
-        # international
-        self.foreign_relations = {"foreign relations": []}
-        self.alliance = ""
         # other
         self.coordinates = []
+        self.foreign_relations = {"foreign relations": []}
+        self.land_1910 = ["Mongolia", "Manchu Empire", "Tibet", "Xinjiang"]
+        self.land_1914_1918 = ["Manchu Empire", "Tibet", "Xinjiang"]
+        self.land_1932_1936 = ["Chinese Warlords"]
+        self.land_1939 = ["Chinese Warlords"]
+
+    def establish_foreign_objectives(self):
+        pass
+
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone_Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-        if self.date.year <= 1918:
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Manchu Empire" or nation_json['countries'][i]['nation_name'] ==
-                "Xinjiang" or nation_json['countries'][i]['nation_name'] == "Mongolia" or nation_json['countries'][i]['nation_name'] ==
-                "Tibet"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
-        if self.date.year >= 1932 or self.date.year <= 1936:
+            if self.date.year <= 1918:
+                for i in range(len(nation_json['countries'])):
+                    # print(nation_json['countries'][i]['nation_name'])
+                    if (nation_json['countries'][i]['nation_name'] == "Manchu Empire" or
+                            nation_json['countries'][i]['nation_name'] == "Tibet" or
+                            nation_json['countries'][i]['nation_name'] == "Xinjiang" or
+                            nation_json['countries'][i]['nation_name'] == "Mongolia"):
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                    if "Manchu Empire" == nation_json['countries'][i]['nation_name']:
+                        print("Hi", nation_json['countries'][i]['coordinates'])
+                self.coordinates = (retreive_coords(self.coordinates))
 
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Chinese Warlords"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = (retreive_coords(self.coordinates))
 
-        if self.date.year >= 1939:
+            elif 1931 < self.date.year < 1937:
+                for i in range(len(nation_json['countries'])):
+                    # print(nation_json['countries'][i]['nation_name'])
+                    if (nation_json['countries'][i]['nation_name'] == "Chinese Warlords"):
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                self.coordinates = (retreive_coords(self.coordinates))
 
-            for i in range(len(nation_json['countries'])):
-                if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):
-                    # print(retreive_coords((nation_json['countries'][i]['coordinates'])))
-                    self.coordinates.append((nation_json['countries'][i]['coordinates']))
-            self.coordinates = [(retreive_coords(self.coordinates))]
+            elif self.date.year >= 1939:
+                for i in range(len(nation_json['countries'])):
+                    # print(nation_json['countries'][i]['nation_name'])
+                    if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):
+                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                self.coordinates = (retreive_coords(self.coordinates))

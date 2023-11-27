@@ -24,7 +24,7 @@ flags = {
 leaders = {
     "1910" : None,
     "1914" : None,
-    "1918" : "Konstantin Päts",
+    "1918" : None,
     "1932" : "Konstantin Päts",
     "1936" : "Konstantin Päts",
     "1939" : "Kaarel Eenpalu"
@@ -76,9 +76,11 @@ class LithuaniaAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        objectives_enemy = ["Contain Russia", "Contain Latvia", "Contain Estonia"]
+        objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Bulgaria"]
         objectives_allies = ["Improve relations with United States", "Improve relations with France",
-                             "Improve relations with Great Britain"]
+                             "Improve relations with Canada", "Improve relations with Belgium",
+                             "Improve relations with Netherlands", "Improve relations with Estonia",
+                             "Improve relations with Latvia"]
 
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)

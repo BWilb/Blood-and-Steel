@@ -93,19 +93,17 @@ class SpainAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        if self.date.year <= 1918:
-            objectives_enemy = ["Contain Germany", "Contain Austria", "Contain Russia"]
-            objectives_allies = ["Improve relations with France", "Improve relations with Great Britain", "Improve relations with Russia"]
 
-        else:
-            objectives_enemy = ["Contain Germany", "Contain Austria", "Contain Russia"]
-            objectives_allies = ["Improve relations with Great Britain", "Improve relations with United States"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+        if self.date.year > 1918:
+            objectives_enemy = ["Contain Great Britain", "Contain France", "Contain Russia"]
+            objectives_allies = ["Improve relations with Germany", "Improve relations with Italy", "Improve relations with Portugal"]
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'

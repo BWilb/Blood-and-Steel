@@ -183,7 +183,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, austrian, afghan_ai, english_ai, dutch_ai, swiss_ai, belgian_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           brazilian_ai, venezuelan_ai, chilean_ai, bolivian_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, argentinian_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -235,7 +235,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, afghan, austrian_ai, english_ai, dutch_ai, swiss_ai, belgian_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           brazilian_ai, venezuelan_ai, chilean_ai, bolivian_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, argentinian_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -287,7 +287,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, argentine, austrian_ai, english_ai, dutch_ai, swiss_ai, belgian_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           brazilian_ai, venezuelan_ai, chilean_ai, bolivian_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, afghani_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -339,7 +339,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, belgian, austrian_ai, english_ai, dutch_ai, swiss_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           brazilian_ai, argentina_ai, venezuelan_ai, chilean_ai, bolivian_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, afghani_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -391,7 +391,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, bolivian, austrian_ai, english_ai, dutch_ai, swiss_ai, belgian_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           brazilian_ai, argentina_ai, venezuelan_ai, chilean_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, afghani_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -443,7 +443,7 @@ def accept_nation(nation, time):
         peruvian_ai = peru_ai.Peru(globe1)
         establish_nations(globe1, brazilian, austrian_ai, english_ai, dutch_ai, swiss_ai, belgian_ai,
                           french_ai, greek_ai, norwegian_ai, russian_ai, portuguese_ai, bulgarian_ai,
-                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, swedish_ai, estonian_ai,
+                          polish_ai, spanish_ai, danish_ai, hungarian_ai, luxembourger_ai, estonian_ai,
                           latvian_ai, lithuanian_ai, canadian_ai, american_ai, mexican_ai, cuban_ai, germany1,
                           bolivian_ai, argentina_ai, venezuelan_ai, chilean_ai, columbian_ai,
                           peruvian_ai, romanian_ai, turkish_ai, japanese_ai, afghani_ai, iranian_ai, iraqi_ai, italian_ai)
@@ -494,7 +494,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, british, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -544,7 +544,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, bulgarian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -594,7 +594,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, canadian, luxembourger_ai, spanish_ai, bulgarian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -644,7 +644,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, chilean, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, bulgarian_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -694,7 +694,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, columbian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, bulgarian_ai, venezuelan_ai,
                           chilean_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -744,7 +744,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, cuban, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           columbian_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, bulgarian_ai, venezuelan_ai,
                           chilean_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -754,6 +754,7 @@ def accept_nation(nation, time):
     if nation.lower() == "denmark":
         danish = denmark.Denmark(globe1)
         danish.is_chosen = True
+        chinese_ai = china_ai.ChinaAI(globe1)
         bulgarian_ai = bulgaria_ai.BulgariaAI(globe1)
         british_ai = britain_ai.Britain(globe1)
         italian_ai = italy_ai.ItalyAI(globe1)
@@ -791,12 +792,13 @@ def accept_nation(nation, time):
         iranian_ai = iran_ai.Iran(globe1)
         romanian_ai = romania_ai.RomaniaAI(globe1)
         iraqi_ai = iraq_ai.Iraq(globe1)
+        austrian_ai = austria_ai.Austria(globe1)
         establish_nations(globe1, danish, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, bulgarian_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
-                          romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          romanian_ai, austrian_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
-                          columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
+                          columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai, chinese_ai)
 
         game = SpriteGame(danish, globe1)
         game.main_game()
@@ -844,7 +846,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, estonian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, bulgarian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,danish_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -894,7 +896,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, french, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           british_ai, italian_ai, bulgarian_ai, estonian_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, danish_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -945,7 +947,7 @@ def accept_nation(nation, time):
                           bulgarian_ai, italian_ai, luxembourger_ai, estonian_ai, french_ai, danish_ai, greek_ai,
                           hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai,
                           venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
@@ -997,7 +999,7 @@ def accept_nation(nation, time):
                           bulgarian_ai, italian_ai, luxembourger_ai, estonian_ai, french_ai, danish_ai, germany1,
                           hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai,
                           venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
@@ -1049,7 +1051,7 @@ def accept_nation(nation, time):
                           bulgarian_ai, italian_ai, luxembourger_ai, estonian_ai, french_ai, danish_ai, germany1,
                           greek_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai,
                           venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
@@ -1101,7 +1103,7 @@ def accept_nation(nation, time):
                           bulgarian_ai, italian_ai, luxembourger_ai, estonian_ai, french_ai, danish_ai, germany1,
                           greek_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai,
                           venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, hungarian_ai, iraqi_ai)
@@ -1153,7 +1155,7 @@ def accept_nation(nation, time):
                           bulgarian_ai, italian_ai, luxembourger_ai, estonian_ai, french_ai, danish_ai, germany1,
                           greek_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai,
                           venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, hungarian_ai, iranian_ai)
@@ -1204,7 +1206,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, italian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1254,7 +1256,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, japanese, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, italian_ai, iranian_ai, iraqi_ai)
 
@@ -1304,7 +1306,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, luxembourger, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1354,7 +1356,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, latvian, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai,
-                          luxembourger_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1454,7 +1456,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, mexican, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, dutch_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1504,7 +1506,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, dutch, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1554,7 +1556,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, norwegian, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1604,7 +1606,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, peruvian, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, norwegian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1654,7 +1656,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, polish, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai, norwegian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, dutch_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, dutch_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1704,7 +1706,7 @@ def accept_nation(nation, time):
         establish_nations(globe1, portuguese, british_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai, norwegian_ai,
                           bulgarian_ai, italian_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai,
                           romanian_ai, lithuanian_ai,
-                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, swedish_ai, swiss_ai,
+                          luxembourger_ai, latvian_ai, dutch_ai, polish_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1753,7 +1755,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, romanian, luxembourger_ai, spanish_ai, canadian_ai, russian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1802,7 +1804,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, russian, luxembourger_ai, spanish_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1851,7 +1853,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, spanish, luxembourger_ai, russian_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swedish_ai, swiss_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1949,7 +1951,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, swiss, luxembourger_ai, russian_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai, swedish_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -1998,7 +2000,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, turkish, luxembourger_ai, russian_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai, swedish_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, swiss_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -2047,7 +2049,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, american, luxembourger_ai, russian_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai, swedish_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai,
                           cuban_ai, mexican_ai, swiss_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 
@@ -2096,7 +2098,7 @@ def accept_nation(nation, time):
         iraqi_ai = iraq_ai.Iraq(globe1)
         establish_nations(globe1, venezuelan, luxembourger_ai, russian_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
-                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai, swedish_ai,
+                          latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, spanish_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, swiss_ai,
                           columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
 

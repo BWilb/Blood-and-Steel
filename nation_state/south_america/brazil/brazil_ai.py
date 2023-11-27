@@ -79,7 +79,8 @@ class Brazil(NationAI):
         objectives_allies = ["Improve relations with Germany",
                              "Improve relations with Mexico",
                              "Improve relations with Bolivia", "Improve relations with Chile",
-                             "Improve relations with Argentina"]
+                             "Improve relations with Argentina", "Improve relations with Portugal",
+                             "Improve relations with United States"]
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
 

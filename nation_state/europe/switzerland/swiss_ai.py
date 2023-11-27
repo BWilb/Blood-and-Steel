@@ -1,6 +1,4 @@
 import random
-import time
-from datetime import datetime, timedelta
 import json as js
 from nation_data.coordination.retreive_and_convert import retreive_coords
 
@@ -32,6 +30,22 @@ gdp = {
     "1939": 2061627844
 }
 
+flags = {"1910": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png",
+         "1914": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png",
+         "1918": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png",
+         "1932": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png",
+         "1936": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png",
+         "1939": "../flags/switzerland/Flag_of_Switzerland_(Pantone).svg.png"}
+
+leader_images = {
+    "1910": "../leaders/switzerland/02034_1910.jpg",
+    "1914": "../leaders/switzerland/200px-Arthur_Hoffmann_IMG_1914.jpg",
+    "1918": "../leaders/switzerland/Felix_Calonder_1918.jpg",
+    "1932": "../leaders/switzerland/Giuseppe_Motta_circa_1915_1932.jpg",
+    "1936": "../leaders/switzerland/gettyimages-541795457-612x612_1936.jpg",
+    "1939": "../leaders/switzerland/Philip_Etter_Staatsarchiv_Bern_FN_Jost_P_365_1939.jpg"
+}
+
 class SwitzerlandAI(NationAI):
     def __init__(self, globe):
         super().__init__(globe)
@@ -44,6 +58,8 @@ class SwitzerlandAI(NationAI):
         # political
         self.political_typology = "Democratic"
         self.leader = leaders[str(globe.date.year)]
+        self.leader_image = leader_images[str(globe.date.year)]
+        self.flag = flags[str(globe.date.year)]
         self.political_power = 200
         self.political_exponent = 1.56
         self.current_gdp = gdp[str(globe.date.year)]
@@ -58,13 +74,10 @@ class SwitzerlandAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        objectives_enemy = ['']
         objectives_allies = ["Improve relations with France", "Improve relations with Russia",
                              "Improve relations with United States",
                              "Improve relations with Germany", "Improve relations with Italy",
                              "Improve relations with Great Britain"]
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
 
         for ally in objectives_allies:
             self.objectives["objectives"][0]['foreign'].append(ally)

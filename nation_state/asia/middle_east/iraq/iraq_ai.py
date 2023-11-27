@@ -93,7 +93,8 @@ class Iraq(NationAI):
                              "Improve relations with Italy",
                              "Improve relations with Romania",
                              "Improve relations with Hungary",
-                             "Improve relations with Turkey"]
+                             "Improve relations with Turkey",
+                             "Improve relations with Afghanistan"]
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
 

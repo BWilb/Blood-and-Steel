@@ -112,19 +112,17 @@ class Denmark(NationAI):
              "war goal": False,
              "at war with": False}"""
     def establish_foreign_objectives(self):
-        if self.date.year <= 1918:
-            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria", "Contain Norway", "Contain Sweden"]
-            objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States"]
-
-        else:
+        if self.date.year > 1918:
             objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Norway", "Contain Sweden"]
-            objectives_allies = ["Improve relations with United States", "Improve relations with France", "Improve relations with Canada"]
+            objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                                 "Improve relations with Canada", "Improve relations with Belgium", "Improve relations with Netherlands",
+                                 "Improve relations with Sweden"]
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

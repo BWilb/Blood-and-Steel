@@ -77,16 +77,17 @@ class PolandAI(NationAI):
 
     def establish_foreign_objectives(self):
 
-        objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Japan"]
-        objectives_allies = ["Improve relations with United States", "Improve relations with Britain",
-                             "Improve relations with France"]
+        objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Bulgaria"]
+        objectives_allies = ["Improve relations with United States", "Improve relations with France",
+                             "Improve relations with Canada", "Improve relations with Belgium",
+                             "Improve relations with Netherlands", "Improve relations with Estonia",
+                             "Improve relations with Latvia", "Improve relations with Lithuania"]
 
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
 
         for ally in objectives_allies:
             self.objectives["objectives"][0]['foreign'].append(ally)
-
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:

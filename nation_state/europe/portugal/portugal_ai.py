@@ -94,7 +94,9 @@ class Portugal(NationAI):
             # print(nation_json['countries'][i]['nation_name'])
             if (nation_json['countries'][i]['nation_name'] == "Portugal" or
             nation_json['countries'][i]['nation_name'] == "Angola (Portugal)" or
-            nation_json['countries'][i]['nation_name'] == "Mozambique (Portugal)"):
+            nation_json['countries'][i]['nation_name'] == "Mozambique (Portugal)" or
+            nation_json['countries'][i]['nation_name'] == "Mozambique" or
+            nation_json['countries'][i]['nation_name'] == "Angola"):
                 # print(nation_json['countries'][i]['coordinates'])
                 self.coordinates.append((nation_json['countries'][i]['coordinates']))
         self.coordinates = (retreive_coords(self.coordinates))
@@ -102,14 +104,10 @@ class Portugal(NationAI):
         if self.date.year <= 1918:
             objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria"]
             objectives_allies = ["Improve relations with France", "Improve relations with Russia", "Improve relations with United States",
-                                 "Improve relations with Belgium", "Improve relations with Luxembourg"]
+                                 "Improve relations with Belgium", "Improve relations with Luxembourg", "Improve relations with Great Britain"]
 
-        else:
-            objectives_enemy = ["Contain Germany", "Contain Italy", "Contain Russia", "Contain Japan"]
-            objectives_allies = [""]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
-
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)

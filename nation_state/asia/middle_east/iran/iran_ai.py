@@ -91,7 +91,8 @@ class Iran(NationAI):
         objectives_allies = ["Improve relations with Germany",
                              "Improve relations with Italy",
                              "Improve relations with Romania",
-                             "Improve relations with Hungary"]
+                             "Improve relations with Hungary", "Improve relations with Turkey",
+                             "Improve relations with Iraq"]
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
 

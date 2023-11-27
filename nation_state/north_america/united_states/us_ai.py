@@ -38,12 +38,12 @@ presidents = {
     "1939": "Franklin D. Roosevelt"
 }
 gdp = {
-    "1910": 50000000,
-    "1914": 65993945,
-    "1918": 73348873,
-    "1932": 72348873,
-    "1936": 72348873,
-    "1939": 74348873
+    "1910": 893980000000,
+    "1914": 905130000000,
+    "1918": 1100000000000,
+    "1932": 1050000000000,
+    "1936": 1360000000000,
+    "1939": 1470000000000
 }
 
 vice_presidents = {
@@ -85,16 +85,32 @@ class USAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        objectives_enemy = ['Contain Germany', "Contain Japan"]
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Germany", "Contain Austria", "Contain Turkey", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with Russia", "Improve relations with Great Britain",
+                                 "Improve Relations with Canada",
+                                 "Improve relations with Mexico", "Improve relations with France",
+                                 "Improve relations with Netherlands",
+                                 "Improve relations with Belgium"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        objectives_allies = ["Improve relations with France",
-                             "Improve relations with Mexico",
-                             "Improve relations with Great Britain"]
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+        else:
+            objectives_enemy = ["Contain Germany", "Contain Hungary", "Contain Italy", "Contain Japan"]
+            objectives_allies = ["Improve relations with Russia", "Improve relations with Great Britain",
+                                 "Improve Relations with Canada",
+                                 "Improve relations with Mexico", "Improve relations with France",
+                                 "Improve relations with Belgium",
+                                 "Improve relations with Netherlands"]
+
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,

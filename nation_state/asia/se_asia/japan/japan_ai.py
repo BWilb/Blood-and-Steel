@@ -99,17 +99,29 @@ class JapanAI(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_foreign_objectives(self):
-        objectives_enemy = ['Contain Great Britain', "Contain United States",
-                            "Contain France"]
-        objectives_allies = ["Improve relations with Germany",
-                             "Improve relations with Italy",
-                             "Improve relations with Romania",
-                             "Improve relations with Hungary"]
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
+        if self.date.year <= 1918:
+            objectives_enemy = ["Contain Germany", "Contain Turkey", "Contain Austria", "Contain Bulgaria"]
+            objectives_allies = ["Improve relations with France", "Improve relations with Russia",
+                                 "Improve relations with United States",
+                                 "Improve relations with Great Britain", "Improve relations with Belgium"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
+
+        else:
+            objectives_enemy = ["Contain France", "Contain Great Britain", "Contain Russia", "Contain United States",
+                                "Contain Belgium",
+                                "Contain Netherlands", "Contain Mexico"]
+            objectives_allies = ["Improve relations with Germany", "Improve relations with Hungary",
+                                 "Improve relations with Italy"]
+
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'

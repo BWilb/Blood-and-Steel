@@ -44,12 +44,12 @@ gdp = {
     "1936": 53157368421,
     "1939": 54936947368
 }
-flags = {"1910": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1914": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1918": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1932": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1936": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1939": "../flags/japan/Flag_of_Japan_(1870–1999).jpg"}
+flags = {"1910": "../flags/germany/german_empire.jpeg",
+         "1914": "../flags/germany/german_empire.jpeg",
+         "1918": "../flags/germany/german_empire.jpeg",
+         "1932": "../flags/germany/OIP (4).jpeg",
+         "1936": "../flags/germany/OIP (4).jpeg",
+         "1939": "../flags/germany/OIP (4).jpeg"}
 
 leader_images = {
     "1910": "../leaders/germany/holleg_1917.jpeg",
@@ -135,17 +135,24 @@ class GermanAI(NationAI):
 
     def establish_foreign_objectives(self):
         if self.date.year <= 1918:
-            objectives_enemy = ["Contain France", "Contain Russia", "Contain Great Britain"]
-            objectives_allies = ["Improve relations with Mexico", "Improve relations with Sweden", "Improve relations with Austria",
-                                 "Improve relations with Turkey", "Improve relations with Bulgaria", "Improve relations with Afghanistan"]
+            objectives_enemy = ["Contain Turkey", "Contain Russia", "Contain France", "Contain Britain"]
+            objectives_allies = ["Improve relations with Austria",
+                                 "Improve relations with Mexico",
+                                 "Improve relations with Sweden", "Improve relations with China"]
+
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
+
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)
 
         else:
-            objectives_enemy = ["Contain France", "Contain Russia", "Contain Great Britain"]
-            objectives_allies = ["Improve relations with Italy", "Improve relations with Japan", "Improve relations with Romania",
-                                 "Improve relations with Hungary"]
+            objectives_enemy = ["Contain Britain", "Contain United States", "Contain Russia", "Contain France",
+                                "Contain Belgium", "Contain Netherlands", "Contain Luxembourg"]
+            objectives_allies = ["Improve relations with Bulgaria", "Improve relations with Italy",
+                                 "Improve relations Japan", "Improve relations with Hungary"]
+            for enemy in objectives_enemy:
+                self.objectives["objectives"][0]['foreign'].append(enemy)
 
-        for enemy in objectives_enemy:
-            self.objectives["objectives"][0]['foreign'].append(enemy)
-
-        for ally in objectives_allies:
-            self.objectives["objectives"][0]['foreign'].append(ally)
+            for ally in objectives_allies:
+                self.objectives["objectives"][0]['foreign'].append(ally)

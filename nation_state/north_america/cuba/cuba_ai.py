@@ -88,15 +88,16 @@ class CubaAI(NationAI):
 
     def establish_foreign_objectives(self):
         objectives_enemy = ['']
-        objectives_allies = ["Improve relations with United States",
-                             "Improve relations with Mexico",
-                             "Improve relations with Great Britain"]
+        objectives_allies = ["Improve relations with Russia", "Improve relations with Great Britain",
+                             "Improve Relations with United States",
+                             "Improve relations with Mexico", "Improve relations with France",
+                             "Improve relations with Netherlands",
+                             "Improve relations with Belgium", "Improve relations with Canada"]
         for enemy in objectives_enemy:
             self.objectives["objectives"][0]['foreign'].append(enemy)
 
         for ally in objectives_allies:
             self.objectives["objectives"][0]['foreign'].append(ally)
-
     def establish_map_coordinates(self):
         file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:

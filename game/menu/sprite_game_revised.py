@@ -8,6 +8,7 @@ import os
 import networkx as nx
 from military.soldier import Soldier
 import matplotlib.pyplot as plt
+from database_management import upload_database
 """import matplotlib.pyplot as plt
 from database_management import upload_database"""
 
@@ -128,8 +129,8 @@ class SpriteGame:
             self.nation_map[i].draw(self.screen)
 
             """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
-        #nx.draw(self.network, with_labels=True)
-        #plt.show()
+        """nx.draw(self.network, with_labels=True)
+        plt.show()"""
 
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
@@ -289,7 +290,7 @@ class SpriteGame:
 
                 print(self.globe.nations[i].name, (self.globe.nations[i].military['military']['Army']['Figures']['Cost']))"""
 
-        # upload_database.update_database_info(self.globe.nations)
+        upload_database.update_database_info(self.globe.nations)
 
     def foreign_interactions(self):
         for nation_agent in self.globe.nations:
@@ -303,14 +304,13 @@ class SpriteGame:
         slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
         slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
         """speed buttons"""
-        faster_button = button.Button(1720, 150, faster_img, 0.035)
-        fast_button = button.Button(1680, 150, fast_img, 0.035)
-        regular_button = button.Button(1640, 150, regular_img, 0.035)
-        slow_button = button.Button(1600, 150, slow_img, 0.035)
-        slower_button = button.Button(1560, 150, slower_img, 0.035)
-        """primary screen user sees after opening menu"""
-        # later on background will be an actual SVG image of world and not part of the screen
-        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.75, 100)
+        faster_button = button.Button(1720, 75, faster_img, 0.035)
+        fast_button = button.Button(1680, 75, fast_img, 0.035)
+        regular_button = button.Button(1640, 75, regular_img, 0.035)
+        slow_button = button.Button(1600, 75, slow_img, 0.035)
+        slower_button = button.Button(1560, 75, slower_img, 0.035)
+        # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         if slower_button.draw(self.screen):
             self.speed = 2.75
         if slow_button.draw(self.screen):
@@ -321,8 +321,9 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
-        #nx.draw_circular(self.network, with_labels= True)
-        #plt.show()
+        print(self.network)
+        nx.draw_circular(self.network, with_labels= True)
+        plt.show()
 
     def infographics(self):
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
@@ -344,14 +345,13 @@ class SpriteGame:
         slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
         slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
         """speed buttons"""
-        faster_button = button.Button(1720, 150, faster_img, 0.035)
-        fast_button = button.Button(1680, 150, fast_img, 0.035)
-        regular_button = button.Button(1640, 150, regular_img, 0.035)
-        slow_button = button.Button(1600, 150, slow_img, 0.035)
-        slower_button = button.Button(1560, 150, slower_img, 0.035)
-        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+        faster_button = button.Button(1720, 75, faster_img, 0.035)
+        fast_button = button.Button(1680, 75, fast_img, 0.035)
+        regular_button = button.Button(1640, 75, regular_img, 0.035)
+        slow_button = button.Button(1600, 75, slow_img, 0.035)
+        slower_button = button.Button(1560, 75, slower_img, 0.035)
         # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
-        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         if slower_button.draw(self.screen):
             self.speed = 2.75
         if slow_button.draw(self.screen):
@@ -404,6 +404,15 @@ class SpriteGame:
 
         return nations
 
+    def finding_embargoes(self):
+        nations = []
+        for nation in self.nation_selected.foreign_relations['foreign relations']:
+            if nation['embargoed']:
+                nations.append(nation['nation'].flag)
+        #print(nations)
+
+        return nations
+
     def view_foreign_nation_info(self):
         font = pygame.font.SysFont("Arial-Black", 15)
         diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
@@ -412,16 +421,43 @@ class SpriteGame:
         details_button = button.Button(200, 350, details_img, 0.1)
         self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 50)
 
+        faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
+        fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
+        regular_img = pygame.image.load("buttons/game_buttons/functionality_buttons/regular_speed.jpg").convert_alpha()
+        slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
+        slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
+        faster_button = button.Button(1720, 75, faster_img, 0.035)
+        fast_button = button.Button(1680, 75, fast_img, 0.035)
+        regular_button = button.Button(1640, 75, regular_img, 0.035)
+        slow_button = button.Button(1600, 75, slow_img, 0.035)
+        slower_button = button.Button(1560, 75, slower_img, 0.035)
+        # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
+        if slower_button.draw(self.screen):
+            self.speed = 2.75
+        if slow_button.draw(self.screen):
+            self.speed = 2.25
+        if regular_button.draw(self.screen):
+            self.speed = 1.75
+        if fast_button.draw(self.screen):
+            self.speed = 1.25
+        if faster_button.draw(self.screen):
+            self.speed = 0.75
+
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
-        self.draw_text(f"Government Stats", font, (255, 255, 255), 125, 400)
-        self.draw_text(f"Ideology: {self.nation_selected.political_typology}", font, (255, 255, 255), 150, 450)
+        leader = self.resize_leader(self.nation_selected.leader_image)
+        self.screen.blit(leader, (50, 0))
+        self.draw_text(f"Government Stats", font, (255, 255, 255), 100, 400)
+        self.draw_text(f"Ideology: {self.nation_selected.political_typology}", font, (255, 255, 255), 100, 450)
+        self.draw_text(f"Army size: {len(self.nation_selected.military['military']['Army']['Figures']['Army size'])}", font,
+                       (255, 255, 255), 75, 475)
 
-        self.draw_text('Economic stats', font, (255, 255, 255), 125, 575)
-        self.draw_text(f'Gross Domestic Product: {self.nation_selected.current_gdp}', font, (255, 255, 255), 75, 600)
-        self.draw_text(f'National Debt: {self.nation_selected.current_gdp}', font, (255, 255, 255), 75, 635)
+        self.draw_text('Economic stats', font, (255, 255, 255), 115, 525)
+        self.draw_text(f'Gross Domestic Product: ${self.nation_selected.current_gdp}', font, (255, 255, 255), 20, 550)
+        self.draw_text(f'National Debt: ${self.nation_selected.national_debt}', font, (255, 255, 255), 75, 575)
 
-        self.draw_text('Social stats', font, (255, 255, 255), 125, 700)
-        self.draw_text(f'Population: {self.nation_selected.population}', font, (255, 255, 255), 100, 725)
+        self.draw_text('Social stats', font, (255, 255, 255), 125, 625)
+        self.draw_text(f'Population: {self.nation_selected.population}', font, (255, 255, 255), 75, 650)
 
         if diplomacy_button.draw(self.screen):
             self.game_state = "view foreign nation"
@@ -431,12 +467,10 @@ class SpriteGame:
 
     def view_foreign_nation_diplomacy(self):
         #print(self.nation_selected.flag)
-        worsening_relations = []
-        improving_relations = []
-        guaranteeing = []
-        improving_relations.append(self.finding_pos_foreign_nations())
-        worsening_relations.append(self.finding_neg_foreign_relations())
-        guaranteeing.append(self.finding_guarantees())
+        improving_relations = self.finding_pos_foreign_nations()
+        worsening_relations = self.finding_neg_foreign_relations()
+        guaranteeing = self.finding_guarantees()
+        embargoing = self.finding_embargoes()
 
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(125, 900, back_img, 0.05)
@@ -448,7 +482,9 @@ class SpriteGame:
         stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
         stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
-        pact_button = button.Button(25, 700, establish_pact, 0.20)
+        pact_button = button.Button(25, 650, establish_pact, 0.20)
+        embargo_img = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
+        embargo_button = button.Button(25, 775, embargo_img, 0.20)
         """Diplomacy buttons"""
         diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
         diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
@@ -478,55 +514,45 @@ class SpriteGame:
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
         # initial starting point (y = 425 for all, x go by 15, also draw flag of nation
         x = 15
-        for relation in improving_relations:
-            for flag in relation:
-                flag_img = pygame.image.load(flag).convert_alpha()
-                flag_img = pygame.transform.scale(flag_img, (50, 50))
-                flag_button = button.Button(x, 475, flag_img, 0.60)
-                flag_button.draw(self.screen)
-                x += 40
+        for flag in improving_relations:
+            flag_img = pygame.image.load(flag).convert_alpha()
+            flag_img = pygame.transform.scale(flag_img, (50, 50))
+            flag_button = button.Button(x, 465, flag_img, 0.50)
+            flag_button.draw(self.screen)
+            x += 40
 
         if worsen_button.draw(self.screen):
             pass
         x = 15
-        for relation in worsening_relations:
-            for flag in relation:
-                flag_img = pygame.image.load(flag).convert_alpha()
-                flag_img = pygame.transform.scale(flag_img, (50, 50))
-                flag_button = button.Button(x, 600, flag_img, 0.60)
-                flag_button.draw(self.screen)
-                x += 40
+        for flag in worsening_relations:
+            flag_img = pygame.image.load(flag).convert_alpha()
+            flag_img = pygame.transform.scale(flag_img, (50, 50))
+            flag_button = button.Button(x, 590, flag_img, 0.50)
+            flag_button.draw(self.screen)
+            x += 40
 
         if pact_button.draw(self.screen):
             pass
 
         x = 15
-        for guarantee in guaranteeing:
-            for flag in guarantee:
-                flag_img = pygame.image.load(flag).convert_alpha()
-                flag_img = pygame.transform.scale(flag_img, (50, 50))
-                flag_button = button.Button(x, 775, flag_img, 0.50)
-                flag_button.draw(self.screen)
-                x += 35
+        for flag in guaranteeing:
+            flag_img = pygame.image.load(flag).convert_alpha()
+            flag_img = pygame.transform.scale(flag_img, (50, 50))
+            flag_button = button.Button(x, 715, flag_img, 0.50)
+            flag_button.draw(self.screen)
+            x += 40
 
-        """for nation, relations in self.nation_selected.foreign_relations.items():
-            if nation == self.nation.name:
-                self.draw_text(f"{self.nation_selected.name} relations with {self.nation.name}: {relations}",
-                               pygame.font.SysFont("Arial-Black", 12), (255, 255, 255),
-                               10, 475)
-
-        for nation, relations in self.nation.foreign_relations.items():
-            if nation == self.nation_selected.name:
-                self.draw_text(f"{self.nation.name} relations with {self.nation_selected.name}: {relations}",
-                               pygame.font.SysFont("Arial-Black", 12), (255, 255, 255),
-                               10, 525)
-
-        # plt.show()
-
-        if pact_button.draw(self.screen):
-            pass
         if embargo_button.draw(self.screen):
             pass
+        x = 15
+        #print(embargoing)
+        for flag in embargoing:
+            flag_img = pygame.image.load(flag).convert_alpha()
+            flag_img = pygame.transform.scale(flag_img, (50, 50))
+            flag_button = button.Button(x, 855, flag_img, 0.60)
+            flag_button.draw(self.screen)
+            x += 40
+        """
         if worsen_button.draw(self.screen):
             pass
         if justify_button.draw(self.screen):
@@ -541,7 +567,7 @@ class SpriteGame:
         self.loading_buttons()
         self.establish_nodes()
         # print(self.network)
-        # upload_database.initial_upload_to_database(self.globe.nations, self.globe)
+        upload_database.initial_upload_to_database(self.globe.nations, self.globe)
         while self.is_running:
             if not self.game_paused:
                 self.screen.fill((65, 105, 225))
@@ -571,7 +597,7 @@ class SpriteGame:
                 self.globe.date += timedelta(days=1)
                 self.nation_changes()
                 self.globe_changes()
-                time.sleep(1)
+                time.sleep(self.speed)
             self.check_stream()
 
             for event in pygame.event.get():
