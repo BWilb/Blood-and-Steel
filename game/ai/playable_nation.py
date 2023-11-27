@@ -61,22 +61,21 @@ class PlayableNation:
                      "Low growth occurrences": 0.0,
                      "Stable growth occurrences": 0.0,
                      "Extreme growth occurrences": 0.0},
-                    {"Happiness": 78.56}
+                    {"Happiness": 88.56}
                     # growth occurrences will be growth that is consistent, once change happens set back to 0
                 ],
                 "Economy": [
-                    {"tax rate": 15.00,
-                     "government stimulus": False,
-                     "low growth occurrences": 0,
-                     "high growth occurrences": 0},
-                    {"Economic stability": 87.56}
+                    {"debt interest payment rate": 2.00},
+                    {"Economic stability": 87.56,
+                     "Improving ES": False}
                 ],
                 "Political": [
                     {"Repress Far-Left": False,
                      "Repress Far-Right": False,
                      "Repress Autocrats": False,
                      "Repress Liberals": False},
-                    {"Political stability": 90.0}
+                    {"Political stability": 90.0,
+                     "Improving PS": False}
                     # for political rewards to be utilized, AI must make political decision
                     # for example if there is a far left protest and the AI handles the protest by killing everyone...
                     # then political rewards would be decreased and the action and the outcome of the action would be stored in long term
@@ -109,27 +108,33 @@ class PlayableNation:
             ]
         }
 
-        self.long_term_memory = {
-            "Domestic decisions":
-                [
-                    {"Economic Decisions": [],
-                     "Political Decisions": [],
-                     "Population Decisions": []}
+        self.long_term_memory = [
+            {
+                "Domestic Decisions": {
+                    "Economic": [],
+                    "Population": [],
+                    "Political": []
+                },
+                "Domestic problems": [
+                    {"Protests": []}
                 ],
-            "Foreign decisions": [
-                {"allies": []},
-                {"rivals": []},
-                {"enemies": []},
-            ],
-            "Foreign influence": [],
-            "protests": [],
-            "Ideologies": {
-                "Democratic": 100,
-                "Communist": 0,
-                "Fascist": 0,
-                "Autocratic": 0
+                "Domestic Ideologies": {
+                    "Democratic": 100,
+                    "Fascist": 0,
+                    "Communist": 0,
+                    "Autocratic": 0
+                }
+            },
+            {
+                "Foreign Decisions":
+                    {
+                        "Allies": [],
+                        "Enemies": []
+                    },
+                "Foreign Influence": []
             }
-        }
+        ]
+
         # long term memory stores decisions made by the AI. Used by the AI as game advances, to aid in policymaking
         self.military = {
             "military": {
@@ -226,6 +231,50 @@ class PlayableNation:
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
+
+    def remove_improving_relations(self, network, nation2):
+        if network.has_edge(self.name, nation2.name):
+            network.remove_edge(self.name, nation2.name)
+
+        for i in range(0, len(self.worsening_relations)):
+            if nation2.name == self.improving_relations[i]:
+                self.improving_relations.pop(i)
+
+    def add_improve_relations(self, network, nation2):
+        if not network.has_edge(self.name, nation2.name):
+            network.add_edge(self.name, nation2.name)
+
+        self.improving_relations.append(nation2.name)
+
+    def add_worsening_relations(self, network, nation2):
+        if not network.has_edge(self.name, nation2.name):
+            network.add_edge(self.name, nation2.name)
+
+        self.worsening_relations.append(nation2.name)
+
+    def remove_worsening_relations(self, network, nation2):
+        if network.has_edge(self.name, nation2.name):
+            network.remove_edge(self.name, nation2.name)
+
+        for i in range(0, len(self.worsening_relations)):
+            if nation2.name == self.worsening_relations[i]:
+                self.worsening_relations.pop(i)
+
+    def add_embargo(self, network, nation2):
+        if not network.has_edge(self.name, nation2.name):
+            network.add_edge(self.name, nation2.name)
+
+        for foreign_nation in self.foreign_relations['foreign relations']:
+            if nation2.name == foreign_nation['nation'].name:
+                foreign_nation['embargoed'] = True
+
+    def remove_embargo(self, network, nation2):
+        if network.has_edge(self.name, nation2.name):
+            network.remove_edge(self.name, nation2.name)
+
+        for foreign_nation in self.foreign_relations['foreign relations']:
+            if nation2.name == foreign_nation['nation'].name and foreign_nation['embargoed']:
+                foreign_nation['embargoed'] = False
 
     # economic functions
     def check_economic_state(self, globe):

@@ -478,13 +478,19 @@ class SpriteGame:
         improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
         worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
-        worsen_button = button.Button(25, 525, worsen, 0.20)
+        worsen_button = button.Button(25, 500, worsen, 0.20)
+        stop_worsening_relation = pygame.image.load("buttons/relations_buttons/stop_worsening.png").convert_alpha()
+        stop_worsening_relation = pygame.transform.scale(stop_worsening_relation, (230, 50))
+        stop_worsen_button = button.Button(25, 500, stop_worsening_relation, 1.25)
         stop_relation_img = pygame.image.load("buttons/relations_buttons/stop.jpg").convert_alpha()
         stop_relations_button = button.Button(25, 400, stop_relation_img, 0.20)
         establish_pact = pygame.image.load("buttons/relations_buttons/establish_pact.jpg").convert_alpha()
-        pact_button = button.Button(25, 650, establish_pact, 0.20)
+        pact_button = button.Button(25, 600, establish_pact, 0.20)
         embargo_img = pygame.image.load("buttons/relations_buttons/embargo.jpg").convert_alpha()
-        embargo_button = button.Button(25, 775, embargo_img, 0.20)
+        embargo_button = button.Button(25, 700, embargo_img, 0.20)
+        stop_embargo_img = pygame.image.load("buttons/relations_buttons/remove_embargo.png").convert_alpha()
+        stop_embargo_img = pygame.transform.scale(stop_embargo_img, (230, 50))
+        stop_em_button = button.Button(25, 700, stop_embargo_img, 1.25)
         """Diplomacy buttons"""
         diplomacy_img = pygame.image.load("buttons/relations_buttons/diplomacy.jpg").convert_alpha()
         diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
@@ -506,28 +512,32 @@ class SpriteGame:
 
         if not self.nation_selected.name in self.nation.improving_relations:
             if relation_button.draw(self.screen):
-                self.establish_relations(self.nation, self.nation_selected)
+                self.nation.add_improve_relations(self.network, self.nation_selected)
 
         else:
             if stop_relations_button.draw(self.screen):
-                self.remove_relations(self.nation, self.nation_selected)
-        relation_button = button.Button(25, 400, improve_relation_img, 0.20)
-        # initial starting point (y = 425 for all, x go by 15, also draw flag of nation
+                self.nation.remove_improving_relations(self.network, self.nation_selected)
+
         x = 15
         for flag in improving_relations:
             flag_img = pygame.image.load(flag).convert_alpha()
             flag_img = pygame.transform.scale(flag_img, (50, 50))
-            flag_button = button.Button(x, 465, flag_img, 0.50)
+            flag_button = button.Button(x, 465, flag_img, 0.40)
             flag_button.draw(self.screen)
             x += 40
 
-        if worsen_button.draw(self.screen):
-            pass
+        if not self.nation_selected.name in self.nation.worsening_relations:
+            if worsen_button.draw(self.screen):
+                self.nation.add_worsening_relations(self.network, self.nation_selected)
+
+        else:
+            if stop_worsen_button.draw(self.screen):
+                self.nation.remove_worsening_relations(self.network, self.nation_selected)
         x = 15
         for flag in worsening_relations:
             flag_img = pygame.image.load(flag).convert_alpha()
             flag_img = pygame.transform.scale(flag_img, (50, 50))
-            flag_button = button.Button(x, 590, flag_img, 0.50)
+            flag_button = button.Button(x, 575, flag_img, 0.40)
             flag_button.draw(self.screen)
             x += 40
 
@@ -538,18 +548,24 @@ class SpriteGame:
         for flag in guaranteeing:
             flag_img = pygame.image.load(flag).convert_alpha()
             flag_img = pygame.transform.scale(flag_img, (50, 50))
-            flag_button = button.Button(x, 715, flag_img, 0.50)
+            flag_button = button.Button(x, 675, flag_img, 0.40)
             flag_button.draw(self.screen)
             x += 40
 
-        if embargo_button.draw(self.screen):
-            pass
+        for foreign_nation in self.nation.foreign_relations['foreign relations']:
+            if foreign_nation['nation'].name == self.nation_selected.name:
+                if not foreign_nation['embargoed']:
+                    if embargo_button.draw(self.screen):
+                        self.nation.add_embargo(self.network, self.nation_selected)
+                else:
+                    if stop_em_button.draw(self.screen):
+                        self.nation.remove_embargo(self.network, self.nation_selected)
         x = 15
         #print(embargoing)
         for flag in embargoing:
             flag_img = pygame.image.load(flag).convert_alpha()
             flag_img = pygame.transform.scale(flag_img, (50, 50))
-            flag_button = button.Button(x, 855, flag_img, 0.60)
+            flag_button = button.Button(x, 775, flag_img, 0.40)
             flag_button.draw(self.screen)
             x += 40
         """
