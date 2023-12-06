@@ -43,12 +43,12 @@ gdp = {
     "1939": 54936947368
 }
 
-flags = {"1910": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1914": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1918": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1932": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1936": "../flags/japan/Flag_of_Japan_(1870–1999).jpg",
-         "1939": "../flags/japan/Flag_of_Japan_(1870–1999).jpg"}
+flags = {"1910": "../flags/germany/german_empire.jpeg",
+         "1914": "../flags/germany/german_empire.jpeg",
+         "1918": "../flags/germany/german_empire.jpeg",
+         "1932": "../flags/germany/OIP (4).jpeg",
+         "1936": "../flags/germany/OIP (4).jpeg",
+         "1939": "../flags/germany/OIP (4).jpeg"}
 
 leader_images = {
     "1910": "../leaders/germany/holleg_1917.jpeg",

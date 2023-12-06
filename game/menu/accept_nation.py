@@ -924,7 +924,6 @@ def accept_nation(nation, time):
         norwegian_ai = norway_ai.NorwayAI(globe1)
         polish_ai = poland_ai.PolandAI(globe1)
         portuguese_ai = portugal_ai.Portugal(globe1)
-        swedish_ai = sweden_ai.SwedenAI(globe1)
         swiss_ai = SwitzerlandAI(globe1)
         cuban_ai = cuba_ai.CubaAI(globe1)
         mexican_ai = mexico_ai.MexicoAI(globe1)

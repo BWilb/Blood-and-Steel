@@ -38,12 +38,12 @@ flags = {"1910": "../flags/venezuela/Flag_of_Venezuela_(1905–1930).svg.png",
          "1939": "../flags/venezuela/State_flag_of_Venezuela_(1930–1954).svg.png"}
 
 leader_images = {
-    "1910": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
-    "1914": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
-    "1918": "../leaders/venezuela/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
-    "1932": "../leaders/venezuela/Juan_Vicente_Gómez_2-1932.jpg",
-    "1936": "../leaders/venezuela/Eleazar_López_Contreras-35-41.jpg",
-    "1939": "../leaders/venezuela/Eleazar_López_Contreras-35-41.jpg"
+    "1910": "../leaders/venezuala/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1914": "../leaders/venezuala/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1918": "../leaders/venezuala/Presidente_Victorino_Marquez_Bustillos-1910-1918.jpg",
+    "1932": "../leaders/venezuala/Juan_Vicente_Gómez_2-1932.jpg",
+    "1936": "../leaders/venezuala/Eleazar_López_Contreras-35-41.jpg",
+    "1939": "../leaders/venezuala/Eleazar_López_Contreras-35-41.jpg"
 }
 
 class Venezuala(NationAI):

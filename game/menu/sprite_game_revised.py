@@ -40,7 +40,9 @@ class SpriteGame:
         self.globe = globe
         self.actual_day = self.globe.date
         self.speed = 1.5
-        self.flag_button = button.Button(50, 50, pygame.image.load(self.nation.flag), 0.05)
+        self.flag_img = pygame.image.load(self.nation.flag).convert_alpha()
+        self.flag_button = button.Button((self.WIDTH / 2) + 15,
+                                         self.HEIGHT * 0.85, pygame.transform.scale(self.flag_img, (350, 250)), 0.35)
         self.clock = pygame.time.Clock()
         self.nation_map = []
         self.nation_button = None
@@ -128,10 +130,6 @@ class SpriteGame:
         for i in range(0, len(self.nation_map)):
             self.nation_map[i].draw(self.screen)
 
-            """nx.draw(self.network, pos=self.nation_map[i].nation_info, with_labels=False)"""
-        """nx.draw(self.network, with_labels=True)
-        plt.show()"""
-
     def resize_leader(self, leader_image):
         """function for resizing both leader that will be displayed"""
         return pygame.transform.scale(pygame.image.load(leader_image).convert_alpha(), (250, 350))
@@ -142,136 +140,45 @@ class SpriteGame:
 
     def view_government(self):
         """sub section of user nation that displays political information regarding nation"""
-        increment_img = pygame.image.load(
-            "buttons/game_buttons/functionality_buttons/increment_sing.jpg").convert_alpha()
-        army_inc_button = button.Button(self.WIDTH * 0.45, 450, increment_img, 0.025)
-        self.screen.fill((52, 78, 91))
-        self.draw_text(f"Political stats", self.font, self.text_col, self.WIDTH * 0.45, 100)
-        self.draw_text(f"Current Leader: {self.nation_selected.leader}", self.font, self.text_col,
-                       (self.WIDTH * 0.355) - len(self.nation_selected.leader), 200)
-        self.draw_text(f"Stability: {round(self.nation_selected.stability, 2)}%", self.font, self.text_col,
-                       self.WIDTH * 0.45,
-                       300)
-        self.draw_text(f"Army size: {len(self.nation.military['military']['Army']['Figures']['Army size'])}",
-                       self.font, self.text_col, self.WIDTH * 0.355, 400)
-
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
-        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.15)
-
-        if army_inc_button.draw(self.screen):
-            soldier = Soldier(self.nation, self.globe)
-            self.nation.military['military']['Army']['Figures']['Army size'].append(soldier)
-            self.nation.military['military']['Army']['Figures']['Cost'] += soldier.monetary_cost
-            self.nation.national_debt += soldier.monetary_cost
+        back_button = button.Button(125, 850, back_img, 0.05)
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+        leader = self.resize_leader(self.nation.leader_image)
+        # leader variable set to resizing function that resizes leader image
+        self.screen.blit(leader, (50, 0))
+        self.draw_text("Political Stats", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255), self.WIDTH * 0.05, 400)
 
         if back_button.draw(self.screen):
-            self.game_state = "main game"
+            self.game_state = "view infographics"
 
     def view_economy(self):
-        increment_img = pygame.image.load(
-            "buttons/game_buttons/functionality_buttons/increment_sing.jpg").convert_alpha()
-        decrement_img = pygame.image.load(
-            "buttons/game_buttons/functionality_buttons/decrement_sign.jpg").convert_alpha()
-        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/sprite_back.jpg").convert_alpha()
-        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.25)
-        """tax buttons"""
-        # corporate taxes
-        cor_tax_inc_button = button.Button(self.WIDTH * 0.05, 435, increment_img, 0.025)
-        cor_tax_dec_button = button.Button(self.WIDTH * 0.11, 435, decrement_img, 0.025)
-        # income taxes
-        inc_tax_inc_button = button.Button(self.WIDTH * 0.05, 535, increment_img, 0.025)
-        inc_tax_dec_button = button.Button(self.WIDTH * 0.11, 535, decrement_img, 0.025)
-        """sub section of user nation that displays economic information regarding nation"""
-
-        # self.screen.blit(self.sprite_background, (0, 0))
+        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
+        back_button = button.Button(125, 850, back_img, 0.05)
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
-        # self.draw_text(f"{self.anation_selectedday.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        leader = self.resize_leader(self.nation.leader_image)
+        # leader variable set to resizing function that resizes leader image
+        self.screen.blit(leader, (50, 0))
+        self.draw_text("Economic Stats", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255), self.WIDTH * 0.05, 375)
+        self.draw_text(f"National GDP: ${self.nation.current_gdp}", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255), self.WIDTH * 0.01, 425)
+        self.draw_text(f"National Debt: ${round(self.nation.national_debt, 2)}", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255), self.WIDTH * 0.01, 475)
 
-        self.draw_text(f"Economic stats", pygame.font.SysFont("Arial-Black", 30), (255, 255, 255), self.WIDTH * 0.025,
-                       50)
-        #
-        self.draw_text(f"GDP:", pygame.font.SysFont("Arial-Black", 20),
-                       (255, 255, 255)
-                       , self.WIDTH * 0.075, 150)
-        self.draw_text(f"${round(self.nation_selected.current_gdp, 2)}", pygame.font.SysFont("Arial-Black", 20),
-                       (255, 255, 255)
-                       , self.WIDTH * 0.035, 200)
-        self.draw_text(f"National Debt: ", pygame.font.SysFont("Arial-Black", 20),
-                       (255, 255, 255), self.WIDTH * 0.055, 250)
-        self.draw_text(f"${round(self.nation_selected.national_debt, 2)}", pygame.font.SysFont("Arial-Black", 20),
-                       (255, 255, 255),
-                       self.WIDTH * 0.045,
-                       300)
-        self.draw_text(f"Current Corporate Tax Rate",
-                       pygame.font.SysFont("Arial-Black", 20), (255, 255, 255),
-                       self.WIDTH * 0.015, 350)
-        self.draw_text(f"{self.nation_selected.corporate_tax_rate}%",
-                       pygame.font.SysFont("Arial-Black", 20), (255, 255, 255),
-                       self.WIDTH * 0.07, 400)
-        self.draw_text(f"Current Income Tax Rate:",
-                       pygame.font.SysFont("Arial-Black", 20), (255, 255, 255),
-                       self.WIDTH * 0.015, 450)
-        self.draw_text(f"{self.nation_selected.income_tax_rate}%",
-                       pygame.font.SysFont("Arial-Black", 20), (255, 255, 255),
-                       self.WIDTH * 0.07, 500)
-        if cor_tax_inc_button.draw(self.screen):
-            self.nation_selected.corporate_tax_rate += 0.5
-            time.sleep(0.5)
-            """
-            these effects will be brought in once the economic structure of every nation has been changed
-            self.nation.investment -= 20
-            self.nation.government_spending += 35"""
-
-        if cor_tax_dec_button.draw(self.screen):
-            self.nation_selected.corporate_tax_rate -= 0.5
-            time.sleep(0.5)
-            """
-            these effects will be brought in once the economic structure of every nation has been changed
-            self.nation.investment += 10
-            self.nation.government_spending -= 10"""
-
-        if inc_tax_inc_button.draw(self.screen):
-            self.nation_selected.income_tax_rate += 0.5
-            time.sleep(0.5)
-
-            """self.nation.consumer_spending -= 10
-            self.nation.government_spending += 10"""
-
-        if inc_tax_dec_button.draw(self.screen):
-            self.nation_selected.income_tax_rate -= 0.5
-            time.sleep(0.5)
-
-            """self.nation.consumer_spending += 10
-                self.nation.government_spending -= 10"""
         if back_button.draw(self.screen):
-            self.game_state = "main game"
+            self.game_state = "view infographics"
 
     def view_society(self):
+        #self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         """sub section of user nation that displays social information regarding nation"""
         # self.screen.blit(self.sprite_background, (0, 0))
-        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
-        self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
-
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
-        back_button = button.Button(self.WIDTH * 0.465, self.HEIGHT * 0.75, back_img, 0.05)
-        self.draw_text(f"Social stats", pygame.font.SysFont("Arial-Black", 30),
-                       self.text_col, self.WIDTH * 0.1, 100)
-        self.draw_text(f"Population:", pygame.font.SysFont("Arial-Black", 20),
-                       self.text_col, self.WIDTH * 0.1, 200)
+        back_button = button.Button(125, 850, back_img, 0.05)
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+        leader = self.resize_leader(self.nation.leader_image)
+        # leader variable set to resizing function that resizes leader image
+        self.screen.blit(leader, (50, 0))
+        self.draw_text("Social Stats", pygame.font.SysFont("Arial-Black", 20), (255, 255, 255), self.WIDTH * 0.05, 400)
 
-        self.draw_text(f"{self.nation_selected.population}", pygame.font.SysFont("Arial-Black", 20),
-                       self.text_col, self.WIDTH * 0.1, 250)
-
-        self.draw_text(f"Happiness: {round(self.nation_selected.happiness, 2)}%",
-                       pygame.font.SysFont("Arial-Black", 20),
-                       self.text_col, self.WIDTH * 0.1,
-                       300)
-
-        self.draw_text(f"{round(self.nation_selected.happiness, 2)}%", pygame.font.SysFont("Arial-Black", 20),
-                       self.text_col, self.WIDTH * 0.1,
-                       350)
         if back_button.draw(self.screen):
-            self.game_state = "main game"
+            self.game_state = "view infographics"
 
     def nation_changes(self):
         self.nation.check_economic_state(self.globe)
@@ -297,6 +204,9 @@ class SpriteGame:
             nation_agent.determine_diplomatic_approach(self.globe.nations, self.globe, self.network)
 
     def primary_game(self):
+        """global event img & button"""
+        glob_event_img = pygame.image.load("buttons/events/check.jpg").convert_alpha()
+        globe_event_button = button.Button((self.WIDTH / 2) - 50, 50, glob_event_img, 0.50)
         """speed imgs"""
         faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
         fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
@@ -310,6 +220,7 @@ class SpriteGame:
         slow_button = button.Button(1600, 75, slow_img, 0.035)
         slower_button = button.Button(1560, 75, slower_img, 0.035)
         # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        """Date Functionality"""
         self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         if slower_button.draw(self.screen):
             self.speed = 2.75
@@ -321,11 +232,61 @@ class SpriteGame:
             self.speed = 1.25
         if faster_button.draw(self.screen):
             self.speed = 0.75
+
+        if globe_event_button.draw(self.screen):
+            self.game_state = "view events"
+        if self.flag_button.draw(self.screen):
+            self.game_state = "view infographics"
         print(self.network)
         nx.draw_circular(self.network, with_labels= True)
         plt.show()
 
+    def view_foreign_events(self):
+        back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
+        back_button = button.Button(125, 850, back_img, 0.05)
+        """speed imgs"""
+        faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
+        fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
+        regular_img = pygame.image.load("buttons/game_buttons/functionality_buttons/regular_speed.jpg").convert_alpha()
+        slow_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slow.jpg").convert_alpha()
+        slower_img = pygame.image.load("buttons/game_buttons/functionality_buttons/slower.jpg").convert_alpha()
+        """speed buttons"""
+        faster_button = button.Button(1720, 75, faster_img, 0.035)
+        fast_button = button.Button(1680, 75, fast_img, 0.035)
+        regular_button = button.Button(1640, 75, regular_img, 0.035)
+        slow_button = button.Button(1600, 75, slow_img, 0.035)
+        slower_button = button.Button(1560, 75, slower_img, 0.035)
+        self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
+
+        """Date functionality"""
+        pygame.draw.rect(self.screen, (0, 0, 0),
+                         ((self.WIDTH / 3) - 200, (self.HEIGHT / 3) - 200, (self.WIDTH / 2) + 200, (self.HEIGHT / 2) + 250))
+        if slower_button.draw(self.screen):
+            self.speed = 2.75
+        if slow_button.draw(self.screen):
+            self.speed = 2.25
+        if regular_button.draw(self.screen):
+            self.speed = 1.75
+        if fast_button.draw(self.screen):
+            self.speed = 1.25
+        if faster_button.draw(self.screen):
+            self.speed = 0.75
+        y = (self.HEIGHT / 3) - 150
+        x = (self.WIDTH / 2) - 175
+        for message in range(0, len(self.globe.events['Foreign events'])):
+            self.draw_text(f"{self.globe.events['Foreign events'][message]['event']}: {self.globe.events['Foreign events'][message]['date']}",
+                           pygame.font.SysFont("Arial-Black", 10), (255, 255, 255), x, y)
+            y += 35
+
+        if back_button.draw(self.screen):
+            self.game_state = 'main game'
+
+    """following functions deal with viewing nation info, both with
+        user controlled nation and AI controlled nations
+    """
+
     def infographics(self):
+        """Infographic buttons"""
         govt_img = pygame.image.load("buttons/game_buttons/government_button.jpg").convert_alpha()
         econ_img = pygame.image.load("buttons/game_buttons/economy_buttion.jpg").convert_alpha()
         foreign_img = pygame.image.load("buttons/game_buttons/foreign_button.jpg").convert_alpha()
@@ -350,7 +311,9 @@ class SpriteGame:
         regular_button = button.Button(1640, 75, regular_img, 0.035)
         slow_button = button.Button(1600, 75, slow_img, 0.035)
         slower_button = button.Button(1560, 75, slower_img, 0.035)
-        # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, 350, self.HEIGHT))
+
+        """Date functionality"""
         self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         if slower_button.draw(self.screen):
             self.speed = 2.75
@@ -363,7 +326,7 @@ class SpriteGame:
         if faster_button.draw(self.screen):
             self.speed = 0.75
 
-        leader = self.resize_leader(self.nation_selected.leader_image)
+        leader = self.resize_leader(self.nation.leader_image)
         # leader variable set to resizing function that resizes leader image
         self.screen.blit(leader, (50, 0))
 
@@ -375,6 +338,10 @@ class SpriteGame:
             pass
         if social_button.draw(self.screen):
             self.game_state = "view society"
+
+        if self.flag_button.draw(self.screen):
+            if self.game_state == "view infographics":
+                self.game_state = "main game"
 
         if back_button.draw(self.screen):
             self.game_state = "main game"
@@ -419,8 +386,7 @@ class SpriteGame:
         diplomacy_button = button.Button(10, 350, diplomacy_img, 0.1)
         details_img = pygame.image.load("buttons/relations_buttons/national_details.jpg").convert_alpha()
         details_button = button.Button(200, 350, details_img, 0.1)
-        self.draw_text(f"{self.globe.date}", self.font, self.text_col, self.WIDTH * 0.80, 50)
-
+        """Time images and buttons"""
         faster_img = pygame.image.load("buttons/game_buttons/functionality_buttons/faster.jpg").convert_alpha()
         fast_img = pygame.image.load("buttons/game_buttons/functionality_buttons/fast.jpg").convert_alpha()
         regular_img = pygame.image.load("buttons/game_buttons/functionality_buttons/regular_speed.jpg").convert_alpha()
@@ -431,7 +397,7 @@ class SpriteGame:
         regular_button = button.Button(1640, 75, regular_img, 0.035)
         slow_button = button.Button(1600, 75, slow_img, 0.035)
         slower_button = button.Button(1560, 75, slower_img, 0.035)
-        # self.draw_text(f"{self.actual_day.date()}", self.font, self.text_col, self.WIDTH * 0.80, 100)
+        """Date functionality"""
         self.draw_text(f"{self.globe.date.date()}", self.font, self.text_col, self.WIDTH * 0.805, 25)
         if slower_button.draw(self.screen):
             self.speed = 2.75
@@ -465,6 +431,9 @@ class SpriteGame:
         if details_button.draw(self.screen):
             pass
 
+        if self.flag_button.draw(self.screen):
+            pass
+
     def view_foreign_nation_diplomacy(self):
         #print(self.nation_selected.flag)
         improving_relations = self.finding_pos_foreign_nations()
@@ -475,6 +444,7 @@ class SpriteGame:
         back_img = pygame.image.load("buttons/game_buttons/functionality_buttons/info_back.jpg").convert_alpha()
         back_button = button.Button(125, 900, back_img, 0.05)
         """back button established to escape function"""
+        """relation images and buttons for foreign nations"""
         improve_relation_img = pygame.image.load("buttons/relations_buttons/improve_relations.jpg").convert_alpha()
         relation_button = button.Button(25, 400, improve_relation_img, 0.20)
         worsen = pygame.image.load("buttons/relations_buttons/worsen_relations.jpg").convert_alpha()
@@ -569,10 +539,10 @@ class SpriteGame:
             flag_button.draw(self.screen)
             x += 40
         """
-        if worsen_button.draw(self.screen):
-            pass
         if justify_button.draw(self.screen):
             pass"""
+        if self.flag_button.draw(self.screen):
+            pass
 
         if back_button.draw(self.screen):
             self.game_state = "main game"
@@ -582,7 +552,6 @@ class SpriteGame:
         self.nation.sprite = True
         self.loading_buttons()
         self.establish_nodes()
-        # print(self.network)
         upload_database.initial_upload_to_database(self.globe.nations, self.globe)
         while self.is_running:
             if not self.game_paused:
@@ -592,6 +561,9 @@ class SpriteGame:
                 """"""
                 if self.game_state == "main game":
                     self.primary_game()
+
+                elif self.game_state == "view events":
+                    self.view_foreign_events()
 
                 elif self.game_state == "view foreign nation":
                     self.view_foreign_nation_diplomacy()

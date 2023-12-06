@@ -46,7 +46,7 @@ gdp = {
 }
 flags = {"1910": "../flags/germany/german_empire.jpeg",
          "1914": "../flags/germany/german_empire.jpeg",
-         "1918": "../flags/germany/german_empire.jpeg",
+         "1918": "../flags/germany/germany.png",
          "1932": "../flags/germany/OIP (4).jpeg",
          "1936": "../flags/germany/OIP (4).jpeg",
          "1939": "../flags/germany/OIP (4).jpeg"}

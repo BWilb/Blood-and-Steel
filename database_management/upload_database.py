@@ -7,7 +7,7 @@ def initial_upload_to_database(nations, globe):
     """initial upload to database function will upload to each and every database within database management directory"""
     foreign_records = []
     # establishment of national records, including the nation of the player
-    for i in range(0, len(nations) - 1):
+    for i in range(0, len(nations)):
         foreign_records.append([globe.date, nations[i].name, nations[i].leader,
                                 nations[i].population, nations[i].births, nations[i].deaths,
                                 nations[i].current_gdp, nations[i].national_debt,
