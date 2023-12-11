@@ -19,14 +19,15 @@ class PlayableNation:
         self.region = ""
         self.name = ""
         self.date = datetime(globe.date.year, 1, 1)
-        self.year_placeholder = self.date.year
-        self.economic_change_date = self.date + timedelta(days=120)
+        self.population_checker = globe.date + timedelta(days=31)
+        self.economic_change_date = globe.date + timedelta(days=31)
         self.improve_stability = self.date
         self.improve_happiness = self.date
         # social factors
         """population factors"""
         self.population = 0
         self.past_population = self.population
+        self.population_growth = 0
         self.births = 0
         self.deaths = 0
         # political
@@ -157,6 +158,15 @@ class PlayableNation:
                 }
             ]
         }
+    def beginning_objectives(self):
+        self.objectives['objectives'][1]['domestic'][0]['population objectives'].append("Maintain stable population growth")
+        economic_list = ['keep corporate taxes moderate', "keep income taxes moderate","maintain government spending levels", "maintain stable GDP growth",
+                         "prevent national debt exceeding GDP"]
+        for objective in economic_list:
+            self.objectives['objectives'][1]['domestic'][0]['economic objectives'].append(objective)
+        political_list = ['maintain influence of state ideology', 'maintain political stability']
+        for objective in political_list:
+            self.objectives['objectives'][1]['domestic'][0]['political objectives'].append(objective)
 
     def adding_conscription_pool(self, globe):
         if self.conscripting_checker < globe.date:
@@ -181,16 +191,18 @@ class PlayableNation:
                     self.conscripting_checker += timedelta(days=30)
 
     def check_population_growth(self, globe):
-        if self.year_placeholder < self.date.year:
+        if self.population_checker < globe.date:
+            # checking if population growth should be calculated
             population_calculation = ((self.population - self.past_population) /
                                       ((self.population + self.past_population) / 2)) * 100
+            self.population_growth = population_calculation
 
             if population_calculation <= 1.5:
                 if "low population growth occurred" not in self.messages['messages'][0]['social']:
                     self.messages['messages'][0]['social'].append({
                         "low population growth occurred": [
                             {"potential solutions": ['implement birth enhancer'],
-                             "expiration date": globe.date + timedelta(days=10)}
+                             "expiration date": globe.date + timedelta(days=30)}
                         ]
                     })
 
@@ -198,13 +210,12 @@ class PlayableNation:
                 if "high population growth occurred" not in self.messages['messages'][0]['social']:
                     self.messages['messages'][0]['social'].append({
                         "low population growth occurred": [
-                            {"potential solutions": ['implement birth enhancer'],
-                             "expiration date": globe.date + timedelta(days=10)}
+                            {"potential solutions": ['implement birth enhancer', "sacrifice a couple thousand people"],
+                             "expiration date": globe.date + timedelta(days=30)}
                         ]
                     })
-            else:
-                pass
-
+            self.population_checker = globe.date + timedelta(days=31)
+            # resetting value of population checker
         else:
             self.pop_growth()
     def pop_growth(self):
@@ -228,6 +239,7 @@ class PlayableNation:
             self.population += (births - deaths)
             self.births += births
             self.deaths += deaths
+
 
     def political_power_growth(self):
         self.political_power += self.political_exponent
@@ -278,7 +290,7 @@ class PlayableNation:
 
     # economic functions
     def check_economic_state(self, globe):
-        if self.date > self.economic_change_date:
+        if globe.date > self.economic_change_date:
             growth = ((self.current_gdp - self.past_gdp) / (self.current_gdp + self.past_gdp) / 2) * 100
             if growth <= 1.95:
                 if self.e_s == EconomicState.RECOVERY or self.e_s == EconomicState.EXPANSION:
@@ -286,7 +298,8 @@ class PlayableNation:
                     if "low economic growth occurred" not in self.messages['messages'][0]['social']:
                         self.messages['messages'][0]['social'].append({
                             "low economic growth occurred": [
-                                {"potential solutions": ['implement birth enhancer'],
+                                {"potential solutions": ['decrease income taxes', 'decrease corporate taxes',
+                                                         "increase government spending", "increase exports"],
                                  "expiration date": globe.date + timedelta(days=10)}
                             ]
                         })
@@ -296,12 +309,11 @@ class PlayableNation:
                     if "high economic growth occurred" not in self.messages['messages'][0]['social']:
                         self.messages['messages'][0]['social'].append({
                             "high economic growth occurred": [
-                                {"potential solutions": ['implement birth enhancer'],
+                                {"potential solutions": ['increase corporate taxes', "increase income taxes"],
                                  "expiration date": globe.date + timedelta(days=10)}
                             ]
                         })
-            else:
-                pass
+            self.economic_change_date = globe.date + timedelta(days=31)
 
         else:
             if self.e_s == EconomicState.RECESSION or self.e_s == EconomicState.DEPRESSION:
@@ -326,3 +338,11 @@ class PlayableNation:
     # stability functions
     def stability_happiness_change(self, globe):
         pass
+
+    def main(self, globe):
+        while self.population > 100000:
+            self.check_economic_state(globe)
+            self.check_population_growth(globe)
+            self.adding_conscription_pool(globe)
+            self.political_power_growth()
+            break

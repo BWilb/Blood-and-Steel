@@ -1249,7 +1249,6 @@ class NationAI:
         while self.population > 250000:
             self.check_population_growth(globe)
             self.political_power_growth()
-            #self.stability_change()
             if globe.date > self.date_checker:
                 self.determine_diplomatic_approach(globe, network, user_nation)
                 self.date_checker = globe.date + timedelta(days=3)

@@ -97,6 +97,7 @@ def establish_nations(globe, user_nation, *args):
             globe.nations.append(args[i])
 
     user_nation.establish_map_coordinates()
+    user_nation.beginning_objectives()
     globe.nations.append(user_nation)
     for nation in range(0, len(globe.nations)):
         """establishing loop to loop through list of nations"""
@@ -1801,11 +1802,12 @@ def accept_nation(nation, time):
         japanese_ai = japan_ai.JapanAI(globe1)
         iranian_ai = iran_ai.Iran(globe1)
         iraqi_ai = iraq_ai.Iraq(globe1)
+        austrian_ai = austria_ai.Austria(globe1)
         establish_nations(globe1, russian, luxembourger_ai, spanish_ai, canadian_ai, romanian_ai, belgian_ai,
                           bulgarian_ai, british_ai, danish_ai, estonian_ai, french_ai, germany1, greek_ai, hungarian_ai, italian_ai,
                           latvian_ai, lithuanian_ai, dutch_ai, norwegian_ai, polish_ai, portuguese_ai, swiss_ai,
                           cuban_ai, mexican_ai, american_ai, argentina_ai, bolivian_ai, brazilian_ai, chilean_ai, venezuelan_ai,
-                          columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai)
+                          columbian_ai, peruvian_ai, afghani_ai, turkish_ai, japanese_ai, iranian_ai, iraqi_ai, austrian_ai)
 
         game = SpriteGame(russian, globe1)
         game.main_game()

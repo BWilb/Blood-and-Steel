@@ -135,10 +135,12 @@ class GermanAI(NationAI):
 
     def establish_foreign_objectives(self):
         if self.date.year <= 1918:
-            objectives_enemy = ["Contain Turkey", "Contain Russia", "Contain France", "Contain Britain"]
+            objectives_enemy = ["Contain Turkey", "Contain Russia", "Contain France", "Contain Britain", "Contain Belgium",
+                                "Contain Luxembourg", "Contain Canada", "Contain Japan"]
             objectives_allies = ["Improve relations with Austria",
                                  "Improve relations with Mexico",
-                                 "Improve relations with Sweden", "Improve relations with China"]
+                                 "Improve relations with Sweden", "Improve relations with China",
+                                 "Improve relations with Turkey", "Improve relations with Bulgaria"]
 
             for enemy in objectives_enemy:
                 self.objectives["objectives"][0]['foreign'].append(enemy)

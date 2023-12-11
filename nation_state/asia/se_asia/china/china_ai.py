@@ -81,7 +81,7 @@ class ChinaAI(NationAI):
         # other
         self.coordinates = []
         self.foreign_relations = {"foreign relations": []}
-        self.land_1910 = ["Mongolia", "Manchu Empire", "Tibet", "Xinjiang"]
+        self.land_1910 = ["Manchu Empire", "Mongolia", "Tibet", "Xinjiang"]
         self.land_1914_1918 = ["Manchu Empire", "Tibet", "Xinjiang"]
         self.land_1932_1936 = ["Chinese Warlords"]
         self.land_1939 = ["Chinese Warlords"]
@@ -94,29 +94,31 @@ class ChinaAI(NationAI):
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
-            if self.date.year <= 1918:
-                for i in range(len(nation_json['countries'])):
-                    # print(nation_json['countries'][i]['nation_name'])
-                    if (nation_json['countries'][i]['nation_name'] == "Manchu Empire" or
-                            nation_json['countries'][i]['nation_name'] == "Tibet" or
-                            nation_json['countries'][i]['nation_name'] == "Xinjiang" or
-                            nation_json['countries'][i]['nation_name'] == "Mongolia"):
-                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
-                    if "Manchu Empire" == nation_json['countries'][i]['nation_name']:
-                        print("Hi", nation_json['countries'][i]['coordinates'])
+            if self.date.year <= 1910:
+                for land in range(0, len(self.land_1910)):
+                    for i in range(0, len(nation_json['countries'])):
+                        if (self.land_1910[land] == nation_json['countries'][i]['nation_name'] or
+                        nation_json['countries'][i]['nation_name'] == "Manchu Empire"):
+                            self.coordinates.append((nation_json['countries'][i]['coordinates']))
                 self.coordinates = (retreive_coords(self.coordinates))
 
-
-            elif 1931 < self.date.year < 1937:
-                for i in range(len(nation_json['countries'])):
-                    # print(nation_json['countries'][i]['nation_name'])
-                    if (nation_json['countries'][i]['nation_name'] == "Chinese Warlords"):
-                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            if self.date.year >= 1914 and self.date.year <= 1918:
+                for land in range(0, len(self.land_1914_1918)):
+                    for i in range(0, len(nation_json['countries'])):
+                        if self.land_1914_1918[land] == nation_json['countries'][i]['nation_name']:
+                            self.coordinates.append((nation_json['countries'][i]['coordinates']))
                 self.coordinates = (retreive_coords(self.coordinates))
 
-            elif self.date.year >= 1939:
-                for i in range(len(nation_json['countries'])):
-                    # print(nation_json['countries'][i]['nation_name'])
-                    if (nation_json['countries'][i]['nation_name'] == "Chinese warlords"):
-                        self.coordinates.append((nation_json['countries'][i]['coordinates']))
+            if self.date.year == 1936 or self.date.year == 1932:
+                for land in range(0, len(self.land_1932_1936)):
+                    for i in range(0, len(nation_json['countries'])):
+                        if self.land_1932_1936[land] == nation_json['countries'][i]['nation_name']:
+                            self.coordinates.append((nation_json['countries'][i]['coordinates']))
+                self.coordinates = (retreive_coords(self.coordinates))
+
+            if self.date.year >= 1939:
+                for land in range(0, len(self.land_1939)):
+                    for i in range(0, len(nation_json['countries'])):
+                        if self.land_1939[land] == nation_json['countries'][i]['nation_name']:
+                            self.coordinates.append((nation_json['countries'][i]['coordinates']))
                 self.coordinates = (retreive_coords(self.coordinates))
