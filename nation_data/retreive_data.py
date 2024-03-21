@@ -14,7 +14,7 @@ class JsonWriter:
     def __init__(self, year):
         #print(year)
         if year == 1910 or year == 1914 or year == 1918:
-            self.geo_file = gpd.read_file("C:/Users/wilbu/Desktop/Capstone-Project/nation_data/json_fiels/world_1914.geojson").explode()
+            self.geo_file = gpd.read_file("C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/json_fiels/world_1914.geojson").explode()
         if year == 1932 or year == 1936:
             self.geo_file = gpd.read_file("C:/Users/wilbu/Desktop/Capstone-Project/nation_data/json_fiels/world_1930.geojson").explode()
         if year == 1939:
@@ -31,7 +31,7 @@ class JsonWriter:
 
     def clear_old_file(self):
         # clears current file
-        with open(r"C:\Users\wilbu\Desktop\Capstone-Project\nation_data\nation.json", 'w') as clear_file:
+        with open(r"C:\Users\wilbu\OneDrive\Desktop\Capstone-Project\nation_data\nation.json", 'w') as clear_file:
             clear_file.write(self.json_cleaner)
 
         self.writing_new_info()
@@ -56,17 +56,17 @@ class JsonWriter:
             self.push_to_json_file()
     def push_to_json_file(self):
         try:
-            with open('C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json',
+            with open("C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json",
                       'r') as nation:
                 nation_object = json.loads(nation.read())
 
             nation_object['countries'] = self.nation_dictionary
             # sets/appends nation_dictionary to 'countries' list
-            with open('C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json',
+            with open("C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json",
                       'w') as writing_file:
                 json.dump(nation_object, writing_file, indent=4)
 
         except Exception as e:
-            print(e.args)
-"""json_object = JsonWriter(1939)
+            print("1",e.args)
+"""json_object = JsonWriter(1910)
 json_object.clear_old_file()"""

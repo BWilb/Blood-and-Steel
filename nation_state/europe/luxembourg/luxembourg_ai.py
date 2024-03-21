@@ -124,7 +124,7 @@ class LuxembourgAI(NationAI):
     def establish_map_coordinates(self):
         # collection of coordinates will be done separately in every nation,
         # so as to access information specifically to the nation(in this case Austria)
-        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 

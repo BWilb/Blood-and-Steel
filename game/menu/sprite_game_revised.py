@@ -8,7 +8,7 @@ import os
 import networkx as nx
 from military.soldier import Soldier
 import matplotlib.pyplot as plt
-from database_management import upload_database
+#from database_management import upload_database
 """import matplotlib.pyplot as plt
 from database_management import upload_database"""
 
@@ -317,7 +317,7 @@ class SpriteGame:
 
                 print(self.globe.nations[i].name, (self.globe.nations[i].military['military']['Army']['Figures']['Cost']))"""
 
-        upload_database.update_database_info(self.globe.nations)
+        #upload_database.update_database_info(self.globe.nations)
 
     def foreign_interactions(self):
         for nation_agent in self.globe.nations:
@@ -702,7 +702,7 @@ class SpriteGame:
         self.nation.sprite = True
         self.loading_buttons()
         self.establish_nodes()
-        upload_database.initial_upload_to_database(self.globe.nations, self.globe)
+        #upload_database.initial_upload_to_database(self.globe.nations, self.globe)
         while self.is_running:
             if not self.game_paused:
                 self.screen.fill((65, 105, 225))

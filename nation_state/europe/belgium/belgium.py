@@ -94,7 +94,7 @@ class Belgium(playable_nation.PlayableNation):
         self.land_1932_1939 = ["Belgium", "Belgian Congo", "Rwanda (Belgium)", "Burundi"]
 
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         if self.date.year < 1932:

@@ -106,7 +106,7 @@ class NorwayAI(NationAI):
                 self.objectives["objectives"][0]['foreign'].append(ally)
 
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
         for land in range(0, len(self.land)):

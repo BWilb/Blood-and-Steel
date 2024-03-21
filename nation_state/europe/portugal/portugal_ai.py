@@ -86,7 +86,7 @@ class Portugal(NationAI):
         self.foreign_relations = {"foreign relations": []}
 
     def establish_map_coordinates(self):
-        file_path = 'C:/Users/wilbu/Desktop/Capstone-Project/nation_data/nation.json'
+        file_path = 'C:/Users/wilbu/OneDrive/Desktop/Capstone-Project/nation_data/nation.json'
         with open(file_path, 'r') as file:
             nation_json = js.load(file)
 
